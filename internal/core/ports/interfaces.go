@@ -29,4 +29,5 @@ type RouterService interface {
 	GetProviderForModel(modelID string) (ModelProvider, error)
 	ListAllModels(ctx context.Context) ([]schema.Model, error)
 	Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error)
+	StreamChat(ctx context.Context, req *schema.ChatRequest) (<-chan StreamResult, error)
 }

@@ -49,18 +49,12 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 		return
 	}
 
-	p, err := h.service.GetProviderForModel(req.Model)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		return
-	}
-
 	if req.Stream {
-		h.handleStream(c, p, &req)
+		h.handleStream(c, &req)
 		return
 	}
 
-	resp, err := p.Chat(c.Request.Context(), &req)
+	resp, err := h.service.Chat(c.Request.Context(), &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -69,13 +63,15 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (h *Handler) handleStream(c *gin.Context, p ports.ModelProvider, req *schema.ChatRequest) {
-	streamChan, err := p.Stream(c.Request.Context(), req)
+func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
+	// Call the gateway (service)
+	streamChan, err := h.service.StreamChat(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	// Set headers for SSE (Server-Sent Events)
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
 	c.Writer.Header().Set("Cache-Control", "no-cache")
 	c.Writer.Header().Set("Connection", "keep-alive")
@@ -85,7 +81,15 @@ func (h *Handler) handleStream(c *gin.Context, p ports.ModelProvider, req *schem
 	c.Writer.WriteHeader(http.StatusOK)
 	c.Writer.Flush()
 
-	for result := range streamChan {
+	// Consume the channel and flush to client
+	c.Stream(func(w io.Writer) bool {
+		result, ok := <-streamChan
+		if !ok {
+			// Channel closed
+			io.WriteString(w, "data: [DONE]\n\n")
+			return false
+		}
+
 		if result.Err != nil {
 			errResp := schema.ChatResponse{
 				Choices: []schema.Choice{{
@@ -94,20 +98,18 @@ func (h *Handler) handleStream(c *gin.Context, p ports.ModelProvider, req *schem
 				}},
 			}
 			data, _ := json.Marshal(errResp)
-			fmt.Fprintf(c.Writer, "data: %s\n\n", data)
-			c.Writer.Flush()
-			return
+			fmt.Fprintf(w, "data: %s\n\n", data)
+			return false // Stop streaming on error
 		}
 
 		if result.Response != nil {
 			data, err := json.Marshal(result.Response)
 			if err == nil {
-				fmt.Fprintf(c.Writer, "data: %s\n\n", data)
-				c.Writer.Flush()
+				fmt.Fprintf(w, "data: %s\n\n", data)
+				return true
 			}
 		}
-	}
 
-	io.WriteString(c.Writer, "data: [DONE]\n\n")
-	c.Writer.Flush()
+		return true
+	})
 }

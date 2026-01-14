@@ -11,14 +11,14 @@ func init() {
 	registry.Register("ollama", NewAdapter)
 }
 
-// NewAdapter creates an Ollama adapter. 
+// NewAdapter creates an Ollama adapter.
 // Since Ollama is OpenAI-compatible at /v1, we can reuse the OpenAI adapter logic!
 // This is the ultimate DRY principle.
 func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
 	if config.BaseURL == "" {
 		config.BaseURL = "http://localhost:11434/v1" // Ollama's OpenAI compatible endpoint
 	}
-	
+
 	// Create the OpenAI adapter but acting as Ollama
 	return openai.NewAdapter(config)
 }

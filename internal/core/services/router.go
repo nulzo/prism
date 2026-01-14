@@ -78,6 +78,14 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 	return p.Chat(ctx, req)
 }
 
+func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
+	p, err := s.GetProviderForModel(req.Model)
+	if err != nil {
+		return nil, err
+	}
+	return p.Stream(ctx, req)
+}
+
 const ModelsCacheKey = "all_models"
 const ModelsCacheTTL = 5 * time.Minute
 

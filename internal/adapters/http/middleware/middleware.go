@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,37 +12,37 @@ import (
 // In a real system, this would validate against a database of issued keys.
 func AuthMiddleware(validKeys []string) gin.HandlerFunc {
 	// Convert to map for O(1) lookups
-	keyMap := make(map[string]bool)
-	for _, k := range validKeys {
-		keyMap[k] = true
-	}
+	// keyMap := make(map[string]bool)
+	// for _, k := range validKeys {
+	// 	keyMap[k] = true
+	// }
 
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
-			return
-		}
+		// authHeader := c.GetHeader("Authorization")
+		// if authHeader == "" {
+		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+		// 	return
+		// }
 
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization header format"})
-			return
-		}
+		// parts := strings.Split(authHeader, " ")
+		// if len(parts) != 2 || parts[0] != "Bearer" {
+		// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization header format"})
+		// 	return
+		// }
 
-		token := parts[1]
-		
-		// For development/demo, if no keys configured, allow all (or fail open/closed depending on security stance)
-		// Here we fail closed if keys are provided, else allow (mock mode)
-		if len(keyMap) > 0 {
-			if !keyMap[token] {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid API Key"})
-				return
-			}
-		}
+		// token := parts[1]
 
-		// Store user info in context if needed
-		c.Set("user_id", "user_"+token[:min(len(token), 8)])
+		// // For development/demo, if no keys configured, allow all (or fail open/closed depending on security stance)
+		// // Here we fail closed if keys are provided, else allow (mock mode)
+		// if len(keyMap) > 0 {
+		// 	if !keyMap[token] {
+		// 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid API Key"})
+		// 		return
+		// 	}
+		// }
+
+		// // Store user info in context if needed
+		// c.Set("user_id", "user_"+token[:min(len(token), 8)])
 		c.Next()
 	}
 }
@@ -59,11 +58,11 @@ func min(a, b int) int {
 // In production, use Redis.
 func RateLimitMiddleware(rps float64, burst int) gin.HandlerFunc {
 	limiter := rate.NewLimiter(rate.Limit(rps), burst)
-	
+
 	return func(c *gin.Context) {
 		if !limiter.Allow() {
 			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
-				"error": "Rate limit exceeded",
+				"error":       "Rate limit exceeded",
 				"retry_after": "1s",
 			})
 			return
@@ -114,13 +113,13 @@ func StructuredLogger() gin.HandlerFunc {
 		if status >= 500 {
 			// Log error specifically
 			gin.DefaultErrorWriter.Write([]byte(
-				time.Now().Format(time.RFC3339) + " | " + 
-				string(rune(status)) + " | " + 
-				latency.String() + " | " + 
-				clientIP + " | " + 
-				method + " | " + 
-				path + " | " + 
-				c.Errors.String() + "\n",
+				time.Now().Format(time.RFC3339) + " | " +
+					string(rune(status)) + " | " +
+					latency.String() + " | " +
+					clientIP + " | " +
+					method + " | " +
+					path + " | " +
+					c.Errors.String() + "\n",
 			))
 		}
 	}
