@@ -8,8 +8,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/core/ports"
 )
 
-// Factory is a function that creates a ModelProvider instance given a configuration.
-// We use the domain.ProviderConfig struct which serves as our unified configuration shape.
 type Factory func(cfg domain.ProviderConfig) (ports.ModelProvider, error)
 
 var (
@@ -17,8 +15,6 @@ var (
 	factories = make(map[string]Factory)
 )
 
-// Register makes a provider factory available to the system.
-// 'type' is the key (e.g., "openai", "ollama").
 func Register(providerType string, f Factory) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -28,7 +24,6 @@ func Register(providerType string, f Factory) {
 	factories[providerType] = f
 }
 
-// Get retrieves a factory to create a provider of a specific type.
 func Get(providerType string) (Factory, error) {
 	mu.RLock()
 	defer mu.RUnlock()

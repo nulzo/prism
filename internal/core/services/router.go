@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/nulzo/model-router-api/internal/core/domain"
 	"github.com/nulzo/model-router-api/internal/core/ports"
@@ -14,13 +15,15 @@ import (
 type RouterService struct {
 	providers map[string]ports.ModelProvider
 	routes    []domain.RouteConfig
+	cache     ports.CacheService
 	mu        sync.RWMutex
 }
 
-func NewRouterService() *RouterService {
+func NewRouterService(cache ports.CacheService) *RouterService {
 	return &RouterService{
 		providers: make(map[string]ports.ModelProvider),
 		routes:    make([]domain.RouteConfig, 0),
+		cache:     cache,
 	}
 }
 
@@ -51,13 +54,8 @@ func (s *RouterService) GetProviderForModel(modelID string) (ports.ModelProvider
 	}
 
 	// 2. Fallback: Search all providers for who supports this model
-	// Optimization: In a real system, we would have a map[ModelID]ProviderID cache here.
-	// For now, we rely on the provider naming convention or explicit routing.
-
 	// simplistic fallback for now
 	for _, p := range s.providers {
-		// If the provider name matches the model prefix (e.g. "openai" matches "gpt-4")
-		// This is heuristic and should be replaced by real capability checks
 		if strings.Contains(modelID, "gpt") && p.Type() == "openai" {
 			return p, nil
 		}
@@ -80,7 +78,19 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 	return p.Chat(ctx, req)
 }
 
+const ModelsCacheKey = "all_models"
+const ModelsCacheTTL = 5 * time.Minute
+
 func (s *RouterService) ListAllModels(ctx context.Context) ([]schema.Model, error) {
+	// 1. Try Cache
+	if s.cache != nil {
+		var cachedModels []schema.Model
+		if err := s.cache.Get(ctx, ModelsCacheKey, &cachedModels); err == nil {
+			return cachedModels, nil
+		}
+	}
+
+	// 2. Fetch from Providers
 	s.mu.RLock()
 	providers := make([]ports.ModelProvider, 0, len(s.providers))
 	for _, p := range s.providers {
@@ -114,6 +124,12 @@ func (s *RouterService) ListAllModels(ctx context.Context) ([]schema.Model, erro
 				seen[m.ID] = true
 			}
 		}
+	}
+
+	// 3. Set Cache
+	if s.cache != nil && len(allModels) > 0 {
+		// Log error in real app
+		_ = s.cache.Set(ctx, ModelsCacheKey, allModels, ModelsCacheTTL)
 	}
 
 	return allModels, nil
