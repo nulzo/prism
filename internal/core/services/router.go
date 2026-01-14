@@ -40,29 +40,49 @@ func (s *RouterService) SetRoutes(routes []domain.RouteConfig) {
 }
 
 // GetProviderForModel finds the best provider for a given model ID
-func (s *RouterService) GetProviderForModel(modelID string) (ports.ModelProvider, error) {
+func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string) (ports.ModelProvider, error) {
 	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	// 1. Check explicit routes (Prefix/Regex matching)
+	// 1. Check explicit routes (manual overrides)
 	for _, route := range s.routes {
 		if strings.HasPrefix(modelID, route.Pattern) {
-			if p, exists := s.providers[route.TargetID]; exists {
+			targetID := route.TargetID
+			s.mu.RUnlock()
+			if p, exists := s.providers[targetID]; exists {
 				return p, nil
+			}
+			s.mu.RLock()
+		}
+	}
+	s.mu.RUnlock()
+
+	// 2. Dynamic Lookup: Search all provider models
+	allModels, err := s.ListAllModels(ctx)
+	if err == nil {
+		for _, m := range allModels {
+			// Exact match or match without version tag (e.g., "tinydolphin" matches "tinydolphin:latest")
+			if m.ID == modelID || strings.Split(m.ID, ":")[0] == modelID {
+				s.mu.RLock()
+				p, exists := s.providers[m.Provider]
+				s.mu.RUnlock()
+				if exists {
+					return p, nil
+				}
 			}
 		}
 	}
 
-	// 2. Fallback: Search all providers for who supports this model
-	// simplistic fallback for now
+	// 3. Fallback: Heuristic matching for well-known prefixes
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	for _, p := range s.providers {
-		if strings.Contains(modelID, "gpt") && p.Type() == "openai" {
+		lowered := strings.ToLower(modelID)
+		if strings.Contains(lowered, "gpt") && p.Type() == "openai" {
 			return p, nil
 		}
-		if strings.Contains(modelID, "claude") && p.Type() == "anthropic" {
+		if strings.Contains(lowered, "claude") && p.Type() == "anthropic" {
 			return p, nil
 		}
-		if strings.Contains(modelID, "gemini") && p.Type() == "google" {
+		if strings.Contains(lowered, "gemini") && p.Type() == "google" {
 			return p, nil
 		}
 	}
@@ -71,7 +91,7 @@ func (s *RouterService) GetProviderForModel(modelID string) (ports.ModelProvider
 }
 
 func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
-	p, err := s.GetProviderForModel(req.Model)
+	p, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +99,7 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 }
 
 func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
-	p, err := s.GetProviderForModel(req.Model)
+	p, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
 		return nil, err
 	}

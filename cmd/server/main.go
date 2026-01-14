@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nulzo/model-router-api/internal/adapters/cache/memory"
 	"github.com/nulzo/model-router-api/internal/adapters/http/middleware"
-	"github.com/nulzo/model-router-api/internal/adapters/http/v1"
+	v1 "github.com/nulzo/model-router-api/internal/adapters/http/v1"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/factory"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/core/domain"
@@ -56,7 +56,7 @@ func main() {
 			BaseURL: "https://api.deepseek.com/v1",
 		},
 		{
-			ID:      "local-ollama",
+			ID:      "ollama",
 			Type:    "ollama",
 			Name:    "Ollama Local",
 			BaseURL: cfg.OllamaBaseURL,
@@ -85,31 +85,29 @@ func main() {
 		log.Printf("Registered provider: %s (%s)", pCfg.Name, pCfg.ID)
 	}
 
-	// 6. Define Routing Rules (Again, could be DB driven)
+	// 6. Define Routing Rules (Manual overrides or special logic)
+	// Broad patterns can still be used to force a model family to a specific provider instance.
 	routerService.SetRoutes([]domain.RouteConfig{
-		{Pattern: "gpt-4", TargetID: "openai-main"},
-		{Pattern: "claude", TargetID: "anthropic-main"},
-		{Pattern: "gemini", TargetID: "google-main"},
-		{Pattern: "deepseek", TargetID: "deepseek-main"},
-		{Pattern: "llama", TargetID: "local-ollama"},
-		{Pattern: "mistral", TargetID: "local-ollama"},
+		{Pattern: "gpt-", TargetID: "openai-main"},
+		{Pattern: "claude-", TargetID: "anthropic-main"},
+		{Pattern: "gemini-", TargetID: "google-main"},
 	})
 
 	// 7. Setup Handlers & Server
 	handler := v1.NewHandler(routerService)
 	engine := gin.New() // Use New() to control middleware order explicitly
-	
+
 	// Global Middleware
 	engine.Use(middleware.StructuredLogger())
 	engine.Use(gin.Recovery())
 	engine.Use(middleware.CORSMiddleware())
-	
+
 	// Define API Key(s) for the router itself (e.g., provided to clients)
 	// In production, load from env or DB
 	validKeys := []string{"sk-router-admin-key", "sk-router-client-key"}
-	
+
 	v1Group := engine.Group("/v1")
-	
+
 	// Apply Auth and Rate Limit specifically to the API group
 	v1Group.Use(middleware.AuthMiddleware(validKeys))
 	v1Group.Use(middleware.RateLimitMiddleware(100, 200)) // 100 RPS, burst 200
