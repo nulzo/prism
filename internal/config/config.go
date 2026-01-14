@@ -19,6 +19,7 @@ type Config struct {
 	OpenAIBaseURL    string
 	AnthropicBaseURL string
 	GoogleBaseURL    string
+	OllamaBaseURL    string
 }
 
 // LoadConfig loads configuration from environment variables.
@@ -34,6 +35,7 @@ func LoadConfig() *Config {
 		OpenAIBaseURL:    getEnv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
 		AnthropicBaseURL: getEnv("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
 		GoogleBaseURL:    getEnv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"),
+		OllamaBaseURL:    getEnv("OLLAMA_BASE_URL", "http://localhost:11434"),
 	}
 }
 

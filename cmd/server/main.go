@@ -9,6 +9,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/provider"
 	"github.com/nulzo/model-router-api/internal/provider/anthropic"
 	"github.com/nulzo/model-router-api/internal/provider/google"
+	"github.com/nulzo/model-router-api/internal/provider/ollama"
 	"github.com/nulzo/model-router-api/internal/provider/openai"
 	"github.com/nulzo/model-router-api/internal/router"
 )
@@ -32,10 +33,15 @@ func main() {
 		BaseURL: cfg.GoogleBaseURL,
 	})
 
+	ollamaP := ollama.NewAdapter(provider.ProviderConfig{
+		BaseURL: cfg.OllamaBaseURL,
+	})
+
 	r := router.NewRouter()
 	r.RegisterProvider(openaiP)
 	r.RegisterProvider(anthropicP)
 	r.RegisterProvider(googleP)
+	r.RegisterProvider(ollamaP)
 
 	// OpenAI
 	r.RegisterRoute("gpt-4", "openai")
@@ -48,6 +54,11 @@ func main() {
 
 	// Google
 	r.RegisterRoute("gemini", "google") // Catches gemini-1.5, gemini-2.0
+
+	// Ollama (since it's local, we might want to register specific local models or a catch-all)
+	r.RegisterRoute("llama", "ollama")
+	r.RegisterRoute("deepseek", "ollama")
+	r.RegisterRoute("mistral", "ollama")
 
 	handler := api.NewHandler(r)
 
