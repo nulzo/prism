@@ -30,7 +30,6 @@ Thumbs.db      # Windows#
 
 # directory structure
 bin/*
-pkg/*
 !.gitkeep
 
 # goop - go package manager
