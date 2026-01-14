@@ -25,7 +25,21 @@ func (h *Handler) RegisterRoutes(engine *gin.Engine) {
 	v1 := engine.Group("/v1")
 	{
 		v1.POST("/chat/completions", h.HandleChatCompletions)
+		v1.GET("/models", h.HandleListModels)
 	}
+}
+
+func (h *Handler) HandleListModels(c *gin.Context) {
+	models, err := h.router.ListModels(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"object": "list",
+		"data":   models,
+	})
 }
 
 func (h *Handler) HandleChatCompletions(c *gin.Context) {

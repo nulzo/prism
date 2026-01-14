@@ -41,6 +41,14 @@ func (m *MockProvider) Stream(ctx context.Context, req *schema.ChatRequest) (<-c
 	return args.Get(0).(<-chan provider.StreamResult), args.Error(1)
 }
 
+func (m *MockProvider) Models(ctx context.Context) ([]schema.Model, error) {
+	args := m.Called(ctx)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]schema.Model), args.Error(1)
+}
+
 func setupRouter(p provider.ModelProvider) *gin.Engine {
 	r := router.NewRouter()
 	r.RegisterProvider(p)
@@ -176,4 +184,34 @@ func TestHandleChatCompletions_InvalidBody(t *testing.T) {
 	engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandleListModels_Success(t *testing.T) {
+	mockP := new(MockProvider)
+	mockP.On("Name").Return("mock-provider")
+	
+	expectedModels := []schema.Model{
+		{ID: "model-1", Created: 12345, Object: "model", OwnedBy: "owner-1", Provider: "mock-provider"},
+	}
+	
+	mockP.On("Models", mock.Anything).Return(expectedModels, nil)
+
+	engine := setupRouter(mockP)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/v1/models", nil)
+
+	engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	
+	var actualResp struct {
+		Object string         `json:"object"`
+		Data   []schema.Model `json:"data"`
+	}
+	err := json.Unmarshal(w.Body.Bytes(), &actualResp)
+	assert.NoError(t, err)
+	assert.Equal(t, "list", actualResp.Object)
+	assert.Len(t, actualResp.Data, 1)
+	assert.Equal(t, "model-1", actualResp.Data[0].ID)
 }

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/modeldata"
 	"github.com/nulzo/model-router-api/internal/provider"
 	"github.com/nulzo/model-router-api/pkg/schema"
 )
@@ -56,7 +57,7 @@ type GenConfig struct {
 type GeminiCandidate struct {
 	Content      GeminiContent `json:"content"`
 	FinishReason string        `json:"finishReason"`
-	TokenCount   int           `json:"tokenCount"` 
+	TokenCount   int           `json:"tokenCount"`
 }
 
 type GeminiResponse struct {
@@ -84,7 +85,7 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 		if msg.Role == "assistant" {
 			role = "model"
 		}
-		
+
 		content := msg.Content.Text // Simplified: using Text only
 		if msg.Role == "system" {
 			content = "System instruction: " + content
@@ -238,8 +239,8 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 		ch <- provider.StreamResult{
 			Response: &schema.ChatResponse{
 				Choices: []schema.Choice{{
-					Index: 0,
-					Delta: &schema.ChatMessage{},
+					Index:        0,
+					Delta:        &schema.ChatMessage{},
 					FinishReason: "stop",
 				}},
 			},
@@ -247,4 +248,96 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	}()
 
 	return ch, nil
+}
+
+type GeminiModel struct {
+	Name        string `json:"name"`
+	DisplayName string `json:"displayName"`
+	Description string `json:"description"`
+}
+
+type GeminiModelList struct {
+	Models []GeminiModel `json:"models"`
+}
+
+func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
+	if a.config.APIKey == "mock-google-key" || a.config.APIKey == "" {
+		// Mock enrichment
+		var models []schema.Model
+		for id, info := range modeldata.KnownModels {
+			if len(id) > 6 && id[:6] == "gemini" {
+				m := info
+				m.ID = id
+				m.Object = "model"
+				m.Created = time.Now().Unix()
+				m.OwnedBy = "google"
+				m.Provider = "google"
+				models = append(models, m)
+			}
+		}
+		return models, nil
+	}
+
+	url := fmt.Sprintf("%s/models?key=%s", a.config.BaseURL, a.config.APIKey)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("gemini models api error %d: %s", resp.StatusCode, string(body))
+	}
+
+	var list GeminiModelList
+	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
+		return nil, err
+	}
+
+	var models []schema.Model
+	for _, m := range list.Models {
+		// Strip "models/" prefix if present
+		id := m.Name
+		if len(id) > 7 && id[:7] == "models/" {
+			id = id[7:]
+		}
+
+		mod := schema.Model{
+			ID:          id,
+			Created:     time.Now().Unix(), // Google doesn't return created time in list
+			Object:      "model",
+			OwnedBy:     "google",
+			Provider:    "google",
+			Description: m.Description,
+			Name:        m.DisplayName,
+		}
+
+		// Enrich
+		if info, ok := modeldata.KnownModels[id]; ok {
+			mod.Name = info.Name
+			if mod.Description == "" {
+				mod.Description = info.Description
+			}
+			mod.ContextLength = info.ContextLength
+			mod.Architecture = info.Architecture
+			mod.Pricing = info.Pricing
+			mod.TopProvider = info.TopProvider
+		} else {
+			mod.Name = m.DisplayName
+			if mod.Name == "" {
+				mod.Name = id
+			}
+			mod.Pricing = schema.Pricing{Prompt: "0", Completion: "0"}
+		}
+
+		models = append(models, mod)
+	}
+
+	return models, nil
 }

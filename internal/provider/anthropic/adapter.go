@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/modeldata"
 	"github.com/nulzo/model-router-api/internal/provider"
 	"github.com/nulzo/model-router-api/pkg/schema"
 )
@@ -242,4 +243,96 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	}()
 
 	return ch, nil
+}
+
+type AnthropicModel struct {
+	ID          string `json:"id"`
+	Type        string `json:"type"`
+	CreatedAt   string `json:"created_at"`
+	DisplayName string `json:"display_name"`
+}
+
+type AnthropicModelList struct {
+	Data    []AnthropicModel `json:"data"`
+	HasMore bool             `json:"has_more"`
+}
+
+func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
+	// Helper to get static models
+	getStaticModels := func() []schema.Model {
+		var models []schema.Model
+		for id, info := range modeldata.KnownModels {
+			// Check if it looks like an Anthropic model ID
+			if len(id) > 6 && id[:6] == "claude" {
+				m := info
+				m.ID = id
+				m.Object = "model"
+				m.Created = time.Now().Unix()
+				m.OwnedBy = "anthropic"
+				m.Provider = "anthropic"
+				models = append(models, m)
+			}
+		}
+		return models
+	}
+
+	if a.config.APIKey == "sk-mock-anthropic" || a.config.APIKey == "" {
+		return getStaticModels(), nil
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", a.config.BaseURL+"/models", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("x-api-key", a.config.APIKey)
+	req.Header.Set("anthropic-version", a.config.Version)
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return getStaticModels(), nil
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return getStaticModels(), nil
+	}
+
+	var list AnthropicModelList
+	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
+		return nil, err
+	}
+
+	var models []schema.Model
+	for _, m := range list.Data {
+		t, _ := time.Parse(time.RFC3339, m.CreatedAt)
+		
+		mod := schema.Model{
+			ID:       m.ID,
+			Created:  t.Unix(),
+			Object:   "model",
+			OwnedBy:  "anthropic",
+			Provider: "anthropic",
+		}
+
+		// Enrich
+		if info, ok := modeldata.KnownModels[m.ID]; ok {
+			mod.Name = info.Name
+			mod.Description = info.Description
+			mod.ContextLength = info.ContextLength
+			mod.Architecture = info.Architecture
+			mod.Pricing = info.Pricing
+			mod.TopProvider = info.TopProvider
+		} else {
+			mod.Name = m.DisplayName
+			if mod.Name == "" {
+				mod.Name = m.ID
+			}
+			mod.Description = "Anthropic model"
+			mod.Pricing = schema.Pricing{Prompt: "0", Completion: "0"}
+		}
+		
+		models = append(models, mod)
+	}
+
+	return models, nil
 }

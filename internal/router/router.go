@@ -1,11 +1,13 @@
 package router
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"sync"
 
 	"github.com/nulzo/model-router-api/internal/provider"
+	"github.com/nulzo/model-router-api/pkg/schema"
 )
 
 type Router struct {
@@ -61,4 +63,40 @@ func (r *Router) matchProvider(model string) string {
 
 	// Default fallback (could be configurable)
 	return "openai"
+}
+
+// ListModels aggregates models from all registered providers concurrently
+func (r *Router) ListModels(ctx context.Context) ([]schema.Model, error) {
+	r.mu.RLock()
+	// Snapshot providers to avoid holding lock during network calls
+	providers := make([]provider.ModelProvider, 0, len(r.providers))
+	for _, p := range r.providers {
+		providers = append(providers, p)
+	}
+	r.mu.RUnlock()
+
+	var wg sync.WaitGroup
+	modelsChan := make(chan []schema.Model, len(providers))
+
+	for _, p := range providers {
+		wg.Add(1)
+		go func(p provider.ModelProvider) {
+			defer wg.Done()
+			// We suppress errors here to return partial results if one provider is down
+			// In a production system, we might want to log this.
+			if m, err := p.Models(ctx); err == nil {
+				modelsChan <- m
+			}
+		}(p)
+	}
+
+	wg.Wait()
+	close(modelsChan)
+
+	var allModels []schema.Model
+	for ms := range modelsChan {
+		allModels = append(allModels, ms...)
+	}
+
+	return allModels, nil
 }

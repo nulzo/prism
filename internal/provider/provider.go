@@ -22,4 +22,6 @@ type ModelProvider interface {
 	Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error)
 	// Stream handles streaming requests
 	Stream(ctx context.Context, req *schema.ChatRequest) (<-chan StreamResult, error)
+	// Models lists available models
+	Models(ctx context.Context) ([]schema.Model, error)
 }
