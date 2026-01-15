@@ -35,11 +35,3 @@ providers:
     name: "Ollama"
     base_url: "http://localhost:11434"
     enabled: true
-
-routes:
-  - pattern: "gpt-"
-    target_id: "openai-main"
-  - pattern: "claude-"
-    target_id: "anthropic-main"
-  - pattern: "gemini-"
-    target_id: "google-main"
