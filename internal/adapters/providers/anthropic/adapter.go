@@ -50,11 +50,11 @@ type Request struct {
 	Stream    bool      `json:"stream,omitempty"`
 }
 type Response struct {
-	ID           string    `json:"id"`
-	Content      []Content `json:"content"`
-	Model        string    `json:"model"`
-	StopReason   string    `json:"stop_reason"`
-	Usage        Usage     `json:"usage"`
+	ID         string    `json:"id"`
+	Content    []Content `json:"content"`
+	Model      string    `json:"model"`
+	StopReason string    `json:"stop_reason"`
+	Usage      Usage     `json:"usage"`
 }
 type Content struct {
 	Type string `json:"type"`
@@ -65,11 +65,11 @@ type Usage struct {
 	OutputTokens int `json:"output_tokens"`
 }
 type StreamEvent struct {
-	Type         string    `json:"type"`
-	Delta        *Delta    `json:"delta,omitempty"`
-	ContentBlock *Content  `json:"content_block,omitempty"` // For content_block_start
-	Index        int       `json:"index,omitempty"`
-	Usage        *Usage    `json:"usage,omitempty"` // For message_start
+	Type         string   `json:"type"`
+	Delta        *Delta   `json:"delta,omitempty"`
+	ContentBlock *Content `json:"content_block,omitempty"` // For content_block_start
+	Index        int      `json:"index,omitempty"`
+	Usage        *Usage   `json:"usage,omitempty"` // For message_start
 }
 type Delta struct {
 	Type string `json:"type"`
@@ -152,7 +152,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	ar.Stream = true
 
 	url := fmt.Sprintf("%s/messages", strings.TrimRight(a.config.BaseURL, "/"))
-	
+
 	headers := map[string]string{
 		"x-api-key":         a.config.APIKey,
 		"anthropic-version": "2023-06-01",
@@ -169,7 +169,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 				return nil
 			}
 			data := strings.TrimPrefix(line, "data: ")
-			
+
 			var event StreamEvent
 			if err := json.Unmarshal([]byte(data), &event); err != nil {
 				return nil
@@ -205,11 +205,6 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
-	// Anthropic doesn't have a robust public models list endpoint that returns all metadata standardly like OpenAI
-	// But we can try /v1/models if available, or return static knowns if 404.
-	// For this implementation, we'll try to fetch but fallback gracefully.
-	// NOTE: Anthropic recently added a models endpoint.
-	
 	var list struct {
 		Data []struct {
 			ID          string `json:"id"`
@@ -217,7 +212,7 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 			CreatedAt   string `json:"created_at"`
 		} `json:"data"`
 	}
-	
+
 	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
 	headers := map[string]string{
 		"x-api-key":         a.config.APIKey,
@@ -225,8 +220,6 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	}
 
 	if err := utils.SendRequest(ctx, a.client, "GET", url, headers, nil, &list); err != nil {
-		// Fallback to static list if API fails (common for Anthropic which limits this endpoint)
-		// Return empty list so we don't block the router's aggregation
 		return []schema.Model{}, nil
 	}
 

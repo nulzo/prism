@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/nulzo/model-router-api/internal/core/domain"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -30,6 +31,9 @@ type RedisConfig struct {
 
 // LoadConfig reads configuration from file or environment variables.
 func LoadConfig() (*Config, error) {
+	// Load .env file if present
+	_ = godotenv.Load()
+
 	v := viper.New()
 
 	v.SetConfigName("config") 

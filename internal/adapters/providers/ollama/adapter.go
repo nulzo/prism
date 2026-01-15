@@ -83,3 +83,7 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 
 	return models, nil
 }
+
+func (a *Adapter) Type() string {
+	return "ollama"
+}

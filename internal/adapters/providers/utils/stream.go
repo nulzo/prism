@@ -9,17 +9,8 @@ import (
 	"net/http"
 )
 
-// StreamProcessor is a function that takes a raw line from the stream and returns
-// a processed result (or nil to skip) and an error.
-// If valid data is found, it should be sent to the channel within this function,
-// or returned to be sent by the caller. 
-// However, to keep it simple: the processor parses the line and returns the object to be sent.
-// Actually, generic return types are messy here. 
-// Let's use a callback approach: The caller provides a function "OnLine(line string) error"
 type LineProcessor func(line string) error
 
-// StreamRequest handles the boilerplate of setting up an HTTP stream, checking status,
-// and scanning the response body line-by-line.
 func StreamRequest(ctx context.Context, client HTTPClient, method, url string, headers map[string]string, body interface{}, processLine LineProcessor) error {
 	var bodyReader *bytes.Buffer
 	if body != nil {
@@ -48,8 +39,6 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 		return fmt.Errorf("stream request failed: %w", err)
 	}
 
-	// Ensure we close body if we error out early, but otherwise the loop handles it
-	// Actually, standard practice: close after function returns, but this function blocks until stream ends.
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
@@ -62,10 +51,8 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 		if line == "" {
 			continue
 		}
-		
-		// Delegate specific parsing logic to the caller
+
 		if err := processLine(line); err != nil {
-			// If the processor returns an error, we abort the stream
 			return err
 		}
 	}

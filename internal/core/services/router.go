@@ -125,9 +125,21 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 	// 2. Fetch from Providers if not in cache
 	if !cacheHit {
 		s.mu.RLock()
-		providers := make([]ports.ModelProvider, 0, len(s.providers))
-		for _, p := range s.providers {
-			providers = append(providers, p)
+		// Filter providers if a specific provider is requested
+		var providers []ports.ModelProvider
+		if filter.Provider != "" {
+			for _, p := range s.providers {
+				// Match by ID (Name) or Type
+				if strings.EqualFold(p.Name(), filter.Provider) || strings.EqualFold(p.Type(), filter.Provider) {
+					providers = append(providers, p)
+				}
+			}
+		} else {
+			// Otherwise use all providers
+			providers = make([]ports.ModelProvider, 0, len(s.providers))
+			for _, p := range s.providers {
+				providers = append(providers, p)
+			}
 		}
 		s.mu.RUnlock()
 
@@ -162,14 +174,26 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 			}
 		}
 
-		// Cache the full list
-		if s.cache != nil && len(allModels) > 0 {
+		// Cache the full list ONLY if we queried ALL providers (no filter)
+		// Otherwise, we are caching a partial list which is bad.
+		if s.cache != nil && len(allModels) > 0 && filter.Provider == "" {
 			_ = s.cache.Set(ctx, ModelsCacheKey, allModels, ModelsCacheTTL)
 		}
 	}
 
 	// 3. Apply Filters
-	return s.applyFilters(allModels, filter), nil
+	// If we already filtered providers by selection, we don't need to filter by provider name/ID again
+	// strictly, unless we want to support advanced cases. For now, if we selected providers,
+	// we assume the returned models are from the correct provider context.
+	// However, to be safe: if we matched by TYPE, the model.Provider (ID) might not match filter.Provider (Type).
+	// So we should clear filter.Provider if we handled it via selection.
+	effectiveFilter := filter
+	if filter.Provider != "" {
+		// We assumed we handled the provider filtering by selecting the correct providers
+		effectiveFilter.Provider = ""
+	}
+	
+	return s.applyFilters(allModels, effectiveFilter), nil
 }
 
 func (s *RouterService) applyFilters(models []schema.Model, filter ports.ModelFilter) []schema.Model {
