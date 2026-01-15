@@ -2,6 +2,7 @@ package google
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -102,9 +103,66 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 }
 
 func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
-	// Not implemented for this demo refactor, but would follow similar SSE pattern
-	// using :streamGenerateContent endpoint
-	return nil, fmt.Errorf("stream not implemented for google adapter yet")
+	ch := make(chan ports.StreamResult)
+
+	gr := GeminiRequest{}
+	for _, m := range req.Messages {
+		role := "user"
+		if m.Role == "assistant" {
+			role = "model"
+		}
+		gr.Contents = append(gr.Contents, GeminiContent{
+			Role:  role,
+			Parts: []GeminiPart{{Text: m.Content.Text}},
+		})
+	}
+
+	// Use streamGenerateContent?alt=sse for Server-Sent Events if supported, 
+	// but standard REST stream sends a JSON array. 
+	// The easiest "REST" way without the SDK is to just read the chunks.
+	// NOTE: Google's REST API returns a JSON array: "[{...},\n{...}]".
+	// Parsing this manually is tricky. 
+	// However, the ?alt=sse parameter is now supported in v1beta.
+	url := fmt.Sprintf("%s/models/%s:streamGenerateContent?key=%s&alt=sse", 
+		strings.TrimRight(a.config.BaseURL, "/"), 
+		req.Model, 
+		a.config.APIKey,
+	)
+
+	go func() {
+		defer close(ch)
+		
+		// Google doesn't need extra headers for this request, but strict checking is good.
+		headers := map[string]string{}
+
+		err := utils.StreamRequest(ctx, a.client, "POST", url, headers, gr, func(line string) error {
+			if !strings.HasPrefix(line, "data: ") {
+				return nil
+			}
+			data := strings.TrimPrefix(line, "data: ")
+			
+			var gResp GeminiResponse
+			if err := json.Unmarshal([]byte(data), &gResp); err != nil {
+				return nil
+			}
+
+			if len(gResp.Candidates) > 0 && len(gResp.Candidates[0].Content.Parts) > 0 {
+				text := gResp.Candidates[0].Content.Parts[0].Text
+				ch <- ports.StreamResult{Response: &schema.ChatResponse{
+					Choices: []schema.Choice{{
+						Delta: &schema.ChatMessage{Content: schema.Content{Text: text}},
+					}},
+				}}
+			}
+			return nil
+		})
+
+		if err != nil {
+			ch <- ports.StreamResult{Err: err}
+		}
+	}()
+
+	return ch, nil
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {

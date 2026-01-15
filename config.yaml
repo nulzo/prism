@@ -1,0 +1,45 @@
+server:
+  port: "8080"
+  env: "development"
+
+redis:
+  enabled: false
+  addr: "localhost:6379"
+
+providers:
+  - id: "openai-main"
+    type: "openai"
+    name: "OpenAI"
+    api_key: "ENV:OPENAI_API_KEY"
+    base_url: "https://api.openai.com/v1"
+    enabled: true
+
+  - id: "anthropic-main"
+    type: "anthropic"
+    name: "Anthropic"
+    api_key: "ENV:ANTHROPIC_API_KEY"
+    base_url: "https://api.anthropic.com"
+    enabled: true
+    config:
+      version: "2023-06-01"
+
+  - id: "google-main"
+    type: "google"
+    name: "Google Gemini"
+    api_key: "ENV:GOOGLE_API_KEY"
+    base_url: "https://generativelanguage.googleapis.com/v1beta"
+    enabled: true
+
+  - id: "ollama-local"
+    type: "ollama"
+    name: "Ollama"
+    base_url: "http://localhost:11434"
+    enabled: true
+
+routes:
+  - pattern: "gpt-"
+    target_id: "openai-main"
+  - pattern: "claude-"
+    target_id: "anthropic-main"
+  - pattern: "gemini-"
+    target_id: "google-main"

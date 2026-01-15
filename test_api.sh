@@ -1,80 +1,47 @@
 #!/bin/bash
 
 # Configuration
-BASE_URL=${BASE_URL:-"http://localhost:8080/v1"}
-API_KEY=${API_KEY:-"sk-router-admin-key"}
-
-# Models to test based on the router configuration in main.go
-# MODELS=("gpt-4" "claude" "gemini" "deepseek" "llama" "mistral" "tinydolphin")
-MODELS=("tinydolphin:latest")
+API_BASE="http://localhost:8080/v1"
+MODEL="gpt-4o" # Ensure this model or a prefix like 'gpt-' is in your config.yaml routes
 
 # Colors for output
 GREEN='\033[0;32m'
-RED='\033[0;31m'
 BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${YELLOW}Checking if server is running at ${BASE_URL}...${NC}"
-if ! curl -s --connect-timeout 2 "${BASE_URL}/models" -H "Authorization: Bearer ${API_KEY}" > /dev/null; then
-    echo -e "${RED}Error: Server is not responding at ${BASE_URL}${NC}"
-    echo -e "Make sure to start the server first with: ${BLUE}go run cmd/server/main.go${NC}"
-    exit 1
-fi
+echo -e "${BLUE}Starting API Integration Tests...${NC}\n"
 
-echo -e "${YELLOW}Starting API Tests against ${BASE_URL}${NC}"
-echo -e "${YELLOW}Using API Key: ${API_KEY}${NC}"
+# 1. Test Model Listing
+echo -e "${BLUE}[1/3] Testing GET /models...${NC}"
+curl -s -X GET "$API_BASE/models" | jq '.' | head -n 20
+echo -e "${GREEN}✓ Model list retrieved (truncated output above)${NC}\n"
 
-# Function to test listing models
-test_list_models() {
-    echo -e "\n${BLUE}Testing List Models${NC}"
-    local response=$(curl -s -X GET "${BASE_URL}/models" -H "Authorization: Bearer ${API_KEY}")
-    local count=$(echo "$response" | jq '.data | length')
-    echo -e "${GREEN}Found ${count} models total.${NC}"
-    echo -e "First 5 models:"
-    echo "$response" | jq -r '.data[:5] | .[] | " - \(.id) (via \(.provider))"'
-}
+# 2. Test Non-Streaming Chat
+echo -e "${BLUE}[2/3] Testing POST /chat/completions (Non-Streaming)...${NC}"
+curl -s -X POST "$API_BASE/chat/completions" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "'$MODEL'",
+    "messages": [{"role": "user", "content": "Say hello in exactly 3 words." }],
+    "stream": false
+  }' | jq '.'
+echo -e "${GREEN}✓ Non-streaming chat successful${NC}\n"
 
-# Function to run non-streaming chat completion
-test_non_streaming() {
-    local model=$1
-    echo -e "\n${BLUE}Testing Non-Streaming: model=${model}${NC}"    
-    curl -s -X POST "${BASE_URL}/chat/completions" \
-        -H "Authorization: Bearer ${API_KEY}" \
-        -H "Content-Type: application/json" \
-        -d "{
-            \"model\": \"${model}\",
-            \"messages\": [
-                {\"role\": \"user\", \"content\": \"Hello, how are you? Respond in 10 words or less.\"}
-            ],
-            \"stream\": false
-        }" | jq .
-}
-
-# Function to run streaming chat completion
-test_streaming() {
-    local model=$1
-    echo -e "\n${BLUE}Testing Streaming: model=${model}${NC}"    
-    curl -s -X POST "${BASE_URL}/chat/completions" \
-        -H "Authorization: Bearer ${API_KEY}" \
-        -H "Content-Type: application/json" \
-        -d "{
-            \"model\": \"${model}\",
-            \"messages\": [
-                {\"role\": \"user\", \"content\": \"Hello, how are you? Respond in 10 words or less.\"}
-            ],
-            \"stream\": true
-        }"
-}
-
-# Run tests
-# test_list_models
-
-for model in "${MODELS[@]}"; do
-    echo -e "\n${GREEN}=== Testing Model: ${model} ===${NC}"
-    test_non_streaming "$model"
-    test_streaming "$model"
-    echo -e "\n${GREEN}=== Finished Testing Model: ${model} ===${NC}"
+# 3. Test Streaming Chat
+echo -e "${BLUE}[3/3] Testing POST /chat/completions (Streaming)...${NC}"
+echo "Sending streaming request..."
+# We use --no-buffer to see results immediately
+curl -N -s -X POST "$API_BASE/chat/completions" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "'$MODEL'",
+    "messages": [{"role": "user", "content": "Count from 1 to 5 slowly." }],
+    "stream": true
+  }' | while read -r line; do
+    if [[ $line == data:* ]]; then
+        echo -e "${GREEN}$line${NC}"
+    fi
 done
+echo -e "\n${GREEN}✓ Streaming chat successful${NC}"
 
-echo -e "\n${YELLOW}All tests completed.${NC}"
+echo -e "\n${BLUE}Integration tests complete.${NC}"

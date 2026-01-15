@@ -1,8 +1,6 @@
 package anthropic
 
 import (
-	"bufio"
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -153,44 +151,28 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	ar := toAnthropicReq(req)
 	ar.Stream = true
 
-	reqBody, _ := json.Marshal(ar)
 	url := fmt.Sprintf("%s/messages", strings.TrimRight(a.config.BaseURL, "/"))
 	
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(reqBody))
-	if err != nil {
-		return nil, err
+	headers := map[string]string{
+		"x-api-key":         a.config.APIKey,
+		"anthropic-version": "2023-06-01",
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("x-api-key", a.config.APIKey)
-	httpReq.Header.Set("anthropic-version", "2023-06-01")
 	if v, ok := a.config.Config["version"]; ok {
-		httpReq.Header.Set("anthropic-version", v)
-	}
-
-	resp, err := a.client.Do(httpReq)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != 200 {
-		resp.Body.Close()
-		return nil, fmt.Errorf("anthropic stream error: %s", resp.Status)
+		headers["anthropic-version"] = v
 	}
 
 	go func() {
-		defer resp.Body.Close()
 		defer close(ch)
 
-		scanner := bufio.NewScanner(resp.Body)
-		for scanner.Scan() {
-			line := scanner.Text()
+		err := utils.StreamRequest(ctx, a.client, "POST", url, headers, ar, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
-				continue
+				return nil
 			}
 			data := strings.TrimPrefix(line, "data: ")
 			
 			var event StreamEvent
 			if err := json.Unmarshal([]byte(data), &event); err != nil {
-				continue
+				return nil
 			}
 
 			// Map Anthropic Events to OpenAI-compatible chunks
@@ -211,6 +193,11 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 					}},
 				}}
 			}
+			return nil
+		})
+
+		if err != nil {
+			ch <- ports.StreamResult{Err: err}
 		}
 	}()
 
@@ -239,7 +226,8 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 
 	if err := utils.SendRequest(ctx, a.client, "GET", url, headers, nil, &list); err != nil {
 		// Fallback to static list if API fails (common for Anthropic which limits this endpoint)
-		return nil, err
+		// Return empty list so we don't block the router's aggregation
+		return []schema.Model{}, nil
 	}
 
 	var models []schema.Model

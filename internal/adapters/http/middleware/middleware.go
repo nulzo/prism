@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nulzo/model-router-api/internal/logger"
+	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 )
 
@@ -88,7 +90,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-// StructuredLogger logs request details
+// StructuredLogger logs request details using Zap
 func StructuredLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
@@ -106,21 +108,25 @@ func StructuredLogger() gin.HandlerFunc {
 			path = path + "?" + raw
 		}
 
-		// In production, use zap or logrus
-		// For now, standard log with structured-like format
-		// Using gin.DefaultWriter which is stdout
-		// Format: [TIME] STATUS | LATENCY | IP | METHOD | PATH | ERROR
+		fields := []zap.Field{
+			zap.Int("status", status),
+			zap.String("method", method),
+			zap.String("path", path),
+			zap.String("ip", clientIP),
+			zap.Duration("latency", latency),
+		}
+
+		if len(c.Errors) > 0 {
+			fields = append(fields, zap.String("errors", c.Errors.String()))
+		}
+
+		msg := "Incoming Request"
 		if status >= 500 {
-			// Log error specifically
-			gin.DefaultErrorWriter.Write([]byte(
-				time.Now().Format(time.RFC3339) + " | " +
-					string(rune(status)) + " | " +
-					latency.String() + " | " +
-					clientIP + " | " +
-					method + " | " +
-					path + " | " +
-					c.Errors.String() + "\n",
-			))
+			logger.Error(msg, fields...)
+		} else if status >= 400 {
+			logger.Warn(msg, fields...)
+		} else {
+			logger.Info(msg, fields...)
 		}
 	}
 }

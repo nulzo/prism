@@ -1,8 +1,6 @@
 package openai
 
 import (
-	"bufio"
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -72,62 +70,40 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 
 	// Ensure stream is true
 	req.Stream = true
-
-	reqBody, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(reqBody))
-	if err != nil {
-		return nil, err
-	}
 
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("Authorization", "Bearer "+a.config.APIKey)
+	headers := map[string]string{
+		"Authorization": "Bearer " + a.config.APIKey,
+	}
 	if org, ok := a.config.Config["organization"]; ok {
-		httpReq.Header.Set("OpenAI-Organization", org)
-	}
-
-	resp, err := a.client.Do(httpReq)
-	if err != nil {
-		return nil, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
-		return nil, fmt.Errorf("stream connection failed: %s", resp.Status)
+		headers["OpenAI-Organization"] = org
 	}
 
 	go func() {
-		defer resp.Body.Close()
 		defer close(ch)
 
-		scanner := bufio.NewScanner(resp.Body)
-		for scanner.Scan() {
-			line := scanner.Text()
-			
+		err := utils.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
 			// SSE format: data: {...}
 			if !strings.HasPrefix(line, "data: ") {
-				continue
+				return nil
 			}
 			
 			data := strings.TrimPrefix(line, "data: ")
 			if data == "[DONE]" {
-				return
+				return nil // We can't return special error to stop, loop continues until end of body or context cancel
 			}
 
 			var chatResp schema.ChatResponse
 			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
-				// Don't fail the whole stream for one bad chunk, but maybe log it
-				continue 
+				// Log error but continue
+				return nil
 			}
 
 			ch <- ports.StreamResult{Response: &chatResp}
-		}
-		
-		if err := scanner.Err(); err != nil {
+			return nil
+		})
+
+		if err != nil {
 			ch <- ports.StreamResult{Err: err}
 		}
 	}()

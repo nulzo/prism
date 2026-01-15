@@ -1,47 +1,75 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
+	"github.com/nulzo/model-router-api/internal/core/domain"
 )
 
-// Config holds the application configuration.
 type Config struct {
-	ServerPort string
+	Server    ServerConfig            `mapstructure:"server"`
+	Redis     RedisConfig             `mapstructure:"redis"`
+	Providers []domain.ProviderConfig `mapstructure:"providers"`
+	Routes    []domain.RouteConfig    `mapstructure:"routes"`
+}
+
+type ServerConfig struct {
+	Port string `mapstructure:"port"`
+	Env  string `mapstructure:"env"`
+}
+
+type RedisConfig struct {
+	Addr     string `mapstructure:"addr"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
+	Enabled  bool   `mapstructure:"enabled"`
+}
+
+// LoadConfig reads configuration from file or environment variables.
+func LoadConfig() (*Config, error) {
+	v := viper.New()
+
+	v.SetConfigName("config") 
+	v.SetConfigType("yaml")   
+	v.AddConfigPath(".")      
+	v.AddConfigPath("./config") 
+
+	// Default Values
+	v.SetDefault("server.port", "8080")
+	v.SetDefault("server.env", "development")
+	v.SetDefault("redis.enabled", false)
+
+	// Environment Variables
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.AutomaticEnv()
+
+	if err := v.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			return nil, fmt.Errorf("error reading config file: %w", err)
+		}
+	}
+
+	var cfg Config
+	if err := v.Unmarshal(&cfg); err != nil {
+		return nil, fmt.Errorf("unable to decode into struct: %w", err)
+	}
 	
-	// API Keys
-	OpenAIKey    string
-	AnthropicKey string
-	GoogleKey    string
-
-	// Base URLs (can be overridden for testing/proxying)
-	OpenAIBaseURL    string
-	AnthropicBaseURL string
-	GoogleBaseURL    string
-	OllamaBaseURL    string
-}
-
-// LoadConfig loads configuration from environment variables.
-func LoadConfig() *Config {
-	// Load .env file if it exists
-	_ = godotenv.Load()
-
-	return &Config{
-		ServerPort:       getEnv("SERVER_PORT", "8080"),
-		OpenAIKey:        getEnv("OPENAI_API_KEY", "sk-mock-openai"),
-		AnthropicKey:     getEnv("ANTHROPIC_API_KEY", "sk-mock-anthropic"),
-		GoogleKey:        getEnv("GOOGLE_API_KEY", "mock-google-key"),
-		OpenAIBaseURL:    getEnv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-		AnthropicBaseURL: getEnv("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
-		GoogleBaseURL:    getEnv("GOOGLE_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"),
-		OllamaBaseURL:    getEnv("OLLAMA_BASE_URL", "http://localhost:11434"),
+	// Resolve API Keys
+	for i, p := range cfg.Providers {
+		if strings.HasPrefix(p.APIKey, "ENV:") {
+			envVar := strings.TrimPrefix(p.APIKey, "ENV:")
+			// Check process environment first (explicit override)
+			val := os.Getenv(envVar)
+			if val == "" {
+				// Then check viper (which might have it from other sources)
+				val = v.GetString(envVar)
+			}
+			cfg.Providers[i].APIKey = val
+		}
 	}
-}
 
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
+	return &cfg, nil
 }

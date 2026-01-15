@@ -9,21 +9,25 @@ import (
 
 	"github.com/nulzo/model-router-api/internal/core/domain"
 	"github.com/nulzo/model-router-api/internal/core/ports"
+	"github.com/nulzo/model-router-api/internal/logger"
 	"github.com/nulzo/model-router-api/pkg/schema"
+	"go.uber.org/zap"
 )
 
 type RouterService struct {
-	providers map[string]ports.ModelProvider
-	routes    []domain.RouteConfig
-	cache     ports.CacheService
-	mu        sync.RWMutex
+	providers  map[string]ports.ModelProvider
+	modelIndex map[string]string // map[ModelID]ProviderID
+	routes     []domain.RouteConfig
+	cache      ports.CacheService
+	mu         sync.RWMutex
 }
 
 func NewRouterService(cache ports.CacheService) *RouterService {
 	return &RouterService{
-		providers: make(map[string]ports.ModelProvider),
-		routes:    make([]domain.RouteConfig, 0),
-		cache:     cache,
+		providers:  make(map[string]ports.ModelProvider),
+		modelIndex: make(map[string]string),
+		routes:     make([]domain.RouteConfig, 0),
+		cache:      cache,
 	}
 }
 
@@ -31,6 +35,15 @@ func (s *RouterService) RegisterProvider(p ports.ModelProvider) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.providers[p.Name()] = p
+}
+
+// RegisterModels associates a list of models with a provider for direct lookup
+func (s *RouterService) RegisterModels(providerID string, models []string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for _, m := range models {
+		s.modelIndex[m] = providerID
+	}
 }
 
 func (s *RouterService) SetRoutes(routes []domain.RouteConfig) {
@@ -42,38 +55,26 @@ func (s *RouterService) SetRoutes(routes []domain.RouteConfig) {
 // GetProviderForModel finds the best provider for a given model ID
 func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string) (ports.ModelProvider, error) {
 	s.mu.RLock()
-	// 1. Check explicit routes (manual overrides)
+	defer s.mu.RUnlock()
+
+	// 1. Check explicit routes (manual overrides / pattern matching)
 	for _, route := range s.routes {
 		if strings.HasPrefix(modelID, route.Pattern) {
-			targetID := route.TargetID
-			s.mu.RUnlock()
-			if p, exists := s.providers[targetID]; exists {
+			if p, exists := s.providers[route.TargetID]; exists {
 				return p, nil
 			}
-			s.mu.RLock()
-		}
-	}
-	s.mu.RUnlock()
-
-	// 2. Dynamic Lookup: Search all provider models
-	allModels, err := s.ListAllModels(ctx)
-	if err == nil {
-		for _, m := range allModels {
-			// Exact match or match without version tag (e.g., "tinydolphin" matches "tinydolphin:latest")
-			if m.ID == modelID || strings.Split(m.ID, ":")[0] == modelID {
-				s.mu.RLock()
-				p, exists := s.providers[m.Provider]
-				s.mu.RUnlock()
-				if exists {
-					return p, nil
-				}
-			}
 		}
 	}
 
-	// 3. Fallback: Heuristic matching for well-known prefixes
-	s.mu.RLock()
-	defer s.mu.RUnlock()
+	// 2. Check exact model match in index
+	if providerID, ok := s.modelIndex[modelID]; ok {
+		if p, exists := s.providers[providerID]; exists {
+			return p, nil
+		}
+	}
+
+	// 3. Fallback: Heuristic matching for well-known prefixes if not found
+	// This is a safety net.
 	for _, p := range s.providers {
 		lowered := strings.ToLower(modelID)
 		if strings.Contains(lowered, "gpt") && p.Type() == "openai" {
@@ -93,6 +94,7 @@ func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string)
 func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
 	p, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
+		logger.Warn("Provider routing failed", zap.String("model", req.Model), zap.Error(err))
 		return nil, err
 	}
 	return p.Chat(ctx, req)
@@ -101,6 +103,7 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
 	p, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
+		logger.Warn("Provider routing failed for stream", zap.String("model", req.Model), zap.Error(err))
 		return nil, err
 	}
 	return p.Stream(ctx, req)
@@ -109,56 +112,88 @@ func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest)
 const ModelsCacheKey = "all_models"
 const ModelsCacheTTL = 5 * time.Minute
 
-func (s *RouterService) ListAllModels(ctx context.Context) ([]schema.Model, error) {
+func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFilter) ([]schema.Model, error) {
 	// 1. Try Cache
-	if s.cache != nil {
-		var cachedModels []schema.Model
-		if err := s.cache.Get(ctx, ModelsCacheKey, &cachedModels); err == nil {
-			return cachedModels, nil
-		}
-	}
-
-	// 2. Fetch from Providers
-	s.mu.RLock()
-	providers := make([]ports.ModelProvider, 0, len(s.providers))
-	for _, p := range s.providers {
-		providers = append(providers, p)
-	}
-	s.mu.RUnlock()
-
-	var wg sync.WaitGroup
-	modelsChan := make(chan []schema.Model, len(providers))
-
-	for _, p := range providers {
-		wg.Add(1)
-		go func(p ports.ModelProvider) {
-			defer wg.Done()
-			if m, err := p.Models(ctx); err == nil {
-				modelsChan <- m
-			}
-		}(p)
-	}
-
-	wg.Wait()
-	close(modelsChan)
-
 	var allModels []schema.Model
-	seen := make(map[string]bool)
-
-	for ms := range modelsChan {
-		for _, m := range ms {
-			if !seen[m.ID] {
-				allModels = append(allModels, m)
-				seen[m.ID] = true
-			}
+	cacheHit := false
+	if s.cache != nil {
+		if err := s.cache.Get(ctx, ModelsCacheKey, &allModels); err == nil {
+			cacheHit = true
 		}
 	}
 
-	// 3. Set Cache
-	if s.cache != nil && len(allModels) > 0 {
-		// Log error in real app
-		_ = s.cache.Set(ctx, ModelsCacheKey, allModels, ModelsCacheTTL)
+	// 2. Fetch from Providers if not in cache
+	if !cacheHit {
+		s.mu.RLock()
+		providers := make([]ports.ModelProvider, 0, len(s.providers))
+		for _, p := range s.providers {
+			providers = append(providers, p)
+		}
+		s.mu.RUnlock()
+
+		var wg sync.WaitGroup
+		modelsChan := make(chan []schema.Model, len(providers))
+
+		for _, p := range providers {
+			wg.Add(1)
+			go func(p ports.ModelProvider) {
+				defer wg.Done()
+				// Some providers might fail to list models (network, or not supported)
+				// Log it but don't fail everything
+				m, err := p.Models(ctx)
+				if err != nil {
+					logger.Warn("Failed to list models for provider", zap.String("provider", p.Name()), zap.Error(err))
+					return
+				}
+				modelsChan <- m
+			}(p)
+		}
+
+		wg.Wait()
+		close(modelsChan)
+
+		seen := make(map[string]bool)
+		for ms := range modelsChan {
+			for _, m := range ms {
+				if !seen[m.ID] {
+					allModels = append(allModels, m)
+					seen[m.ID] = true
+				}
+			}
+		}
+
+		// Cache the full list
+		if s.cache != nil && len(allModels) > 0 {
+			_ = s.cache.Set(ctx, ModelsCacheKey, allModels, ModelsCacheTTL)
+		}
 	}
 
-	return allModels, nil
+	// 3. Apply Filters
+	return s.applyFilters(allModels, filter), nil
+}
+
+func (s *RouterService) applyFilters(models []schema.Model, filter ports.ModelFilter) []schema.Model {
+	filtered := make([]schema.Model, 0)
+	for _, m := range models {
+		if s.matchesFilter(m, filter) {
+			filtered = append(filtered, m)
+		}
+	}
+	return filtered
+}
+
+func (s *RouterService) matchesFilter(m schema.Model, f ports.ModelFilter) bool {
+	if f.Provider != "" && !strings.EqualFold(m.Provider, f.Provider) {
+		return false
+	}
+	if f.ID != "" && !strings.Contains(strings.ToLower(m.ID), strings.ToLower(f.ID)) {
+		return false
+	}
+	if f.OwnedBy != "" && !strings.EqualFold(m.OwnedBy, f.OwnedBy) {
+		return false
+	}
+	if f.Modality != "" && !strings.EqualFold(m.Architecture.Modality, f.Modality) {
+		return false
+	}
+	return true
 }

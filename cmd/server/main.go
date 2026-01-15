@@ -1,16 +1,25 @@
 package main
 
 import (
-	"log"
+	"context"
+	"errors"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nulzo/model-router-api/internal/adapters/cache/memory"
+	"github.com/nulzo/model-router-api/internal/adapters/cache/redis"
 	"github.com/nulzo/model-router-api/internal/adapters/http/middleware"
 	v1 "github.com/nulzo/model-router-api/internal/adapters/http/v1"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/factory"
 	"github.com/nulzo/model-router-api/internal/config"
-	"github.com/nulzo/model-router-api/internal/core/domain"
+	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/core/services"
+	"github.com/nulzo/model-router-api/internal/logger"
+	"go.uber.org/zap"
 
 	// Import providers to trigger init() registration
 	_ "github.com/nulzo/model-router-api/internal/adapters/providers/anthropic"
@@ -20,102 +29,108 @@ import (
 )
 
 func main() {
-	// 1. Load Base Config (Env vars)
-	cfg := config.LoadConfig()
-
-	// 2. Define Providers (Ideally loaded from a DB or YAML file)
-	// Now purely data-driven. The system knows nothing about "openai" or "google" packages directly here.
-	providerConfigs := []domain.ProviderConfig{
-		{
-			ID:      "openai-main",
-			Type:    "openai",
-			Name:    "OpenAI",
-			APIKey:  cfg.OpenAIKey,
-			BaseURL: cfg.OpenAIBaseURL,
-		},
-		{
-			ID:      "anthropic-main",
-			Type:    "anthropic",
-			Name:    "Anthropic",
-			APIKey:  cfg.AnthropicKey,
-			BaseURL: cfg.AnthropicBaseURL,
-			Config:  map[string]string{"version": "2023-06-01"},
-		},
-		{
-			ID:      "google-main",
-			Type:    "google",
-			Name:    "Google Gemini",
-			APIKey:  cfg.GoogleKey,
-			BaseURL: cfg.GoogleBaseURL,
-		},
-		{
-			ID:      "deepseek-main",
-			Type:    "openai", // Reusing OpenAI adapter
-			Name:    "DeepSeek",
-			APIKey:  "sk-mock-deepseek",
-			BaseURL: "https://api.deepseek.com/v1",
-		},
-		{
-			ID:      "ollama",
-			Type:    "ollama",
-			Name:    "Ollama Local",
-			BaseURL: cfg.OllamaBaseURL,
-		},
+	// 1. Load Configuration
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		// Panic here because we can't start without config
+		panic("failed to load configuration: " + err.Error())
 	}
 
+	// 2. Initialize Logger
+	logger.Initialize(cfg.Server.Env)
+	defer logger.Sync()
+
+	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
+
 	// 3. Initialize Cache
-	// In production, you would check env vars to decide between Redis and Memory
-	// e.g. if cfg.RedisAddr != "" { cache = redis.NewRedisCache(...) }
-	// For now, defaulting to MemoryCache to keep the "run out of the box" experience.
-	cacheService := memory.NewMemoryCache()
+	var cacheService ports.CacheService
+	if cfg.Redis.Enabled {
+		logger.Info("Using Redis Cache", zap.String("addr", cfg.Redis.Addr))
+		cacheService = redis.NewRedisCache(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
+	} else {
+		logger.Info("Using Memory Cache")
+		cacheService = memory.NewMemoryCache()
+	}
 
 	// 4. Initialize Core Services
 	routerService := services.NewRouterService(cacheService)
 	providerFactory := factory.NewProviderFactory()
 
-	// 5. Register Providers using the Factory (which uses the Registry)
-	for _, pCfg := range providerConfigs {
-		// This now looks up the "Type" in the registry and invokes the constructor
-		p, err := providerFactory.CreateProvider(pCfg)
-		if err != nil {
-			log.Printf("Failed to create provider %s (type: %s): %v", pCfg.ID, pCfg.Type, err)
+	// 5. Register Providers from Config
+	registeredCount := 0
+	for _, pCfg := range cfg.Providers {
+		if !pCfg.Enabled {
 			continue
 		}
+
+		p, err := providerFactory.CreateProvider(pCfg)
+		if err != nil {
+			logger.Error("Failed to create provider", 
+				zap.String("id", pCfg.ID), 
+				zap.String("type", pCfg.Type), 
+				zap.Error(err))
+			continue
+		}
+		
 		routerService.RegisterProvider(p)
-		log.Printf("Registered provider: %s (%s)", pCfg.Name, pCfg.ID)
+		if len(pCfg.Models) > 0 {
+			routerService.RegisterModels(pCfg.ID, pCfg.Models)
+		}
+		logger.Info("Registered provider", zap.String("name", pCfg.Name), zap.String("id", pCfg.ID), zap.Int("models_count", len(pCfg.Models)))
+		registeredCount++
+	}
+	
+	if registeredCount == 0 {
+		logger.Warn("No providers were registered. API will not function correctly.")
 	}
 
-	// 6. Define Routing Rules (Manual overrides or special logic)
-	// Broad patterns can still be used to force a model family to a specific provider instance.
-	routerService.SetRoutes([]domain.RouteConfig{
-		{Pattern: "gpt-", TargetID: "openai-main"},
-		{Pattern: "claude-", TargetID: "anthropic-main"},
-		{Pattern: "gemini-", TargetID: "google-main"},
-	})
+	// 6. Set Routing Rules
+	routerService.SetRoutes(cfg.Routes)
 
-	// 7. Setup Handlers & Server
-	handler := v1.NewHandler(routerService)
-	engine := gin.New() // Use New() to control middleware order explicitly
+	// 7. Setup HTTP Server
+	if cfg.Server.Env == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
-	// Global Middleware
+	engine := gin.New()
+	
+	// Middleware
 	engine.Use(middleware.StructuredLogger())
 	engine.Use(gin.Recovery())
 	engine.Use(middleware.CORSMiddleware())
 
-	// Define API Key(s) for the router itself (e.g., provided to clients)
-	// In production, load from env or DB
-	validKeys := []string{"sk-router-admin-key", "sk-router-client-key"}
-
+	handler := v1.NewHandler(routerService)
 	v1Group := engine.Group("/v1")
-
-	// Apply Auth and Rate Limit specifically to the API group
-	v1Group.Use(middleware.AuthMiddleware(validKeys))
-	v1Group.Use(middleware.RateLimitMiddleware(100, 200)) // 100 RPS, burst 200
+	
+	// Add Auth/RateLimit here if needed, driven by config
+	// v1Group.Use(middleware.AuthMiddleware(...))
 
 	handler.RegisterRoutes(v1Group)
 
-	log.Printf("Starting Enterprise Model Router on port %s", cfg.ServerPort)
-	if err := engine.Run(":" + cfg.ServerPort); err != nil {
-		log.Fatalf("Server failed: %v", err)
+	srv := &http.Server{
+		Addr:    ":" + cfg.Server.Port,
+		Handler: engine,
 	}
+
+	// Graceful Shutdown
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logger.Fatal("Server start failure", zap.Error(err))
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	logger.Info("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		logger.Fatal("Server forced to shutdown", zap.Error(err))
+	}
+
+	logger.Info("Server exiting")
 }

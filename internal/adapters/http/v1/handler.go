@@ -25,7 +25,14 @@ func (h *Handler) RegisterRoutes(router *gin.RouterGroup) {
 }
 
 func (h *Handler) HandleListModels(c *gin.Context) {
-	models, err := h.service.ListAllModels(c.Request.Context())
+	filter := ports.ModelFilter{
+		Provider: c.Query("provider"),
+		ID:       c.Query("id"),
+		Modality: c.Query("modality"),
+		OwnedBy:  c.Query("owned_by"),
+	}
+
+	models, err := h.service.ListAllModels(c.Request.Context(), filter)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
