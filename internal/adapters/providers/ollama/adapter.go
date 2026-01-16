@@ -26,7 +26,6 @@ type Adapter struct {
 }
 
 func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
-	// 1. Setup OpenAI Adapter for Chat/Stream (needs /v1)
 	openAIConfig := config
 	if openAIConfig.BaseURL == "" {
 		openAIConfig.BaseURL = "http://localhost:11434/v1"
@@ -39,7 +38,6 @@ func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
 		return nil, err
 	}
 
-	// 2. Return our wrapper
 	return &Adapter{
 		ModelProvider: oaAdapter,
 		config:        config,
@@ -47,15 +45,14 @@ func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
 	}, nil
 }
 
-// Models overrides the OpenAI implementation to hit the native Ollama /api/tags endpoint
 func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
-	// Clean the BaseURL to get the root (remove /v1 if present)
 	rootURL := a.config.BaseURL
 	if rootURL == "" {
 		rootURL = "http://localhost:11434"
 	}
+
 	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
-	
+
 	url := fmt.Sprintf("%s/api/tags", rootURL)
 
 	var resp struct {
@@ -73,11 +70,18 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	var models []schema.Model
 	for _, m := range resp.Models {
 		models = append(models, schema.Model{
-			ID:          m.Name,
+			ID:          fmt.Sprintf("%s/%s", "ollama", m.Name),
 			Name:        m.Name,
 			Provider:    a.config.ID,
 			OwnedBy:     "ollama",
 			Description: fmt.Sprintf("Ollama model (Size: %d bytes)", m.Size),
+			// ollama is always free
+			Pricing: schema.Pricing{
+				Prompt:     "0",
+				Completion: "0",
+				Image:      "0",
+				Request:    "0",
+			},
 		})
 	}
 
