@@ -143,8 +143,7 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 			wg.Add(1)
 			go func(p ports.ModelProvider) {
 				defer wg.Done()
-				// Some providers might fail to list models (network, or not supported)
-				// Log it but don't fail everything
+				// log but don't fail everything
 				m, err := p.Models(ctx)
 				if err != nil {
 					logger.Warn("Failed to list models for provider", zap.String("provider", p.Name()), zap.Error(err))
@@ -174,15 +173,8 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 		}
 	}
 
-	// 3. Apply Filters
-	// If we already filtered providers by selection, we don't need to filter by provider name/ID again
-	// strictly, unless we want to support advanced cases. For now, if we selected providers,
-	// we assume the returned models are from the correct provider context.
-	// However, to be safe: if we matched by TYPE, the model.Provider (ID) might not match filter.Provider (Type).
-	// So we should clear filter.Provider if we handled it via selection.
 	effectiveFilter := filter
 	if filter.Provider != "" {
-		// We assumed we handled the provider filtering by selecting the correct providers
 		effectiveFilter.Provider = ""
 	}
 

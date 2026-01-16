@@ -2,13 +2,14 @@ package ports
 
 import (
 	"context"
+
 	"github.com/nulzo/model-router-api/pkg/schema"
 )
 
 type ModelFilter struct {
 	Provider string
 	ID       string
-	Modality string // e.g., "text", "multimodal"
+	Modality string
 	OwnedBy  string
 }
 
