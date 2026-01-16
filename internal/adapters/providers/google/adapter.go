@@ -57,9 +57,9 @@ type GeminiResponse struct {
 	Candidates []GeminiCandidate `json:"candidates"`
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
+func Shape(req []schema.ChatMessage) (GeminiRequest, error) {
 	gr := GeminiRequest{}
-	for _, m := range req.Messages {
+	for _, m := range req {
 		role := schema.User
 		if m.Role == string(schema.Assistant) {
 			role = schema.ModelAssistant
@@ -69,6 +69,11 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 			Parts: []GeminiPart{{Text: m.Content.Text}},
 		})
 	}
+	return gr, nil
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
+	var shape, _ = Shape(req.Messages)
 
 	url := fmt.Sprintf("%s/models/%s:generateContent?key=%s",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -77,7 +82,7 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 	)
 
 	var gResp GeminiResponse
-	if err := utils.SendRequest(ctx, a.client, "POST", url, nil, gr, &gResp); err != nil {
+	if err := utils.SendRequest(ctx, a.client, "POST", url, nil, shape, &gResp); err != nil {
 		return nil, err
 	}
 
@@ -107,17 +112,7 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
 	ch := make(chan ports.StreamResult)
 
-	gr := GeminiRequest{}
-	for _, m := range req.Messages {
-		role := "user"
-		if m.Role == "assistant" {
-			role = "model"
-		}
-		gr.Contents = append(gr.Contents, GeminiContent{
-			Role:  role,
-			Parts: []GeminiPart{{Text: m.Content.Text}},
-		})
-	}
+	var shape, _ = Shape(req.Messages)
 
 	url := fmt.Sprintf("%s/models/%s:streamGenerateContent?key=%s&alt=sse",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -130,7 +125,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 
 		headers := map[string]string{}
 
-		err := utils.StreamRequest(ctx, a.client, "POST", url, headers, gr, func(line string) error {
+		err := utils.StreamRequest(ctx, a.client, "POST", url, headers, shape, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
