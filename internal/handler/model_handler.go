@@ -7,10 +7,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/core/ports"
 )
 
-type Handler struct {
-	service ports.RouterService
-}
-
 func (h *Handler) HandleListModels(c *gin.Context) {
 	filter := ports.ModelFilter{
 		Provider: c.Query("provider"),

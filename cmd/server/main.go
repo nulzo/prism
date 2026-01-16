@@ -9,16 +9,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/nulzo/model-router-api/internal/adapters/cache/memory"
 	"github.com/nulzo/model-router-api/internal/adapters/cache/redis"
-	"github.com/nulzo/model-router-api/internal/adapters/http/middleware"
-	v1 "github.com/nulzo/model-router-api/internal/adapters/http/v1"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/factory"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/core/services"
 	"github.com/nulzo/model-router-api/internal/logger"
+	"github.com/nulzo/model-router-api/internal/otel"
+	"github.com/nulzo/model-router-api/internal/router"
 	"go.uber.org/zap"
 
 	// Import providers to trigger init() registration
@@ -41,6 +40,18 @@ func main() {
 	defer logger.Sync()
 
 	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
+
+	// 2a. Initialize OpenTelemetry
+	shutdownTracer, err := otel.InitTracer("model-router-api", logger.Get(), os.Stdout)
+	if err != nil {
+		logger.Error("Failed to initialize tracer", zap.Error(err))
+	} else {
+		defer func() {
+			if err := shutdownTracer(context.Background()); err != nil {
+				logger.Error("Failed to shutdown tracer", zap.Error(err))
+			}
+		}()
+	}
 
 	// 3. Initialize Cache
 	var cacheService ports.CacheService
@@ -87,25 +98,9 @@ func main() {
 	// 6. Set Routing Rules
 	routerService.SetRoutes(cfg.Routes)
 
-	// 7. Setup HTTP Server
-	if cfg.Server.Env == "production" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	engine := gin.New()
-	
-	// Middleware
-	engine.Use(middleware.StructuredLogger())
-	engine.Use(gin.Recovery())
-	engine.Use(middleware.CORSMiddleware())
-
-	handler := v1.NewHandler(routerService)
-	v1Group := engine.Group("/v1")
-	
-	// Add Auth/RateLimit here if needed, driven by config
-	// v1Group.Use(middleware.AuthMiddleware(...))
-
-	handler.RegisterRoutes(v1Group)
+	// 7. Setup HTTP Server via Router
+	appRouter := router.New(cfg, logger.Get(), routerService)
+	engine := appRouter.Setup()
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Server.Port,

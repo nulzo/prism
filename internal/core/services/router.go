@@ -16,7 +16,7 @@ import (
 
 type RouterService struct {
 	providers  map[string]ports.ModelProvider
-	modelIndex map[string]string // map[ModelID]ProviderID
+	modelIndex map[string]string
 	routes     []domain.RouteConfig
 	cache      ports.CacheService
 	mu         sync.RWMutex
@@ -76,14 +76,7 @@ func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string)
 	// 3. Fallback: Heuristic matching for well-known prefixes if not found
 	// This is a safety net.
 	for _, p := range s.providers {
-		lowered := strings.ToLower(modelID)
-		if strings.Contains(lowered, "gpt") && p.Type() == "openai" {
-			return p, nil
-		}
-		if strings.Contains(lowered, "claude") && p.Type() == "anthropic" {
-			return p, nil
-		}
-		if strings.Contains(lowered, "gemini") && p.Type() == "google" {
+		if matchProviderHeuristic(modelID, p) {
 			return p, nil
 		}
 	}
@@ -192,32 +185,6 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 		// We assumed we handled the provider filtering by selecting the correct providers
 		effectiveFilter.Provider = ""
 	}
-	
-	return s.applyFilters(allModels, effectiveFilter), nil
-}
 
-func (s *RouterService) applyFilters(models []schema.Model, filter ports.ModelFilter) []schema.Model {
-	filtered := make([]schema.Model, 0)
-	for _, m := range models {
-		if s.matchesFilter(m, filter) {
-			filtered = append(filtered, m)
-		}
-	}
-	return filtered
-}
-
-func (s *RouterService) matchesFilter(m schema.Model, f ports.ModelFilter) bool {
-	if f.Provider != "" && !strings.EqualFold(m.Provider, f.Provider) {
-		return false
-	}
-	if f.ID != "" && !strings.Contains(strings.ToLower(m.ID), strings.ToLower(f.ID)) {
-		return false
-	}
-	if f.OwnedBy != "" && !strings.EqualFold(m.OwnedBy, f.OwnedBy) {
-		return false
-	}
-	if f.Modality != "" && !strings.EqualFold(m.Architecture.Modality, f.Modality) {
-		return false
-	}
-	return true
+	return applyFilters(allModels, effectiveFilter), nil
 }

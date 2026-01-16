@@ -13,8 +13,14 @@ import (
 type Config struct {
 	Server    ServerConfig            `mapstructure:"server"`
 	Redis     RedisConfig             `mapstructure:"redis"`
+	RateLimit RateLimitConfig         `mapstructure:"rate_limit"`
 	Providers []domain.ProviderConfig `mapstructure:"providers"`
 	Routes    []domain.RouteConfig    `mapstructure:"routes"`
+}
+
+type RateLimitConfig struct {
+	RequestsPerSecond float64 `mapstructure:"requests_per_second"`
+	Burst             int     `mapstructure:"burst"`
 }
 
 type ServerConfig struct {
@@ -40,11 +46,14 @@ func LoadConfig() (*Config, error) {
 	v.SetConfigType("yaml")   
 	v.AddConfigPath(".")      
 	v.AddConfigPath("./config") 
+	v.AddConfigPath("./internal/config")
 
 	// Default Values
 	v.SetDefault("server.port", "8080")
 	v.SetDefault("server.env", "development")
 	v.SetDefault("redis.enabled", false)
+	v.SetDefault("rate_limit.requests_per_second", 10.0)
+	v.SetDefault("rate_limit.burst", 20)
 
 	// Environment Variables
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
