@@ -1,6 +1,14 @@
 server:
   port: "8080"
-  env: "development"
+  read_timeout: "10s"
+  write_timeout: "10s"
+
+rate_limit:
+  requests_per_second: 10.0
+  burst: 20
+
+log:
+  level: "info"
 
 redis:
   enabled: false
