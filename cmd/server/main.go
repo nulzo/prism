@@ -16,7 +16,9 @@ import (
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/core/services"
 	"github.com/nulzo/model-router-api/internal/logger"
-	"github.com/nulzo/model-router-api/internal/otel"
+	"github.com/nulzo/model-router-api/pkg/schema"
+
+	// "github.com/nulzo/model-router-api/internal/otel"
 	"github.com/nulzo/model-router-api/internal/router"
 	"go.uber.org/zap"
 
@@ -37,16 +39,16 @@ func main() {
 
 	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
 
-	shutdownTracer, err := otel.InitTracer("model-router-api", logger.Get(), os.Stdout)
-	if err != nil {
-		logger.Error("Failed to initialize tracer", zap.Error(err))
-	} else {
-		defer func() {
-			if err := shutdownTracer(context.Background()); err != nil {
-				logger.Error("Failed to shutdown tracer", zap.Error(err))
-			}
-		}()
-	}
+	// shutdownTracer, err := otel.InitTracer("model-router-api", logger.Get(), os.Stdout)
+	// if err != nil {
+	// 	logger.Error("Failed to initialize tracer", zap.Error(err))
+	// } else {
+	// 	defer func() {
+	// 		if err := shutdownTracer(context.Background()); err != nil {
+	// 			logger.Error("Failed to shutdown tracer", zap.Error(err))
+	// 		}
+	// 	}()
+	// }
 
 	var cacheService ports.CacheService
 	if cfg.Redis.Enabled {
@@ -57,7 +59,8 @@ func main() {
 		cacheService = memory.NewMemoryCache()
 	}
 
-	routerService := services.NewRouterService(cacheService)
+	modelRegistry := services.NewInMemoryModelRegistry(cfg.Models)
+	routerService := services.NewRouterService(modelRegistry, cacheService)
 	providerFactory := factory.NewProviderFactory()
 
 	registeredCount := 0
@@ -76,18 +79,50 @@ func main() {
 		}
 
 		routerService.RegisterProvider(p)
-		if len(pCfg.Models) > 0 {
-			routerService.RegisterModels(pCfg.ID, pCfg.Models)
-		}
-		logger.Info("Registered provider", zap.String("name", pCfg.Name), zap.String("id", pCfg.ID), zap.Int("models_count", len(pCfg.Models)))
+
+		logger.Info("Registered provider", zap.String("name", pCfg.Name), zap.String("id", pCfg.ID))
 		registeredCount++
+
+		// Dynamic Discovery for Ollama
+		if p.Type() == "ollama" {
+			go func(prov ports.ModelProvider, provID string) {
+				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+				defer cancel()
+
+				models, err := prov.Models(ctx)
+				if err != nil {
+					logger.Error("Failed to fetch dynamic models for ollama", zap.String("provider_id", provID), zap.Error(err))
+					return
+				}
+
+				for _, m := range models {
+					def := schema.ModelDefinition{
+						ID:          m.ID, // e.g. "ollama/llama3:latest"
+						Name:        m.Name,
+						ProviderID:  provID,
+						UpstreamID:  m.Name, // e.g. "llama3:latest"
+						Description: m.Description,
+						Enabled:     true,
+						Pricing: schema.ModelPricing{
+							Input:  0,
+							Output: 0,
+						},
+						Config: schema.ModelConfig{
+							ContextWindow:    4096, // Default assumption for Ollama
+							StreamingSupport: true,
+							Modality:         []string{"text"},
+						},
+					}
+					modelRegistry.AddModel(def)
+				}
+				logger.Info("Discovered dynamic models", zap.String("provider", provID), zap.Int("count", len(models)))
+			}(p, pCfg.ID)
+		}
 	}
 
 	if registeredCount == 0 {
 		logger.Warn("No providers were registered. API will not function correctly.")
 	}
-
-	routerService.SetRoutes(cfg.Routes)
 
 	appRouter := router.New(cfg, logger.Get(), routerService)
 	engine := appRouter.Setup()

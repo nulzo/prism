@@ -157,6 +157,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 
 func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	url := fmt.Sprintf("%s/models?key=%s", strings.TrimRight(a.config.BaseURL, "/"), a.config.APIKey)
+
 	var list struct {
 		Models []struct {
 			Name        string `json:"name"`
@@ -169,6 +170,7 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	}
 
 	var models []schema.Model
+	
 	for _, m := range list.Models {
 		id := strings.TrimPrefix(m.Name, "models/")
 		models = append(models, schema.Model{

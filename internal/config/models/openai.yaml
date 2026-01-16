@@ -1,0 +1,53 @@
+models:
+  - id: "openai/gpt-4o"
+    name: "GPT-4o"
+    provider_id: "openai-main"
+    upstream_id: "gpt-4o"
+    description: "OpenAI's flagship flagship model."
+    enabled: true
+    pricing:
+      input: 2.50
+      output: 10.00
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: ["text", "image"]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: "manual"
+
+  - id: "openai/gpt-4-turbo"
+    name: "GPT-4 Turbo"
+    provider_id: "openai-main"
+    upstream_id: "gpt-4-turbo-preview"
+    description: "High-intelligence model with a large context window."
+    enabled: true
+    pricing:
+      input: 10.00
+      output: 30.00
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: ["text", "image"]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: "manual"
+
+  - id: "openai/gpt-3.5-turbo"
+    name: "GPT-3.5 Turbo"
+    provider_id: "openai-main"
+    upstream_id: "gpt-3.5-turbo"
+    description: "Fast, inexpensive model for simple tasks."
+    enabled: true
+    pricing:
+      input: 0.50
+      output: 1.50
+    config:
+      context_window: 16385
+      max_output: 4096
+      modality: ["text"]
+      tool_use: true
+      streaming_support: true
+    source: "manual"

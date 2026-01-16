@@ -1,0 +1,17 @@
+models:
+  - id: "ollama/llama3"
+    name: "Llama 3 (Local)"
+    provider_id: "ollama-local"
+    upstream_id: "llama3"
+    description: "Meta's open source model running locally."
+    enabled: true
+    pricing:
+      input: 0.00
+      output: 0.00
+    config:
+      context_window: 8192
+      max_output: 4096
+      modality: ["text"]
+      tool_use: false
+      streaming_support: true
+    source: "manual"

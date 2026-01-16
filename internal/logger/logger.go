@@ -20,9 +20,12 @@ func Initialize(env string) {
 		var config zap.Config
 		if env == "development" {
 			config = zap.NewDevelopmentConfig()
-			config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+			config.Encoding = "json" // Force pure JSON
+			config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // No colors in JSON
+			config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 		} else {
 			config = zap.NewProductionConfig()
+			config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 		}
 		
 		config.OutputPaths = []string{"stdout"}

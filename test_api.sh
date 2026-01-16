@@ -1,7 +1,7 @@
 #!/bin/bash
 
 API_BASE="http://localhost:8080/v1"
-MODEL="gpt-4o"
+MODEL="ollama/deepscaler:latest"
 
 # Colors for output
 GREEN='\033[0;32m'

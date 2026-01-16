@@ -3,10 +3,12 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/viper"
 	"github.com/nulzo/model-router-api/internal/core/domain"
+	"github.com/nulzo/model-router-api/pkg/schema"
 	"github.com/joho/godotenv"
 )
 
@@ -16,6 +18,7 @@ type Config struct {
 	RateLimit RateLimitConfig         `mapstructure:"rate_limit"`
 	Providers []domain.ProviderConfig `mapstructure:"providers"`
 	Routes    []domain.RouteConfig    `mapstructure:"routes"`
+	Models    []schema.ModelDefinition `mapstructure:"models"`
 }
 
 type RateLimitConfig struct {
@@ -64,6 +67,40 @@ func LoadConfig() (*Config, error) {
 			return nil, fmt.Errorf("error reading config file: %w", err)
 		}
 	}
+
+	// Load all models from internal/config/models/*.yaml
+	// We need to accumulate them because viper overwrites slices when merging
+	var allModels []schema.ModelDefinition
+	
+	// Try to find the models directory relative to execution or common paths
+	modelSearchPaths := []string{
+		"internal/config/models/*.yaml",
+		"./config/models/*.yaml",
+		"./models/*.yaml",
+	}
+
+	for _, pattern := range modelSearchPaths {
+		files, _ := filepath.Glob(pattern)
+		for _, file := range files {
+			vModel := viper.New()
+			vModel.SetConfigFile(file)
+			if err := vModel.ReadInConfig(); err != nil {
+				// Warn but continue
+				fmt.Printf("Warning: Failed to read model config %s: %v\n", file, err)
+				continue
+			}
+			
+			var fileData struct {
+				Models []schema.ModelDefinition `mapstructure:"models"`
+			}
+			if err := vModel.Unmarshal(&fileData); err == nil {
+				allModels = append(allModels, fileData.Models...)
+			}
+		}
+	}
+
+	// Set the aggregated models back into the main viper instance so Unmarshal works
+	v.Set("models", allModels)
 
 	var cfg Config
 	if err := v.Unmarshal(&cfg); err != nil {

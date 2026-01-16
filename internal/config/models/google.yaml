@@ -1,0 +1,18 @@
+models:
+  - id: "google/gemini-1.5-flash"
+    name: "Gemini 1.5 Flash"
+    provider_id: "google-main"
+    upstream_id: "gemini-1.5-flash"
+    description: "Fast and versatile multimodal model for high-frequency tasks."
+    enabled: true
+    pricing:
+      input: 0.35
+      output: 1.05
+    config:
+      context_window: 1000000
+      max_output: 8192
+      modality: ["text", "image", "video", "audio"]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: "manual"

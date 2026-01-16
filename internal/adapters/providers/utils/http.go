@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -54,12 +53,12 @@ func SendRequest(ctx context.Context, client HTTPClient, method, url string, hea
 		}
 	}
 
-	prettyJSON, err := json.MarshalIndent(response, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// prettyJSON, err := json.MarshalIndent(response, "", "  ")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println(string(prettyJSON))
+	// fmt.Println(string(prettyJSON))
 
 	return nil
 }

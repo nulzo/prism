@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/adapters/providers"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/openai"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/utils"
 	"github.com/nulzo/model-router-api/internal/core/domain"
@@ -16,7 +17,7 @@ import (
 )
 
 func init() {
-	registry.Register("ollama", NewAdapter)
+	registry.Register(string(providers.Ollama), NewAdapter)
 }
 
 type Adapter struct {
@@ -26,14 +27,11 @@ type Adapter struct {
 }
 
 func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
-	openAIConfig := config
-	if openAIConfig.BaseURL == "" {
-		openAIConfig.BaseURL = "http://localhost:11434/v1"
-	} else if !strings.HasSuffix(openAIConfig.BaseURL, "/v1") {
-		openAIConfig.BaseURL = strings.TrimRight(openAIConfig.BaseURL, "/") + "/v1"
+	if !strings.HasSuffix(config.BaseURL, "/v1") {
+		config.BaseURL = strings.TrimRight(config.BaseURL, "/") + "/v1"
 	}
 
-	oaAdapter, err := openai.NewAdapter(openAIConfig)
+	oaAdapter, err := openai.NewAdapter(config)
 	if err != nil {
 		return nil, err
 	}
@@ -47,9 +45,6 @@ func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
 
 func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	rootURL := a.config.BaseURL
-	if rootURL == "" {
-		rootURL = "http://localhost:11434"
-	}
 
 	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
 
@@ -70,10 +65,10 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	var models []schema.Model
 	for _, m := range resp.Models {
 		models = append(models, schema.Model{
-			ID:          fmt.Sprintf("%s/%s", "ollama", m.Name),
+			ID:          fmt.Sprintf("%s/%s", string(providers.Ollama), m.Name),
 			Name:        m.Name,
 			Provider:    a.config.ID,
-			OwnedBy:     "ollama",
+			OwnedBy:     string(providers.Ollama),
 			Description: fmt.Sprintf("Ollama model (Size: %d bytes)", m.Size),
 			// ollama is always free
 			Pricing: schema.Pricing{
@@ -89,5 +84,5 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 }
 
 func (a *Adapter) Type() string {
-	return "ollama"
+	return string(providers.Ollama)
 }

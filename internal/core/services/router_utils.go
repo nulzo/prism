@@ -32,17 +32,3 @@ func matchesFilter(m schema.Model, f ports.ModelFilter) bool {
 	}
 	return true
 }
-
-func matchProviderHeuristic(modelID string, p ports.ModelProvider) bool {
-	lowered := strings.ToLower(modelID)
-	if strings.Contains(lowered, "gpt") && p.Type() == "openai" {
-		return true
-	}
-	if strings.Contains(lowered, "claude") && p.Type() == "anthropic" {
-		return true
-	}
-	if strings.Contains(lowered, "gemini") && p.Type() == "google" {
-		return true
-	}
-	return false
-}

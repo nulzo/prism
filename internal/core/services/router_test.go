@@ -7,151 +7,132 @@ import (
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/pkg/schema"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 // MockProvider implements ports.ModelProvider for testing
 type MockProvider struct {
+	mock.Mock
 	ID           string
 	ProviderType string
-	ModelsList   []schema.Model
-	ShouldFail   bool
 }
 
 func (m *MockProvider) Name() string { return m.ID }
 func (m *MockProvider) Type() string { return m.ProviderType }
 
 func (m *MockProvider) Models(ctx context.Context) ([]schema.Model, error) {
-	if m.ShouldFail {
-		return nil, assert.AnError
-	}
-	return m.ModelsList, nil
+	// Not used in new router logic
+	return nil, nil
 }
 
-// Stubs for other methods
 func (m *MockProvider) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
-	return nil, nil
-}
-func (m *MockProvider) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
-	return nil, nil
+	args := m.Called(ctx, req)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*schema.ChatResponse), args.Error(1)
 }
 
-func TestListAllModels_Filtering(t *testing.T) {
-	// Setup Providers
-	p1 := &MockProvider{
-		ID:           "p1",
-		ProviderType: "openai",
-		ModelsList: []schema.Model{
-			{ID: "gpt-4", Provider: "p1", Architecture: schema.Architecture{Modality: "text"}},
+func (m *MockProvider) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
+	args := m.Called(ctx, req)
+	return args.Get(0).(<-chan ports.StreamResult), args.Error(1)
+}
+
+func TestListAllModels_RegistryBased(t *testing.T) {
+	// Setup Registry
+	defs := []schema.ModelDefinition{
+		{
+			ID:         "gpt-4",
+			Name:       "GPT-4",
+			ProviderID: "p1",
+			UpstreamID: "gpt-4-0613",
+			Enabled:    true,
+			Config: schema.ModelConfig{
+				Modality: []string{"text"},
+			},
+		},
+		{
+			ID:         "claude-3",
+			Name:       "Claude 3",
+			ProviderID: "p2",
+			UpstreamID: "claude-3-opus",
+			Enabled:    true,
+			Config: schema.ModelConfig{
+				Modality: []string{"text", "image"},
+			},
 		},
 	}
-	p2 := &MockProvider{
-		ID:           "p2",
-		ProviderType: "anthropic",
-		ModelsList: []schema.Model{
-			{ID: "claude-3", Provider: "p2", Architecture: schema.Architecture{Modality: "text"}},
-		},
-	}
-	p3 := &MockProvider{
-		ID:           "p3",
-		ProviderType: "ollama",
-		ModelsList: []schema.Model{
-			{ID: "llama3", Provider: "p3", Architecture: schema.Architecture{Modality: "text"}},
-		},
-	}
+	registry := NewInMemoryModelRegistry(defs)
 
 	// Setup Router
-	router := NewRouterService(nil) // No cache needed for this test
-	router.RegisterProvider(p1)
-	router.RegisterProvider(p2)
-	router.RegisterProvider(p3)
+	router := NewRouterService(registry, nil)
 
 	ctx := context.Background()
 
-	tests := []struct {
-		name          string
-		filter        ports.ModelFilter
-		expectedCount int
-		expectedIDs   []string
-	}{
-		{
-			name:          "No Filter",
-			filter:        ports.ModelFilter{},
-			expectedCount: 3,
-			expectedIDs:   []string{"gpt-4", "claude-3", "llama3"},
-		},
-		{
-			name:          "Filter by Provider Type (ollama)",
-			filter:        ports.ModelFilter{Provider: "ollama"},
-			expectedCount: 1,
-			expectedIDs:   []string{"llama3"},
-		},
-		{
-			name:          "Filter by Provider ID (p1)",
-			filter:        ports.ModelFilter{Provider: "p1"},
-			expectedCount: 1,
-			expectedIDs:   []string{"gpt-4"},
-		},
-		{
-			name:          "Filter by Model ID (partial)",
-			filter:        ports.ModelFilter{ID: "gpt"},
-			expectedCount: 1,
-			expectedIDs:   []string{"gpt-4"},
-		},
-	}
+	// Test 1: No Filter
+	models, err := router.ListAllModels(ctx, ports.ModelFilter{})
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(models))
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			models, err := router.ListAllModels(ctx, tt.filter)
-			assert.NoError(t, err)
-			assert.Equal(t, tt.expectedCount, len(models))
-
-			// Verify IDs
-			foundIDs := make(map[string]bool)
-			for _, m := range models {
-				foundIDs[m.ID] = true
-			}
-			for _, id := range tt.expectedIDs {
-				assert.True(t, foundIDs[id], "Expected model %s not found", id)
-			}
-		})
-	}
-}
-
-func TestListAllModels_ProviderSelectionOptimization(t *testing.T) {
-	// This test verifies that if we filter by provider, we ONLY call that provider
-
-	p1 := &MockProvider{ID: "p1", ProviderType: "type1", ModelsList: []schema.Model{{ID: "m1"}}}
-	p2 := &MockProvider{ID: "p2", ProviderType: "type2", ModelsList: []schema.Model{{ID: "m2"}}}
-
-	router := NewRouterService(nil)
-	router.RegisterProvider(p1)
-	router.RegisterProvider(p2)
-
-	ctx := context.Background()
-
-	// Filter for p1
-	models, err := router.ListAllModels(ctx, ports.ModelFilter{Provider: "p1"})
+	// Test 2: Filter by Provider
+	models, err = router.ListAllModels(ctx, ports.ModelFilter{Provider: "p1"})
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(models))
-	assert.Equal(t, "m1", models[0].ID)
+	assert.Equal(t, "gpt-4", models[0].ID)
 
-	p2_sneaky := &MockProvider{
-		ID:           "p2",
-		ProviderType: "type2",
-		ModelsList:   []schema.Model{{ID: "m2", Provider: "p1"}},
-	}
-
-	router2 := NewRouterService(nil)
-	router2.RegisterProvider(p1)
-	router2.RegisterProvider(p2_sneaky)
-
-	models2, err := router2.ListAllModels(ctx, ports.ModelFilter{Provider: "p1"})
+	// Test 3: Filter by ID
+	models, err = router.ListAllModels(ctx, ports.ModelFilter{ID: "claude"})
 	assert.NoError(t, err)
-
-	assert.Equal(t, 1, len(models2), "Should only fetch from requested provider, ignoring others even if they could return matching data")
-	assert.Equal(t, "m1", models2[0].ID)
+	assert.Equal(t, 1, len(models))
+	assert.Equal(t, "claude-3", models[0].ID)
 }
 
-func TestListAllModels_Cache(t *testing.T) {
-	// TODO: Add cache test
+func TestChat_Routing(t *testing.T) {
+	// Setup Registry
+	defs := []schema.ModelDefinition{
+		{
+			ID:         "my-gpt",
+			ProviderID: "openai-main",
+			UpstreamID: "gpt-4-upstream",
+			Enabled:    true,
+		},
+	}
+	registry := NewInMemoryModelRegistry(defs)
+
+	// Setup Provider Mock
+	mockProvider := new(MockProvider)
+	mockProvider.ID = "openai-main"
+	mockProvider.ProviderType = "openai"
+
+	mockProvider.On("Chat", mock.Anything, mock.MatchedBy(func(req *schema.ChatRequest) bool {
+		// Verify that the router translated "my-gpt" to "gpt-4-upstream"
+		return req.Model == "gpt-4-upstream"
+	})).Return(&schema.ChatResponse{}, nil)
+
+	// Setup Router
+	router := NewRouterService(registry, nil)
+	router.RegisterProvider(mockProvider)
+
+	// Execute Chat
+	req := &schema.ChatRequest{
+		Model: "my-gpt",
+		Messages: []schema.ChatMessage{
+			{Role: "user", Content: schema.Content{Text: "Hello"}},
+		},
+	}
+
+	_, err := router.Chat(context.Background(), req)
+	assert.NoError(t, err)
+
+	mockProvider.AssertExpectations(t)
+}
+
+func TestChat_Failures(t *testing.T) {
+	registry := NewInMemoryModelRegistry(nil)
+	router := NewRouterService(registry, nil)
+
+	// Test Unknown Model
+	_, err := router.Chat(context.Background(), &schema.ChatRequest{Model: "unknown"})
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "model not found")
 }

@@ -1,0 +1,36 @@
+models:
+  - id: "anthropic/claude-3.5-sonnet"
+    name: "Claude 3.5 Sonnet"
+    provider_id: "anthropic-main"
+    upstream_id: "claude-3-5-sonnet-20240620"
+    description: "Anthropic's most intelligent model."
+    enabled: true
+    pricing:
+      input: 3.00
+      output: 15.00
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: ["text", "image"]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: "manual"
+
+  - id: "anthropic/claude-3-haiku"
+    name: "Claude 3 Haiku"
+    provider_id: "anthropic-main"
+    upstream_id: "claude-3-haiku-20240307"
+    description: "Fastest and most compact model for near-instant responsiveness."
+    enabled: true
+    pricing:
+      input: 0.25
+      output: 1.25
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: ["text", "image"]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: "manual"
