@@ -17,8 +17,14 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		errMap := domain.ParseValidationError(err)
 		log.Printf("%s", errMap)
-		// Return RFC compliant error
+		// returns RFC compliant error
 		c.Error(domain.ValidationError(errMap))
+		return
+	}
+
+	// if we want to stream the response, roll down into streaming
+	if req.Stream {
+		h.handleStream(c, &req)
 		return
 	}
 

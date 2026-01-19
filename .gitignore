@@ -21,7 +21,6 @@ vendor/
 # Project-specific files and directories (customize as needed)
 # Example: logs, build directories, IDE/OS files
 dist/
-build/
 *.log
 .idea/         # JetBrains IDEs (GoLand, etc)
 .vscode/       # VS Code

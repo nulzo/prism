@@ -7,8 +7,8 @@ import (
 // --- Request Types ---
 
 type ChatRequest struct {
-	// message array is required
-	Messages []ChatMessage `json:"messages" binding:"required,min=1"`
+	// message array is required, dive in and deep validate
+	Messages []ChatMessage `json:"messages" binding:"required,min=1,dive"`
 
 	// the model to send request to, generally in shape `<provider>/<model>`
 	Model string `json:"model" binding:"required"`
@@ -16,8 +16,11 @@ type ChatRequest struct {
 	// Allows to force the model to produce specific output format.
 	ResponseFormat *ResponseFormat `json:"response_format,omitempty"`
 
-	Stop   *Stop `json:"stop,omitempty"`   // Can be string or []string
-	Stream bool  `json:"stream,omitempty"` // Enable streaming
+	// Can be string or []string
+	Stop *Stop `json:"stop,omitempty"`
+
+	// Enable streaming, defaults to `false` (empty)
+	Stream bool `json:"stream,omitempty"`
 
 	// LLM Parameters
 	MaxTokens         int             `json:"max_tokens,omitempty"`

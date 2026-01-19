@@ -47,21 +47,21 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 	headers := map[string]string{
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
-	
+
 	// Handle organization header if present in config
 	if org, ok := a.config.Config["organization"]; ok {
 		headers["OpenAI-Organization"] = org
 	}
 
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
-	
+
 	// Ensure stream is false for this method
 	req.Stream = false
-	
+
 	if err := utils.SendRequest(ctx, a.client, "POST", url, headers, req, &resp); err != nil {
 		return nil, err
 	}
-	
+
 	return &resp, nil
 }
 
@@ -87,7 +87,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
-			
+
 			data := strings.TrimPrefix(line, "data: ")
 			if data == "[DONE]" {
 				return nil // We can't return special error to stop, loop continues until end of body or context cancel
@@ -115,17 +115,17 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	var resp struct {
 		Data []schema.Model `json:"data"`
 	}
-	
+
 	headers := map[string]string{
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
 
 	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
-	
+
 	if err := utils.SendRequest(ctx, a.client, "GET", url, headers, nil, &resp); err != nil {
 		return nil, err
 	}
-	
+
 	// Enrich with provider ID
 	for i := range resp.Data {
 		resp.Data[i].Provider = a.config.ID
