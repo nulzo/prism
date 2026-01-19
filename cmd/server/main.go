@@ -9,23 +9,21 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/nulzo/model-router-api/internal/adapters/cache/memory"
-	"github.com/nulzo/model-router-api/internal/adapters/cache/redis"
-	"github.com/nulzo/model-router-api/internal/adapters/providers/factory"
 	"github.com/nulzo/model-router-api/internal/config"
-	"github.com/nulzo/model-router-api/internal/core/domain"
-	"github.com/nulzo/model-router-api/internal/core/ports"
-	"github.com/nulzo/model-router-api/internal/core/services"
-	"github.com/nulzo/model-router-api/internal/logger"
+	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
+	"github.com/nulzo/model-router-api/internal/server"
+	"github.com/nulzo/model-router-api/internal/server/validator"
+	"github.com/nulzo/model-router-api/internal/store/cache"
 
-	// "github.com/nulzo/model-router-api/internal/otel"
-	"github.com/nulzo/model-router-api/internal/router"
+	// "github.com/nulzo/model-gateway-server/internal/otel"
+	"github.com/nulzo/model-router-api/internal/gateway"
 	"go.uber.org/zap"
 
-	_ "github.com/nulzo/model-router-api/internal/adapters/providers/anthropic"
-	_ "github.com/nulzo/model-router-api/internal/adapters/providers/google"
-	_ "github.com/nulzo/model-router-api/internal/adapters/providers/ollama"
-	_ "github.com/nulzo/model-router-api/internal/adapters/providers/openai"
+	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
+	_ "github.com/nulzo/model-router-api/internal/llm/google"
+	_ "github.com/nulzo/model-router-api/internal/llm/ollama"
+	_ "github.com/nulzo/model-router-api/internal/llm/openai"
 )
 
 func main() {
@@ -39,9 +37,9 @@ func main() {
 
 	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
 
-	domain.InitValidator()
+	validator.InitValidator()
 
-	// shutdownTracer, err := otel.InitTracer("model-router-api", logger.Get(), os.Stdout)
+	// shutdownTracer, err := otel.InitTracer("model-gateway-server", logger.Get(), os.Stdout)
 	// if err != nil {
 	// 	logger.Error("Failed to initialize tracer", zap.Error(err))
 	// } else {
@@ -52,39 +50,48 @@ func main() {
 	// 	}()
 	// }
 
-	var cacheService ports.CacheService
+	var cacheService cache.CacheService
 	if cfg.Redis.Enabled {
 		logger.Info("Using Redis Cache", zap.String("addr", cfg.Redis.Addr))
-		cacheService = redis.NewRedisCache(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
+		cacheService = cache.NewRedisCache(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
 	} else {
 		logger.Info("Using Memory Cache")
-		cacheService = memory.NewMemoryCache()
+		cacheService = cache.NewMemoryCache()
 	}
 
-	modelRegistry := services.NewInMemoryModelRegistry(cfg.Models)
-	routerService := services.NewRouterService(modelRegistry, cacheService)
-	providerFactory := factory.NewProviderFactory()
+	log := logger.Get()
+
+	routerService := gateway.NewService(log, cacheService)
 
 	registeredCount := 0
+	ctx := context.Background()
+
 	for _, pCfg := range cfg.Providers {
 		if !pCfg.Enabled {
 			continue
 		}
 
-		p, err := providerFactory.CreateProvider(pCfg)
+		factoryFunc, err := llm.Get(pCfg.Type)
 		if err != nil {
-			logger.Error("Failed to create provider",
-				zap.String("id", pCfg.ID),
-				zap.String("type", pCfg.Type),
-				zap.Error(err))
+			log.Error("Unknown provider type", zap.String("type", pCfg.Type))
 			continue
 		}
 
-		if err := routerService.RegisterProvider(context.Background(), p); err != nil {
-			logger.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
+		providerInstance, err := factoryFunc(pCfg)
+		if err != nil {
+			log.Error("Failed to initialize provider",
+				zap.String("id", pCfg.ID),
+				zap.Error(err),
+			)
+			continue
 		}
 
-		logger.Info("Registered provider", zap.String("name", pCfg.Name), zap.String("id", pCfg.ID))
+		// C. Register with Service
+		if err := routerService.RegisterProvider(ctx, providerInstance); err != nil {
+			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
+			continue
+		}
+
 		registeredCount++
 	}
 
@@ -92,7 +99,7 @@ func main() {
 		logger.Warn("No providers were registered. API will not function correctly.")
 	}
 
-	appRouter := router.New(cfg, logger.Get(), routerService)
+	apiServer := server.NewServer(cfg, log, svc)
 	engine := appRouter.Setup()
 
 	srv := &http.Server{

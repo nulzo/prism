@@ -6,19 +6,37 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/spf13/viper"
-	"github.com/nulzo/model-router-api/internal/core/domain"
-	"github.com/nulzo/model-router-api/pkg/schema"
 	"github.com/joho/godotenv"
+	"github.com/nulzo/model-router-api/pkg/api"
+	"github.com/spf13/viper"
 )
 
+// ProviderConfig represents the configuration for a single AI provider.
+type ProviderConfig struct {
+	ID           string                `json:"id" yaml:"id" mapstructure:"id"`
+	Type         string                `json:"type" yaml:"type" mapstructure:"type"`
+	Name         string                `json:"name" yaml:"name" mapstructure:"name"`
+	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key"`
+	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url"`
+	Models       []string              `json:"models" yaml:"models" mapstructure:"models"` // Deprecated: use StaticModels
+	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`                // Injected at runtime
+	Config       map[string]string     `json:"config" yaml:"config" mapstructure:"config"`
+	Enabled      bool                  `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+}
+
+// RouteConfig allows defining rules for specific models
+type RouteConfig struct {
+	Pattern  string `json:"pattern" yaml:"pattern" mapstructure:"pattern"`
+	TargetID string `json:"target_id" yaml:"target_id" mapstructure:"target_id"`
+}
+
 type Config struct {
-	Server    ServerConfig            `mapstructure:"server"`
-	Redis     RedisConfig             `mapstructure:"redis"`
-	RateLimit RateLimitConfig         `mapstructure:"rate_limit"`
-	Providers []domain.ProviderConfig `mapstructure:"providers"`
-	Routes    []domain.RouteConfig    `mapstructure:"routes"`
-	Models    []schema.ModelDefinition `mapstructure:"models"`
+	Server    ServerConfig          `mapstructure:"server"`
+	Redis     RedisConfig           `mapstructure:"redis"`
+	RateLimit RateLimitConfig       `mapstructure:"rate_limit"`
+	Providers []ProviderConfig      `mapstructure:"providers"`
+	Routes    []RouteConfig         `mapstructure:"routes"`
+	Models    []api.ModelDefinition `mapstructure:"models"`
 }
 
 type RateLimitConfig struct {
@@ -45,10 +63,10 @@ func LoadConfig() (*Config, error) {
 
 	v := viper.New()
 
-	v.SetConfigName("config") 
-	v.SetConfigType("yaml")   
-	v.AddConfigPath(".")      
-	v.AddConfigPath("./config") 
+	v.SetConfigName("config")
+	v.SetConfigType("yaml")
+	v.AddConfigPath(".")
+	v.AddConfigPath("./config")
 	v.AddConfigPath("./internal/config")
 
 	// Default Values
@@ -70,8 +88,8 @@ func LoadConfig() (*Config, error) {
 
 	// Load all models from internal/config/models/*.yaml
 	// We need to accumulate them because viper overwrites slices when merging
-	var allModels []schema.ModelDefinition
-	
+	var allModels []api.ModelDefinition
+
 	// Try to find the models directory relative to execution or common paths
 	modelSearchPaths := []string{
 		"internal/config/models/*.yaml",
@@ -89,9 +107,9 @@ func LoadConfig() (*Config, error) {
 				fmt.Printf("Warning: Failed to read model config %s: %v\n", file, err)
 				continue
 			}
-			
+
 			var fileData struct {
-				Models []schema.ModelDefinition `mapstructure:"models"`
+				Models []api.ModelDefinition `mapstructure:"models"`
 			}
 			if err := vModel.Unmarshal(&fileData); err == nil {
 				allModels = append(allModels, fileData.Models...)
@@ -106,7 +124,7 @@ func LoadConfig() (*Config, error) {
 	if err := v.Unmarshal(&cfg); err != nil {
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
-	
+
 	// Resolve API Keys and inject StaticModels
 	for i, p := range cfg.Providers {
 		// 1. API Key Resolution
@@ -122,7 +140,7 @@ func LoadConfig() (*Config, error) {
 		}
 
 		// 2. Inject Static Models matching this provider
-		var providerModels []schema.ModelDefinition
+		var providerModels []api.ModelDefinition
 		for _, m := range allModels {
 			// Match by Provider ID
 			if m.ProviderID == p.ID {
