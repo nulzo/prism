@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
-	"github.com/nulzo/model-router-api/internal/core/domain"
 )
 
 // HTTPClient defines the interface for an HTTP http
@@ -47,7 +45,7 @@ func SendRequest(ctx context.Context, client HTTPClient, method, url string, hea
 	// Check for non-200 status codes
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		respBody, _ := io.ReadAll(resp.Body)
-		return &domain.UpstreamError{
+		return &UpstreamError{
 			StatusCode: resp.StatusCode,
 			Body:       respBody,
 			URL:        url,
@@ -97,7 +95,7 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		respBody, _ := io.ReadAll(resp.Body)
-		return &domain.UpstreamError{
+		return &UpstreamError{
 			StatusCode: resp.StatusCode,
 			Body:       respBody,
 			URL:        url,

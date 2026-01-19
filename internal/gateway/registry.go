@@ -9,20 +9,6 @@ import (
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-type Registry interface {
-	// GetModel returns the configuration for a given public model ID
-	GetModel(id string) (*api.ModelDefinition, error)
-
-	// ListModels returns a list of all available models, optionally filtered
-	ListModels() []api.ModelDefinition
-
-	// AddModel adds or updates a model definition dynamically
-	AddModel(model api.ModelDefinition)
-
-	// ResolveRoute returns the provider ID and upstream model ID for a public model ID
-	ResolveRoute(modelID string) (providerID string, upstreamModelID string, err error)
-}
-
 // registry is a private helper struct to manage model definitions.
 // It is thread-safe.
 type registry struct {
@@ -31,12 +17,6 @@ type registry struct {
 }
 
 func newRegistry() *registry {
-	index := make(map[string]api.ModelDefinition)
-	for _, m := range models {
-		if m.Enabled {
-			index[m.ID] = m
-		}
-	}
 	return &registry{
 		models: make(map[string]api.ModelDefinition),
 	}
@@ -53,6 +33,23 @@ func (r *registry) getModel(id string) (api.ModelDefinition, bool) {
 	defer r.mu.RUnlock()
 	m, ok := r.models[id]
 	return m, ok
+}
+
+func (r *registry) ResolveRoute(modelID string) (string, string, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	// Check exact match
+	if m, ok := r.models[modelID]; ok {
+		// Default to modelID if UpstreamID is empty
+		upstreamID := m.UpstreamID
+		if upstreamID == "" {
+			upstreamID = modelID
+		}
+		return m.ProviderID, upstreamID, nil
+	}
+
+	return "", "", fmt.Errorf("model not found: %s", modelID)
 }
 
 // listAndFilter converts internal definitions to the public API response format
@@ -79,7 +76,7 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 			Architecture: api.Architecture{
 				Modality: strings.Join(def.Config.Modality, ","),
 			},
-			OwnedBy: def.OwnedBy, // Ensure this exists in your definition
+			OwnedBy: "system", // Default as not in definition
 		}
 
 		// 2. Apply Filters (Inline logic is cleaner than a separate function)

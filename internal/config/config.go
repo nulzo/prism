@@ -45,8 +45,9 @@ type RateLimitConfig struct {
 }
 
 type ServerConfig struct {
-	Port string `mapstructure:"port"`
-	Env  string `mapstructure:"env"`
+	Port    string   `mapstructure:"port"`
+	Env     string   `mapstructure:"env"`
+	APIKeys []string `mapstructure:"api_keys"`
 }
 
 type RedisConfig struct {

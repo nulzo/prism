@@ -1,5 +1,7 @@
 package api
 
+import "encoding/json"
+
 type ChatRequest struct {
 	// message array is required, dive in and deep validate
 	Messages []ChatMessage `json:"messages" binding:"required,min=1,dive"`

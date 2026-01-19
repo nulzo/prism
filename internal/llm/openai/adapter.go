@@ -12,7 +12,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
-	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -63,24 +62,24 @@ func (a *Adapter) handleUpstreamError(err error) error {
 	var apiErr upstreamErrorResponse
 	if jsonErr := json.Unmarshal(upstreamErr.Body, &apiErr); jsonErr != nil {
 		// if we can't parse it, return a generic upstream error
-		return server.NewError(
+		return api.NewError(
 			upstreamErr.StatusCode,
 			"Upstream Error",
 			string(upstreamErr.Body),
-			server.WithLog(err),
+			api.WithLog(err),
 		)
 	}
 
 	// create a nice RFC 9457 problem
-	return server.NewError(
+	return api.NewError(
 		upstreamErr.StatusCode,
 		"Upstream Provider Error",
 		apiErr.Error.Message,
-		server.WithType("about:blank"),
-		server.WithExtension("upstream_code", apiErr.Error.Code),
-		server.WithExtension("upstream_type", apiErr.Error.Type),
-		server.WithExtension("upstream_param", apiErr.Error.Param),
-		server.WithLog(err),
+		api.WithType("about:blank"),
+		api.WithExtension("upstream_code", apiErr.Error.Code),
+		api.WithExtension("upstream_type", apiErr.Error.Type),
+		api.WithExtension("upstream_param", apiErr.Error.Param),
+		api.WithLog(err),
 	)
 }
 

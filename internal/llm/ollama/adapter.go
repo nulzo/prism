@@ -12,7 +12,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/openai"
-	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -47,7 +46,7 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	// Ollama is dynamic, so we query the API and map to ModelDefinition
 	rootURL := a.config.BaseURL
 	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
-	url := fmt.Sprintf("%s/server/tags", rootURL)
+	url := fmt.Sprintf("%s/api/tags", rootURL)
 
 	var resp struct {
 		Models []struct {
@@ -58,17 +57,13 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	}
 
 	if err := httpclient.SendRequest(ctx, a.client, "GET", url, nil, nil, &resp); err != nil {
-		// handleUpstreamError is available if we duplicated logic, but here we just wrap.
-		// Since we embed OpenAI adapter, the Chat/Stream methods use OpenAI's error handling.
-		// For Models(), if it fails, it's not a user-facing 4xx usually, but a 500 config error.
-		// However, let's try to be consistent.
 		var upstreamErr *httpclient.UpstreamError
 		if errors.As(err, &upstreamErr) {
-			return nil, server.NewError(
+			return nil, api.NewError(
 				upstreamErr.StatusCode,
 				"Ollama Registry Error",
 				string(upstreamErr.Body),
-				server.WithLog(err),
+				api.WithLog(err),
 			)
 		}
 		return nil, fmt.Errorf("ollama tags error: %w", err)
@@ -76,8 +71,7 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 
 	var models []api.ModelDefinition
 	for _, m := range resp.Models {
-		// Construct a ModelDefinition from the dynamic info
-		// We use a safe default configuration for Ollama models
+
 		modelDef := api.ModelDefinition{
 			ID:          fmt.Sprintf("%s/%s", string(llm.Ollama), m.Name),
 			Name:        m.Name,

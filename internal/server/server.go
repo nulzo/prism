@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
@@ -33,6 +35,10 @@ func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Serve
 		config:  cfg,
 	}
 
-	s.setupRoutes() // Call the private method below
+	s.SetupRoutes()
 	return s
+}
+
+func (s *Server) Handler() http.Handler {
+	return s.router
 }

@@ -1,28 +1,26 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/nulzo/model-router-api/internal/server/middleware"
+	v1 "github.com/nulzo/model-router-api/internal/server/v1"
 )
 
 func (s *Server) SetupRoutes() {
 	// 1. Global Middleware
-	s.router.Use(gin.Logger())
-	s.router.Use(gin.Recovery())
-	s.router.Use(middleware.Cors())
+	// s.router.Use(gin.Logger()) // Already used in New() via middleware.Logger?
+	// s.router.Use(gin.Recovery()) // Already used in New()
+
+	s.router.Use(middleware.CORS())
+	s.router.Use(middleware.ErrorHandler()) // Register the error handler we fixed!
 
 	// 2. Health Check (Public)
-	s.router.GET("/health", s.handleHealth)
+	healthHandler := v1.NewHealthHandler()
+	s.router.GET("/health", healthHandler.Health)
 
 	// 3. API V1 Group
 	api := s.router.Group("/server/v1")
-	api.Use(middleware.Auth()) // Require API Key for everything below
+	api.Use(middleware.Auth(s.config.Server.APIKeys)) // Require API Key for everything below
 	{
-		// Map the handler function to the path
-		// Note: We use a closure or method reference to pass dependencies if needed,
-		// but since 's' holds the service, we can define handlers as methods on *Server
-		// OR (cleaner approach): Delegate to a sub-handler
-
 		chatHandler := v1.NewChatHandler(s.service)
 		api.POST("/chat/completions", chatHandler.CreateCompletion)
 

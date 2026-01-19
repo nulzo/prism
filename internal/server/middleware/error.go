@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nulzo/model-router-api/internal/core/domain"
+	"github.com/nulzo/model-router-api/pkg/api"
 )
 
 // ErrorHandler is a custom error handling middleware that handles all errors returned by handlers
@@ -18,7 +18,7 @@ func ErrorHandler() gin.HandlerFunc {
 			err := c.Errors.Last().Err
 
 			// first, we need to check if it's a custom error
-			if problem, ok := err.(*domain.Problem); ok {
+			if problem, ok := err.(*api.Problem); ok {
 				// if there is an internal log attached, log it
 				if problem.Log != nil {
 					log.Printf("Internal Error: %v", problem.Log)
@@ -35,7 +35,7 @@ func ErrorHandler() gin.HandlerFunc {
 			log.Printf("Unhandled Error: %v", err)
 
 			// send the JSON response in a standard error shape
-			c.JSON(http.StatusInternalServerError, domain.New(
+			c.JSON(http.StatusInternalServerError, api.NewError(
 				http.StatusInternalServerError,
 				"Internal Server Error",
 				"An unexpected error occurred.",

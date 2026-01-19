@@ -10,14 +10,12 @@ import (
 	"time"
 
 	"github.com/nulzo/model-router-api/internal/config"
+	"github.com/nulzo/model-router-api/internal/gateway"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
 	"github.com/nulzo/model-router-api/internal/store/cache"
-
-	// "github.com/nulzo/model-gateway-server/internal/otel"
-	"github.com/nulzo/model-router-api/internal/gateway"
 	"go.uber.org/zap"
 
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
@@ -38,17 +36,6 @@ func main() {
 	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
 
 	validator.InitValidator()
-
-	// shutdownTracer, err := otel.InitTracer("model-gateway-server", logger.Get(), os.Stdout)
-	// if err != nil {
-	// 	logger.Error("Failed to initialize tracer", zap.Error(err))
-	// } else {
-	// 	defer func() {
-	// 		if err := shutdownTracer(context.Background()); err != nil {
-	// 			logger.Error("Failed to shutdown tracer", zap.Error(err))
-	// 		}
-	// 	}()
-	// }
 
 	var cacheService cache.CacheService
 	if cfg.Redis.Enabled {
@@ -99,12 +86,11 @@ func main() {
 		logger.Warn("No providers were registered. API will not function correctly.")
 	}
 
-	apiServer := server.NewServer(cfg, log, svc)
-	engine := appRouter.Setup()
+	apiServer := server.New(cfg, log, routerService)
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Server.Port,
-		Handler: engine,
+		Handler: apiServer.Handler(),
 	}
 
 	go func() {

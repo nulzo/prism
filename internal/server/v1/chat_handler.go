@@ -8,16 +8,24 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nulzo/model-router-api/internal/server"
+	"github.com/nulzo/model-router-api/internal/gateway"
 	"github.com/nulzo/model-router-api/internal/server/validator"
-	"github.com/nulzo/model-router-api/pkg/schema"
+	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-func (h *Handler) HandleChatCompletions(c *gin.Context) {
-	var req schema.ChatRequest
+type ChatHandler struct {
+	service gateway.Service
+}
+
+func NewChatHandler(service gateway.Service) *ChatHandler {
+	return &ChatHandler{service: service}
+}
+
+func (h *ChatHandler) CreateCompletion(c *gin.Context) {
+	var req api.ChatRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		// returns RFC compliant error
-		_ = c.Error(server.ValidationError(validator.ParseValidationError(err)))
+		_ = c.Error(api.ValidationError(validator.ParseValidationError(err)))
 		return
 	}
 
@@ -30,19 +38,19 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 	resp, err := h.service.Chat(c.Request.Context(), &req)
 	if err != nil {
 		// at this point we hit an upstream error, and we should surface it back
-		_ = c.Error(server.InternalError("Failed to process chat request", err.Error()))
+		_ = c.Error(api.InternalError("Failed to process chat request", err.Error()))
 		return
 	}
 
 	c.JSON(http.StatusOK, resp)
 }
 
-func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
+func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 	// call the gateway (service)
 	streamChan, err := h.service.StreamChat(c.Request.Context(), req)
 	if err != nil {
 		// if this is a domain problem, we should still serialize it properly
-		var problem *server.Problem
+		var problem *api.Problem
 		if errors.As(err, &problem) {
 			c.JSON(problem.Status, problem)
 			return
@@ -75,10 +83,10 @@ func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
 		}
 
 		if result.Err != nil {
-			errResp := schema.ChatResponse{
-				Choices: []schema.Choice{{
+			errResp := api.ChatResponse{
+				Choices: []api.Choice{{
 					FinishReason: "error",
-					Error:        &schema.ErrorResponse{Message: result.Err.Error()},
+					Error:        &api.ErrorResponse{Message: result.Err.Error()},
 				}},
 			}
 			data, _ := json.Marshal(errResp)

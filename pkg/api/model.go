@@ -15,6 +15,13 @@ type Model struct {
 	PerRequestLimits *PerRequestLimits `json:"per_request_limits,omitempty"`
 }
 
+type ModelFilter struct {
+	Provider string
+	ID       string
+	Modality string
+	OwnedBy  string
+}
+
 type Architecture struct {
 	Modality     string `json:"modality"`
 	Tokenizer    string `json:"tokenizer"`

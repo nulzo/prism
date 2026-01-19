@@ -1,7 +1,7 @@
 models:
   - id: "ollama/llama3"
     name: "Llama 3 (Local)"
-    provider_id: "ollama-local"
+    provider_id: "ollama"
     upstream_id: "llama3"
     description: "Meta's open source model running locally."
     enabled: true
