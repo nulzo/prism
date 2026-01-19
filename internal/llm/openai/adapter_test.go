@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/nulzo/model-router-api/internal/adapters/providers/openai"
-	"github.com/nulzo/model-router-api/internal/core/domain"
-	"github.com/nulzo/model-router-api/pkg/schema"
+	"github.com/nulzo/model-router-api/internal/config"
+	"github.com/nulzo/model-router-api/internal/llm/openai"
+	"github.com/nulzo/model-router-api/pkg/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -52,10 +52,10 @@ func TestOpenAIChat(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Execute
-	resp, err := adapter.Chat(context.Background(), &schema.ChatRequest{
+	resp, err := adapter.Chat(context.Background(), &api.ChatRequest{
 		Model: "gpt-3.5-turbo",
-		Messages: []schema.ChatMessage{
-			{Role: "user", Content: schema.Content{Text: "Hi"}},
+		Messages: []api.ChatMessage{
+			{Role: "user", Content: api.Content{Text: "Hi"}},
 		},
 	})
 

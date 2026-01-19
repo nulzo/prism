@@ -2,7 +2,7 @@
 
 # Configuration
 API_HOST="http://localhost:8080"
-API_BASE="${API_HOST}/v1"
+API_BASE="${API_HOST}/server/v1"
 MODEL="${MODEL:-ollama/tinydolphin:latest}"
 TEMP_BODY="response_body.json" # Temp file for JSON body
 
