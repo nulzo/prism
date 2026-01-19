@@ -204,35 +204,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	return ch, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
-	var list struct {
-		Data []struct {
-			ID          string `json:"id"`
-			DisplayName string `json:"display_name"`
-			CreatedAt   string `json:"created_at"`
-		} `json:"data"`
-	}
-
-	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
-	headers := map[string]string{
-		"x-api-key":         a.config.APIKey,
-		"anthropic-version": "2023-06-01",
-	}
-
-	if err := utils.SendRequest(ctx, a.client, "GET", url, headers, nil, &list); err != nil {
-		return []schema.Model{}, nil
-	}
-
-	var models []schema.Model
-	for _, m := range list.Data {
-		t, _ := time.Parse(time.RFC3339, m.CreatedAt)
-		models = append(models, schema.Model{
-			ID:       m.ID,
-			Name:     m.DisplayName,
-			Created:  t.Unix(),
-			Provider: a.config.ID,
-			OwnedBy:  "anthropic",
-		})
-	}
-	return models, nil
+func (a *Adapter) Models(ctx context.Context) ([]schema.ModelDefinition, error) {
+	// Anthropic provider uses static configuration
+	return a.config.StaticModels, nil
 }

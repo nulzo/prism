@@ -2,8 +2,8 @@ package ollama
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -44,14 +44,12 @@ func NewAdapter(config domain.ProviderConfig) (ports.ModelProvider, error) {
 	}, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
+func (a *Adapter) Models(ctx context.Context) ([]schema.ModelDefinition, error) {
+	// Ollama is dynamic, so we query the API and map to ModelDefinition
 	rootURL := a.config.BaseURL
-
 	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
-
 	url := fmt.Sprintf("%s/api/tags", rootURL)
 
-	log.Print("\n\n\nI AM HERE\n\n\n")
 	var resp struct {
 		Models []struct {
 			Name       string `json:"name"`
@@ -61,25 +59,50 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 	}
 
 	if err := utils.SendRequest(ctx, a.client, "GET", url, nil, nil, &resp); err != nil {
+		// handleUpstreamError is available if we duplicated logic, but here we just wrap.
+		// Since we embed OpenAI adapter, the Chat/Stream methods use OpenAI's error handling.
+		// For Models(), if it fails, it's not a user-facing 4xx usually, but a 500 config error.
+		// However, let's try to be consistent.
+		var upstreamErr *domain.UpstreamError
+		if errors.As(err, &upstreamErr) {
+			return nil, domain.New(
+				upstreamErr.StatusCode,
+				"Ollama Registry Error",
+				string(upstreamErr.Body),
+				domain.WithLog(err),
+			)
+		}
 		return nil, fmt.Errorf("ollama tags error: %w", err)
 	}
 
-	var models []schema.Model
+	var models []schema.ModelDefinition
 	for _, m := range resp.Models {
-		models = append(models, schema.Model{
+		// Construct a ModelDefinition from the dynamic info
+		// We use a safe default configuration for Ollama models
+		modelDef := schema.ModelDefinition{
 			ID:          fmt.Sprintf("%s/%s", string(providers.Ollama), m.Name),
 			Name:        m.Name,
-			Provider:    a.config.ID,
-			OwnedBy:     string(providers.Ollama),
+			ProviderID:  a.config.ID,
+			UpstreamID:  m.Name,
 			Description: fmt.Sprintf("Ollama model (Size: %d bytes)", m.Size),
-			// ollama is always free
-			Pricing: schema.Pricing{
-				Prompt:     "0",
-				Completion: "0",
-				Image:      "0",
-				Request:    "0",
+			Enabled:     true,
+			Source:      "auto",
+			LastUpdated: time.Now(),
+			Pricing: schema.ModelPricing{
+				Input:  0,
+				Output: 0,
+				Image:  0,
 			},
-		})
+			Config: schema.ModelConfig{
+				ContextWindow:    4096, // Default assumption, can't easily know from tags
+				MaxOutput:        4096,
+				Modality:         []string{"text"},
+				ImageSupport:     false, // TODO: detect if multimodal
+				ToolUse:          false,
+				StreamingSupport: true,
+			},
+		}
+		models = append(models, modelDef)
 	}
 
 	return models, nil

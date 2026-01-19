@@ -1,10 +1,20 @@
 package domain
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
+
+// UpstreamError represents an error returned by an upstream service
+type UpstreamError struct {
+	StatusCode int
+	Body       []byte
+	URL        string
+}
+
+func (e *UpstreamError) Error() string {
+	return fmt.Sprintf("upstream error: status %d from %s", e.StatusCode, e.URL)
+}
 
 // Problem implements RFC 9457
 type Problem struct {
@@ -21,21 +31,6 @@ type Problem struct {
 
 func (p *Problem) Error() string {
 	return fmt.Sprintf("[%d] %s: %s", p.Status, p.Title, p.Detail)
-}
-
-func (p *Problem) MarshalJSON() ([]byte, error) {
-	type Alias Problem
-
-	data := make(map[string]interface{})
-
-	for k, v := range p.Extensions {
-		data[k] = v
-	}
-
-	stdJSON, _ := json.Marshal(Alias(*p))
-	_ = json.Unmarshal(stdJSON, &data)
-
-	return json.Marshal(data)
 }
 
 type ProblemOption func(*Problem)
@@ -121,8 +116,8 @@ func BadRequestError(detail string, opts ...ProblemOption) *Problem {
 }
 
 // InternalError creates a standard error for any internal server error
-func InternalError(msg string, err error) *Error {
-	return &Error{Code: http.StatusInternalServerError, Message: msg, Log: err}
+func InternalError(msg string, err string, opts ...ProblemOption) *Problem {
+	return New(http.StatusInternalServerError, msg, err, opts...)
 }
 
 // NotFoundError creates a standard 404 error

@@ -163,6 +163,12 @@ type ChatResponse struct {
 	Object            string         `json:"object"` // "chat.completion" or "chat.completion.chunk"
 	SystemFingerprint string         `json:"system_fingerprint,omitempty"`
 	Usage             *ResponseUsage `json:"usage,omitempty"`
+
+	Error *ErrorResponse `json:"error,omitempty"`
+}
+
+func (e *ErrorResponse) Error() string {
+	return e.Message
 }
 
 type Choice struct {
@@ -181,7 +187,7 @@ type ResponseUsage struct {
 }
 
 type ErrorResponse struct {
-	Code     int                    `json:"code"`
+	Code     interface{}            `json:"code,omitempty"`
 	Message  string                 `json:"message"`
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }

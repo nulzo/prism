@@ -38,7 +38,7 @@ providers:
     base_url: "https://generativelanguage.googleapis.com/v1beta"
     enabled: true
 
-  - id: "ollama-local"
+  - id: "ollama"
     type: "ollama"
     name: "Ollama"
     base_url: "http://localhost:11434"

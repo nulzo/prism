@@ -20,7 +20,7 @@ func (h *Handler) HandleListModels(c *gin.Context) {
 	models, err := h.service.ListAllModels(c.Request.Context(), filter)
 	if err != nil {
 		// throw 500 internal server error
-		c.Error(domain.InternalError("Failed to list models", err))
+		c.Error(domain.InternalError("Failed to list models", err.Error()))
 		return
 	}
 

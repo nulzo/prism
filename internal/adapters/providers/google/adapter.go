@@ -155,30 +155,7 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 	return ch, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
-	url := fmt.Sprintf("%s/models?key=%s", strings.TrimRight(a.config.BaseURL, "/"), a.config.APIKey)
-
-	var list struct {
-		Models []struct {
-			Name        string `json:"name"`
-			DisplayName string `json:"displayName"`
-		} `json:"models"`
-	}
-
-	if err := utils.SendRequest(ctx, a.client, "GET", url, nil, nil, &list); err != nil {
-		return nil, err
-	}
-
-	var models []schema.Model
-	
-	for _, m := range list.Models {
-		id := strings.TrimPrefix(m.Name, "models/")
-		models = append(models, schema.Model{
-			ID:       fmt.Sprintf("%s/%s", pn, id),
-			Name:     m.DisplayName,
-			Provider: a.config.ID,
-			OwnedBy:  pn,
-		})
-	}
-	return models, nil
+func (a *Adapter) Models(ctx context.Context) ([]schema.ModelDefinition, error) {
+	// Google provider uses static configuration
+	return a.config.StaticModels, nil
 }

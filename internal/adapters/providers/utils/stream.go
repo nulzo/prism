@@ -6,7 +6,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+
+	"github.com/nulzo/model-router-api/internal/core/domain"
 )
 
 type LineProcessor func(line string) error
@@ -42,7 +45,12 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return fmt.Errorf("stream api error (status %d)", resp.StatusCode)
+		respBody, _ := io.ReadAll(resp.Body)
+		return &domain.UpstreamError{
+			StatusCode: resp.StatusCode,
+			Body:       respBody,
+			URL:        url,
+		}
 	}
 
 	scanner := bufio.NewScanner(resp.Body)

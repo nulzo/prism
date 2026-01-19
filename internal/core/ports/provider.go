@@ -2,6 +2,7 @@ package ports
 
 import (
 	"context"
+
 	"github.com/nulzo/model-router-api/pkg/schema"
 )
 
@@ -9,11 +10,9 @@ import (
 type ModelProvider interface {
 	Name() string
 	Type() string // e.g., "openai", "anthropic"
-	
-	// Core capabilities
 	Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error)
 	Stream(ctx context.Context, req *schema.ChatRequest) (<-chan StreamResult, error)
-	Models(ctx context.Context) ([]schema.Model, error)
+	Models(ctx context.Context) ([]schema.ModelDefinition, error)
 }
 
 type StreamResult struct {

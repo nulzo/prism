@@ -6,7 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+
+	"github.com/nulzo/model-router-api/internal/core/domain"
 )
 
 // HTTPClient defines the interface for an HTTP client
@@ -44,7 +47,14 @@ func SendRequest(ctx context.Context, client HTTPClient, method, url string, hea
 	// Check for non-200 status codes
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		respBody, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("api error (status %d): %s", resp.StatusCode, string(respBody))
+		log.Print(respBody)
+		log.Println(string(respBody))
+		log.Printf("status code: %d", resp.StatusCode)
+		return &domain.UpstreamError{
+			StatusCode: resp.StatusCode,
+			Body:       respBody,
+			URL:        url,
+		}
 	}
 
 	if response != nil {
@@ -52,13 +62,6 @@ func SendRequest(ctx context.Context, client HTTPClient, method, url string, hea
 			return fmt.Errorf("failed to decode response: %w", err)
 		}
 	}
-
-	// prettyJSON, err := json.MarshalIndent(response, "", "  ")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// fmt.Println(string(prettyJSON))
 
 	return nil
 }

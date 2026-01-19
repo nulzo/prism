@@ -15,6 +15,9 @@ type ModelFilter struct {
 
 // RouterService defines the business logic for routing requests.
 type RouterService interface {
+	// RegisterProvider registers a new model provider and syncs its models
+	RegisterProvider(ctx context.Context, p ModelProvider) error
+
 	GetProviderForModel(ctx context.Context, modelID string) (ModelProvider, string, error)
 	ListAllModels(ctx context.Context, filter ModelFilter) ([]schema.Model, error)
 	Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error)

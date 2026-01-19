@@ -2,9 +2,9 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,10 +15,8 @@ import (
 func (h *Handler) HandleChatCompletions(c *gin.Context) {
 	var req schema.ChatRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		errMap := domain.ParseValidationError(err)
-		log.Printf("%s", errMap)
 		// returns RFC compliant error
-		c.Error(domain.ValidationError(errMap))
+		_ = c.Error(domain.ValidationError(domain.ParseValidationError(err)))
 		return
 	}
 
@@ -30,7 +28,8 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 
 	resp, err := h.service.Chat(c.Request.Context(), &req)
 	if err != nil {
-		c.Error(err)
+		// at this point we hit an upstream error, and we should surface it back
+		_ = c.Error(domain.InternalError("Failed to process chat request", err.Error()))
 		return
 	}
 
@@ -38,9 +37,16 @@ func (h *Handler) HandleChatCompletions(c *gin.Context) {
 }
 
 func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
-	// Call the gateway (service)
+	// call the gateway (service)
 	streamChan, err := h.service.StreamChat(c.Request.Context(), req)
 	if err != nil {
+		// if this is a domain problem, we should still serialize it properly
+		var problem *domain.Problem
+		if errors.As(err, &problem) {
+			c.JSON(problem.Status, problem)
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -55,12 +61,15 @@ func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
 	c.Writer.WriteHeader(http.StatusOK)
 	c.Writer.Flush()
 
-	// Consume the channel and flush to client
+	// consume the channel and flush to client
 	c.Stream(func(w io.Writer) bool {
 		result, ok := <-streamChan
 		if !ok {
-			// Channel closed
-			io.WriteString(w, "data: [DONE]\n\n")
+			// channel is closed
+			_, err := io.WriteString(w, "data: [DONE]\n\n")
+			if err != nil {
+				return false
+			}
 			return false
 		}
 
@@ -72,14 +81,20 @@ func (h *Handler) handleStream(c *gin.Context, req *schema.ChatRequest) {
 				}},
 			}
 			data, _ := json.Marshal(errResp)
-			fmt.Fprintf(w, "data: %s\n\n", data)
+			_, err := fmt.Fprintf(w, "data: %s\n\n", data)
+			if err != nil {
+				return false
+			}
 			return false // Stop streaming on error
 		}
 
 		if result.Response != nil {
 			data, err := json.Marshal(result.Response)
 			if err == nil {
-				fmt.Fprintf(w, "data: %s\n\n", data)
+				_, err := fmt.Fprintf(w, "data: %s\n\n", data)
+				if err != nil {
+					return false
+				}
 				return true
 			}
 		}

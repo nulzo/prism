@@ -107,8 +107,9 @@ func LoadConfig() (*Config, error) {
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
 	
-	// Resolve API Keys
+	// Resolve API Keys and inject StaticModels
 	for i, p := range cfg.Providers {
+		// 1. API Key Resolution
 		if strings.HasPrefix(p.APIKey, "ENV:") {
 			envVar := strings.TrimPrefix(p.APIKey, "ENV:")
 			// Check process environment first (explicit override)
@@ -119,6 +120,16 @@ func LoadConfig() (*Config, error) {
 			}
 			cfg.Providers[i].APIKey = val
 		}
+
+		// 2. Inject Static Models matching this provider
+		var providerModels []schema.ModelDefinition
+		for _, m := range allModels {
+			// Match by Provider ID
+			if m.ProviderID == p.ID {
+				providerModels = append(providerModels, m)
+			}
+		}
+		cfg.Providers[i].StaticModels = providerModels
 	}
 
 	return &cfg, nil

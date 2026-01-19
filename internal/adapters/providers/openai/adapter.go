@@ -3,6 +3,7 @@ package openai
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -42,24 +43,65 @@ func (a *Adapter) Type() string {
 	return "openai"
 }
 
+// upstreamErrorResponse mirrors the standard OpenAI error shape
+type upstreamErrorResponse struct {
+	Error struct {
+		Message string      `json:"message"`
+		Type    string      `json:"type"`
+		Param   interface{} `json:"param"`
+		Code    interface{} `json:"code"`
+	} `json:"error"`
+}
+
+func (a *Adapter) handleUpstreamError(err error) error {
+	var upstreamErr *domain.UpstreamError
+	if !errors.As(err, &upstreamErr) {
+		return err
+	}
+
+	// parse the specific upstream error format
+	var apiErr upstreamErrorResponse
+	if jsonErr := json.Unmarshal(upstreamErr.Body, &apiErr); jsonErr != nil {
+		// if we can't parse it, return a generic upstream error
+		return domain.New(
+			upstreamErr.StatusCode,
+			"Upstream Error",
+			string(upstreamErr.Body),
+			domain.WithLog(err),
+		)
+	}
+
+	// create a nice RFC 9457 problem
+	return domain.New(
+		upstreamErr.StatusCode,
+		"Upstream Provider Error",
+		apiErr.Error.Message,
+		domain.WithType("about:blank"),
+		domain.WithExtension("upstream_code", apiErr.Error.Code),
+		domain.WithExtension("upstream_type", apiErr.Error.Type),
+		domain.WithExtension("upstream_param", apiErr.Error.Param),
+		domain.WithLog(err),
+	)
+}
+
 func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
 	var resp schema.ChatResponse
 	headers := map[string]string{
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
 
-	// Handle organization header if present in config
+	// handle headers if present in config
 	if org, ok := a.config.Config["organization"]; ok {
 		headers["OpenAI-Organization"] = org
 	}
 
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 
-	// Ensure stream is false for this method
+	// ensure stream is false for this method
 	req.Stream = false
 
 	if err := utils.SendRequest(ctx, a.client, "POST", url, headers, req, &resp); err != nil {
-		return nil, err
+		return nil, a.handleUpstreamError(err)
 	}
 
 	return &resp, nil
@@ -68,7 +110,7 @@ func (a *Adapter) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.Ch
 func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
 	ch := make(chan ports.StreamResult)
 
-	// Ensure stream is true
+	// ensure stream is true
 	req.Stream = true
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 
@@ -90,12 +132,12 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 
 			data := strings.TrimPrefix(line, "data: ")
 			if data == "[DONE]" {
-				return nil // We can't return special error to stop, loop continues until end of body or context cancel
+				return nil // we can't return special error to stop, loop continues until end of body or context cancel
 			}
 
 			var chatResp schema.ChatResponse
 			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
-				// Log error but continue
+				// log error but continue
 				return nil
 			}
 
@@ -104,32 +146,15 @@ func (a *Adapter) Stream(ctx context.Context, req *schema.ChatRequest) (<-chan p
 		})
 
 		if err != nil {
-			ch <- ports.StreamResult{Err: err}
+			ch <- ports.StreamResult{Err: a.handleUpstreamError(err)}
 		}
 	}()
 
 	return ch, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
-	var resp struct {
-		Data []schema.Model `json:"data"`
-	}
-
-	headers := map[string]string{
-		"Authorization": "Bearer " + a.config.APIKey,
-	}
-
-	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
-
-	if err := utils.SendRequest(ctx, a.client, "GET", url, headers, nil, &resp); err != nil {
-		return nil, err
-	}
-
-	// Enrich with provider ID
-	for i := range resp.Data {
-		resp.Data[i].Provider = a.config.ID
-	}
-
-	return resp.Data, nil
+func (a *Adapter) Models(ctx context.Context) ([]schema.ModelDefinition, error) {
+	// OpenAI provider now uses static configuration as the source of truth
+	// because the API does not provide pricing or detailed capability flags.
+	return a.config.StaticModels, nil
 }
