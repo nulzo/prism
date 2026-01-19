@@ -40,6 +40,7 @@ func (r *Router) Setup() *gin.Engine {
 	engine.Use(middleware.CORS())
 	engine.Use(middleware.Logger(r.logger))
 	engine.Use(middleware.Tracing("model-router-api"))
+	engine.Use(middleware.ErrorHandler())
 
 	rateLimiter := middleware.NewRateLimiter(
 		r.config.RateLimit.RequestsPerSecond,

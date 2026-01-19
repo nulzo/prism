@@ -4,32 +4,27 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nulzo/model-router-api/internal/core/domain"
 	"github.com/nulzo/model-router-api/pkg/schema"
 )
 
 func (h *Handler) HandleChatCompletions(c *gin.Context) {
 	var req schema.ChatRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": err.Error()})
-		return
-	}
-
-	if req.Model == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Model is required"})
-		return
-	}
-
-	if req.Stream {
-		h.handleStream(c, &req)
+		errMap := domain.ParseValidationError(err)
+		log.Printf("%s", errMap)
+		// Return RFC compliant error
+		c.Error(domain.ValidationError(errMap))
 		return
 	}
 
 	resp, err := h.service.Chat(c.Request.Context(), &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.Error(err)
 		return
 	}
 

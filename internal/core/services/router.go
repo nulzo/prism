@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/nulzo/model-router-api/internal/core/domain"
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/logger"
 	"github.com/nulzo/model-router-api/pkg/schema"
@@ -33,8 +34,6 @@ func (s *RouterService) RegisterProvider(p ports.ModelProvider) {
 	s.providers[p.Name()] = p
 }
 
-
-
 // GetProviderForModel finds the best provider for a given model ID and returns the provider and the upstream model ID
 func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string) (ports.ModelProvider, string, error) {
 	s.mu.RLock()
@@ -42,14 +41,14 @@ func (s *RouterService) GetProviderForModel(ctx context.Context, modelID string)
 
 	providerID, upstreamModelID, err := s.registry.ResolveRoute(modelID)
 	if err != nil {
-		return nil, "", fmt.Errorf("route resolution failed: %w", err)
+		return nil, "", domain.BadRequestError(fmt.Sprintf("route resolution failed for model '%s': %v", modelID, err))
 	}
 
 	if p, exists := s.providers[providerID]; exists {
 		return p, upstreamModelID, nil
 	}
 
-	return nil, "", fmt.Errorf("provider configured but not active/loaded: %s", providerID)
+	return nil, "", domain.ProviderError(fmt.Sprintf("provider '%s' configured but not active/loaded", providerID), nil)
 }
 
 func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*schema.ChatResponse, error) {
@@ -65,7 +64,11 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 	reqClone := *req
 	reqClone.Model = upstreamID
 
-	return p.Chat(ctx, &reqClone)
+	resp, err := p.Chat(ctx, &reqClone)
+	if err != nil {
+		return nil, domain.ProviderError("Upstream provider request failed", err)
+	}
+	return resp, nil
 }
 
 func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest) (<-chan ports.StreamResult, error) {
@@ -84,7 +87,7 @@ func (s *RouterService) StreamChat(ctx context.Context, req *schema.ChatRequest)
 func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFilter) ([]schema.Model, error) {
 	// Source of truth is now the Registry
 	definitions := s.registry.ListModels()
-	
+
 	var models []schema.Model
 	for _, def := range definitions {
 		m := schema.Model{
@@ -102,12 +105,12 @@ func (s *RouterService) ListAllModels(ctx context.Context, filter ports.ModelFil
 				Modality: strings.Join(def.Config.Modality, ","),
 			},
 		}
-		
+
 		// Apply basic filtering
 		if filter.Provider != "" && !strings.EqualFold(def.ProviderID, filter.Provider) {
 			continue
 		}
-		
+
 		models = append(models, m)
 	}
 

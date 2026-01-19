@@ -13,6 +13,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/adapters/cache/redis"
 	"github.com/nulzo/model-router-api/internal/adapters/providers/factory"
 	"github.com/nulzo/model-router-api/internal/config"
+	"github.com/nulzo/model-router-api/internal/core/domain"
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/core/services"
 	"github.com/nulzo/model-router-api/internal/logger"
@@ -38,6 +39,8 @@ func main() {
 	defer logger.Sync()
 
 	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
+
+	domain.InitValidator()
 
 	// shutdownTracer, err := otel.InitTracer("model-router-api", logger.Get(), os.Stdout)
 	// if err != nil {

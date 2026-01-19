@@ -7,12 +7,11 @@ import (
 // --- Request Types ---
 
 type ChatRequest struct {
-	// Either "messages" or "prompt" is required
-	Messages []ChatMessage `json:"messages,omitempty"`
-	Prompt   string        `json:"prompt,omitempty"`
+	// message array is required
+	Messages []ChatMessage `json:"messages" binding:"required,min=1"`
 
-	// If "model" is unspecified, uses the user's default
-	Model string `json:"model,omitempty"`
+	// the model to send request to, generally in shape `<provider>/<model>`
+	Model string `json:"model" binding:"required"`
 
 	// Allows to force the model to produce specific output format.
 	ResponseFormat *ResponseFormat `json:"response_format,omitempty"`
@@ -53,7 +52,7 @@ type ChatRequest struct {
 }
 
 type ChatMessage struct {
-	Role       string     `json:"role"`
+	Role       string     `json:"role" binding:"required,oneof=user assistant system"`
 	Content    Content    `json:"content"` // string or []ContentPart
 	Name       string     `json:"name,omitempty"`
 	ToolCallID string     `json:"tool_call_id,omitempty"`
