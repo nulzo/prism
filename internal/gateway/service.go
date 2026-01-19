@@ -35,7 +35,7 @@ type service struct {
 	cache     store.Store
 	mu        sync.RWMutex
 	providers map[string]llm.Provider
-	registry  *registry // Defined in registry.go
+	registry  *registry
 }
 
 func NewService(logger *zap.Logger, cache store.Store) Service {

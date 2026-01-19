@@ -73,7 +73,6 @@ func main() {
 			continue
 		}
 
-		// C. Register with Service
 		if err := routerService.RegisterProvider(ctx, providerInstance); err != nil {
 			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
 			continue

@@ -39,9 +39,7 @@ func (r *registry) ResolveRoute(modelID string) (string, string, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	// Check exact match
 	if m, ok := r.models[modelID]; ok {
-		// Default to modelID if UpstreamID is empty
 		upstreamID := m.UpstreamID
 		if upstreamID == "" {
 			upstreamID = modelID
@@ -61,7 +59,6 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 	var results []api.Model
 
 	for _, def := range s.registry.models {
-		// 1. Convert to Public Schema
 		m := api.Model{
 			ID:            def.ID,
 			Name:          def.Name,
@@ -79,7 +76,6 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 			OwnedBy: "system", // Default as not in definition
 		}
 
-		// 2. Apply Filters (Inline logic is cleaner than a separate function)
 		if filter.Provider != "" && !strings.EqualFold(m.Provider, filter.Provider) {
 			continue
 		}

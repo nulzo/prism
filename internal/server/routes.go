@@ -6,20 +6,17 @@ import (
 )
 
 func (s *Server) SetupRoutes() {
-	// 1. Global Middleware
-	// s.router.Use(gin.Logger()) // Already used in New() via middleware.Logger?
-	// s.router.Use(gin.Recovery()) // Already used in New()
 
 	s.router.Use(middleware.CORS())
-	s.router.Use(middleware.ErrorHandler()) // Register the error handler we fixed!
+	s.router.Use(middleware.ErrorHandler())
 
-	// 2. Health Check (Public)
 	healthHandler := v1.NewHealthHandler()
 	s.router.GET("/health", healthHandler.Health)
+	s.router.GET("/routes", v1.NewRoutesHandler(s.router).List)
+	s.router.GET("/config", v1.NewConfigHandler(s.config).Get)
 
-	// 3. API V1 Group
-	api := s.router.Group("/server/v1")
-	api.Use(middleware.Auth(s.config.Server.APIKeys)) // Require API Key for everything below
+	api := s.router.Group("/api/v1")
+	api.Use(middleware.Auth(s.config.Server.APIKeys))
 	{
 		chatHandler := v1.NewChatHandler(s.service)
 		api.POST("/chat/completions", chatHandler.CreateCompletion)
