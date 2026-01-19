@@ -58,9 +58,6 @@ func (s *RouterService) Chat(ctx context.Context, req *schema.ChatRequest) (*sch
 		return nil, err
 	}
 
-	// Create a shallow copy of the request to avoid mutating the original
-	// If the request contains slices that are modified deep down, we might need a deep copy,
-	// but strictly for changing the Model string, this is sufficient.
 	reqClone := *req
 	reqClone.Model = upstreamID
 

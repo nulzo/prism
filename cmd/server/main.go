@@ -17,8 +17,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/core/ports"
 	"github.com/nulzo/model-router-api/internal/core/services"
 	"github.com/nulzo/model-router-api/internal/logger"
-	"github.com/nulzo/model-router-api/pkg/schema"
-
 	// "github.com/nulzo/model-router-api/internal/otel"
 	"github.com/nulzo/model-router-api/internal/router"
 	"go.uber.org/zap"
@@ -87,40 +85,40 @@ func main() {
 		registeredCount++
 
 		// Dynamic Discovery for Ollama
-		if p.Type() == "ollama" {
-			go func(prov ports.ModelProvider, provID string) {
-				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-				defer cancel()
-
-				models, err := prov.Models(ctx)
-				if err != nil {
-					logger.Error("Failed to fetch dynamic models for ollama", zap.String("provider_id", provID), zap.Error(err))
-					return
-				}
-
-				for _, m := range models {
-					def := schema.ModelDefinition{
-						ID:          m.ID, // e.g. "ollama/llama3:latest"
-						Name:        m.Name,
-						ProviderID:  provID,
-						UpstreamID:  m.Name, // e.g. "llama3:latest"
-						Description: m.Description,
-						Enabled:     true,
-						Pricing: schema.ModelPricing{
-							Input:  0,
-							Output: 0,
-						},
-						Config: schema.ModelConfig{
-							ContextWindow:    4096, // Default assumption for Ollama
-							StreamingSupport: true,
-							Modality:         []string{"text"},
-						},
-					}
-					modelRegistry.AddModel(def)
-				}
-				logger.Info("Discovered dynamic models", zap.String("provider", provID), zap.Int("count", len(models)))
-			}(p, pCfg.ID)
-		}
+		//if p.Type() == "ollama" {
+		//	go func(prov ports.ModelProvider, provID string) {
+		//		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		//		defer cancel()
+		//
+		//		models, err := prov.Models(ctx)
+		//		if err != nil {
+		//			logger.Error("Failed to fetch dynamic models for ollama", zap.String("provider_id", provID), zap.Error(err))
+		//			return
+		//		}
+		//
+		//		for _, m := range models {
+		//			def := schema.ModelDefinition{
+		//				ID:          m.ID, // e.g. "ollama/llama3:latest"
+		//				Name:        m.Name,
+		//				ProviderID:  provID,
+		//				UpstreamID:  m.Name, // e.g. "llama3:latest"
+		//				Description: m.Description,
+		//				Enabled:     true,
+		//				Pricing: schema.ModelPricing{
+		//					Input:  0,
+		//					Output: 0,
+		//				},
+		//				Config: schema.ModelConfig{
+		//					ContextWindow:    4096, // Default assumption for Ollama
+		//					StreamingSupport: true,
+		//					Modality:         []string{"text"},
+		//				},
+		//			}
+		//			modelRegistry.AddModel(def)
+		//		}
+		//		logger.Info("Discovered dynamic models", zap.String("provider", provID), zap.Int("count", len(models)))
+		//	}(p, pCfg.ID)
+		//}
 	}
 
 	if registeredCount == 0 {

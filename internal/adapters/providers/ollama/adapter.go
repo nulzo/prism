@@ -3,6 +3,7 @@ package ollama
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -21,7 +22,7 @@ func init() {
 }
 
 type Adapter struct {
-	ports.ModelProvider // Embeds the OpenAI adapter for Chat/Stream capabilities
+	ports.ModelProvider // embeds the OpenAI adapter for chat/stream capabilities
 	config              domain.ProviderConfig
 	client              *http.Client
 }
@@ -50,6 +51,7 @@ func (a *Adapter) Models(ctx context.Context) ([]schema.Model, error) {
 
 	url := fmt.Sprintf("%s/api/tags", rootURL)
 
+	log.Print("\n\n\nI AM HERE\n\n\n")
 	var resp struct {
 		Models []struct {
 			Name       string `json:"name"`
