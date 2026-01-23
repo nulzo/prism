@@ -24,6 +24,10 @@ import (
 	_ "github.com/nulzo/model-router-api/internal/llm/openai"
 )
 
+// Version is the version of the application. We inject this during
+// the docker build stage.
+var Version = "snapshot"
+
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
