@@ -18,7 +18,7 @@ type Config struct {
 
 var (
 	globalLogger *zap.Logger
-	atom         zap.AtomicLevel
+	mu           sync.RWMutex
 	once         sync.Once
 )
 
@@ -31,64 +31,75 @@ func DefaultConfig() Config {
 	}
 }
 
-// Initialize sets up the global logger using the provided configuration.
-func Initialize(cfg Config) {
+// New creates a new logger instance.
+func New(cfg Config) (*zap.Logger, error) {
+	// 1. REGISTER THE CUSTOM ENCODER
+	// zap.RegisterEncoder is global and not thread-safe for re-registration,
+	// so we ensure it runs only once.
 	once.Do(func() {
-		// 1. REGISTER THE CUSTOM ENCODER
-		// We name it "colored-console"
 		err := zap.RegisterEncoder("colored-console", func(zcfg zapcore.EncoderConfig) (zapcore.Encoder, error) {
 			return NewColoredConsoleEncoder(zcfg), nil
 		})
 		if err != nil {
+			// This might panic if registered twice without check, but once prevents it.
+			// In a real robust system we might check existence, but zap doesn't expose that easily.
 			panic(err)
 		}
-
-		encoderConfig := zap.NewProductionEncoderConfig()
-		encoderConfig.TimeKey = "timestamp"
-		encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("15:04:05")
-
-		encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-
-		// Colorize the LEVEL (INFO, DEBUG) specifically
-		if cfg.Format == "console" && cfg.EnableColor {
-			encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
-			encoderConfig.EncodeCaller = nil
-		} else {
-			encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-		}
-
-		// Select the encoding based on config
-		encoding := cfg.Format
-		if cfg.Format == "console" && cfg.EnableColor {
-			// USE OUR CUSTOM ENCODER
-			encoding = "colored-console"
-		}
-
-		zapConfig := zap.Config{
-			Level:             zap.NewAtomicLevelAt(parseLevel(cfg.Level)),
-			Development:       cfg.Format == "console",
-			Encoding:          encoding, // <--- Points to our custom wrapper
-			EncoderConfig:     encoderConfig,
-			OutputPaths:       []string{"stdout"},
-			ErrorOutputPaths:  []string{"stderr"},
-			DisableStacktrace: cfg.Level != "debug" && cfg.Level != "error",
-		}
-
-		globalLogger, err = zapConfig.Build(zap.AddCallerSkip(1))
-		if err != nil {
-			panic(err)
-		}
-
-		atom = zapConfig.Level
 	})
+
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.TimeKey = "timestamp"
+	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("15:04:05")
+	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+
+	// Colorize the LEVEL (INFO, DEBUG) specifically
+	if cfg.Format == "console" && cfg.EnableColor {
+		encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+		encoderConfig.EncodeCaller = nil
+	} else {
+		encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	}
+
+	// Select the encoding based on config
+	encoding := cfg.Format
+	if cfg.Format == "console" && cfg.EnableColor {
+		// USE OUR CUSTOM ENCODER
+		encoding = "colored-console"
+	}
+
+	zapConfig := zap.Config{
+		Level:             zap.NewAtomicLevelAt(parseLevel(cfg.Level)),
+		Development:       cfg.Format == "console",
+		Encoding:          encoding,
+		EncoderConfig:     encoderConfig,
+		OutputPaths:       []string{"stdout"},
+		ErrorOutputPaths:  []string{"stderr"},
+		DisableStacktrace: cfg.Level != "debug" && cfg.Level != "error",
+	}
+
+	return zapConfig.Build(zap.AddCallerSkip(1))
+}
+
+// SetGlobal sets the global logger instance.
+func SetGlobal(l *zap.Logger) {
+	mu.Lock()
+	defer mu.Unlock()
+	globalLogger = l
 }
 
 // Get returns the global logger. Initializes with defaults if not already set.
 func Get() *zap.Logger {
-	if globalLogger == nil {
-		Initialize(DefaultConfig())
+	mu.RLock()
+	if globalLogger != nil {
+		defer mu.RUnlock()
+		return globalLogger
 	}
-	return globalLogger
+	mu.RUnlock()
+
+	// Initialize default if nil
+	l, _ := New(DefaultConfig())
+	SetGlobal(l)
+	return l
 }
 
 // With creates a child logger and adds structured context to it.
@@ -119,8 +130,11 @@ func Warn(msg string, fields ...zap.Field) {
 }
 
 func Sync() {
-	if globalLogger != nil {
-		_ = globalLogger.Sync()
+	mu.RLock()
+	l := globalLogger
+	mu.RUnlock()
+	if l != nil {
+		_ = l.Sync()
 	}
 }
 

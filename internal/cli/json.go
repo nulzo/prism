@@ -17,7 +17,7 @@ var (
 
 // HighlightJSON takes a JSON string (minified or indented) and applies ANSI colors.
 func HighlightJSON(jsonStr string) string {
-	if disableColor {
+	if !Enabled() {
 		return jsonStr
 	}
 
@@ -26,24 +26,30 @@ func HighlightJSON(jsonStr string) string {
 		case strings.HasSuffix(token, ":"): // Key ("key":)
 			// Strip colon, colorize key, add colon back
 			key := token[:len(token)-1]
-			return fmt.Sprintf("%s%s%s:", Blue, key, Reset)
+			// Keys are Blue
+			return fmt.Sprintf("%s%s%s:", Blue, key, ResetCode)
 
 		case strings.HasPrefix(token, "\""): // String Value ("value")
-			return fmt.Sprintf("%s%s%s", Green, token, Reset)
+			// Strings are Green
+			return fmt.Sprintf("%s%s%s", Green, token, ResetCode)
 
 		case token == "true" || token == "false": // Boolean
-			return fmt.Sprintf("%s%s%s", Yellow, token, Reset)
+			// Booleans are Yellow
+			return fmt.Sprintf("%s%s%s", Yellow, token, ResetCode)
 
 		case token == "null": // Null
-			return fmt.Sprintf("%s%s%s", Red, token, Reset)
+			// Null is Red/Grey
+			return fmt.Sprintf("%s%s%s", DimCode, token, ResetCode)
 
 		default: // Number
-			return fmt.Sprintf("%s%s%s", Purple, token, Reset)
+			// Numbers are Purple
+			return fmt.Sprintf("%s%s%s", Purple, token, ResetCode)
 		}
 	})
 }
 
 // PrettyFormat takes any interface, marshals it to indented JSON, and colorizes it.
+// It returns the string representation.
 func PrettyFormat(v interface{}) string {
 	// If it's already a []byte or string that looks like JSON, try to format it
 	var str string
@@ -61,4 +67,9 @@ func PrettyFormat(v interface{}) string {
 	}
 
 	return HighlightJSON(str)
+}
+
+// PrettyPrint prints the PrettyFormatted JSON to stdout with a newline.
+func PrettyPrint(v interface{}) {
+	fmt.Println(PrettyFormat(v))
 }

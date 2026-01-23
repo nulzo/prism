@@ -12,11 +12,15 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 )
 
-// trans is a private global translator
-var trans ut.Translator
+// Validator wraps the translation logic for validation errors.
+type Validator struct {
+	trans ut.Translator
+}
 
-// InitValidator configures the validator engine.
-func InitValidator() {
+// New configures the validator engine and returns a new Validator instance.
+func New() *Validator {
+	var trans ut.Translator
+
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterTagNameFunc(func(fld reflect.StructField) string {
 			name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
@@ -32,11 +36,15 @@ func InitValidator() {
 
 		_ = en_translations.RegisterDefaultTranslations(v, trans)
 	}
+
+	return &Validator{
+		trans: trans,
+	}
 }
 
-// ParseValidationError converts raw technical errors into a clean map.
-// When defined, nested errors can be resolved into their heirarchical naming.
-func ParseValidationError(err error) map[string]string {
+// ParseError converts raw technical errors into a clean map.
+// When defined, nested errors can be resolved into their hierarchical naming.
+func (v *Validator) ParseError(err error) map[string]string {
 	errMap := make(map[string]string)
 
 	if validationErrors, ok := err.(validator.ValidationErrors); ok {
@@ -47,7 +55,13 @@ func ParseValidationError(err error) map[string]string {
 				ns = ns[i+1:]
 			}
 
-			msg := e.Translate(trans)
+			// If translator is nil (shouldn't happen if initialized), fallback
+			var msg string
+			if v.trans != nil {
+				msg = e.Translate(v.trans)
+			} else {
+				msg = e.Error()
+			}
 
 			if e.Tag() == "oneof" {
 				msg = fmt.Sprintf("must be one of [%s]", strings.ReplaceAll(e.Param(), " ", ", "))

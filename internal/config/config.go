@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/nulzo/model-router-api/pkg/api"
 	"github.com/spf13/viper"
@@ -13,57 +14,47 @@ import (
 
 // ProviderConfig represents the configuration for a single AI provider.
 type ProviderConfig struct {
-	ID           string                `json:"id" yaml:"id" mapstructure:"id"`
-	Type         string                `json:"type" yaml:"type" mapstructure:"type"`
-	Name         string                `json:"name" yaml:"name" mapstructure:"name"`
-	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key"`
-	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url"`
+	ID           string                `json:"id" yaml:"id" mapstructure:"id" validate:"required"`
+	Type         string                `json:"type" yaml:"type" mapstructure:"type" validate:"required,oneof=openai anthropic google ollama"`
+	Name         string                `json:"name" yaml:"name" mapstructure:"name" validate:"required"`
+	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key" validate:"required_if=RequiresAuth true"`
+	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url" validate:"omitempty,url"`
 	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`
 	Config       map[string]string     `json:"config" yaml:"config" mapstructure:"config"`
 	Enabled      bool                  `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
 	RequiresAuth bool                  `json:"requires_auth" yaml:"requires_auth" mapstructure:"requires_auth"`
 }
 
-func (p *ProviderConfig) Validate() error {
-	if !p.Enabled {
-		return nil
-	}
-	if p.RequiresAuth && p.APIKey == "" {
-		return fmt.Errorf("no API key found for provider.")
-	}
-	return nil
-}
-
 // RouteConfig allows defining rules for specific models
 type RouteConfig struct {
-	Pattern  string `json:"pattern" yaml:"pattern" mapstructure:"pattern"`
-	TargetID string `json:"target_id" yaml:"target_id" mapstructure:"target_id"`
+	Pattern  string `json:"pattern" yaml:"pattern" mapstructure:"pattern" validate:"required"`
+	TargetID string `json:"target_id" yaml:"target_id" mapstructure:"target_id" validate:"required"`
 }
 
 type Config struct {
-	Server    ServerConfig          `mapstructure:"server"`
-	Redis     RedisConfig           `mapstructure:"redis"`
-	RateLimit RateLimitConfig       `mapstructure:"rate_limit"`
+	Server    ServerConfig          `mapstructure:"server" validate:"required"`
+	Redis     RedisConfig           `mapstructure:"redis" validate:"required"`
+	RateLimit RateLimitConfig       `mapstructure:"rate_limit" validate:"required"`
 	Providers []ProviderConfig      `mapstructure:"providers"`
-	Routes    []RouteConfig         `mapstructure:"routes"`
+	Routes    []RouteConfig         `mapstructure:"routes" validate:"dive"`
 	Models    []api.ModelDefinition `mapstructure:"models"`
 }
 
 type RateLimitConfig struct {
-	RequestsPerSecond float64 `mapstructure:"requests_per_second"`
-	Burst             int     `mapstructure:"burst"`
+	RequestsPerSecond float64 `mapstructure:"requests_per_second" validate:"gt=0"`
+	Burst             int     `mapstructure:"burst" validate:"gt=0"`
 }
 
 type ServerConfig struct {
-	Port    string   `mapstructure:"port"`
-	Env     string   `mapstructure:"env"`
-	APIKeys []string `mapstructure:"api_keys"`
+	Port    string   `mapstructure:"port" validate:"required,numeric"`
+	Env     string   `mapstructure:"env" validate:"required,oneof=development production staging"`
+	APIKeys []string `mapstructure:"api_keys" validate:"dive,min=10"`
 }
 
 type RedisConfig struct {
-	Addr     string `mapstructure:"addr"`
+	Addr     string `mapstructure:"addr" validate:"required_if=Enabled true"`
 	Password string `mapstructure:"password"`
-	DB       int    `mapstructure:"db"`
+	DB       int    `mapstructure:"db" validate:"min=0"`
 	Enabled  bool   `mapstructure:"enabled"`
 }
 
@@ -97,8 +88,53 @@ func LoadConfig() (*Config, error) {
 		}
 	}
 
-	// Load all models from internal/config/models/*.yaml
-	// We need to accumulate them because viper overwrites slices when merging
+	// Load models
+	allModels := loadModels()
+	v.Set("models", allModels)
+
+	var cfg Config
+	if err := v.Unmarshal(&cfg); err != nil {
+		return nil, fmt.Errorf("unable to decode into struct: %w", err)
+	}
+
+	// Resolve dynamic values and internal mapping
+	resolveConfiguration(&cfg, v, allModels)
+
+	// Validate the configuration
+	validate := validator.New()
+	if err := validate.Struct(&cfg); err != nil {
+		return nil, fmt.Errorf("configuration validation failed: %w", err)
+	}
+
+	return &cfg, nil
+}
+
+// resolveConfiguration handles post-load logic like env var injection and model mapping
+func resolveConfiguration(cfg *Config, v *viper.Viper, allModels []api.ModelDefinition) {
+	for i, p := range cfg.Providers {
+		// Handle ENV: prefix for API keys
+		if strings.HasPrefix(p.APIKey, "ENV:") {
+			envVar := strings.TrimPrefix(p.APIKey, "ENV:")
+			val := os.Getenv(envVar)
+			if val == "" {
+				val = v.GetString(envVar)
+			}
+			cfg.Providers[i].APIKey = val
+		}
+
+		// Inject static models
+		var providerModels []api.ModelDefinition
+		for _, m := range allModels {
+			if m.ProviderID == p.ID {
+				providerModels = append(providerModels, m)
+			}
+		}
+		cfg.Providers[i].StaticModels = providerModels
+	}
+}
+
+// loadModels discovers and loads model definitions from yaml files
+func loadModels() []api.ModelDefinition {
 	var allModels []api.ModelDefinition
 
 	// Try to find the models directory relative to execution or common paths
@@ -114,7 +150,7 @@ func LoadConfig() (*Config, error) {
 			vModel := viper.New()
 			vModel.SetConfigFile(file)
 			if err := vModel.ReadInConfig(); err != nil {
-				// Warn but continue
+				// Warn but continue - using fmt here as we don't have logger injected
 				fmt.Printf("Warning: Failed to read model config %s: %v\n", file, err)
 				continue
 			}
@@ -127,34 +163,5 @@ func LoadConfig() (*Config, error) {
 			}
 		}
 	}
-
-	// set the aggregated models back into the main viper instance so Unmarshal works
-	v.Set("models", allModels)
-
-	var cfg Config
-	if err := v.Unmarshal(&cfg); err != nil {
-		return nil, fmt.Errorf("unable to decode into struct: %w", err)
-	}
-
-	// resolve api keys and inject StaticModels
-	for i, p := range cfg.Providers {
-		if strings.HasPrefix(p.APIKey, "ENV:") {
-			envVar := strings.TrimPrefix(p.APIKey, "ENV:")
-			val := os.Getenv(envVar)
-			if val == "" {
-				val = v.GetString(envVar)
-			}
-			cfg.Providers[i].APIKey = val
-		}
-
-		var providerModels []api.ModelDefinition
-		for _, m := range allModels {
-			if m.ProviderID == p.ID {
-				providerModels = append(providerModels, m)
-			}
-		}
-		cfg.Providers[i].StaticModels = providerModels
-	}
-
-	return &cfg, nil
+	return allModels
 }

@@ -14,18 +14,22 @@ import (
 )
 
 type ChatHandler struct {
-	service gateway.Service
+	service   gateway.Service
+	validator *validator.Validator
 }
 
-func NewChatHandler(service gateway.Service) *ChatHandler {
-	return &ChatHandler{service: service}
+func NewChatHandler(service gateway.Service, v *validator.Validator) *ChatHandler {
+	return &ChatHandler{
+		service:   service,
+		validator: v,
+	}
 }
 
 func (h *ChatHandler) CreateCompletion(c *gin.Context) {
 	var req api.ChatRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		// returns RFC compliant error
-		_ = c.Error(api.ValidationError(validator.ParseValidationError(err)))
+		_ = c.Error(api.ValidationError(h.validator.ParseError(err)))
 		return
 	}
 

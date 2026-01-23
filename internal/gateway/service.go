@@ -53,9 +53,9 @@ func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
 
 	if err != nil {
 		msg := fmt.Sprintf("%s %s %s",
-			cli.CrossMark(),                                      // Red X
-			cli.Style(p.Name(), cli.Cyan),                        // Provider Name
-			cli.Style(fmt.Sprintf("(Failed: %v)", err), cli.Red), // Error in Red
+			cli.CrossMark(),
+			cli.Stylize(p.Name(), cli.Red),
+			cli.Stylize(fmt.Sprintf("(Failed: %v)", err), cli.Red),
 		)
 		s.logger.Error(msg)
 		return fmt.Errorf("failed to sync models for %s: %w", p.Name(), err)
@@ -64,8 +64,8 @@ func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
 	if len(models) == 0 {
 		msg := fmt.Sprintf("%s %s %s",
 			cli.CrossMark(),
-			cli.Style(p.Name(), cli.Cyan),
-			cli.Style("0 models found", cli.Red),
+			cli.Stylize(p.Name(), cli.Cyan),
+			cli.Stylize("0 models found", cli.Red),
 		)
 		s.logger.Warn(msg)
 		// We return nil here because the provider is valid, just empty.
@@ -84,9 +84,9 @@ func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
 
 	msg := fmt.Sprintf("%s %s %s %s",
 		cli.CheckMark(),
-		cli.Style(fmt.Sprintf("%s\t", p.Name()), cli.Green),
+		cli.Stylize(fmt.Sprintf("%s\t", p.Name()), cli.Green),
 		"registered with: ",
-		cli.Style(fmt.Sprintf("%d models", len(models)), cli.White),
+		cli.Stylize(fmt.Sprintf("%d models", len(models)), cli.White),
 	)
 
 	s.logger.Info(msg)

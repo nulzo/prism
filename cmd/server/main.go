@@ -15,7 +15,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
-	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
@@ -48,81 +47,31 @@ func main() {
 
 	printBanner(cfg.Server.Port, cfg.Server.Env)
 
-	logger.Initialize(logger.DefaultConfig())
-	defer logger.Sync()
+	log, err := logger.New(logger.DefaultConfig())
+	if err != nil {
+		panic("failed to initialize logger: " + err.Error())
+	}
+	logger.SetGlobal(log)
+	defer log.Sync()
 
-	validator.InitValidator()
+	val := validator.New()
 
 	var cacheService cache.CacheService
 	if cfg.Redis.Enabled {
-		logger.Info("Using Redis Cache", zap.String("addr", cfg.Redis.Addr))
+		log.Info("Using Redis Cache", zap.String("addr", cfg.Redis.Addr))
 		cacheService = cache.NewRedisCache(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
 	} else {
-		logger.Info("Using Memory Cache")
+		log.Info("Using Memory Cache")
 		cacheService = cache.NewMemoryCache()
 	}
 
-	log := logger.Get()
-
 	routerService := gateway.NewService(log, cacheService)
 
-	registeredCount := 0
+	// Bootstrap providers
 	ctx := context.Background()
+	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
 
-	for _, pCfg := range cfg.Providers {
-		if !pCfg.Enabled {
-			continue
-		}
-
-		if err := pCfg.Validate(); err != nil {
-			msg := fmt.Sprintf("%s %s %s",
-				cli.CrossMark(),
-				cli.Style(fmt.Sprintf("%s\t", pCfg.ID), cli.Red),
-				cli.Style(err.Error(), cli.Red),
-			)
-
-			logger.Info(msg)
-			continue
-		}
-
-		factoryFunc, err := llm.Get(pCfg.Type)
-		if err != nil {
-			log.Error("Unknown provider type", zap.String("type", pCfg.Type))
-			continue
-		}
-
-		providerInstance, err := factoryFunc(pCfg)
-		if err != nil {
-			log.Error("Failed to initialize provider",
-				zap.String("id", pCfg.ID),
-				zap.Error(err),
-			)
-			continue
-		}
-
-		healthCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
-		if err := providerInstance.Health(healthCtx); err != nil {
-			cancel()
-			log.Error("Provider unhealthy, skipping registration",
-				zap.String("id", pCfg.ID),
-				zap.Error(err))
-			continue
-		}
-		cancel()
-
-		if err := routerService.RegisterProvider(ctx, providerInstance); err != nil {
-			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
-			continue
-		}
-
-		registeredCount++
-	}
-
-	if registeredCount == 0 {
-		logger.Warn("No providers were registered. API will not function correctly.")
-	}
-
-	apiServer := server.New(cfg, log, routerService)
+	apiServer := server.New(cfg, log, routerService, val)
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Server.Port,
@@ -175,14 +124,14 @@ func printBanner(port, env string) {
 		fmt.Println(cli.Gradient(line, cli.BrandBlue, cli.BrandPurple, ratio))
 	}
 
-	fmt.Println(cli.Style("\n          An exceptionally fast AI gateway.", cli.Bold))
+	fmt.Println(cli.BoldText("\n          An exceptionally fast AI gateway."))
 
 	fmt.Println()
-	fmt.Printf("   Version:     %s\n", cli.Style(Version, cli.Bold))
+	fmt.Printf("   Version:     %s\n", cli.BoldText(Version))
 	fmt.Printf("   Go Version:  %s\n", runtime.Version())
-	fmt.Printf("   Environment: %s\n", cli.Style(env, cli.Bold))
-	fmt.Printf("   Port:        %s\n", cli.Style(port, cli.Bold))
-	fmt.Printf("   Github:      %s\n", cli.Style("https://github.com/nulzo/prism", cli.Bold))
+	fmt.Printf("   Environment: %s\n", cli.BoldText(env))
+	fmt.Printf("   Port:        %s\n", cli.BoldText(port))
+	fmt.Printf("   Github:      %s\n", cli.BoldText("https://github.com/nulzo/prism"))
 	fmt.Println("   --------------------------------------------------")
 	fmt.Println()
 }

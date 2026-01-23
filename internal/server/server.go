@@ -10,17 +10,19 @@ import (
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
+	"github.com/nulzo/model-router-api/internal/server/validator"
 	"go.uber.org/zap"
 )
 
 type Server struct {
-	router  *gin.Engine
-	config  *config.Config
-	logger  *zap.Logger
-	service gateway.Service
+	router    *gin.Engine
+	config    *config.Config
+	logger    *zap.Logger
+	service   gateway.Service
+	validator *validator.Validator
 }
 
-func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Server {
+func New(cfg *config.Config, logger *zap.Logger, service gateway.Service, v *validator.Validator) *Server {
 
 	gin.SetMode(gin.ReleaseMode)
 
@@ -31,10 +33,11 @@ func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Serve
 	engine.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 
 	s := &Server{
-		router:  engine,
-		service: service,
-		logger:  logger,
-		config:  cfg,
+		router:    engine,
+		service:   service,
+		logger:    logger,
+		config:    cfg,
+		validator: v,
 	}
 
 	s.SetupRoutes()
@@ -43,8 +46,8 @@ func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Serve
 	// nicely on startup.
 	for _, route := range engine.Routes() {
 		msg := fmt.Sprintf("%s➜%s  %s%-6s%s %s",
-			cli.Blue, cli.Reset,
-			cli.Bold, route.Method, cli.Reset,
+			cli.Blue, cli.ResetCode,
+			cli.BoldCode, route.Method, cli.ResetCode,
 			route.Path,
 		)
 		logger.Debug(msg)

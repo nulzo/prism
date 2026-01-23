@@ -18,7 +18,7 @@ func (s *Server) SetupRoutes() {
 	api := s.router.Group("/api/v1")
 	api.Use(middleware.Auth(s.config.Server.APIKeys))
 	{
-		chatHandler := v1.NewChatHandler(s.service)
+		chatHandler := v1.NewChatHandler(s.service, s.validator)
 		api.POST("/chat/completions", chatHandler.CreateCompletion)
 
 		modelsHandler := v1.NewModelHandler(s.service)
