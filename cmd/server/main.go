@@ -155,6 +155,8 @@ func printBanner(port, env string) {
 		fmt.Println(cli.Gradient(line, cli.BrandBlue, cli.BrandPurple, ratio))
 	}
 
+	fmt.Println(cli.Style("\n          An exceptionally fast AI gateway.", cli.Bold))
+
 	fmt.Println()
 	// Use cli.Style for bolding valuable information
 	// Use cli.Arrow for a consistent graphical element

@@ -34,46 +34,51 @@ func DefaultConfig() Config {
 // Initialize sets up the global logger using the provided configuration.
 func Initialize(cfg Config) {
 	once.Do(func() {
-		// Create the encoder config
+		// 1. REGISTER THE CUSTOM ENCODER
+		// We name it "colored-console"
+		err := zap.RegisterEncoder("colored-console", func(zcfg zapcore.EncoderConfig) (zapcore.Encoder, error) {
+			return NewColoredConsoleEncoder(zcfg), nil
+		})
+		if err != nil {
+			panic(err)
+		}
+
 		encoderConfig := zap.NewProductionEncoderConfig()
-
-		// Standardize Time Format
 		encoderConfig.TimeKey = "timestamp"
-		encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("15:04:05")
 
-		// Configure Level Encoding
+		encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+
+		// Colorize the LEVEL (INFO, DEBUG) specifically
 		if cfg.Format == "console" && cfg.EnableColor {
 			encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+			encoderConfig.EncodeCaller = nil
 		} else {
 			encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 		}
 
-		// Configure Callers (shorter path for console, full for json usually)
-		if cfg.Format == "console" {
-			encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-			encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("15:04:05")
+		// Select the encoding based on config
+		encoding := cfg.Format
+		if cfg.Format == "console" && cfg.EnableColor {
+			// USE OUR CUSTOM ENCODER
+			encoding = "colored-console"
 		}
 
-		// Build the Zap Config
 		zapConfig := zap.Config{
 			Level:             zap.NewAtomicLevelAt(parseLevel(cfg.Level)),
-			Development:       false,
-			Sampling:          nil, // Consider sampling for high-load production
-			Encoding:          cfg.Format,
+			Development:       cfg.Format == "console",
+			Encoding:          encoding, // <--- Points to our custom wrapper
 			EncoderConfig:     encoderConfig,
 			OutputPaths:       []string{"stdout"},
 			ErrorOutputPaths:  []string{"stderr"},
 			DisableStacktrace: cfg.Level != "debug" && cfg.Level != "error",
 		}
 
-		// Build the logger
-		var err error
 		globalLogger, err = zapConfig.Build(zap.AddCallerSkip(1))
 		if err != nil {
-			panic("failed to initialize logger: " + err.Error())
+			panic(err)
 		}
 
-		// Capture the atomic level so we can change it dynamically at runtime if needed
 		atom = zapConfig.Level
 	})
 }
