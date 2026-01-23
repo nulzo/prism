@@ -74,6 +74,17 @@ func main() {
 			continue
 		}
 
+		if err := pCfg.Validate(); err != nil {
+			msg := fmt.Sprintf("%s %s %s",
+				cli.CrossMark(),
+				cli.Style(fmt.Sprintf("%s\t", pCfg.ID), cli.Red),
+				cli.Style(err.Error(), cli.Red),
+			)
+
+			logger.Info(msg)
+			continue
+		}
+
 		factoryFunc, err := llm.Get(pCfg.Type)
 		if err != nil {
 			log.Error("Unknown provider type", zap.String("type", pCfg.Type))
@@ -88,6 +99,16 @@ func main() {
 			)
 			continue
 		}
+
+		healthCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		if err := providerInstance.Health(healthCtx); err != nil {
+			cancel()
+			log.Error("Provider unhealthy, skipping registration",
+				zap.String("id", pCfg.ID),
+				zap.Error(err))
+			continue
+		}
+		cancel()
 
 		if err := routerService.RegisterProvider(ctx, providerInstance); err != nil {
 			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))

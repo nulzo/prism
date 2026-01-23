@@ -206,3 +206,36 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	// Anthropic provider uses static configuration
 	return a.config.StaticModels, nil
 }
+
+func (a *Adapter) Health(ctx context.Context) error {
+	// Anthropic's "list models" endpoint is a good candidate for a health check
+	// as it requires auth and verifies connectivity.
+	url := "https://api.anthropic.com/v1/models?limit=1"
+	if a.config.BaseURL != "" {
+		url = fmt.Sprintf("%s/models?limit=1", strings.TrimRight(a.config.BaseURL, "/"))
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("x-api-key", a.config.APIKey)
+	req.Header.Set("anthropic-version", "2023-06-01")
+
+	if v, ok := a.config.Config["version"]; ok {
+		req.Header.Set("anthropic-version", v)
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("health check failed with status: %d", resp.StatusCode)
+	}
+
+	return nil
+}

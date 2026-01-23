@@ -21,4 +21,5 @@ type Provider interface {
 	Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error)
 	Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error)
 	Models(ctx context.Context) ([]api.ModelDefinition, error)
+	Health(ctx context.Context) error
 }

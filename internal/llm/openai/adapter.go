@@ -153,7 +153,61 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
+
 	// OpenAI provider now uses static configuration as the source of truth
+
 	// because the API does not provide pricing or detailed capability flags.
+
 	return a.config.StaticModels, nil
+
+}
+
+
+
+func (a *Adapter) Health(ctx context.Context) error {
+
+	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+
+	if err != nil {
+
+		return err
+
+	}
+
+
+
+	req.Header.Set("Authorization", "Bearer "+a.config.APIKey)
+
+	if org, ok := a.config.Config["organization"]; ok {
+
+		req.Header.Set("OpenAI-Organization", org)
+
+	}
+
+
+
+	resp, err := a.client.Do(req)
+
+	if err != nil {
+
+		return err
+
+	}
+
+	defer resp.Body.Close()
+
+
+
+	if resp.StatusCode != http.StatusOK {
+
+		return fmt.Errorf("health check failed with status: %d", resp.StatusCode)
+
+	}
+
+
+
+	return nil
+
 }

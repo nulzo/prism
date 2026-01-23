@@ -158,3 +158,27 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	// Google provider uses static configuration
 	return a.config.StaticModels, nil
 }
+
+func (a *Adapter) Health(ctx context.Context) error {
+	url := fmt.Sprintf("%s/models?key=%s&pageSize=1",
+		strings.TrimRight(a.config.BaseURL, "/"),
+		a.config.APIKey,
+	)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("health check failed with status: %d", resp.StatusCode)
+	}
+
+	return nil
+}

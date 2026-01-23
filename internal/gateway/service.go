@@ -84,7 +84,7 @@ func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
 
 	msg := fmt.Sprintf("%s %s %s %s",
 		cli.CheckMark(),
-		cli.Style(fmt.Sprintf("%s\t", p.Name()), cli.Cyan),
+		cli.Style(fmt.Sprintf("%s\t", p.Name()), cli.Green),
 		"registered with: ",
 		cli.Style(fmt.Sprintf("%d models", len(models)), cli.White),
 	)

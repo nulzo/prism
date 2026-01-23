@@ -24,6 +24,16 @@ type ProviderConfig struct {
 	RequiresAuth bool                  `json:"requires_auth" yaml:"requires_auth" mapstructure:"requires_auth"`
 }
 
+func (p *ProviderConfig) Validate() error {
+	if !p.Enabled {
+		return nil
+	}
+	if p.RequiresAuth && p.APIKey == "" {
+		return fmt.Errorf("no API key found for provider.")
+	}
+	return nil
+}
+
 // RouteConfig allows defining rules for specific models
 type RouteConfig struct {
 	Pattern  string `json:"pattern" yaml:"pattern" mapstructure:"pattern"`
