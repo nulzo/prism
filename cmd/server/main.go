@@ -3,12 +3,16 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
+	"strings"
 	"syscall"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
 	"github.com/nulzo/model-router-api/internal/llm"
@@ -28,16 +32,25 @@ import (
 // the docker build stage.
 var Version = "snapshot"
 
+const rawBanner = `
+   ________   _______   ________  ________  _______  
+  ╱        ╲╱╱       ╲ ╱        ╲╱        ╲╱       ╲╲
+ ╱         ╱╱        ╱_╱       ╱╱        _╱        ╱╱
+╱╱      __╱        _╱╱         ╱-        ╱         ╱ 
+╲╲_____╱  ╲____╱___╱ ╲╲_______╱╲_______╱╱╲__╱__╱__╱  
+`
+
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		panic("failed to load configuration: " + err.Error())
 	}
 
-	logger.Initialize(cfg.Server.Env)
-	defer logger.Sync()
+	// 1. Print the Banner immediately upon startup
+	printBanner(cfg.Server.Port, cfg.Server.Env)
 
-	logger.Info("Starting Model Router API", zap.String("env", cfg.Server.Env), zap.String("port", cfg.Server.Port))
+	logger.Initialize(logger.DefaultConfig())
+	defer logger.Sync()
 
 	validator.InitValidator()
 
@@ -116,4 +129,40 @@ func main() {
 	}
 
 	logger.Info("Server exiting")
+}
+
+// printBanner shows a pretty banner in the CLI on startup
+func printBanner(port, env string) {
+	lines := strings.Split(rawBanner, "\n")
+	// Remove empty leading line if it exists
+	if len(lines) > 0 && lines[0] == "" {
+		lines = lines[1:]
+	}
+
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
+		// Calculate ratio (0.0 to 1.0) for the gradient
+		ratio := float64(i) / float64(len(lines)-1)
+		if len(lines) == 1 {
+			ratio = 0
+		}
+
+		// Use the cli module to generate the gradient string
+		// This respects NO_COLOR environment variables automatically
+		fmt.Println(cli.Gradient(line, cli.BrandBlue, cli.BrandPurple, ratio))
+	}
+
+	fmt.Println()
+	// Use cli.Style for bolding valuable information
+	// Use cli.Arrow for a consistent graphical element
+	fmt.Printf("   Version:     %s\n", cli.Style(Version, cli.Bold))
+	fmt.Printf("   Go Version:  %s\n", runtime.Version())
+	fmt.Printf("   Environment: %s\n", cli.Style(env, cli.Bold))
+	fmt.Printf("   Port:        %s\n", cli.Style(port, cli.Bold))
+	fmt.Printf("   Github:      %s\n", cli.Style("https://github.com/nulzo/prism", cli.Bold))
+	fmt.Println("   --------------------------------------------------")
+	fmt.Println()
 }

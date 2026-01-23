@@ -1,7 +1,7 @@
 models:
   - id: "anthropic/claude-3.5-sonnet"
     name: "Claude 3.5 Sonnet"
-    provider_id: "anthropic-main"
+    provider_id: "anthropic"
     upstream_id: "claude-3-5-sonnet-20240620"
     description: "Anthropic's most intelligent model."
     enabled: true

@@ -1,7 +1,7 @@
 models:
   - id: "openai/gpt-4o"
     name: "GPT-4o"
-    provider_id: "openai-main"
+    provider_id: "openai"
     upstream_id: "gpt-4o"
     description: "OpenAI's flagship flagship model."
     enabled: true

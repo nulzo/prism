@@ -73,7 +73,7 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 			Architecture: api.Architecture{
 				Modality: strings.Join(def.Config.Modality, ","),
 			},
-			OwnedBy: "system", // Default as not in definition
+			OwnedBy: "system",
 		}
 
 		if filter.Provider != "" && !strings.EqualFold(m.Provider, filter.Provider) {

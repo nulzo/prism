@@ -1,12 +1,15 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
-	"github.com/nulzo/model-router-api/internal/server/middleware"
 	"go.uber.org/zap"
 )
 
@@ -19,14 +22,13 @@ type Server struct {
 
 func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Server {
 
-	if cfg.Server.Env == "production" {
-		gin.SetMode(gin.ReleaseMode)
-	}
+	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.New()
 
-	engine.Use(gin.Recovery())
-	engine.Use(middleware.Logger(logger))
+	engine.Use(ginzap.RecoveryWithZap(logger, true))
+
+	engine.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 
 	s := &Server{
 		router:  engine,
@@ -36,6 +38,18 @@ func New(cfg *config.Config, logger *zap.Logger, service gateway.Service) *Serve
 	}
 
 	s.SetupRoutes()
+
+	// we supressed gin debug but we can manually log the routes
+	// nicely on startup.
+	for _, route := range engine.Routes() {
+		msg := fmt.Sprintf("%s➜%s  %s%-6s%s %s",
+			cli.Blue, cli.Reset,
+			cli.Bold, route.Method, cli.Reset,
+			route.Path,
+		)
+		logger.Debug(msg)
+	}
+
 	return s
 }
 

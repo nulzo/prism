@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/store"
@@ -48,21 +49,47 @@ func NewService(logger *zap.Logger, cache store.Store) Service {
 }
 
 func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
+	models, err := p.Models(ctx)
+
+	if err != nil {
+		msg := fmt.Sprintf("%s %s %s",
+			cli.CrossMark(),                                      // Red X
+			cli.Style(p.Name(), cli.Cyan),                        // Provider Name
+			cli.Style(fmt.Sprintf("(Failed: %v)", err), cli.Red), // Error in Red
+		)
+		s.logger.Error(msg)
+		return fmt.Errorf("failed to sync models for %s: %w", p.Name(), err)
+	}
+
+	if len(models) == 0 {
+		msg := fmt.Sprintf("%s %s %s",
+			cli.CrossMark(),
+			cli.Style(p.Name(), cli.Cyan),
+			cli.Style("0 models found", cli.Red),
+		)
+		s.logger.Warn(msg)
+		// We return nil here because the provider is valid, just empty.
+		// If you want to prevent registration entirely, return an error here.
+		return nil
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	s.providers[p.Name()] = p
 
-	models, err := p.Models(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to sync models for %s: %w", p.Name(), err)
-	}
-
 	for _, m := range models {
 		s.registry.addModel(m)
 	}
 
-	s.logger.Info("provider registered", zap.String("name", p.Name()), zap.Int("models", len(models)))
+	msg := fmt.Sprintf("%s %s %s %s",
+		cli.CheckMark(),
+		cli.Style(fmt.Sprintf("%s\t", p.Name()), cli.Cyan),
+		"registered with: ",
+		cli.Style(fmt.Sprintf("%d models", len(models)), cli.White),
+	)
+
+	s.logger.Info(msg)
 	return nil
 }
 

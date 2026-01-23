@@ -15,31 +15,35 @@ redis:
   addr: "localhost:6379"
 
 providers:
-  - id: "openai-main"
+  - id: "openai"
     type: "openai"
     name: "OpenAI"
     api_key: "ENV:OPENAI_API_KEY"
     base_url: "https://api.openai.com/v1"
     enabled: true
+    requires_auth: true
 
-  - id: "anthropic-main"
+  - id: "anthropic"
     type: "anthropic"
     name: "Anthropic"
     api_key: "ENV:ANTHROPIC_API_KEY"
     base_url: "https://api.anthropic.com"
     enabled: true
+    requires_auth: true
     config:
       version: "2023-06-01"
 
-  - id: "google-main"
+  - id: "google"
     type: "google"
     name: "Google Gemini"
     api_key: "ENV:GOOGLE_API_KEY"
     base_url: "https://generativelanguage.googleapis.com/v1beta"
     enabled: true
+    requires_auth: true
 
   - id: "ollama"
     type: "ollama"
     name: "Ollama"
     base_url: "http://localhost:11434"
     enabled: true
+    requires_auth: false

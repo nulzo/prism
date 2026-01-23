@@ -21,6 +21,7 @@ type ProviderConfig struct {
 	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`
 	Config       map[string]string     `json:"config" yaml:"config" mapstructure:"config"`
 	Enabled      bool                  `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
+	RequiresAuth bool                  `json:"requires_auth" yaml:"requires_auth" mapstructure:"requires_auth"`
 }
 
 // RouteConfig allows defining rules for specific models
