@@ -18,8 +18,7 @@ type ProviderConfig struct {
 	Name         string                `json:"name" yaml:"name" mapstructure:"name"`
 	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key"`
 	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url"`
-	Models       []string              `json:"models" yaml:"models" mapstructure:"models"` // Deprecated: use StaticModels
-	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`                // Injected at runtime
+	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`
 	Config       map[string]string     `json:"config" yaml:"config" mapstructure:"config"`
 	Enabled      bool                  `json:"enabled" yaml:"enabled" mapstructure:"enabled"`
 }
