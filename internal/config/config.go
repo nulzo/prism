@@ -118,7 +118,7 @@ func LoadConfig() (*Config, error) {
 		}
 	}
 
-	// Set the aggregated models back into the main viper instance so Unmarshal works
+	// set the aggregated models back into the main viper instance so Unmarshal works
 	v.Set("models", allModels)
 
 	var cfg Config
@@ -126,24 +126,19 @@ func LoadConfig() (*Config, error) {
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
 
-	// Resolve API Keys and inject StaticModels
+	// resolve api keys and inject StaticModels
 	for i, p := range cfg.Providers {
-		// 1. API Key Resolution
 		if strings.HasPrefix(p.APIKey, "ENV:") {
 			envVar := strings.TrimPrefix(p.APIKey, "ENV:")
-			// Check process environment first (explicit override)
 			val := os.Getenv(envVar)
 			if val == "" {
-				// Then check viper (which might have it from other sources)
 				val = v.GetString(envVar)
 			}
 			cfg.Providers[i].APIKey = val
 		}
 
-		// 2. Inject Static Models matching this provider
 		var providerModels []api.ModelDefinition
 		for _, m := range allModels {
-			// Match by Provider ID
 			if m.ProviderID == p.ID {
 				providerModels = append(providerModels, m)
 			}

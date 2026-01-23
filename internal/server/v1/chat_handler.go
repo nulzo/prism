@@ -60,7 +60,7 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 		return
 	}
 
-	// Set headers for SSE (Server-Sent Events)
+	// set headers for sse
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
 	c.Writer.Header().Set("Cache-Control", "no-cache")
 	c.Writer.Header().Set("Connection", "keep-alive")
@@ -94,7 +94,8 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 			if err != nil {
 				return false
 			}
-			return false // Stop streaming on error
+			// if there's an error we will stop streaming
+			return false
 		}
 
 		if result.Response != nil {
