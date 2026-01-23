@@ -22,10 +22,10 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			continue
 		}
 
-		// Validate provider configuration individually
+		// validate provider configuration
 		if err := validate.Struct(&pCfg); err != nil {
 			log.Warn(fmt.Sprintf("%s %s %s",
-				cli.WarningSign(),
+				cli.CrossMark(),
 				cli.Stylize(fmt.Sprintf("%s\t", pCfg.ID), cli.Black),
 				cli.Stylize("Skipping provider due to missing API key", cli.Yellow),
 			))
@@ -47,7 +47,28 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			continue
 		}
 
-		// Perform Health Check
+		models, err := providerInstance.Models(ctx)
+
+		if err != nil {
+			msg := fmt.Sprintf("%s %s %s",
+				cli.CrossMark(),
+				cli.Stylize(pCfg.ID, cli.Red),
+				cli.Stylize(fmt.Sprintf("(Failed: %v)", err), cli.Red),
+			)
+			log.Error(msg)
+		}
+
+		if len(models) == 0 {
+			msg := fmt.Sprintf("%s %s %s",
+				cli.CrossMark(),
+				cli.Stylize(pCfg.ID, cli.Cyan),
+				cli.Stylize("0 models found", cli.Red),
+			)
+			log.Warn(msg)
+			continue
+		}
+
+		// perform health checks
 		healthCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		if err := providerInstance.Health(healthCtx); err != nil {
 			cancel()
@@ -58,11 +79,20 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 		}
 		cancel()
 
-		// Register with the Service
+		// register with the service
 		if err := service.RegisterProvider(ctx, providerInstance); err != nil {
 			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
 			continue
 		}
+
+		msg := fmt.Sprintf("%s %s %s %s",
+			cli.CheckMark(),
+			cli.Stylize(fmt.Sprintf("%s\t", pCfg.ID), cli.Green),
+			"registered with: ",
+			cli.Stylize(fmt.Sprintf("%d models", len(models)), cli.White),
+		)
+
+		log.Info(msg)
 
 		registeredCount++
 	}
