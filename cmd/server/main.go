@@ -46,7 +46,6 @@ func main() {
 		panic("failed to load configuration: " + err.Error())
 	}
 
-	// 1. Print the Banner immediately upon startup
 	printBanner(cfg.Server.Port, cfg.Server.Env)
 
 	logger.Initialize(logger.DefaultConfig())
@@ -158,8 +157,6 @@ func printBanner(port, env string) {
 	fmt.Println(cli.Style("\n          An exceptionally fast AI gateway.", cli.Bold))
 
 	fmt.Println()
-	// Use cli.Style for bolding valuable information
-	// Use cli.Arrow for a consistent graphical element
 	fmt.Printf("   Version:     %s\n", cli.Style(Version, cli.Bold))
 	fmt.Printf("   Go Version:  %s\n", runtime.Version())
 	fmt.Printf("   Environment: %s\n", cli.Style(env, cli.Bold))
