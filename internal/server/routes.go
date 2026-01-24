@@ -16,9 +16,7 @@ func (s *Server) SetupRoutes() {
 	s.router.GET("/config", v1.NewConfigHandler(s.config).Get)
 
 	api := s.router.Group("/api/v1")
-	// Note: We need the repository here. s.service has it internally but maybe we should expose it or pass it to Server.
-	// Since I already added analytics service to server, I can probably get the repo from the service if I add a method, 
-	// or just add repo to the Server struct.
+
 	api.Use(middleware.Auth(s.repo, s.config.Server.APIKeys))
 	{
 		chatHandler := v1.NewChatHandler(s.service, s.validator)

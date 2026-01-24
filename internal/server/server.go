@@ -50,6 +50,7 @@ func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service 
 
 	// we supressed gin debug but we can manually log the routes
 	// nicely on startup.
+	logger.Debug(cli.BoldText("Available Endpoints: "))
 	for _, route := range engine.Routes() {
 		msg := fmt.Sprintf("%s  %s%-6s%s",
 			cli.BoldCode, route.Method, cli.ResetCode,
@@ -57,6 +58,7 @@ func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service 
 		)
 		logger.Debug(msg)
 	}
+	logger.Debug(cli.BoldText(fmt.Sprintf("Total Endpoints: %d", len(engine.Routes()))))
 
 	return s
 }
