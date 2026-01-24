@@ -55,6 +55,7 @@ var (
 	BrandError  = RGB{255, 87, 87}  // #FF5757
 	BrandWarn   = RGB{255, 204, 0}  // #FFCC00
 	BrandInfo   = RGB{52, 152, 219} // #3498DB
+	BrandGreen  = RGB{52, 219, 158} // #34db9e
 )
 
 var (
@@ -147,19 +148,48 @@ func BoldText(text string) string {
 	return NewStyle().Bold().Render(text)
 }
 
-// Gradient returns the text colored with a linear interpolation between start and end colors
-func Gradient(text string, start, end RGB, progress float64) string {
-	if !Enabled() {
+// Gradient returns the text colored with a linear interpolation across multiple color stops.
+// The progress (0.0 to 1.0) determines the position within the range of colors provided.
+func Gradient(text string, progress float64, colors ...RGB) string {
+	if !Enabled() || len(colors) == 0 {
 		return text
 	}
-	r := start.R + (end.R-start.R)*progress
-	g := start.G + (end.G-start.G)*progress
-	b := start.B + (end.B-start.B)*progress
+
+	// if only one color is provided, there is no gradient to calculate.
+	if len(colors) == 1 {
+		return NewStyle().FgRGB(colors[0]).Render(text)
+	}
+
+	// clamp between 0 and 1
+	if progress < 0 {
+		progress = 0
+	} else if progress > 1 {
+		progress = 1
+	}
+
+	// see which segment the progress falls into.
+	// for N colors, there are N-1 segments.
+	n := float64(len(colors) - 1)
+	segment := int(progress * n)
+
+	// handle the edge case where progress is exactly 1.0
+	if segment > len(colors)-2 {
+		segment = len(colors) - 2
+	}
+
+	// calculate the interp factor within that specific segment [0.0, 1.0]
+	localProgress := (progress * n) - float64(segment)
+
+	start := colors[segment]
+	end := colors[segment+1]
+
+	// lerp  R, G, and B
+	r := start.R + (end.R-start.R)*localProgress
+	g := start.G + (end.G-start.G)*localProgress
+	b := start.B + (end.B-start.B)*localProgress
 
 	return NewStyle().FgRGB(RGB{r, g, b}).Render(text)
 }
-
-// Predefined Status Helpers
 
 func CheckMark() string {
 	return NewStyle().Foreground(Green).Bold().Render("✔")

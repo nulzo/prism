@@ -131,7 +131,7 @@ func printBanner(port, env string) {
 
 		// Use the cli module to generate the gradient string
 		// This respects NO_COLOR environment variables automatically
-		fmt.Println(cli.Gradient(line, cli.BrandBlue, cli.BrandPurple, ratio))
+		fmt.Println(cli.Gradient(line, ratio, cli.BrandBlue, cli.BrandPurple))
 	}
 
 	fmt.Println(cli.BoldText("\n          An exceptionally fast AI gateway."))
