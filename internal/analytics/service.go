@@ -22,7 +22,7 @@ func NewService(repo store.Repository) Service {
 }
 
 func (s *service) GetUsageOverview(ctx context.Context, days int) ([]model.DailyStats, error) {
-	// We can add business logic here, like caching or additional filtering
+	// TODO: caching or other processing?
 	if days <= 0 {
 		days = 7 // default to last week
 	}
