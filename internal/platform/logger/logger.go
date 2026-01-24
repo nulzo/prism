@@ -25,7 +25,7 @@ var (
 // DefaultConfig returns a sane default configuration based on environment variables.
 func DefaultConfig() Config {
 	return Config{
-		Level:       getEnv("LOG_LEVEL", "info"),
+		Level:       getEnv("LOG_LEVEL", "debug"),
 		Format:      getEnv("LOG_FORMAT", "console"), // options: json, console
 		EnableColor: shouldEnableColor(),
 	}
@@ -33,16 +33,12 @@ func DefaultConfig() Config {
 
 // New creates a new logger instance.
 func New(cfg Config) (*zap.Logger, error) {
-	// 1. REGISTER THE CUSTOM ENCODER
-	// zap.RegisterEncoder is global and not thread-safe for re-registration,
-	// so we ensure it runs only once.
 	once.Do(func() {
 		err := zap.RegisterEncoder("colored-console", func(zcfg zapcore.EncoderConfig) (zapcore.Encoder, error) {
 			return NewColoredConsoleEncoder(zcfg), nil
 		})
 		if err != nil {
-			// This might panic if registered twice without check, but once prevents it.
-			// In a real robust system we might check existence, but zap doesn't expose that easily.
+			// this might panic if registered twice without check, but once prevents it.
 			panic(err)
 		}
 	})

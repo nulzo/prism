@@ -11,10 +11,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/store/model"
 	"github.com/nulzo/model-router-api/internal/store/sqlite"
+	"go.uber.org/zap"
 )
 
 func main() {
-	repo, err := sqlite.NewSQLiteStorage("router.db")
+	repo, err := sqlite.NewSQLiteStorage("router.db", &zap.Logger{})
 	if err != nil {
 		log.Fatal(err)
 	}

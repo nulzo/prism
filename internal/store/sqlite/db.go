@@ -3,7 +3,6 @@ package sqlite
 import (
 	"embed"
 	"fmt"
-	"log"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -11,13 +10,15 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/store"
+	"go.uber.org/zap"
 )
 
 //go:embed migrations/*.sql
 var fs embed.FS
 
-func NewSQLiteStorage(dsn string) (store.Repository, error) {
+func NewSQLiteStorage(dsn string, logger *zap.Logger) (store.Repository, error) {
 	// add required pragmas for performance if not present
 	// such as: dsn = "file:router.db?cache=shared&mode=rwc&_journal_mode=WAL&_busy_timeout=5000"
 	db, err := sqlx.Connect("sqlite3", dsn)
@@ -54,6 +55,6 @@ func runMigrations(db *sqlx.DB) error {
 		return err
 	}
 
-	log.Println("Database migrations applied successfully")
+	logger.Debug("Database migrations applied successfully")
 	return nil
 }

@@ -7,12 +7,12 @@ import (
 
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
-	"github.com/nulzo/model-router-api/internal/store"
-	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/server/validator"
+	"github.com/nulzo/model-router-api/internal/store"
 	"go.uber.org/zap"
 )
 
@@ -51,8 +51,7 @@ func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service 
 	// we supressed gin debug but we can manually log the routes
 	// nicely on startup.
 	for _, route := range engine.Routes() {
-		msg := fmt.Sprintf("%s➜%s  %s%-6s%s %s",
-			cli.Blue, cli.ResetCode,
+		msg := fmt.Sprintf("%s  %s%-6s%s",
 			cli.BoldCode, route.Method, cli.ResetCode,
 			route.Path,
 		)

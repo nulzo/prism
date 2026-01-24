@@ -12,10 +12,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
-	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
@@ -68,7 +68,7 @@ func main() {
 	}
 
 	// Initialize Database
-	repo, err := sqlite.NewSQLiteStorage(cfg.Database.Path)
+	repo, err := sqlite.NewSQLiteStorage(cfg.Database.Path, log)
 	if err != nil {
 		logger.Fatal("Failed to initialize database", zap.Error(err))
 	}
