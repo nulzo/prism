@@ -52,7 +52,7 @@ func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service 
 	// nicely on startup.
 	logger.Debug(cli.BoldText("Available Endpoints: "))
 	for _, route := range engine.Routes() {
-		msg := fmt.Sprintf("%s  %s%-6s%s",
+		msg := fmt.Sprintf("%s%s%s%s",
 			cli.BoldCode, route.Method, cli.ResetCode,
 			route.Path,
 		)
