@@ -70,10 +70,10 @@ func New(cfg Config) (*zap.Logger, error) {
 		EncoderConfig:     encoderConfig,
 		OutputPaths:       []string{"stdout"},
 		ErrorOutputPaths:  []string{"stderr"},
-		DisableStacktrace: cfg.Level != "debug" && cfg.Level != "error",
+		DisableStacktrace: false,
 	}
 
-	return zapConfig.Build(zap.AddCallerSkip(1))
+	return zapConfig.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
 }
 
 // SetGlobal sets the global logger instance.
