@@ -10,6 +10,8 @@ import (
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
+	"github.com/nulzo/model-router-api/internal/store"
+	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/server/validator"
 	"go.uber.org/zap"
 )
@@ -18,11 +20,13 @@ type Server struct {
 	router    *gin.Engine
 	config    *config.Config
 	logger    *zap.Logger
+	repo      store.Repository
 	service   gateway.Service
+	analytics analytics.Service
 	validator *validator.Validator
 }
 
-func New(cfg *config.Config, logger *zap.Logger, service gateway.Service, v *validator.Validator) *Server {
+func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service gateway.Service, analytics analytics.Service, v *validator.Validator) *Server {
 
 	gin.SetMode(gin.ReleaseMode)
 
@@ -34,7 +38,9 @@ func New(cfg *config.Config, logger *zap.Logger, service gateway.Service, v *val
 
 	s := &Server{
 		router:    engine,
+		repo:      repo,
 		service:   service,
+		analytics: analytics,
 		logger:    logger,
 		config:    cfg,
 		validator: v,

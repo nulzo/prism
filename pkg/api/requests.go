@@ -22,7 +22,7 @@ type ChatRequest struct {
 	MaxTokens         int             `json:"max_tokens,omitempty"`
 	Temperature       float64         `json:"temperature,omitempty"`
 	TopP              float64         `json:"top_p,omitempty"`
-	TopK              int             `json:"top_k,omitempty"` // Not available for OpenAI models
+	TopK              int             `json:"top_k,omitempty"`
 	FrequencyPenalty  float64         `json:"frequency_penalty,omitempty"`
 	PresencePenalty   float64         `json:"presence_penalty,omitempty"`
 	RepetitionPenalty float64         `json:"repetition_penalty,omitempty"`
@@ -96,7 +96,7 @@ type ImageURL struct {
 }
 
 type ResponseFormat struct {
-	Type string `json:"type"` // e.g., 'json_object'
+	Type string `json:"type"`
 }
 
 type Stop struct {

@@ -10,6 +10,8 @@ import (
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/store"
+	"github.com/nulzo/model-router-api/internal/store/cache"
+	"github.com/nulzo/model-router-api/internal/store/model"
 	"github.com/nulzo/model-router-api/pkg/api"
 	"go.uber.org/zap"
 )
@@ -32,15 +34,17 @@ type Service interface {
 
 type service struct {
 	logger    *zap.Logger
-	cache     store.Store
+	repo      store.Repository
+	cache     cache.CacheService
 	mu        sync.RWMutex
 	providers map[string]llm.Provider
 	registry  *registry
 }
 
-func NewService(logger *zap.Logger, cache store.Store) Service {
+func NewService(logger *zap.Logger, repo store.Repository, cache cache.CacheService) Service {
 	return &service{
 		logger:    logger,
+		repo:      repo,
 		cache:     cache,
 		providers: make(map[string]llm.Provider),
 		registry:  newRegistry(),
@@ -77,11 +81,43 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		return nil, fmt.Errorf("provider execution failed: %w", err)
 	}
 
+	latency := time.Since(start)
+
+	// Persist usage to DB (Async to avoid blocking response)
 	go func() {
-		s.logger.Info("chat completion",
-			zap.String("provider", provider.Name()),
-			zap.Duration("latency", time.Since(start)),
-		)
+		apiKey, ok := ctx.Value(store.ContextKeyAPIKey).(*model.APIKey)
+		if !ok {
+			s.logger.Warn("API Key not found in context, skipping usage logging")
+			return
+		}
+
+		log := &model.RequestLog{
+			ID:              resp.ID,
+			UserID:          apiKey.UserID,
+			APIKeyID:        apiKey.ID,
+			ProviderID:      provider.Name(),
+			ModelID:         req.Model,
+			StatusCode:      200,
+			LatencyMS:       latency.Milliseconds(),
+			CreatedAt:       time.Now(),
+		}
+
+		if resp.Usage != nil {
+			log.InputTokens = resp.Usage.PromptTokens
+			log.OutputTokens = resp.Usage.CompletionTokens
+		}
+
+		// Calculate cost if pricing is available
+		pricing, err := s.repo.Providers().GetModelPricing(context.Background(), req.Model)
+		if err == nil && pricing != nil && resp.Usage != nil {
+			inputCost := (int64(resp.Usage.PromptTokens) * pricing.InputCostMicrosPer1k) / 1000
+			outputCost := (int64(resp.Usage.CompletionTokens) * pricing.OutputCostMicrosPer1k) / 1000
+			log.TotalCostMicros = inputCost + outputCost
+		}
+
+		if err := s.repo.Requests().Log(context.Background(), log); err != nil {
+			s.logger.Error("failed to log request", zap.Error(err))
+		}
 	}()
 
 	return resp, nil

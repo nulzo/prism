@@ -43,10 +43,9 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
-	// Ollama is dynamic, so we query the API and map to ModelDefinition
 	rootURL := a.config.BaseURL
 	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
-	url := fmt.Sprintf("%s/api/tags", rootURL)
+	tagsURL := fmt.Sprintf("%s/api/tags", rootURL)
 
 	var resp struct {
 		Models []struct {
@@ -56,7 +55,7 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 		} `json:"models"`
 	}
 
-	if err := httpclient.SendRequest(ctx, a.client, "GET", url, nil, nil, &resp); err != nil {
+	if err := httpclient.SendRequest(ctx, a.client, "GET", tagsURL, nil, nil, &resp); err != nil {
 		var upstreamErr *httpclient.UpstreamError
 		if errors.As(err, &upstreamErr) {
 			return nil, api.NewError(
@@ -70,7 +69,39 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	}
 
 	var models []api.ModelDefinition
+	showURL := fmt.Sprintf("%s/api/show", rootURL)
+
 	for _, m := range resp.Models {
+		// Detect capabilities via /api/show
+		isMultimodal := false
+		
+		var showResp struct {
+			Details struct {
+				Families []string `json:"families"`
+				Family   string   `json:"family"`
+			} `json:"details"`
+		}
+		
+		reqBody := map[string]string{"name": m.Name}
+		// We ignore errors here and default to non-multimodal to avoid breaking the whole list
+		if err := httpclient.SendRequest(ctx, a.client, "POST", showURL, reqBody, nil, &showResp); err == nil {
+			// Check families for vision capabilities
+			for _, f := range showResp.Details.Families {
+				if f == "clip" || f == "mllama" {
+					isMultimodal = true
+					break
+				}
+			}
+			// Fallback to single family check
+			if !isMultimodal && (showResp.Details.Family == "clip" || showResp.Details.Family == "mllama") {
+				isMultimodal = true
+			}
+		}
+
+		modalities := []string{"text"}
+		if isMultimodal {
+			modalities = append(modalities, "image")
+		}
 
 		modelDef := api.ModelDefinition{
 			ID:          fmt.Sprintf("%s/%s", string(llm.Ollama), m.Name),
@@ -87,11 +118,11 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 				Image:  0,
 			},
 			Config: api.ModelConfig{
-				ContextWindow:    4096, // Default assumption, can't easily know from tags
+				ContextWindow:    4096, // Default assumption
 				MaxOutput:        4096,
-				Modality:         []string{"text"},
-				ImageSupport:     false, // TODO: detect if multimodal
-				ToolUse:          false,
+				Modality:         modalities,
+				ImageSupport:     isMultimodal,
+				ToolUse:          false, 
 				StreamingSupport: true,
 			},
 		}

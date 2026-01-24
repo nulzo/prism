@@ -35,6 +35,7 @@ type Config struct {
 	Server    ServerConfig          `mapstructure:"server" validate:"required"`
 	Redis     RedisConfig           `mapstructure:"redis" validate:"required"`
 	RateLimit RateLimitConfig       `mapstructure:"rate_limit" validate:"required"`
+	Database  DatabaseConfig        `mapstructure:"database" validate:"required"`
 	Providers []ProviderConfig      `mapstructure:"providers"`
 	Routes    []RouteConfig         `mapstructure:"routes" validate:"dive"`
 	Models    []api.ModelDefinition `mapstructure:"models"`
@@ -43,6 +44,10 @@ type Config struct {
 type RateLimitConfig struct {
 	RequestsPerSecond float64 `mapstructure:"requests_per_second" validate:"gt=0"`
 	Burst             int     `mapstructure:"burst" validate:"gt=0"`
+}
+
+type DatabaseConfig struct {
+	Path string `mapstructure:"path" validate:"required"`
 }
 
 type ServerConfig struct {
@@ -77,6 +82,7 @@ func LoadConfig() (*Config, error) {
 	v.SetDefault("redis.enabled", false)
 	v.SetDefault("rate_limit.requests_per_second", 10.0)
 	v.SetDefault("rate_limit.burst", 20)
+	v.SetDefault("database.path", "./router.db")
 
 	// Environment Variables
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

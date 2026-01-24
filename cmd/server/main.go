@@ -15,10 +15,12 @@ import (
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
+	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
 	"github.com/nulzo/model-router-api/internal/store/cache"
+	"github.com/nulzo/model-router-api/internal/store/sqlite"
 	"go.uber.org/zap"
 
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
@@ -65,13 +67,21 @@ func main() {
 		cacheService = cache.NewMemoryCache()
 	}
 
-	routerService := gateway.NewService(log, cacheService)
+	// Initialize Database
+	repo, err := sqlite.NewSQLiteStorage(cfg.Database.Path)
+	if err != nil {
+		logger.Fatal("Failed to initialize database", zap.Error(err))
+	}
+	defer repo.Close()
+
+	routerService := gateway.NewService(log, repo, cacheService)
+	analyticsService := analytics.NewService(repo)
 
 	// Bootstrap providers
 	ctx := context.Background()
 	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
 
-	apiServer := server.New(cfg, log, routerService, val)
+	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Server.Port,
