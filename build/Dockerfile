@@ -28,6 +28,8 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /root/
 COPY --from=binary-build /home/prism .
+COPY --from=binary-build /home/internal/config/config.yaml ./config/config.yaml
+COPY --from=binary-build /home/internal/config/models ./config/models
 
 EXPOSE 8080
 
