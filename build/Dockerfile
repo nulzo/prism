@@ -11,10 +11,8 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 # copy the source code
-COPY cmd ./cmd
-COPY pkg ./pkg
-COPY internal ./internal
+COPY . .
 
 # CGO_ENABLED=0 ensures static bin with no c ref or dep on c libs
 # -ldflags "-s -w" strips debug info to reduce size of final build
-RUN CGO_ENABLED=0 go build -o prism -ldflags "-s -w -X 'github.com/nulzo/prism/cmd.Version=$GOTENBERG_VERSION" cmd/server/main.go
+RUN CGO_ENABLED=0 go build -o prism -ldflags "-s -w -X 'github.com/nulzo/prism/cmd.Version=$PRISM_VERSION'" cmd/server/main.go
