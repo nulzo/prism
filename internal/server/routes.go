@@ -17,15 +17,17 @@ func (s *Server) SetupRoutes() {
 
 	api := s.router.Group("/api/v1")
 
-	api.Use(middleware.Auth(s.repo, s.config.Server.APIKeys))
-	{
-		chatHandler := v1.NewChatHandler(s.service, s.validator)
-		api.POST("/chat/completions", chatHandler.CreateCompletion)
-
-		modelsHandler := v1.NewModelHandler(s.service)
-		api.GET("/models", modelsHandler.ListModels)
-
-		analyticsHandler := v1.NewAnalyticsHandler(s.analytics)
-		api.GET("/analytics/usage", analyticsHandler.GetUsage)
+	if s.config.Server.AuthEnabled {
+		api.Use(middleware.Auth(s.repo, s.config.Server.APIKeys))
 	}
+
+	chatHandler := v1.NewChatHandler(s.service, s.validator)
+	api.POST("/chat/completions", chatHandler.CreateCompletion)
+
+	modelsHandler := v1.NewModelHandler(s.service)
+	api.GET("/models", modelsHandler.ListModels)
+
+	analyticsHandler := v1.NewAnalyticsHandler(s.analytics)
+	api.GET("/analytics/usage", analyticsHandler.GetUsage)
+
 }

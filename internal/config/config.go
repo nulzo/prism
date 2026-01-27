@@ -51,9 +51,10 @@ type DatabaseConfig struct {
 }
 
 type ServerConfig struct {
-	Port    string   `mapstructure:"port" validate:"required,numeric"`
-	Env     string   `mapstructure:"env" validate:"required,oneof=development production staging"`
-	APIKeys []string `mapstructure:"api_keys" validate:"dive,min=10"`
+	Port        string   `mapstructure:"port" validate:"required,numeric"`
+	Env         string   `mapstructure:"env" validate:"required,oneof=development production staging"`
+	AuthEnabled bool     `mapstructure:"auth_enabled"`
+	APIKeys     []string `mapstructure:"api_keys" validate:"dive,min=10"`
 }
 
 type RedisConfig struct {

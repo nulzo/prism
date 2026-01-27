@@ -1,5 +1,7 @@
 server:
   port: "8080"
+  env: "development"
+  auth_enabled: false
   read_timeout: "10s"
   write_timeout: "10s"
 
