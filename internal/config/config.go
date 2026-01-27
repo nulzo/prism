@@ -135,11 +135,6 @@ func resolveConfiguration(cfg *Config, v *viper.Viper, allModels []api.ModelDefi
 			if val == "" {
 				val = v.GetString(envVar)
 			}
-			// Only update if we found a value, otherwise keep the "ENV:..." string
-			// or maybe we should default to empty?
-			// But wait, if it's not found, it stays "ENV:..." which is bad URL.
-			// Let's assume if it's not found, we might want to fallback or just use empty.
-			// The existing APIKey logic assigns empty string if not found (val="" init).
 			cfg.Providers[i].BaseURL = val
 		}
 
