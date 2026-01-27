@@ -73,7 +73,7 @@ func New(cfg Config) (*zap.Logger, error) {
 		DisableStacktrace: false,
 	}
 
-	return zapConfig.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
+	return zapConfig.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.PanicLevel))
 }
 
 // SetGlobal sets the global logger instance.

@@ -44,6 +44,6 @@ providers:
   - id: "ollama"
     type: "ollama"
     name: "Ollama"
-    base_url: "http://localhost:11434"
+    base_url: "ENV:OLLAMA_BASE_URL"
     enabled: true
     requires_auth: false

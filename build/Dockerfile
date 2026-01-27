@@ -18,7 +18,7 @@ COPY . .
 
 # CGO_ENABLED=0 ensures static bin with no c ref or dep on c libs
 # -ldflags "-s -w" strips debug info to reduce size of final build
-RUN go build -o prism -ldflags "-s -w -X 'github.com/nulzo/prism/cmd.Version=$PRISM_VERSION'" cmd/server/main.go
+RUN go build -o prism -ldflags "-s -w -X 'main.Version=$PRISM_VERSION'" cmd/server/main.go
 
 # extract binaries from build
 FROM alpine:latest
