@@ -1,27 +1,81 @@
 models:
-  - id: "anthropic/claude-3.5-sonnet"
-    name: "Claude 3.5 Sonnet"
-    provider_id: "anthropic"
-    upstream_id: "claude-3-5-sonnet-20240620"
-    description: "Anthropic's most intelligent model."
+  - id: anthropic/claude-2
+    name: Claude 2.0 / 2.1
+    provider_id: anthropic
+    upstream_id: claude-2
+    description: Claude 2 is Anthropic's previous generation model, offering reliable performance for various tasks. This includes Claude 2.0 and Claude 2.1.
     enabled: true
     pricing:
-      input: 3.00
-      output: 15.00
+      input: 8.0
+      output: 24.0
     config:
       context_window: 200000
       max_output: 4096
-      modality: ["text", "image"]
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-3-5-haiku-latest
+    name: Claude Haiku 3.5
+    provider_id: anthropic
+    upstream_id: claude-3-5-haiku-latest
+    description: Fastest, most cost-effective model
+    enabled: true
+    pricing:
+      input: 0.8
+      output: 4.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text, image]
       image_support: true
       tool_use: true
       streaming_support: true
-    source: "manual"
+    source: auto
 
-  - id: "anthropic/claude-3-haiku"
-    name: "Claude 3 Haiku"
-    provider_id: "anthropic-main"
-    upstream_id: "claude-3-haiku-20240307"
-    description: "Fastest and most compact model for near-instant responsiveness."
+  - id: anthropic/claude-3-5-sonnet
+    name: Claude Sonnet 3.5
+    provider_id: anthropic
+    upstream_id: claude-3-5-sonnet
+    description: Claude 3.5 Sonnet is an ideal balance of intelligence and speed for enterprise workloads. Maximum utility at a lower price, dependable, balanced for scaled deployments.
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 15.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-3-7-sonnet-latest
+    name: Claude Sonnet 3.7
+    provider_id: anthropic
+    upstream_id: claude-3-7-sonnet-latest
+    description: Claude 3.7 Sonnet is an advanced large language model with improved reasoning, coding, and problem-solving capabilities.
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 15.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-3-haiku
+    name: Claude Haiku 3
+    provider_id: anthropic
+    upstream_id: claude-3-haiku
+    description: Fastest, most cost-effective model
     enabled: true
     pricing:
       input: 0.25
@@ -29,8 +83,206 @@ models:
     config:
       context_window: 200000
       max_output: 4096
-      modality: ["text", "image"]
+      modality: [text, image]
       image_support: true
       tool_use: true
       streaming_support: true
-    source: "manual"
+    source: auto
+
+  - id: anthropic/claude-3-opus-latest
+    name: Claude Opus 3
+    provider_id: anthropic
+    upstream_id: claude-3-opus-latest
+    description: Claude 3 Opus was Anthropic's most powerful model for highly complex tasks. It boasts top-level performance, intelligence, fluency, and understanding.
+    enabled: true
+    pricing:
+      input: 15.0
+      output: 75.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-3-sonnet
+    name: Claude 3 Sonnet
+    provider_id: anthropic
+    upstream_id: claude-3-sonnet
+    description: Claude 3 Sonnet is an ideal balance of intelligence and speed for enterprise workloads. Maximum utility at a lower price, dependable, balanced for scaled deployments.
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 15.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-haiku-4-5
+    name: Claude Haiku 4.5
+    provider_id: anthropic
+    upstream_id: claude-haiku-4-5
+    description: Fastest and most intelligent Haiku model
+    enabled: true
+    pricing:
+      input: 1.0
+      output: 5.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-instant-1
+    name: claude-instant-1
+    provider_id: anthropic
+    upstream_id: claude-instant-1
+    description: Retired, here to match price sources
+    enabled: true
+    pricing:
+      input: 1.63
+      output: 55.1
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-instant-1.2
+    name: claude-instant-1.2
+    provider_id: anthropic
+    upstream_id: claude-instant-1.2
+    description: Retired, here to match price sources
+    enabled: true
+    pricing:
+      input: 1.63
+      output: 5.51
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-opus-4-0
+    name: Claude Opus 4
+    provider_id: anthropic
+    upstream_id: claude-opus-4-0
+    description: Most intelligent model for complex tasks
+    enabled: true
+    pricing:
+      input: 15.0
+      output: 75.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-opus-4-1
+    name: Claude Opus 4.1
+    provider_id: anthropic
+    upstream_id: claude-opus-4-1
+    description: Most intelligent model for complex tasks
+    enabled: true
+    pricing:
+      input: 15.0
+      output: 75.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-opus-4-5
+    name: Claude Opus 4.5
+    provider_id: anthropic
+    upstream_id: claude-opus-4-5
+    description: Premium model combining maximum intelligence with practical performance
+    enabled: true
+    pricing:
+      input: 5.0
+      output: 25.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-sonnet-4-0
+    name: Claude Sonnet 4
+    provider_id: anthropic
+    upstream_id: claude-sonnet-4-0
+    description: Optimal balance of intelligence, cost, and speed
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 15.0
+    config:
+      context_window: 200000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-sonnet-4-5
+    name: Claude Sonnet 4.5
+    provider_id: anthropic
+    upstream_id: claude-sonnet-4-5
+    description: Most intelligent model for building agents and coding
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 15.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: anthropic/claude-v1
+    name: claude-v1
+    provider_id: anthropic
+    upstream_id: claude-v1
+    description: Retired, here to match price sources
+    enabled: true
+    pricing:
+      input: 8.0
+      output: 24.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto

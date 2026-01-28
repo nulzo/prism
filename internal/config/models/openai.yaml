@@ -1,53 +1,1134 @@
 models:
-  - id: "openai/gpt-4o"
-    name: "GPT-4o"
-    provider_id: "openai"
-    upstream_id: "gpt-4o"
-    description: "OpenAI's flagship flagship model."
+  - id: openai/ada
+    name: ada
+    provider_id: openai
+    upstream_id: ada
+    description: ''
     enabled: true
     pricing:
-      input: 2.50
-      output: 10.00
+      input: 0.4
+      output: 0.4
     config:
       context_window: 128000
       max_output: 4096
-      modality: ["text", "image"]
-      image_support: true
-      tool_use: true
+      modality: [text]
+      image_support: false
+      tool_use: false
       streaming_support: true
-    source: "manual"
+    source: auto
 
-  - id: "openai/gpt-4-turbo"
-    name: "GPT-4 Turbo"
-    provider_id: "openai-main"
-    upstream_id: "gpt-4-turbo-preview"
-    description: "High-intelligence model with a large context window."
+  - id: openai/babbage
+    name: babbage
+    provider_id: openai
+    upstream_id: babbage
+    description: ''
     enabled: true
     pricing:
-      input: 10.00
-      output: 30.00
+      input: 0.5
+      output: 0.5
     config:
       context_window: 128000
       max_output: 4096
-      modality: ["text", "image"]
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/chatgpt-4o-latest
+    name: ChatGPT-4o
+    provider_id: openai
+    upstream_id: chatgpt-4o-latest
+    description: OpenAI ChatGPT 4o is continually updated by OpenAI to point to the current version of GPT-4o used by ChatGPT. It therefore differs slightly from the API version of GPT-4o in that it has additional RLHF. It is intended for research and evaluation.
+    enabled: true
+    pricing:
+      input: 5.0
+      output: 15.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
       image_support: true
       tool_use: true
       streaming_support: true
-    source: "manual"
+    source: auto
 
-  - id: "openai/gpt-3.5-turbo"
-    name: "GPT-3.5 Turbo"
-    provider_id: "openai-main"
-    upstream_id: "gpt-3.5-turbo"
-    description: "Fast, inexpensive model for simple tasks."
+  - id: openai/codex-mini
+    name: Codex Mini
+    provider_id: openai
+    upstream_id: codex-mini
+    description: codex-mini-latest is a fine-tuned version of o4-mini specifically for use in Codex CLI. For direct use in the API, we recommend starting with gpt-4.1.
     enabled: true
     pricing:
-      input: 0.50
-      output: 1.50
+      input: 1.5
+      output: 6.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/computer-use
+    name: Computer use
+    provider_id: openai
+    upstream_id: computer-use
+    description: ''
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 12.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/curie
+    name: curie
+    provider_id: openai
+    upstream_id: curie
+    description: ''
+    enabled: true
+    pricing:
+      input: 2.0
+      output: 2.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/davinci
+    name: davinci
+    provider_id: openai
+    upstream_id: davinci
+    description: ''
+    enabled: true
+    pricing:
+      input: 20.0
+      output: 20.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/ft:gpt-3.5-turbo-
+    name: ft:gpt-3.5-turbo-
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo-
+    description: GPT-3.5 Turbo fine tuned.
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 6.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/ft:gpt-4o
+    name: ft:gpt-4o
+    provider_id: openai
+    upstream_id: ft:gpt-4o
+    description: GPT-4o fine tuned.
+    enabled: true
+    pricing:
+      input: 3.75
+      output: 15.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/ft:gpt-4o-mini
+    name: ft:gpt-4o-mini
+    provider_id: openai
+    upstream_id: ft:gpt-4o-mini
+    description: GPT-4o Mini fine tuned.
+    enabled: true
+    pricing:
+      input: 0.3
+      output: 1.2
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-0301
+    name: gpt-3.5-0301
+    provider_id: openai
+    upstream_id: gpt-3.5-0301
+    description: ''
+    enabled: true
+    pricing:
+      input: 1.5
+      output: 2.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-turbo
+    name: gpt 3.5 turbo
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo
+    description: GPT-3.5 Turbo offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 0.5
+      output: 1.5
     config:
       context_window: 16385
       max_output: 4096
-      modality: ["text"]
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-turbo-0613
+    name: gpt-3.5-turbo-0613
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-0613
+    description: ''
+    enabled: true
+    pricing:
+      input: 1.5
+      output: 2.0
+    config:
+      context_window: 16385
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-turbo-1106
+    name: gpt-3.5-turbo-1106
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-1106
+    description: ''
+    enabled: true
+    pricing:
+      input: 1.0
+      output: 2.0
+    config:
+      context_window: 16385
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-turbo-16k
+    name: GPT-3.5 Turbo 16k
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-16k
+    description: 'This model offers four times the context length of gpt-3.5-turbo, allowing it to support approximately 20 pages of text in a single request at a higher cost. Training data: up to Sep 2021.'
+    enabled: true
+    pricing:
+      input: 3.0
+      output: 4.0
+    config:
+      context_window: 16385
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-3.5-turbo-instruct
+    name: gpt 3.5 turbo instruct
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-instruct
+    description: GPT-3.5 Turbo offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 1.5
+      output: 2.0
+    config:
+      context_window: 16385
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4
+    name: gpt 4
+    provider_id: openai
+    upstream_id: gpt-4
+    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating sophisticated capabilities in complex reasoning, theory of mind, and narrative understanding.
+    enabled: true
+    pricing:
+      input: 30.0
+      output: 60.0
+    config:
+      context_window: 8192
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
       tool_use: true
       streaming_support: true
-    source: "manual"
+    source: auto
+
+  - id: openai/gpt-4-32k
+    name: gpt 4
+    provider_id: openai
+    upstream_id: gpt-4-32k
+    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating sophisticated capabilities in complex reasoning, theory of mind, and narrative understanding.
+    enabled: true
+    pricing:
+      input: 60.0
+      output: 120.0
+    config:
+      context_window: 32000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4-turbo
+    name: gpt 4 turbo
+    provider_id: openai
+    upstream_id: gpt-4-turbo
+    description: GPT-4 Turbo offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 10.0
+      output: 30.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4-vision-preview
+    name: gpt 4 vision
+    provider_id: openai
+    upstream_id: gpt-4-vision-preview
+    description: GPT-4 Vision is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 10.0
+      output: 30.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4.1
+    name: gpt 4.1
+    provider_id: openai
+    upstream_id: gpt-4.1
+    description: GPT-4.1 is OpenAI's latest flagship model, offering major improvements in coding, instruction following, and long context understanding with up to 1 million tokens of context.
+    enabled: true
+    pricing:
+      input: 2.0
+      output: 8.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4.1-mini
+    name: gpt 4.1 mini
+    provider_id: openai
+    upstream_id: gpt-4.1-mini
+    description: GPT-4.1 Mini is a significant leap in small model performance, matching or exceeding GPT-4o in many benchmarks while reducing latency by nearly half and cost by 83%.
+    enabled: true
+    pricing:
+      input: 0.4
+      output: 1.6
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4.1-nano
+    name: gpt 4.1 nano
+    provider_id: openai
+    upstream_id: gpt-4.1-nano
+    description: GPT-4.1 Nano is OpenAI's fastest and cheapest model, delivering exceptional performance for its size with a 1 million token context window, ideal for classification and autocompletion tasks.
+    enabled: true
+    pricing:
+      input: 0.1
+      output: 0.4
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4.5-preview
+    name: GPT-4.5 (Preview)
+    provider_id: openai
+    upstream_id: gpt-4.5-preview
+    description: GPT-4.5 (Preview) is a research preview of OpenAI's latest language model, designed to advance capabilities in reasoning, creativity, and multi-turn conversation. It builds on previous iterations with improvements in world knowledge, contextual coherence, and the ability to follow user intent more effectively.
+    enabled: true
+    pricing:
+      input: 75.0
+      output: 150.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o
+    name: gpt 4o
+    provider_id: openai
+    upstream_id: gpt-4o
+    description: GPT-4 Optimized (GPT-4o) is designed for high performance in reasoning, creativity, and technical tasks while maintaining consistent output quality.
+    enabled: true
+    pricing:
+      input: 2.5
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-audio-preview
+    name: gpt 4o audio preview
+    provider_id: openai
+    upstream_id: gpt-4o-audio-preview
+    description: Audio model for gpt-4o
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini
+    name: gpt 4o mini
+    provider_id: openai
+    upstream_id: gpt-4o-mini
+    description: GPT-4o Mini is a cost-optimized variant of GPT-4o, designed for high-efficiency processing while maintaining strong performance. It excels in rapid inference and resource-efficient operations, making it ideal for production deployments requiring a balance of cost and capability.
+    enabled: true
+    pricing:
+      input: 0.15
+      output: 0.6
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini-2024-07-18.ft-
+    name: gpt-4o-mini-2024-07-18.ft-
+    provider_id: openai
+    upstream_id: gpt-4o-mini-2024-07-18.ft-
+    description: GPT-4o Mini fine tuned.
+    enabled: true
+    pricing:
+      input: 0.3
+      output: 1.2
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini-audio-preview
+    name: gpt 4o mini audio preview
+    provider_id: openai
+    upstream_id: gpt-4o-mini-audio-preview
+    description: Audio model for gpt-4o mini
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 0.6
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini-realtime-preview
+    name: gpt-4o-mini-realtime-preview
+    provider_id: openai
+    upstream_id: gpt-4o-mini-realtime-preview
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.6
+      output: 2.4
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini-transcribe
+    name: gpt-4o-mini-transcribe
+    provider_id: openai
+    upstream_id: gpt-4o-mini-transcribe
+    description: ''
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 5.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-mini-tts
+    name: gpt-4o-mini-tts
+    provider_id: openai
+    upstream_id: gpt-4o-mini-tts
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.6
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-realtime-preview
+    name: gpt-4o-realtime-preview
+    provider_id: openai
+    upstream_id: gpt-4o-realtime-preview
+    description: ''
+    enabled: true
+    pricing:
+      input: 5.0
+      output: 20.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-search-preview
+    name: GPT-4o Search Preview
+    provider_id: openai
+    upstream_id: gpt-4o-search-preview
+    description: GPT-4o Search Previewis a specialized model for web search in Chat Completions. It is trained to understand and execute web search queries.
+    enabled: true
+    pricing:
+      input: 2.5
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o-transcribe
+    name: gpt-4o-transcribe
+    provider_id: openai
+    upstream_id: gpt-4o-transcribe
+    description: ''
+    enabled: true
+    pricing:
+      input: 2.5
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-4o:extended
+    name: GPT-4o (extended)
+    provider_id: openai
+    upstream_id: gpt-4o:extended
+    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of GPT-4 Turbo while being twice as fast and 50% more cost-effective. GPT-4o also offers improved performance in processing non-English languages and enhanced visual capabilities.
+    enabled: true
+    pricing:
+      input: 6.0
+      output: 18.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5
+    name: GPT-5
+    provider_id: openai
+    upstream_id: gpt-5
+    description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic tasks across domains.
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 10.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5-image
+    name: gpt-5-image
+    provider_id: openai
+    upstream_id: gpt-5-image
+    description: ''
+    enabled: true
+    pricing:
+      input: 10.0
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5-image-mini
+    name: gpt-5-image-mini
+    provider_id: openai
+    upstream_id: gpt-5-image-mini
+    description: ''
+    enabled: true
+    pricing:
+      input: 2.5
+      output: 2.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5-mini
+    name: GPT-5 mini
+    provider_id: openai
+    upstream_id: gpt-5-mini
+    description: GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's great for well-defined tasks and precise prompts.
+    enabled: true
+    pricing:
+      input: 0.25
+      output: 2.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5-nano
+    name: GPT-5 nano
+    provider_id: openai
+    upstream_id: gpt-5-nano
+    description: GPT-5 Nano is OpenAI's fastest, cheapest version of GPT-5. It's great for summarization and classification tasks.
+    enabled: true
+    pricing:
+      input: 0.05
+      output: 0.4
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5-pro
+    name: gpt-5-pro
+    provider_id: openai
+    upstream_id: gpt-5-pro
+    description: ''
+    enabled: true
+    pricing:
+      input: 15.0
+      output: 120.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5.1
+    name: GPT-5.1
+    provider_id: openai
+    upstream_id: gpt-5.1
+    description: The best model for coding and agentic tasks across industries
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 10.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5.1-codex-mini
+    name: GPT-5.1 Codex Mini
+    provider_id: openai
+    upstream_id: gpt-5.1-codex-mini
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.25
+      output: 2.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5.2
+    name: GPT-5.2
+    provider_id: openai
+    upstream_id: gpt-5.2
+    description: The best model for coding and agentic tasks across industries
+    enabled: true
+    pricing:
+      input: 1.75
+      output: 14.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-5.2-pro
+    name: gpt-5.2-pro
+    provider_id: openai
+    upstream_id: gpt-5.2-pro
+    description: Version of GPT-5.2 that produces smarter and more precise responses.
+    enabled: true
+    pricing:
+      input: 21.0
+      output: 168.0
+    config:
+      context_window: 400000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-realtime
+    name: gpt-realtime
+    provider_id: openai
+    upstream_id: gpt-realtime
+    description: ''
+    enabled: true
+    pricing:
+      input: 4.0
+      output: 16.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/gpt-realtime-mini
+    name: gpt-realtime-mini
+    provider_id: openai
+    upstream_id: gpt-realtime-mini
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.6
+      output: 2.4
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/moderation
+    name: moderation
+    provider_id: openai
+    upstream_id: moderation
+    description: All OpenAI moderation models and endpoints are free of charge
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o1
+    name: o1
+    provider_id: openai
+    upstream_id: o1
+    description: O1 is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 15.0
+      output: 60.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o1-mini
+    name: o1 mini
+    provider_id: openai
+    upstream_id: o1-mini
+    description: O1 Mini is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 1.1
+      output: 4.4
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o1-pro
+    name: o1-pro
+    provider_id: openai
+    upstream_id: o1-pro
+    description: The o1 series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o1-pro model uses more compute to think harder and provide consistently better answers.
+    enabled: true
+    pricing:
+      input: 150.0
+      output: 600.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o3
+    name: o3
+    provider_id: openai
+    upstream_id: o3
+    description: 'o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following. Use it to think through multi-step problems that involve analysis across text, code, and images. Note that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations'
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o3-deep-research
+    name: o3-deep-research
+    provider_id: openai
+    upstream_id: o3-deep-research
+    description: ''
+    enabled: true
+    pricing:
+      input: 10.0
+      output: 40.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o3-mini
+    name: o3 Mini
+    provider_id: openai
+    upstream_id: o3-mini
+    description: OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding.
+    enabled: true
+    pricing:
+      input: 1.1
+      output: 4.4
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o3-pro
+    name: o3 Pro
+    provider_id: openai
+    upstream_id: o3-pro
+    description: The o-series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o3-pro model uses more compute to think harder and provide consistently better answers.
+    enabled: true
+    pricing:
+      input: 20.0
+      output: 80.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o4-mini
+    name: o4 Mini High
+    provider_id: openai
+    upstream_id: o4-mini
+    description: OpenAI o4-mini-high is the same model as o4-mini with reasoning_effort set to high.
+    enabled: true
+    pricing:
+      input: 1.1
+      output: 4.4
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/o4-mini-deep-research
+    name: o4-mini-deep-research
+    provider_id: openai
+    upstream_id: o4-mini-deep-research
+    description: ''
+    enabled: true
+    pricing:
+      input: 2.0
+      output: 8.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/text-davinci-002
+    name: text-davinci-002
+    provider_id: openai
+    upstream_id: text-davinci-002
+    description: ''
+    enabled: true
+    pricing:
+      input: 20.0
+      output: 20.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/text-davinci-003
+    name: text-davinci-003
+    provider_id: openai
+    upstream_id: text-davinci-003
+    description: ''
+    enabled: true
+    pricing:
+      input: 20.0
+      output: 20.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/text-embedding-3-large
+    name: text embedding 3
+    provider_id: openai
+    upstream_id: text-embedding-3-large
+    description: Text Embedding 3 is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 0.13
+      output: 0.0
+    config:
+      context_window: 8192
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/text-embedding-3-small
+    name: text embedding 3
+    provider_id: openai
+    upstream_id: text-embedding-3-small
+    description: Text Embedding 3 is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 0.02
+      output: 0.0
+    config:
+      context_window: 8192
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
+
+  - id: openai/text-embedding-ada-002
+    name: text embedding ada
+    provider_id: openai
+    upstream_id: text-embedding-ada-002
+    description: Text Embedding Ada is a model that offers a balance between cost and performance.
+    enabled: true
+    pricing:
+      input: 0.1
+      output: 0.0
+    config:
+      context_window: 8192
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
