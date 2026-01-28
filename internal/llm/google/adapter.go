@@ -52,8 +52,14 @@ type GeminiCandidate struct {
 	Content      GeminiContent `json:"content"`
 	FinishReason string        `json:"finishReason"`
 }
+type GeminiUsageMetadata struct {
+	PromptTokenCount     int `json:"promptTokenCount"`
+	CandidatesTokenCount int `json:"candidatesTokenCount"`
+	TotalTokenCount      int `json:"totalTokenCount"`
+}
 type GeminiResponse struct {
-	Candidates []GeminiCandidate `json:"candidates"`
+	Candidates    []GeminiCandidate   `json:"candidates"`
+	UsageMetadata GeminiUsageMetadata `json:"usageMetadata"`
 }
 
 func Shape(req []api.ChatMessage) (GeminiRequest, error) {
@@ -105,6 +111,11 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			},
 			FinishReason: "stop",
 		}},
+		Usage: &api.ResponseUsage{
+			PromptTokens:     gResp.UsageMetadata.PromptTokenCount,
+			CompletionTokens: gResp.UsageMetadata.CandidatesTokenCount,
+			TotalTokens:      gResp.UsageMetadata.TotalTokenCount,
+		},
 	}, nil
 }
 
@@ -141,6 +152,18 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 					Choices: []api.Choice{{
 						Delta: &api.ChatMessage{Content: api.Content{Text: text}},
 					}},
+				}}
+			}
+
+			// Handle usage metadata if present in stream
+			if gResp.UsageMetadata.TotalTokenCount > 0 {
+				ch <- api.StreamResult{Response: &api.ChatResponse{
+					Choices: []api.Choice{},
+					Usage: &api.ResponseUsage{
+						PromptTokens:     gResp.UsageMetadata.PromptTokenCount,
+						CompletionTokens: gResp.UsageMetadata.CandidatesTokenCount,
+						TotalTokens:      gResp.UsageMetadata.TotalTokenCount,
+					},
 				}}
 			}
 			return nil

@@ -16,6 +16,7 @@ func (s *Server) SetupRoutes() {
 	s.router.GET("/config", v1.NewConfigHandler(s.config).Get)
 
 	api := s.router.Group("/api/v1")
+	api.Use(middleware.Identity())
 
 	if s.config.Server.AuthEnabled {
 		api.Use(middleware.Auth(s.repo, s.config.Server.APIKeys))
