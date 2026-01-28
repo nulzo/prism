@@ -5,417 +5,423 @@ pricing_urls:
   - https://cloud.google.com/vertex-ai/generative-ai/pricing
 
 models:
-  - id: "google/gemini-1.5-flash"
-    name: "Gemini 1.5 Flash"
-    provider_id: "google"
-    upstream_id: "gemini-1.5-flash"
-    description: "Fast and versatile multimodal model for high-frequency tasks."
-    enabled: true
-    pricing:
-      input: 0.35
-      output: 1.05
-    config:
-      context_window: 1000000
-      max_output: 8192
-      modality: ["text", "image", "video", "audio"]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: "manual"
-
-
   - id: google/gemini-1.0-pro-vision-001
     name: gemini 1.0 pro vision
-    description: >-
-      Google's first-generation advanced multimodal model that can understand
-      text, code, and images. It provides strong reasoning capabilities and
-      follows instructions effectively.
-    config:
-      context_window: 32768
-      max_output: 8192
-      modality: ["text", "image"]
-      image_support: false
-      tool_use: false
-      streaming_support: true
+    provider_id: google
+    upstream_id: gemini-1.0-pro-vision-001
+    description: Google's first-generation advanced multimodal model that can understand
+      text, code, and images. It provides strong reasoning capabilities and follows
+      instructions effectively.
+    enabled: true
     pricing:
       input: 0.125
       output: 0.375
+    config:
+      context_window: 32768
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-1.5-flash
-  #   name: gemini 1.5 flash
-  #   description: >-
-  #     A faster, more cost-effective variant of Gemini 1.5 that maintains strong
-  #     capabilities while optimizing for performance and cost efficiency.
-  #     Suitable for production deployments requiring high throughput.
-  #   match:
-  #     contains: gemini-1.5-flash
-  #   context_window: 1000000
-  #   pricing_checked: 2025-07-04
-  #   pricing:
-  #     input: 0.075
-  #     output: 0.3
-  #     cached: 0.01875
+  - id: google/gemini-1.5-flash
+    name: gemini 1.5 flash
+    provider_id: google
+    upstream_id: gemini-1.5-flash
+    description: A faster, more cost-effective variant of Gemini 1.5 that maintains
+      strong capabilities while optimizing for performance and cost efficiency. Suitable
+      for production deployments requiring high throughput.
+    enabled: true
+    pricing:
+      input: 0.075
+      output: 0.3
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-1.5-pro
-  #   name: gemini 1.5 Pro
-  #   description: >-
-  #     Google's most capable multimodal model with an extremely long context
-  #     window of up to 1 million tokens. It excels at complex reasoning,
-  #     long-form content processing, and multimodal understanding.
-  #   match:
-  #     contains: gemini-1.5-pro
-  #   context_window: 1000000
-  #   pricing_checked: 2025-06-22
-  #   pricing:
-  #     input:
-  #       base: 1.25
-  #       tiers:
-  #         - start: 128000
-  #           price: 2.50
-  #     output:
-  #       base: 5.00
-  #       tiers:
-  #         - start: 128000
-  #           price: 10.00
+  - id: google/gemini-1.5-pro
+    name: gemini 1.5 Pro
+    provider_id: google
+    upstream_id: gemini-1.5-pro
+    description: Google's most capable multimodal model with an extremely long context
+      window of up to 1 million tokens. It excels at complex reasoning, long-form content
+      processing, and multimodal understanding.
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 5.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.0-flash
-  #   name: gemini 2.0 flash
-  #   description: >-
-  #     The newest generation of Google's Gemini models, featuring improved
-  #     reasoning, instruction following, and factual accuracy, with the Flash
-  #     variant optimized for cost-efficiency and performance.
-  #   match:
-  #     or:
-  #       - ends_with: gemini-2.0-flash
-  #       - contains: gemini-2.0-flash-0
-  #       - contains: gemini-2.0-flash-exp
-  #       - contains: gemini-2.0-flash-thinking
-  #       - contains: gemini-2.0-flash-latest
-  #   context_window: 1000000
-  #   pricing_checked: 2025-07-04
-  #   pricing:
-  #     input: 0.1
-  #     input_audio_mtok: 0.7
-  #     output: 0.4
-  #     cached:
-  #       base: 0.025
-  #       tiers:
-  #         - start: 1000000
-  #           price: 0.175
+  - id: google/gemini-2.0-flash
+    name: gemini 2.0 flash
+    provider_id: google
+    upstream_id: gemini-2.0-flash
+    description: The newest generation of Google's Gemini models, featuring improved
+      reasoning, instruction following, and factual accuracy, with the Flash variant
+      optimized for cost-efficiency and performance.
+    enabled: true
+    pricing:
+      input: 0.1
+      output: 0.4
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.0-flash-lite
-  #   name: gemini 2.0 flash lite
-  #   description: >-
-  #     A lighter, more cost-effective version of Gemini 2.0 Flash, designed for
-  #     applications requiring high efficiency while maintaining good performance.
-  #     Ideal for high-volume, cost-sensitive deployments.
-  #   match:
-  #     contains: gemini-2.0-flash-lite
-  #   context_window: 1000000
-  #   pricing_checked: 2025-07-04
-  #   pricing:
-  #     input: 0.075
-  #     output: 0.3
+  - id: google/gemini-2.0-flash-lite
+    name: gemini 2.0 flash lite
+    provider_id: google
+    upstream_id: gemini-2.0-flash-lite
+    description: A lighter, more cost-effective version of Gemini 2.0 Flash, designed
+      for applications requiring high efficiency while maintaining good performance.
+      Ideal for high-volume, cost-sensitive deployments.
+    enabled: true
+    pricing:
+      input: 0.075
+      output: 0.3
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.5-flash
-  #   name: Gemini 2.5 Flash
-  #   description: >-
-  #     Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding,
-  #     mathematics, and scientific tasks. It includes built-in "thinking" capabilities,
-  #     enabling it to provide responses with greater accuracy and nuanced context handling.
-  #   match:
-  #     or:
-  #       - equals: gemini-2.5-flash
-  #       - equals: gemini-2.5-flash-latest
-  #       - equals: gemini-2.5-flash-preview-09-2025
-  #   pricing_checked: 2025-10-31
-  #   pricing:
-  #     input: 0.3
-  #     input_audio_mtok: 1
-  #     cached: 0.03
-  #     cache_audio_read_mtok: 0.1
-  #     output: 2.5
+  - id: google/gemini-2.5-flash
+    name: Gemini 2.5 Flash
+    provider_id: google
+    upstream_id: gemini-2.5-flash
+    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically
+      designed for advanced reasoning, coding, mathematics, and scientific tasks. It
+      includes built-in "thinking" capabilities, enabling it to provide responses with
+      greater accuracy and nuanced context handling.
+    enabled: true
+    pricing:
+      input: 0.3
+      output: 2.5
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.5-flash-image
-  #   name: Gemini 2.5 Flash Image
-  #   description: >-
-  #     Google's specialized image generation model optimized for fast, high-quality image generation.
-  #     Outputs images at 1024x1024 resolution, with each image consuming 1290 output tokens.
-  #   match:
-  #     or:
-  #       - equals: gemini-2.5-flash-image
-  #       - equals: gemini-2.5-flash-image-preview
-  #   context_window: 1000000
-  #   pricing_checked: 2025-11-04
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-2.5-flash-image. Image output is priced at
-  #     $30 per 1M tokens, with each 1024x1024 image = 1290 tokens = $0.039/image. Cache pricing is not available for this
-  #     model.
-  #   pricing:
-  #     input: 0.3
-  #     output: 30.0
+  - id: google/gemini-2.5-flash-image
+    name: Gemini 2.5 Flash Image
+    provider_id: google
+    upstream_id: gemini-2.5-flash-image
+    description: Google's specialized image generation model optimized for fast, high-quality
+      image generation. Outputs images at 1024x1024 resolution, with each image consuming
+      1290 output tokens.
+    enabled: true
+    pricing:
+      input: 0.3
+      output: 30.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.5-flash-lite
-  #   name: Gemini 2.5 Flash Lite
-  #   description: >-
-  #     Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and
-  #     cost efficiency. It offers improved throughput, faster token generation, and better
-  #     performance across common benchmarks compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning)
-  #     is disabled to prioritize speed, but developers can enable it via the Reasoning
-  #     API parameter to selectively trade off cost for intelligence.
-  #   match:
-  #     or:
-  #       - equals: gemini-2.5-flash-lite
-  #       - starts_with: gemini-2.5-flash-lite-preview
-  #   context_window: 1000000
-  #   pricing_checked: 2025-10-31
-  #   pricing:
-  #     input: 0.1
-  #     input_audio_mtok: 0.3
-  #     cached: 0.01
-  #     cache_audio_read_mtok: 0.03
-  #     output: 0.4
+  - id: google/gemini-2.5-flash-lite
+    name: Gemini 2.5 Flash Lite
+    provider_id: google
+    upstream_id: gemini-2.5-flash-lite
+    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini
+      2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved
+      throughput, faster token generation, and better performance across common benchmarks
+      compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning)
+      is disabled to prioritize speed, but developers can enable it via the Reasoning
+      API parameter to selectively trade off cost for intelligence.
+    enabled: true
+    pricing:
+      input: 0.1
+      output: 0.4
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.5-flash-preview
-  #   name: Gemini 2.5 Flash Preview 05-20
-  #   description: >-
-  #     Gemini 2.5 Flash May 20th Checkpoint is Google's state-of-the-art workhorse model, specifically designed for advanced
-  #     reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking"
-  #     capabilities, enabling it to provide responses with greater accuracy and nuanced context handling.
-  #   match:
-  #     or:
-  #       - contains: gemini-2.5-flash-preview-05-20
-  #       - contains: gemini-2.5-flash-preview-04-17
-  #       - equals: gemini-2.5-flash-preview-05-20:thinking
-  #       - equals: gemini-2.5-flash-preview
-  #       - equals: gemini-2.5-flash-preview:thinking
-  #   price_comments: from https://cloud.google.com/vertex-ai/generative-ai/pricing should be retired 2025-07-15
-  #   pricing_checked: 2025-10-31
-  #   pricing:
-  #     input: 0.15
-  #     output: 0.6
+  - id: google/gemini-2.5-flash-preview
+    name: Gemini 2.5 Flash Preview 05-20
+    provider_id: google
+    upstream_id: gemini-2.5-flash-preview
+    description: Gemini 2.5 Flash May 20th Checkpoint is Google's state-of-the-art workhorse
+      model, specifically designed for advanced reasoning, coding, mathematics, and
+      scientific tasks. It includes built-in "thinking" capabilities, enabling it to
+      provide responses with greater accuracy and nuanced context handling.
+    enabled: true
+    pricing:
+      input: 0.15
+      output: 0.6
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-2.5-pro
-  #   name: Gemini 2.5 Pro
-  #   description: >-
-  #     Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific
-  #     tasks. It employs "thinking" capabilities, enabling it to reason through responses
-  #     with enhanced accuracy and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks,
-  #     including first-place positioning on the LMArena leaderboard, reflecting superior
-  #     human-preference alignment and complex problem-solving abilities.
-  #   match:
-  #     starts_with: gemini-2.5-pro
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-2.5-pro
-  #   pricing_checked: 2025-10-31
-  #   pricing:
-  #     input:
-  #       base: 1.25
-  #       tiers:
-  #         - start: 200000
-  #           price: 2.5
-  #     cached:
-  #       base: 0.125
-  #       tiers:
-  #         - start: 200000
-  #           price: 0.25
-  #     output:
-  #       base: 10
-  #       tiers:
-  #         - start: 200000
-  #           price: 15
+  - id: google/gemini-2.5-pro
+    name: Gemini 2.5 Pro
+    provider_id: google
+    upstream_id: gemini-2.5-pro
+    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced
+      reasoning, coding, mathematics, and scientific tasks. It employs "thinking" capabilities,
+      enabling it to reason through responses with enhanced accuracy and nuanced context
+      handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks,
+      including first-place positioning on the LMArena leaderboard, reflecting superior
+      human-preference alignment and complex problem-solving abilities.
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 10.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-3-flash-preview
-  #   name: Gemini 3 Flash Preview
-  #   description: >-
-  #     Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art
-  #     performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
-  #   match:
-  #     or:
-  #       - equals: gemini-3-flash-preview
-  #       - starts_with: gemini-3-flash-preview-
-  #   context_window: 1000000
-  #   pricing_checked: 2025-12-19
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing. Standard pricing shown; Batch API offers 50% discount on input/output.
-  #   pricing:
-  #     input: 0.5
-  #     input_audio_mtok: 1
-  #     cached: 0.05
-  #     cache_audio_read_mtok: 0.1
-  #     output: 3
+  - id: google/gemini-3-flash-preview
+    name: Gemini 3 Flash Preview
+    provider_id: google
+    upstream_id: gemini-3-flash-preview
+    description: Google's ultra-fast frontier model optimized for speed and efficiency.
+      Delivers state-of-the-art performance while maintaining low latency and cost,
+      with improved reasoning and coding capabilities.
+    enabled: true
+    pricing:
+      input: 0.5
+      output: 3.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-3-pro-image-preview
-  #   name: Gemini 3 Pro Image Preview
-  #   description: >-
-  #     Google's image generation model optimized for high-quality image generation.
-  #     Supports 1K/2K and 4K resolution outputs with flexible pricing based on image dimensions.
-  #   match:
-  #     or:
-  #       - starts_with: gemini-3-pro-image-preview
-  #       - equals: gemini-3-pro-image-preview
-  #   context_window: 1000000
-  #   pricing_checked: 2025-12-19
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-3-pro-image. Image output is priced at
-  #     $120 per 1M tokens, with each 1K/2K image = 1120 tokens = $0.134/image and each 4K image = 2000 tokens = $0.24/image.
-  #   pricing:
-  #     input: 2
-  #     output: 120
+  - id: google/gemini-3-pro-image-preview
+    name: Gemini 3 Pro Image Preview
+    provider_id: google
+    upstream_id: gemini-3-pro-image-preview
+    description: Google's image generation model optimized for high-quality image generation.
+      Supports 1K/2K and 4K resolution outputs with flexible pricing based on image
+      dimensions.
+    enabled: true
+    pricing:
+      input: 2.0
+      output: 120.0
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-3-pro-preview
-  #   name: Gemini 3 Pro Preview
-  #   description: The best model in the world for multimodal understanding, and our most powerful agentic and vibe-coding model yet.
-  #   match:
-  #     or:
-  #       - starts_with: gemini-3-pro-preview
-  #       - equals: gemini-3-pro-text-preview
-  #   pricing_checked: 2025-11-18
-  #   pricing:
-  #     input:
-  #       base: 2
-  #       tiers:
-  #         - start: 200000
-  #           price: 4
-  #     cached:
-  #       base: 0.2
-  #       tiers:
-  #         - start: 200000
-  #           price: 0.4
-  #     output:
-  #       base: 12
-  #       tiers:
-  #         - start: 200000
-  #           price: 18
+  - id: google/gemini-3-pro-preview
+    name: Gemini 3 Pro Preview
+    provider_id: google
+    upstream_id: gemini-3-pro-preview
+    description: The best model in the world for multimodal understanding, and our most
+      powerful agentic and vibe-coding model yet.
+    enabled: true
+    pricing:
+      input: 2.0
+      output: 12.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-embedding-001
-  #   match:
-  #     equals: gemini-embedding-001
-  #   pricing:
-  #     input: 0.15
+  - id: google/gemini-embedding-001
+    name: gemini-embedding-001
+    provider_id: google
+    upstream_id: gemini-embedding-001
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.15
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-flash-1.5
-  #   name: Gemini 1.5 Flash
-  #   description: >-
-  #     Gemini 1.5 Flash is a foundation model that performs well at a variety of multimodal tasks such as visual understanding,
-  #     classification, summarization, and creating content from image, audio and video.
-  #     It's adept at processing visual and text inputs such as photographs, documents, infographics, and screenshots.
-  #   match:
-  #     equals: gemini-flash-1.5
-  #   pricing_checked: 2025-07-05
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-1.5-flash
-  #   pricing:
-  #     input:
-  #       base: 0.075
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.15
-  #     cached:
-  #       base: 0.01875
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.0375
-  #     output:
-  #       base: 0.3
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.6
+  - id: google/gemini-flash-1.5
+    name: Gemini 1.5 Flash
+    provider_id: google
+    upstream_id: gemini-flash-1.5
+    description: Gemini 1.5 Flash is a foundation model that performs well at a variety
+      of multimodal tasks such as visual understanding, classification, summarization,
+      and creating content from image, audio and video. It's adept at processing visual
+      and text inputs such as photographs, documents, infographics, and screenshots.
+    enabled: true
+    pricing:
+      input: 0.075
+      output: 0.3
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-flash-1.5-8b
-  #   name: gemini 1.5 flash
-  #   description: >-
-  #     A faster, more cost-effective variant of Gemini 1.5 that maintains strong
-  #     capabilities while optimizing for performance and cost efficiency.
-  #     Suitable for production deployments requiring high throughput.
-  #   match:
-  #     equals: gemini-flash-1.5-8b
-  #   context_window: 1000000
-  #   pricing_checked: 2025-07-05
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-1.5-flash-8b
-  #   pricing:
-  #     input:
-  #       base: 0.0375
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.075
-  #     cached:
-  #       base: 0.01
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.02
-  #     output:
-  #       base: 0.15
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.3
+  - id: google/gemini-flash-1.5-8b
+    name: gemini 1.5 flash
+    provider_id: google
+    upstream_id: gemini-flash-1.5-8b
+    description: A faster, more cost-effective variant of Gemini 1.5 that maintains
+      strong capabilities while optimizing for performance and cost efficiency. Suitable
+      for production deployments requiring high throughput.
+    enabled: true
+    pricing:
+      input: 0.0375
+      output: 0.15
+    config:
+      context_window: 1000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-live-2.5-flash-preview
-  #   match:
-  #     or:
-  #       - starts_with: gemini-live-2.5-flash-preview
-  #       - starts_with: gemini-2.5-flash-native-audio-preview
-  #   pricing:
-  #     input: 0.5
-  #     input_audio_mtok: 3
-  #     output: 2
-  #     output_audio_mtok: 12
+  - id: google/gemini-live-2.5-flash-preview
+    name: gemini-live-2.5-flash-preview
+    provider_id: google
+    upstream_id: gemini-live-2.5-flash-preview
+    description: ''
+    enabled: true
+    pricing:
+      input: 0.5
+      output: 2.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-pro
-  #   name: gemini 1.0 pro
-  #   description: >-
-  #     Google's first-generation advanced multimodal model that can understand
-  #     text, code, and images. It provides strong reasoning capabilities and
-  #     follows instructions effectively.
-  #   match:
-  #     or:
-  #       - equals: gemini-pro
-  #       - equals: gemini-1.0-pro
-  #   context_window: 32768
-  #   pricing_checked: 2025-07-04
-  #   price_comments: I can't find anything so trusting these pricing, not sure the model still exists
-  #   pricing:
-  #     input: 0.125
-  #     output: 0.375
+  - id: google/gemini-pro
+    name: gemini 1.0 pro
+    provider_id: google
+    upstream_id: gemini-pro
+    description: Google's first-generation advanced multimodal model that can understand
+      text, code, and images. It provides strong reasoning capabilities and follows
+      instructions effectively.
+    enabled: true
+    pricing:
+      input: 0.125
+      output: 0.375
+    config:
+      context_window: 32768
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemini-pro-1.5
-  #   name: Gemini 1.5 Pro
-  #   description: >-
-  #     Google's latest multimodal model, supports image and video[0] in text or chat prompts.
-  #   match:
-  #     equals: gemini-pro-1.5
-  #   context_window: 2000000
-  #   pricing_checked: 2025-07-05
-  #   price_comments: See https://ai.google.dev/gemini-api/docs/pricing#gemini-1.5-pro
-  #   pricing:
-  #     input:
-  #       base: 1.25
-  #       tiers:
-  #         - start: 128000
-  #           price: 2.5
-  #     cached:
-  #       base: 0.3125
-  #       tiers:
-  #         - start: 128000
-  #           price: 0.625
-  #     output:
-  #       base: 5
-  #       tiers:
-  #         - start: 128000
-  #           price: 10
+  - id: google/gemini-pro-1.5
+    name: Gemini 1.5 Pro
+    provider_id: google
+    upstream_id: gemini-pro-1.5
+    description: Google's latest multimodal model, supports image and video[0] in text
+      or chat prompts.
+    enabled: true
+    pricing:
+      input: 1.25
+      output: 5.0
+    config:
+      context_window: 2000000
+      max_output: 4096
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
 
-  # - id: gemma-3
-  #   name: Gemma 3 (free)
-  #   description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.
-  #   pricing_checked: 2025-08-12
-  #   match:
-  #     or:
-  #       - starts_with: gemma-3-
-  #       - equals: gemma-3
-  #   pricing: {}
+  - id: google/gemma-3
+    name: Gemma 3 (free)
+    provider_id: google
+    upstream_id: gemma-3
+    description: Lightweight, state-of the art, open model built from the same technology
+      that powers our Gemini models.
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto
 
-  # - id: gemma-3n
-  #   name: Gemma 3n (free)
-  #   description: Our open model built for efficient performance on everyday devices like mobile phones, laptops, and
-  #     tablets.
-  #   collapse: false
-  #   pricing_checked: 2025-08-12
-  #   match:
-  #     or:
-  #       - starts_with: gemma-3n
-  #   pricing: {}
+  - id: google/gemma-3n
+    name: Gemma 3n (free)
+    provider_id: google
+    upstream_id: gemma-3n
+    description: Our open model built for efficient performance on everyday devices
+      like mobile phones, laptops, and tablets.
+    enabled: true
+    pricing:
+      input: 0.0
+      output: 0.0
+    config:
+      context_window: 128000
+      max_output: 4096
+      modality: [text]
+      image_support: false
+      tool_use: false
+      streaming_support: true
+    source: auto

@@ -109,3 +109,7 @@ Temporary Items
 .env
 
 *.db
+
+./scripts
+./scripts/*
+scripts/*
