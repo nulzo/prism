@@ -214,11 +214,3 @@ func ErrorBadge() string {
 func WarnBadge() string {
 	return NewStyle().BgRGB(BrandWarn).Foreground(Black).Bold().Render(" WARN ")
 }
-
-// Legacy helpers for compatibility (can be deprecated or kept)
-func Style(text string, colorCode string) string {
-	if !Enabled() {
-		return text
-	}
-	return fmt.Sprintf("%s%s%s", colorCode, text, ResetCode)
-}
