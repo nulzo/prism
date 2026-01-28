@@ -85,21 +85,35 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	// Persist usage to DB (Async to avoid blocking response)
 	go func() {
-		apiKey, ok := ctx.Value(store.ContextKeyAPIKey).(*model.APIKey)
-		if !ok {
-			s.logger.Warn("API Key not found in context, skipping usage logging")
-			return
+		var userID, apiKeyID, appName string
+
+		if val, ok := ctx.Value(store.ContextKeyAppName).(string); ok {
+			appName = val
+		}
+
+		if apiKey, ok := ctx.Value(store.ContextKeyAPIKey).(*model.APIKey); ok {
+			userID = apiKey.UserID
+			apiKeyID = apiKey.ID
+		} else {
+			if appName != "" {
+				userID = "anonymous"
+				apiKeyID = "anonymous"
+			} else {
+				s.logger.Warn("No Identity (API Key or App Name) found in context, skipping usage logging")
+				return
+			}
 		}
 
 		log := &model.RequestLog{
-			ID:              resp.ID,
-			UserID:          apiKey.UserID,
-			APIKeyID:        apiKey.ID,
-			ProviderID:      provider.Name(),
-			ModelID:         req.Model,
-			StatusCode:      200,
-			LatencyMS:       latency.Milliseconds(),
-			CreatedAt:       time.Now(),
+			ID:         resp.ID,
+			UserID:     userID,
+			APIKeyID:   apiKeyID,
+			AppName:    appName,
+			ProviderID: provider.Name(),
+			ModelID:    req.Model,
+			StatusCode: 200,
+			LatencyMS:  latency.Milliseconds(),
+			CreatedAt:  time.Now(),
 		}
 
 		if resp.Usage != nil {

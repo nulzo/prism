@@ -8,7 +8,10 @@ import (
 
 type contextKey string
 
-const ContextKeyAPIKey contextKey = "api_key"
+const (
+	ContextKeyAPIKey  contextKey = "api_key"
+	ContextKeyAppName contextKey = "app_name"
+)
 
 // Repository is the main contract for the data layer.
 // It exposes sub-repositories for specific domains.

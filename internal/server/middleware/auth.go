@@ -20,9 +20,20 @@ func Auth(repo store.Repository, staticKeys []string) gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
+		appName := c.GetHeader("X-App-Name")
+		if appName != "" {
+			ctx := context.WithValue(c.Request.Context(), store.ContextKeyAppName, appName)
+			c.Request = c.Request.WithContext(ctx)
+		}
+
 		authHeader := c.GetHeader("Authorization")
+
 		if authHeader == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, api.ErrorResponse{Message: "Missing Authorization header"})
+			if appName != "" {
+				c.Next()
+				return
+			}
+			c.AbortWithStatusJSON(http.StatusUnauthorized, api.ErrorResponse{Message: "Missing Authorization header or X-App-Name"})
 			return
 		}
 
@@ -34,13 +45,11 @@ func Auth(repo store.Repository, staticKeys []string) gin.HandlerFunc {
 
 		token := parts[1]
 
-		// 1. Check static keys (config-based)
 		if staticMap[token] {
 			c.Next()
 			return
 		}
 
-		// 2. Check DB keys
 		hash := sha256.Sum256([]byte(token))
 		hashedHex := hex.EncodeToString(hash[:])
 
@@ -53,7 +62,7 @@ func Auth(repo store.Repository, staticKeys []string) gin.HandlerFunc {
 		// Inject key into context for downstream use (logging)
 		ctx := context.WithValue(c.Request.Context(), store.ContextKeyAPIKey, key)
 		c.Request = c.Request.WithContext(ctx)
-		
+
 		// Update last used timestamp (async)
 		go func() {
 			_ = repo.APIKeys().UpdateUsage(context.Background(), key.ID)

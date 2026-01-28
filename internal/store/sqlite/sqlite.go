@@ -116,12 +116,12 @@ func (r *requestRepo) Log(ctx context.Context, log *model.RequestLog) error {
 	// Using NamedExec for cleaner mapping
 	query := `
 	INSERT INTO request_logs (
-		id, user_id, api_key_id, provider_id, model_id,
+		id, user_id, api_key_id, app_name, provider_id, model_id,
 		input_tokens, output_tokens, cached_tokens,
 		latency_ms, ttft_ms, status_code, total_cost_micros,
 		ip_address, user_agent, meta_json, created_at
 	) VALUES (
-		:id, :user_id, :api_key_id, :provider_id, :model_id,
+		:id, :user_id, :api_key_id, :app_name, :provider_id, :model_id,
 		:input_tokens, :output_tokens, :cached_tokens,
 		:latency_ms, :ttft_ms, :status_code, :total_cost_micros,
 		:ip_address, :user_agent, :meta_json, :created_at

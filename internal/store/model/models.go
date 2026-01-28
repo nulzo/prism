@@ -32,7 +32,7 @@ type APIKey struct {
 	UserID             string         `db:"user_id" json:"user_id"`
 	WalletID           sql.NullString `db:"wallet_id" json:"wallet_id,omitempty"`
 	Name               string         `db:"name" json:"name"`
-	KeyHash            string         `db:"key_hash" json:"-"`          // Never return hash
+	KeyHash            string         `db:"key_hash" json:"-"`            // Never return hash
 	KeyPrefix          string         `db:"key_prefix" json:"key_prefix"` // Display only
 	Scopes             string         `db:"scopes" json:"scopes"`         // JSON array
 	ExpiresAt          sql.NullTime   `db:"expires_at" json:"expires_at,omitempty"`
@@ -58,43 +58,44 @@ type Provider struct {
 
 // Model represents a specific model offered by a provider with pricing.
 type Model struct {
-	ID                     string    `db:"id" json:"id"`
-	ProviderID             string    `db:"provider_id" json:"provider_id"`
-	ProviderModelID        string    `db:"provider_model_id" json:"provider_model_id"`
-	IsEnabled              bool      `db:"is_enabled" json:"is_enabled"`
-	IsPublic               bool      `db:"is_public" json:"is_public"`
-	InputCostMicrosPer1k   int64     `db:"input_cost_micros_per_1k" json:"input_cost_micros_per_1k"`
-	OutputCostMicrosPer1k  int64     `db:"output_cost_micros_per_1k" json:"output_cost_micros_per_1k"`
-	ContextWindow          int       `db:"context_window" json:"context_window"`
-	CreatedAt              time.Time `db:"created_at" json:"created_at"`
-	UpdatedAt              time.Time `db:"updated_at" json:"updated_at"`
+	ID                    string    `db:"id" json:"id"`
+	ProviderID            string    `db:"provider_id" json:"provider_id"`
+	ProviderModelID       string    `db:"provider_model_id" json:"provider_model_id"`
+	IsEnabled             bool      `db:"is_enabled" json:"is_enabled"`
+	IsPublic              bool      `db:"is_public" json:"is_public"`
+	InputCostMicrosPer1k  int64     `db:"input_cost_micros_per_1k" json:"input_cost_micros_per_1k"`
+	OutputCostMicrosPer1k int64     `db:"output_cost_micros_per_1k" json:"output_cost_micros_per_1k"`
+	ContextWindow         int       `db:"context_window" json:"context_window"`
+	CreatedAt             time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt             time.Time `db:"updated_at" json:"updated_at"`
 }
 
 // RequestLog captures the full detail of a completed inference request.
 type RequestLog struct {
-	ID              string         `db:"id" json:"id"`
-	UserID          string         `db:"user_id" json:"user_id"`
-	APIKeyID        string         `db:"api_key_id" json:"api_key_id"`
-	ProviderID      string         `db:"provider_id" json:"provider_id"`
-	ModelID         string         `db:"model_id" json:"model_id"`
-	InputTokens     int            `db:"input_tokens" json:"input_tokens"`
-	OutputTokens    int            `db:"output_tokens" json:"output_tokens"`
-	CachedTokens    int            `db:"cached_tokens" json:"cached_tokens"`
-	LatencyMS       int64          `db:"latency_ms" json:"latency_ms"`
-	TTFTMS          sql.NullInt64  `db:"ttft_ms" json:"ttft_ms,omitempty"`
-	StatusCode      int            `db:"status_code" json:"status_code"`
-	TotalCostMicros int64          `db:"total_cost_micros" json:"total_cost_micros"`
-	IPAddress       string         `db:"ip_address" json:"ip_address"`
-	UserAgent       string         `db:"user_agent" json:"user_agent"`
-	MetaJSON        string         `db:"meta_json" json:"meta_json"`
-	CreatedAt       time.Time      `db:"created_at" json:"created_at"`
+	ID              string        `db:"id" json:"id"`
+	UserID          string        `db:"user_id" json:"user_id"`
+	APIKeyID        string        `db:"api_key_id" json:"api_key_id"`
+	AppName         string        `db:"app_name" json:"app_name"`
+	ProviderID      string        `db:"provider_id" json:"provider_id"`
+	ModelID         string        `db:"model_id" json:"model_id"`
+	InputTokens     int           `db:"input_tokens" json:"input_tokens"`
+	OutputTokens    int           `db:"output_tokens" json:"output_tokens"`
+	CachedTokens    int           `db:"cached_tokens" json:"cached_tokens"`
+	LatencyMS       int64         `db:"latency_ms" json:"latency_ms"`
+	TTFTMS          sql.NullInt64 `db:"ttft_ms" json:"ttft_ms,omitempty"`
+	StatusCode      int           `db:"status_code" json:"status_code"`
+	TotalCostMicros int64         `db:"total_cost_micros" json:"total_cost_micros"`
+	IPAddress       string        `db:"ip_address" json:"ip_address"`
+	UserAgent       string        `db:"user_agent" json:"user_agent"`
+	MetaJSON        string        `db:"meta_json" json:"meta_json"`
+	CreatedAt       time.Time     `db:"created_at" json:"created_at"`
 }
 
 // DailyStats represents aggregated usage data for a specific day.
 type DailyStats struct {
-	Date            string `db:"date" json:"date"`
-	TotalRequests   int    `db:"total_requests" json:"total_requests"`
-	TotalTokens     int    `db:"total_tokens" json:"total_tokens"`
-	TotalCostMicros int64  `db:"total_cost_micros" json:"total_cost_micros"`
+	Date            string  `db:"date" json:"date"`
+	TotalRequests   int     `db:"total_requests" json:"total_requests"`
+	TotalTokens     int     `db:"total_tokens" json:"total_tokens"`
+	TotalCostMicros int64   `db:"total_cost_micros" json:"total_cost_micros"`
 	AverageLatency  float64 `db:"avg_latency" json:"avg_latency"`
 }
