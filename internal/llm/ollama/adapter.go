@@ -74,14 +74,16 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	for _, m := range resp.Models {
 		// Detect capabilities via /api/show
 		isMultimodal := false
-		
+		contextLength := 4096 // Default
+
 		var showResp struct {
 			Details struct {
 				Families []string `json:"families"`
 				Family   string   `json:"family"`
 			} `json:"details"`
+			ModelInfo map[string]interface{} `json:"model_info"`
 		}
-		
+
 		reqBody := map[string]string{"name": m.Name}
 		// We ignore errors here and default to non-multimodal to avoid breaking the whole list
 		if err := httpclient.SendRequest(ctx, a.client, "POST", showURL, reqBody, nil, &showResp); err == nil {
@@ -96,6 +98,19 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 			if !isMultimodal && (showResp.Details.Family == "clip" || showResp.Details.Family == "mllama") {
 				isMultimodal = true
 			}
+
+			// Try to find context length in model_info
+			if showResp.ModelInfo != nil {
+				// keys can be "llama.context_length", "context_length", etc.
+				for k, v := range showResp.ModelInfo {
+					if strings.Contains(k, "context_length") {
+						if f, ok := v.(float64); ok {
+							contextLength = int(f)
+							break
+						}
+					}
+				}
+			}
 		}
 
 		modalities := []string{"text"}
@@ -104,26 +119,43 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 		}
 
 		modelDef := api.ModelDefinition{
-			ID:          fmt.Sprintf("%s/%s", string(llm.Ollama), m.Name),
-			Name:        m.Name,
-			ProviderID:  a.config.ID,
-			UpstreamID:  m.Name,
-			Description: fmt.Sprintf("Ollama model (Size: %d bytes)", m.Size),
-			Enabled:     true,
-			Source:      "auto",
-			LastUpdated: time.Now(),
+			ID:            fmt.Sprintf("%s/%s", string(llm.Ollama), m.Name),
+			Name:          m.Name,
+			ProviderID:    a.config.ID,
+			UpstreamID:    m.Name,
+			Description:   fmt.Sprintf("Ollama model (Size: %d bytes)", m.Size),
+			Enabled:       true,
+			Source:        "auto",
+			LastUpdated:   time.Now(),
+			ContextLength: contextLength,
 			Pricing: api.ModelPricing{
-				Input:  0,
-				Output: 0,
-				Image:  0,
+				Prompt:            "0",
+				Completion:        "0",
+				Request:           "0",
+				Image:             "0",
+				WebSearch:         "0",
+				InternalReasoning: "0",
+				InputCacheRead:    "0",
+				InputCacheWrite:   "0",
 			},
 			Config: api.ModelConfig{
-				ContextWindow:    4096, // Default assumption
+				ContextWindow:    contextLength,
 				MaxOutput:        4096,
 				Modality:         modalities,
 				ImageSupport:     isMultimodal,
-				ToolUse:          false, 
+				ToolUse:          false,
 				StreamingSupport: true,
+			},
+			Architecture: api.ModelArchitecture{
+				InputModalities:  modalities,
+				OutputModalities: []string{"text"},
+				Tokenizer:        "ollama",
+				InstructType:     "",
+			},
+			TopProvider: api.ModelTopProvider{
+				ContextLength:       contextLength,
+				MaxCompletionTokens: 4096,
+				IsModerated:         false,
 			},
 		}
 		models = append(models, modelDef)

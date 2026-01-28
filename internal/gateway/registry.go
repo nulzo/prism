@@ -64,14 +64,27 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 			Name:          def.Name,
 			Provider:      def.ProviderID,
 			Description:   def.Description,
-			ContextLength: def.Config.ContextWindow,
+			ContextLength: def.ContextLength,
 			Pricing: api.Pricing{
-				Prompt:     fmt.Sprintf("%f", def.Pricing.Input),
-				Completion: fmt.Sprintf("%f", def.Pricing.Output),
-				Image:      fmt.Sprintf("%f", def.Pricing.Image),
+				Prompt:            def.Pricing.Prompt,
+				Completion:        def.Pricing.Completion,
+				Request:           def.Pricing.Request,
+				Image:             def.Pricing.Image,
+				WebSearch:         def.Pricing.WebSearch,
+				InternalReasoning: def.Pricing.InternalReasoning,
+				InputCacheRead:    def.Pricing.InputCacheRead,
+				InputCacheWrite:   def.Pricing.InputCacheWrite,
 			},
 			Architecture: api.Architecture{
-				Modality: strings.Join(def.Config.Modality, ","),
+				InputModalities:  def.Architecture.InputModalities,
+				OutputModalities: def.Architecture.OutputModalities,
+				Tokenizer:        def.Architecture.Tokenizer,
+				InstructType:     def.Architecture.InstructType,
+			},
+			TopProvider: api.TopProvider{
+				ContextLength:       def.TopProvider.ContextLength,
+				MaxCompletionTokens: def.TopProvider.MaxCompletionTokens,
+				IsModerated:         def.TopProvider.IsModerated,
 			},
 			OwnedBy: "system",
 		}
@@ -85,8 +98,17 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 		if filter.OwnedBy != "" && !strings.EqualFold(m.OwnedBy, filter.OwnedBy) {
 			continue
 		}
-		if filter.Modality != "" && !strings.EqualFold(m.Architecture.Modality, filter.Modality) {
-			continue
+		if filter.Modality != "" {
+			found := false
+			for _, mod := range m.Architecture.InputModalities {
+				if strings.EqualFold(mod, filter.Modality) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			}
 		}
 
 		results = append(results, m)

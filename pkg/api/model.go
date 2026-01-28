@@ -23,16 +23,21 @@ type ModelFilter struct {
 }
 
 type Architecture struct {
-	Modality     string `json:"modality"`
-	Tokenizer    string `json:"tokenizer"`
-	InstructType string `json:"instruct_type,omitempty"`
+	InputModalities  []string `json:"input_modalities"`
+	OutputModalities []string `json:"output_modalities"`
+	Tokenizer        string   `json:"tokenizer"`
+	InstructType     string   `json:"instruct_type,omitempty"`
 }
 
 type Pricing struct {
-	Prompt     string `json:"prompt"`
-	Completion string `json:"completion"`
-	Image      string `json:"image,omitempty"`
-	Request    string `json:"request,omitempty"`
+	Prompt            string `json:"prompt"`
+	Completion        string `json:"completion"`
+	Request           string `json:"request"`
+	Image             string `json:"image,omitempty"`
+	WebSearch         string `json:"web_search,omitempty"`
+	InternalReasoning string `json:"internal_reasoning,omitempty"`
+	InputCacheRead    string `json:"input_cache_read,omitempty"`
+	InputCacheWrite   string `json:"input_cache_write,omitempty"`
 }
 
 type TopProvider struct {

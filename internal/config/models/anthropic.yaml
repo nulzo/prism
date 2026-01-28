@@ -6,8 +6,12 @@ models:
     description: Claude 2 is Anthropic's previous generation model, offering reliable performance for various tasks. This includes Claude 2.0 and Claude 2.1.
     enabled: true
     pricing:
-      input: 8.0
-      output: 24.0
+      prompt: '8'
+      completion: '24'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
     config:
       context_window: 200000
       max_output: 4096
@@ -16,6 +20,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-5-haiku-latest
     name: Claude Haiku 3.5
@@ -24,8 +36,12 @@ models:
     description: Fastest, most cost-effective model
     enabled: true
     pricing:
-      input: 0.8
-      output: 4.0
+      prompt: '0.8'
+      completion: '4'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.08'
+      input_cache_write: '1'
     config:
       context_window: 200000
       max_output: 4096
@@ -34,6 +50,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-5-sonnet
     name: Claude Sonnet 3.5
@@ -42,8 +66,12 @@ models:
     description: Claude 3.5 Sonnet is an ideal balance of intelligence and speed for enterprise workloads. Maximum utility at a lower price, dependable, balanced for scaled deployments.
     enabled: true
     pricing:
-      input: 3.0
-      output: 15.0
+      prompt: '3'
+      completion: '15'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.3'
+      input_cache_write: '3.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -52,6 +80,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-7-sonnet-latest
     name: Claude Sonnet 3.7
@@ -60,8 +96,12 @@ models:
     description: Claude 3.7 Sonnet is an advanced large language model with improved reasoning, coding, and problem-solving capabilities.
     enabled: true
     pricing:
-      input: 3.0
-      output: 15.0
+      prompt: '3'
+      completion: '15'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.3'
+      input_cache_write: '3.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -70,6 +110,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-haiku
     name: Claude Haiku 3
@@ -78,8 +126,12 @@ models:
     description: Fastest, most cost-effective model
     enabled: true
     pricing:
-      input: 0.25
-      output: 1.25
+      prompt: '0.25'
+      completion: '1.25'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.03'
+      input_cache_write: '0.3'
     config:
       context_window: 200000
       max_output: 4096
@@ -88,6 +140,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-opus-latest
     name: Claude Opus 3
@@ -96,8 +156,12 @@ models:
     description: Claude 3 Opus was Anthropic's most powerful model for highly complex tasks. It boasts top-level performance, intelligence, fluency, and understanding.
     enabled: true
     pricing:
-      input: 15.0
-      output: 75.0
+      prompt: '15'
+      completion: '75'
+      request: '0'
+      image: '0'
+      input_cache_read: '1.5'
+      input_cache_write: '18.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -106,6 +170,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-3-sonnet
     name: Claude 3 Sonnet
@@ -114,8 +186,12 @@ models:
     description: Claude 3 Sonnet is an ideal balance of intelligence and speed for enterprise workloads. Maximum utility at a lower price, dependable, balanced for scaled deployments.
     enabled: true
     pricing:
-      input: 3.0
-      output: 15.0
+      prompt: '3'
+      completion: '15'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.3'
+      input_cache_write: '3.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -124,6 +200,14 @@ models:
       tool_use: true
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-haiku-4-5
     name: Claude Haiku 4.5
@@ -132,8 +216,12 @@ models:
     description: Fastest and most intelligent Haiku model
     enabled: true
     pricing:
-      input: 1.0
-      output: 5.0
+      prompt: '1'
+      completion: '5'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.1'
+      input_cache_write: '1.25'
     config:
       context_window: 200000
       max_output: 4096
@@ -142,6 +230,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-instant-1
     name: claude-instant-1
@@ -150,8 +246,12 @@ models:
     description: Retired, here to match price sources
     enabled: true
     pricing:
-      input: 1.63
-      output: 55.1
+      prompt: '1.63'
+      completion: '55.1'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
     config:
       context_window: 128000
       max_output: 4096
@@ -160,6 +260,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 128000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-instant-1.2
     name: claude-instant-1.2
@@ -168,8 +276,12 @@ models:
     description: Retired, here to match price sources
     enabled: true
     pricing:
-      input: 1.63
-      output: 5.51
+      prompt: '1.63'
+      completion: '5.51'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
     config:
       context_window: 128000
       max_output: 4096
@@ -178,6 +290,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 128000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-opus-4-0
     name: Claude Opus 4
@@ -186,8 +306,12 @@ models:
     description: Most intelligent model for complex tasks
     enabled: true
     pricing:
-      input: 15.0
-      output: 75.0
+      prompt: '15'
+      completion: '75'
+      request: '0'
+      image: '0'
+      input_cache_read: '1.5'
+      input_cache_write: '18.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -196,6 +320,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-opus-4-1
     name: Claude Opus 4.1
@@ -204,8 +336,12 @@ models:
     description: Most intelligent model for complex tasks
     enabled: true
     pricing:
-      input: 15.0
-      output: 75.0
+      prompt: '15'
+      completion: '75'
+      request: '0'
+      image: '0'
+      input_cache_read: '1.5'
+      input_cache_write: '18.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -214,6 +350,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-opus-4-5
     name: Claude Opus 4.5
@@ -222,8 +366,12 @@ models:
     description: Premium model combining maximum intelligence with practical performance
     enabled: true
     pricing:
-      input: 5.0
-      output: 25.0
+      prompt: '5'
+      completion: '25'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.5'
+      input_cache_write: '6.25'
     config:
       context_window: 200000
       max_output: 4096
@@ -232,6 +380,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-sonnet-4-0
     name: Claude Sonnet 4
@@ -240,8 +396,12 @@ models:
     description: Optimal balance of intelligence, cost, and speed
     enabled: true
     pricing:
-      input: 3.0
-      output: 15.0
+      prompt: '3'
+      completion: '15'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.3'
+      input_cache_write: '3.75'
     config:
       context_window: 200000
       max_output: 4096
@@ -250,6 +410,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 200000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-sonnet-4-5
     name: Claude Sonnet 4.5
@@ -258,8 +426,12 @@ models:
     description: Most intelligent model for building agents and coding
     enabled: true
     pricing:
-      input: 3.0
-      output: 15.0
+      prompt: '3'
+      completion: '15'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.3'
+      input_cache_write: '3.75'
     config:
       context_window: 1000000
       max_output: 4096
@@ -268,6 +440,14 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 1000000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: anthropic/claude-v1
     name: claude-v1
@@ -276,8 +456,12 @@ models:
     description: Retired, here to match price sources
     enabled: true
     pricing:
-      input: 8.0
-      output: 24.0
+      prompt: '8'
+      completion: '24'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
     config:
       context_window: 128000
       max_output: 4096
@@ -286,3 +470,11 @@ models:
       tool_use: false
       streaming_support: true
     source: auto
+    context_length: 128000
+    architecture:
+      input_modalities: [text]
+      output_modalities: [text]
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: false
