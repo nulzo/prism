@@ -11,14 +11,14 @@ func TestLoadConfig_Defaults(t *testing.T) {
 
 	os.Clearenv()
 	t.Setenv("SERVER_PORT", "9090")
-	t.Setenv("SERVER_ENV", "test")
+	t.Setenv("SERVER_ENV", "development")
 	t.Setenv("REDIS_ENABLED", "true")
 
 	cfg, err := LoadConfig()
 	assert.NoError(t, err)
 
-	assert.Equal(t, "9090", cfg.Server.Port)
-	assert.Equal(t, "test", cfg.Server.Env)
+	assert.Equal(t, 9090, cfg.Server.Port)
+	assert.Equal(t, "development", cfg.Server.Env)
 	assert.True(t, cfg.Redis.Enabled)
 }
 

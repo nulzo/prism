@@ -36,6 +36,11 @@ deps-audit: ### Check dependency vulnerabilities
 	govulncheck ./...
 .PHONY: deps-audit
 
+format: ### Run code formatter
+	gofumpt -l -w .
+	gci write . --skip-generated -s standard -s default
+.PHONY: format
+
 proto: ### Generate source files from proto
 	protoc --go_out=. \
 		--go_opt=paths=source_relative \
@@ -61,3 +66,11 @@ test: ### Run unit tests
 integration-test: ### Run integration tests
 	go clean -testcache && go test -v ./test/...
 .PHONY: integration-test
+
+migrate-create:  ### Create new migration
+	migrate create -ext sql -dir migrations '$(word 2,$(MAKECMDGOALS))'
+.PHONY: migrate-create
+
+migrate-up: ### Run migration up
+	migrate -path migrations -database '$(PG_URL)?sslmode=disable' up
+.PHONY: migrate-up

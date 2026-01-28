@@ -212,7 +212,7 @@ func (a *Adapter) Health(ctx context.Context) error {
 	// as it requires auth and verifies connectivity.
 	url := "https://api.anthropic.com/v1/models?limit=1"
 	if a.config.BaseURL != "" {
-		url = fmt.Sprintf("%s/models?limit=1", strings.TrimRight(a.config.BaseURL, "/"))
+		url = fmt.Sprintf("%s/v1/models?limit=1", strings.TrimRight(a.config.BaseURL, "/"))
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)

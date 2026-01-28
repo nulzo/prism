@@ -31,6 +31,7 @@ COPY --from=binary-build /home/prism .
 COPY --from=binary-build /home/internal/config/config.yaml ./config/config.yaml
 COPY --from=binary-build /home/internal/config/models ./config/models
 
-EXPOSE 8080
+ENV SERVER_PORT=8080
+EXPOSE $SERVER_PORT
 
 CMD ["./prism"]

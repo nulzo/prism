@@ -51,7 +51,7 @@ type DatabaseConfig struct {
 }
 
 type ServerConfig struct {
-	Port        string   `mapstructure:"port" validate:"required,numeric"`
+	Port        int      `mapstructure:"port" validate:"required,numeric"`
 	Env         string   `mapstructure:"env" validate:"required,oneof=development production staging"`
 	AuthEnabled bool     `mapstructure:"auth_enabled"`
 	APIKeys     []string `mapstructure:"api_keys" validate:"dive,min=10"`
@@ -78,7 +78,7 @@ func LoadConfig() (*Config, error) {
 	v.AddConfigPath("./internal/config")
 
 	// Default Values
-	v.SetDefault("server.port", "8080")
+	v.SetDefault("server.port", 8080)
 	v.SetDefault("server.env", "development")
 	v.SetDefault("redis.enabled", false)
 	v.SetDefault("rate_limit.requests_per_second", 10.0)

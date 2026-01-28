@@ -47,7 +47,7 @@ func main() {
 		panic("failed to load configuration: " + err.Error())
 	}
 
-	printBanner(cfg.Server.Port, cfg.Server.Env)
+	printBanner(fmt.Sprintf("%d", cfg.Server.Port), cfg.Server.Env)
 
 	log, err := logger.New(logger.DefaultConfig())
 	if err != nil {
@@ -84,7 +84,7 @@ func main() {
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
 
 	srv := &http.Server{
-		Addr:    ":" + cfg.Server.Port,
+		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
 		Handler: apiServer.Handler(),
 	}
 
