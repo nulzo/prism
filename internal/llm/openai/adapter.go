@@ -111,6 +111,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 
 	// ensure stream is true
 	req.Stream = true
+	req.StreamOptions = &api.StreamOptions{IncludeUsage: true}
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 
 	headers := map[string]string{

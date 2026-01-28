@@ -18,6 +18,8 @@ type ChatRequest struct {
 	// Enable streaming, defaults to `false` (empty)
 	Stream bool `json:"stream,omitempty"`
 
+	StreamOptions *StreamOptions `json:"stream_options,omitempty"`
+
 	// LLM Parameters
 	MaxTokens         int             `json:"max_tokens,omitempty"`
 	Temperature       float64         `json:"temperature,omitempty"`
@@ -147,6 +149,10 @@ type ProviderPreferences struct {
 
 type DebugOptions struct {
 	EchoUpstreamBody bool `json:"echo_upstream_body,omitempty"`
+}
+
+type StreamOptions struct {
+	IncludeUsage bool `json:"include_usage,omitempty"`
 }
 
 type Role string

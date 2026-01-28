@@ -74,7 +74,12 @@ func main() {
 	}
 	defer repo.Close()
 
-	routerService := gateway.NewService(log, repo, cacheService)
+	// Initialize Analytics Ingestor
+	ingestor := analytics.NewIngestor(log, repo)
+	ingestor.Start(context.Background())
+	defer ingestor.Stop()
+
+	routerService := gateway.NewService(log, repo, ingestor, cacheService)
 	analyticsService := analytics.NewService(repo)
 
 	// Bootstrap providers

@@ -78,6 +78,9 @@ type RequestLog struct {
 	AppName         string        `db:"app_name" json:"app_name"`
 	ProviderID      string        `db:"provider_id" json:"provider_id"`
 	ModelID         string        `db:"model_id" json:"model_id"`
+	UpstreamModelID string        `db:"upstream_model_id" json:"upstream_model_id"`
+	UpstreamRemoteID string       `db:"upstream_remote_id" json:"upstream_remote_id"`
+	FinishReason    string        `db:"finish_reason" json:"finish_reason"`
 	InputTokens     int           `db:"input_tokens" json:"input_tokens"`
 	OutputTokens    int           `db:"output_tokens" json:"output_tokens"`
 	CachedTokens    int           `db:"cached_tokens" json:"cached_tokens"`

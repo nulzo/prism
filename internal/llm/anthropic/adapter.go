@@ -175,6 +175,15 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 
 			// Map Anthropic Events to OpenAI-compatible chunks
 			switch event.Type {
+			case "message_start":
+				if event.Usage != nil {
+					// Input tokens are sent here
+					ch <- api.StreamResult{Response: &api.ChatResponse{
+						Usage: &api.ResponseUsage{
+							PromptTokens: event.Usage.InputTokens,
+						},
+					}}
+				}
 			case "content_block_delta":
 				if event.Delta != nil && event.Delta.Type == "text_delta" {
 					ch <- api.StreamResult{Response: &api.ChatResponse{
@@ -182,6 +191,19 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 							Delta: &api.ChatMessage{Content: api.Content{Text: event.Delta.Text}},
 						}},
 					}}
+				}
+			case "message_delta":
+				// Output tokens and stop reason sent here
+				if event.Usage != nil {
+					ch <- api.StreamResult{Response: &api.ChatResponse{
+						Usage: &api.ResponseUsage{
+							CompletionTokens: event.Usage.OutputTokens,
+						},
+					}}
+				}
+				if event.Delta != nil && event.Delta.Type == "stop_reason" {
+					// stop reason logic handled in message_stop usually, but sometimes here?
+					// Anthropic docs say stop_reason is in message_delta
 				}
 			case "message_stop":
 				ch <- api.StreamResult{Response: &api.ChatResponse{
