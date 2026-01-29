@@ -11,6 +11,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"strconv"
 
 	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/cli"
@@ -19,7 +20,9 @@ import (
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
+	"github.com/nulzo/model-router-api/internal/store"
 	"github.com/nulzo/model-router-api/internal/store/cache"
+	"github.com/nulzo/model-router-api/internal/store/model"
 	"github.com/nulzo/model-router-api/internal/store/sqlite"
 	"go.uber.org/zap"
 
@@ -40,6 +43,19 @@ const rawBanner = `
 ╱╱      __╱        _╱╱         ╱-        ╱         ╱ 
 ╲╲_____╱  ╲____╱___╱ ╲╲_______╱╲_______╱╱╲__╱__╱__╱  
 `
+
+func parseCost(costStr string) int64 {
+	if costStr == "" {
+		return 0
+	}
+	val, err := strconv.ParseFloat(costStr, 64)
+	if err != nil {
+		return 0
+	}
+	// Logic: Input is Dollars per 1M tokens. Output is Micros per 1K tokens.
+	// Micros per 1K = (DollarsPer1M * 1,000,000) / 1000 = DollarsPer1M * 1000.
+	return int64(val * 1000)
+}
 
 func main() {
 	cfg, err := config.LoadConfig()
@@ -74,6 +90,36 @@ func main() {
 	}
 	defer repo.Close()
 
+	// Sync models to DB
+	ctx := context.Background()
+	if err := repo.WithTx(ctx, func(r store.Repository) error {
+		var dbModels []model.Model
+		for _, m := range cfg.Models {
+			// Ensure upstream ID is set
+			upstreamID := m.UpstreamID
+			if upstreamID == "" {
+				// Fallback if needed, or maybe it is part of ID?
+				// Usually upstream_id is required in config.
+				upstreamID = m.ID
+			}
+
+			dbM := model.Model{
+				ID:                    m.ID,
+				ProviderID:            m.ProviderID,
+				ProviderModelID:       upstreamID,
+				IsEnabled:             m.Enabled,
+				IsPublic:              true, // Default to true as config implies availability
+				InputCostMicrosPer1k:  parseCost(m.Pricing.Prompt),
+				OutputCostMicrosPer1k: parseCost(m.Pricing.Completion),
+				ContextWindow:         m.ContextLength,
+			}
+			dbModels = append(dbModels, dbM)
+		}
+		return r.Providers().SyncModels(ctx, dbModels)
+	}); err != nil {
+		logger.Fatal("Failed to sync models", zap.Error(err))
+	}
+
 	// Initialize Analytics Ingestor
 	ingestor := analytics.NewIngestor(log, repo)
 	ingestor.Start(context.Background())
@@ -83,7 +129,6 @@ func main() {
 	analyticsService := analytics.NewService(repo)
 
 	// Bootstrap providers
-	ctx := context.Background()
 	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
 
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)

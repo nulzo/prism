@@ -174,6 +174,41 @@ func (r *providerRepo) GetModelPricing(ctx context.Context, modelID string) (*mo
 	return &m, err
 }
 
+func (r *providerRepo) SyncModels(ctx context.Context, models []model.Model) error {
+	// First, mark all as disabled. The loop below will re-enable present ones.
+	if _, err := r.db.ExecContext(ctx, `UPDATE models SET is_enabled = 0`); err != nil {
+		return err
+	}
+
+	query := `
+	INSERT INTO models (
+		id, provider_id, provider_model_id, is_enabled, is_public,
+		input_cost_micros_per_1k, output_cost_micros_per_1k, context_window,
+		created_at, updated_at
+	) VALUES (
+		:id, :provider_id, :provider_model_id, :is_enabled, :is_public,
+		:input_cost_micros_per_1k, :output_cost_micros_per_1k, :context_window,
+		CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+	)
+	ON CONFLICT(id) DO UPDATE SET
+		provider_id = excluded.provider_id,
+		provider_model_id = excluded.provider_model_id,
+		is_enabled = excluded.is_enabled,
+		is_public = excluded.is_public,
+		input_cost_micros_per_1k = excluded.input_cost_micros_per_1k,
+		output_cost_micros_per_1k = excluded.output_cost_micros_per_1k,
+		context_window = excluded.context_window,
+		updated_at = CURRENT_TIMESTAMP`
+
+	for _, m := range models {
+		if _, err := r.db.NamedExecContext(ctx, query, m); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type userRepo struct {
 	db DB
 }

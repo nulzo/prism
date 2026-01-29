@@ -52,6 +52,8 @@ type ProviderRepository interface {
 	ListActive(ctx context.Context) ([]model.Provider, error)
 	// GetModelPricing retrieves pricing for cost calculation.
 	GetModelPricing(ctx context.Context, modelID string) (*model.Model, error)
+	// SyncModels syncs the models from the configuration to the database.
+	SyncModels(ctx context.Context, models []model.Model) error
 }
 
 type UserRepository interface {
