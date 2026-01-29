@@ -1,0 +1,15 @@
+run:
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 5m
+
+version: "2"
+
+linters:
+  enable:            
+    - errcheck       
+    - govet          
+    - ineffassign    
+    - staticcheck    
+    - unused         
+    - goconst        
+    - gocyclo        
