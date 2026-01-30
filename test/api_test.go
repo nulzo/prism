@@ -9,8 +9,18 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/nulzo/model-router-api/internal/analytics"
+	"github.com/nulzo/model-router-api/internal/config"
+	"github.com/nulzo/model-router-api/internal/gateway"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
+	"github.com/nulzo/model-router-api/internal/server"
+	"github.com/nulzo/model-router-api/internal/server/validator"
+	"github.com/nulzo/model-router-api/internal/store/cache"
+	"github.com/nulzo/model-router-api/internal/store/sqlite"
 	"github.com/nulzo/model-router-api/pkg/api"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -56,132 +66,147 @@ func (m *MockProvider) Health(ctx context.Context) error { return nil }
 
 // --- Test Setup ---
 
-// func setupTestServer(t *testing.T) (*httptest.Server, *MockProvider) {
-// 	// 1. Logger
-// 	log, _ := logger.New(logger.DefaultConfig())
-// 	logger.SetGlobal(log)
+func setupTestServer(t *testing.T) (*httptest.Server, *MockProvider) {
+	// 1. Logger
+	log, _ := logger.New(logger.DefaultConfig())
+	logger.SetGlobal(log)
 
-// 	// 2. In-Memory DB
-// 	db, err := sqlx.Connect("sqlite3", ":memory:")
-// 	require.NoError(t, err)
+	// 2. In-Memory DB
+	db, err := sqlx.Connect("sqlite3", ":memory:")
+	require.NoError(t, err)
 
-// 	// Init Schema
-// 	schema := `
-// 	CREATE TABLE users (
-// 		id TEXT PRIMARY KEY,
-// 		email TEXT UNIQUE NOT NULL,
-// 		name TEXT NOT NULL,
-// 		role TEXT NOT NULL DEFAULT 'user',
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-// 	);
-// 	CREATE TABLE wallets (
-// 		id TEXT PRIMARY KEY,
-// 		user_id TEXT NOT NULL,
-// 		balance_micros INTEGER NOT NULL DEFAULT 0,
-// 		currency TEXT NOT NULL DEFAULT 'USD',
-// 		is_frozen BOOLEAN NOT NULL DEFAULT 0,
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-// 	);
-// 	CREATE TABLE api_keys (
-// 		id TEXT PRIMARY KEY,
-// 		user_id TEXT NOT NULL,
-// 		wallet_id TEXT,
-// 		name TEXT NOT NULL,
-// 		key_hash TEXT NOT NULL UNIQUE,
-// 		key_prefix TEXT NOT NULL,
-// 		scopes TEXT NOT NULL DEFAULT '',
-// 		expires_at DATETIME,
-// 		last_used_at DATETIME,
-// 		monthly_limit_micros INTEGER,
-// 		is_active BOOLEAN NOT NULL DEFAULT 1,
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-// 	);
-// 	CREATE TABLE providers (
-// 		id TEXT PRIMARY KEY,
-// 		name TEXT NOT NULL,
-// 		base_url TEXT NOT NULL,
-// 		api_key_enc TEXT,
-// 		config_json TEXT NOT NULL DEFAULT '{}',
-// 		is_enabled BOOLEAN NOT NULL DEFAULT 1,
-// 		priority INTEGER NOT NULL DEFAULT 0,
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-// 	);
-// 	CREATE TABLE models (
-// 		id TEXT PRIMARY KEY,
-// 		provider_id TEXT NOT NULL,
-// 		provider_model_id TEXT NOT NULL,
-// 		is_enabled BOOLEAN NOT NULL DEFAULT 1,
-// 		is_public BOOLEAN NOT NULL DEFAULT 1,
-// 		input_cost_micros_per_1k INTEGER NOT NULL DEFAULT 0,
-// 		output_cost_micros_per_1k INTEGER NOT NULL DEFAULT 0,
-// 		context_window INTEGER NOT NULL DEFAULT 4096,
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// 		UNIQUE(provider_id, provider_model_id)
-// 	);
-// 	CREATE TABLE request_logs (
-// 		id TEXT PRIMARY KEY,
-// 		user_id TEXT NOT NULL,
-// 		api_key_id TEXT NOT NULL,
-// 		provider_id TEXT NOT NULL,
-// 		model_id TEXT NOT NULL,
-// 		input_tokens INTEGER NOT NULL DEFAULT 0,
-// 		output_tokens INTEGER NOT NULL DEFAULT 0,
-// 		cached_tokens INTEGER NOT NULL DEFAULT 0,
-// 		latency_ms INTEGER NOT NULL DEFAULT 0,
-// 		ttft_ms INTEGER,
-// 		status_code INTEGER NOT NULL,
-// 		total_cost_micros INTEGER NOT NULL DEFAULT 0,
-// 		ip_address TEXT,
-// 		user_agent TEXT,
-// 		meta_json TEXT,
-// 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-// 	);
-// 	`
-// 	_, err = db.Exec(schema)
-// 	require.NoError(t, err)
+	// Init Schema
+	schema := `
+	CREATE TABLE users (
+		id TEXT PRIMARY KEY,
+		email TEXT UNIQUE NOT NULL,
+		name TEXT NOT NULL,
+		role TEXT NOT NULL DEFAULT 'user',
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+	CREATE TABLE wallets (
+		id TEXT PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		balance_micros INTEGER NOT NULL DEFAULT 0,
+		currency TEXT NOT NULL DEFAULT 'USD',
+		is_frozen BOOLEAN NOT NULL DEFAULT 0,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+	CREATE TABLE api_keys (
+		id TEXT PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		wallet_id TEXT,
+		name TEXT NOT NULL,
+		key_hash TEXT NOT NULL UNIQUE,
+		key_prefix TEXT NOT NULL,
+		scopes TEXT NOT NULL DEFAULT '',
+		expires_at DATETIME,
+		last_used_at DATETIME,
+		monthly_limit_micros INTEGER,
+		is_active BOOLEAN NOT NULL DEFAULT 1,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+	CREATE TABLE providers (
+		id TEXT PRIMARY KEY,
+		name TEXT NOT NULL,
+		base_url TEXT NOT NULL,
+		api_key_enc TEXT,
+		config_json TEXT NOT NULL DEFAULT '{}',
+		is_enabled BOOLEAN NOT NULL DEFAULT 1,
+		priority INTEGER NOT NULL DEFAULT 0,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+	CREATE TABLE models (
+		id TEXT PRIMARY KEY,
+		provider_id TEXT NOT NULL,
+		provider_model_id TEXT NOT NULL,
+		is_enabled BOOLEAN NOT NULL DEFAULT 1,
+		is_public BOOLEAN NOT NULL DEFAULT 1,
+		input_cost_micros_per_1k INTEGER NOT NULL DEFAULT 0,
+		output_cost_micros_per_1k INTEGER NOT NULL DEFAULT 0,
+		context_window INTEGER NOT NULL DEFAULT 4096,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		UNIQUE(provider_id, provider_model_id)
+	);
+	CREATE TABLE request_logs (
+		id TEXT PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		api_key_id TEXT NOT NULL,
+		app_name TEXT,
+		provider_id TEXT NOT NULL,
+		model_id TEXT NOT NULL,
+		upstream_model_id TEXT,
+		upstream_remote_id TEXT,
+		finish_reason TEXT,
+		input_tokens INTEGER NOT NULL DEFAULT 0,
+		output_tokens INTEGER NOT NULL DEFAULT 0,
+		cached_tokens INTEGER NOT NULL DEFAULT 0,
+		latency_ms INTEGER NOT NULL DEFAULT 0,
+		ttft_ms INTEGER,
+		status_code INTEGER NOT NULL,
+		total_cost_micros INTEGER NOT NULL DEFAULT 0,
+		ip_address TEXT,
+		user_agent TEXT,
+		meta_json TEXT,
+		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	);
+	`
+	_, err = db.Exec(schema)
+	require.NoError(t, err)
 
-// 	repo := sqlite.NewSqliteRepository(db)
+	repo := sqlite.NewSqliteRepository(db)
 
-// 	// 3. Components
-// 	cacheSvc := cache.NewMemoryCache()
-// 	routerSvc := gateway.NewService(log, repo, cacheSvc)
-// 	analyticsSvc := analytics.NewService(repo)
-// 	val := validator.New()
+	// 3. Components
+	cacheSvc := cache.NewMemoryCache()
+	
+	// Create Ingestor for analytics (required by Gateway service)
+	ingestor := analytics.NewIngestor(log, repo)
+	ingestor.Start(context.Background())
+	
+	routerSvc := gateway.NewService(log, repo, ingestor, cacheSvc)
+	analyticsSvc := analytics.NewService(repo)
+	val := validator.New()
 
-// 	// 4. Config
-// 	cfg := &config.Config{
-// 		Server: config.ServerConfig{
-// 			Port:        0, // Random port
-// 			Env:         "test",
-// 			AuthEnabled: false, // Disable auth for easy testing
-// 		},
-// 		RateLimit: config.RateLimitConfig{
-// 			RequestsPerSecond: 100,
-// 			Burst:             100,
-// 		},
-// 	}
+	// 4. Config
+	cfg := &config.Config{
+		Server: config.ServerConfig{
+			Port:        0, // Random port
+			Env:         "development", // Must be development, production, or staging
+			AuthEnabled: false, // Disable auth for easy testing
+		},
+		RateLimit: config.RateLimitConfig{
+			RequestsPerSecond: 100,
+			Burst:             100,
+		},
+		Redis: config.RedisConfig{
+			Enabled: false,
+		},
+		Database: config.DatabaseConfig{
+			Path: ":memory:",
+		},
+	}
 
-// 	// 5. Register Mock Provider
-// 	mockP := &MockProvider{
-// 		ID: "mock-provider",
-// 		MockModels: []api.ModelDefinition{
-// 			{ID: "test-model", ProviderID: "mock-provider", UpstreamID: "mock-model", Enabled: true},
-// 		},
-// 	}
-// 	err = routerSvc.RegisterProvider(context.Background(), mockP)
-// 	require.NoError(t, err)
+	// 5. Register Mock Provider
+	mockP := &MockProvider{
+		ID: "mock-provider",
+		MockModels: []api.ModelDefinition{
+			{ID: "test-model", ProviderID: "mock-provider", UpstreamID: "mock-model", Enabled: true},
+		},
+	}
+	err = routerSvc.RegisterProvider(context.Background(), mockP)
+	require.NoError(t, err)
 
-// 	// 6. Server
-// 	srv := server.New(cfg, log, repo, routerSvc, analyticsSvc, val)
-// 	ts := httptest.NewServer(srv.Handler())
+	// 6. Server
+	srv := server.New(cfg, log, repo, routerSvc, analyticsSvc, val)
+	ts := httptest.NewServer(srv.Handler())
 
-// 	return ts, mockP
-// }
+	return ts, mockP
+}
 
 // helper to make requests against test server
 func makeRequest(t *testing.T, ts *httptest.Server, method, path string, payload interface{}, target interface{}) int {
@@ -220,75 +245,75 @@ func makeRequest(t *testing.T, ts *httptest.Server, method, path string, payload
 	return resp.StatusCode
 }
 
-// func TestHealthCheck(t *testing.T) {
-// 	ts, _ := setupTestServer(t)
-// 	defer ts.Close()
+func TestHealthCheck(t *testing.T) {
+	ts, _ := setupTestServer(t)
+	defer ts.Close()
 
-// 	resp, err := http.Get(ts.URL + "/health")
-// 	require.NoError(t, err)
-// 	defer resp.Body.Close()
-// 	assert.Equal(t, http.StatusOK, resp.StatusCode)
-// }
+	resp, err := http.Get(ts.URL + "/health")
+	require.NoError(t, err)
+	defer resp.Body.Close()
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+}
 
-// func TestListModels(t *testing.T) {
-// 	ts, _ := setupTestServer(t)
-// 	defer ts.Close()
+func TestListModels(t *testing.T) {
+	ts, _ := setupTestServer(t)
+	defer ts.Close()
 
-// 	var result struct {
-// 		Object string      `json:"object"`
-// 		Data   []api.Model `json:"data"`
-// 	}
+	var result struct {
+		Object string      `json:"object"`
+		Data   []api.Model `json:"data"`
+	}
 
-// 	code := makeRequest(t, ts, "GET", "/api/v1/models", nil, &result)
+	code := makeRequest(t, ts, "GET", "/api/v1/models", nil, &result)
 
-// 	assert.Equal(t, http.StatusOK, code)
-// 	assert.Equal(t, "list", result.Object)
-// 	assert.NotEmpty(t, result.Data, "Models list should not be empty")
-// 	assert.Equal(t, "test-model", result.Data[0].ID)
-// }
+	assert.Equal(t, http.StatusOK, code)
+	assert.Equal(t, "list", result.Object)
+	assert.NotEmpty(t, result.Data, "Models list should not be empty")
+	assert.Equal(t, "test-model", result.Data[0].ID)
+}
 
-// func TestChatCompletion_Sync(t *testing.T) {
-// 	ts, mockP := setupTestServer(t)
-// 	defer ts.Close()
+func TestChatCompletion_Sync(t *testing.T) {
+	ts, mockP := setupTestServer(t)
+	defer ts.Close()
 
-// 	req := api.ChatRequest{
-// 		Model:    "test-model",
-// 		Messages: []api.ChatMessage{{Role: "user", Content: api.Content{Text: "Say hi"}}},
-// 		Stream:   false,
-// 	}
+	req := api.ChatRequest{
+		Model:    "test-model",
+		Messages: []api.ChatMessage{{Role: "user", Content: api.Content{Text: "Say hi"}}},
+		Stream:   false,
+	}
 
-// 	var resp api.ChatResponse
-// 	code := makeRequest(t, ts, "POST", "/api/v1/chat/completions", req, &resp)
+	var resp api.ChatResponse
+	code := makeRequest(t, ts, "POST", "/api/v1/chat/completions", req, &resp)
 
-// 	assert.Equal(t, http.StatusOK, code)
-// 	assert.Equal(t, "chat.completion", resp.Object)
-// 	require.NotEmpty(t, resp.Choices)
-// 	assert.Equal(t, "Mock Response", resp.Choices[0].Message.Content.Text)
-// 	assert.True(t, mockP.Called, "Mock provider should have been called")
-// }
+	assert.Equal(t, http.StatusOK, code)
+	assert.Equal(t, "chat.completion", resp.Object)
+	require.NotEmpty(t, resp.Choices)
+	assert.Equal(t, "Mock Response", resp.Choices[0].Message.Content.Text)
+	assert.True(t, mockP.Called, "Mock provider should have been called")
+}
 
-// func TestValidationError(t *testing.T) {
-// 	ts, _ := setupTestServer(t)
-// 	defer ts.Close()
+func TestValidationError(t *testing.T) {
+	ts, _ := setupTestServer(t)
+	defer ts.Close()
 
-// 	// purposefully bad payload (missing Model, invalid Role)
-// 	payload := map[string]interface{}{
-// 		"messages": []map[string]interface{}{
-// 			{"role": "bad_role", "content": "hello"},
-// 		},
-// 	}
+	// purposefully bad payload (missing Model, invalid Role)
+	payload := map[string]interface{}{
+		"messages": []map[string]interface{}{
+			{"role": "bad_role", "content": "hello"},
+		},
+	}
 
-// 	// capture generic map to check error fields
-// 	var errResp map[string]interface{}
-// 	code := makeRequest(t, ts, "POST", "/api/v1/chat/completions", payload, &errResp)
+	// capture generic map to check error fields
+	var errResp map[string]interface{}
+	code := makeRequest(t, ts, "POST", "/api/v1/chat/completions", payload, &errResp)
 
-// 	assert.Equal(t, http.StatusBadRequest, code)
-// 	assert.Equal(t, "Validation Error", errResp["title"])
+	assert.Equal(t, http.StatusBadRequest, code)
+	assert.Equal(t, "Validation Error", errResp["title"])
 
-// 	// check the RFC 9457 "errors" extension
-// 	errors, ok := errResp["errors"].(map[string]interface{})
-// 	require.True(t, ok, "Should contain 'errors' map")
+	// check the RFC 9457 "errors" extension
+	errors, ok := errResp["errors"].(map[string]interface{})
+	require.True(t, ok, "Should contain 'errors' map")
 
-// 	assert.Contains(t, errors, "messages[0].role")
-// 	assert.Contains(t, errors, "model")
-// }
+	assert.Contains(t, errors, "messages[0].role")
+	assert.Contains(t, errors, "model")
+}

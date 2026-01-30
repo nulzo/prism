@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -16,6 +17,28 @@ type Problem struct {
 	Extensions map[string]interface{} `json:"-"`
 
 	Log error `json:"-"`
+}
+
+func (p *Problem) MarshalJSON() ([]byte, error) {
+	type Alias Problem
+	// Create a map to hold everything
+	m := make(map[string]interface{})
+
+	m["type"] = p.Type
+	m["title"] = p.Title
+	m["status"] = p.Status
+	if p.Detail != "" {
+		m["detail"] = p.Detail
+	}
+	if p.Instance != "" {
+		m["instance"] = p.Instance
+	}
+
+	for k, v := range p.Extensions {
+		m[k] = v
+	}
+
+	return json.Marshal(m)
 }
 
 func (p *Problem) Error() string {
