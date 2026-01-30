@@ -1,0 +1,94 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  GO_VERSION: '1.25.5'
+  IMAGE_NAME: prism
+
+jobs:
+  quality:
+    name: Quality Assurance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Verify Dependencies
+        run: go mod verify
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          args: --timeout=5m
+
+      - name: Run Unit & Integration Tests
+        run: |
+          go test -v -race -covermode atomic -coverprofile=coverage.txt ./internal/... ./pkg/...
+
+  # delivery:
+  #   name: Build & Publish Docker Image
+  #   needs: quality
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+    
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Generate Version
+  #       id: prep
+  #       run: |
+  #         VERSION=$(git describe --tags --always --dirty)
+  #         echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v3
+
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  #     - name: Extract metadata (tags, labels)
+  #       id: meta
+  #       uses: docker/metadata-action@v5
+  #       with:
+  #         images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+  #         tags: |
+  #           type=semver,pattern={{version}}
+  #           type=semver,pattern={{major}}.{{minor}}
+  #           type=sha,format=long
+  #           type=raw,value=latest,enable={{is_default_branch}}
+
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v6
+  #       with:
+  #         context: .
+  #         file: build/Dockerfile
+  #         push: true
+  #         tags: ${{ steps.meta.outputs.tags }}
+  #         labels: ${{ steps.meta.outputs.labels }}
+  #         build-args: |
+  #           PRISM_VERSION=${{ steps.prep.outputs.VERSION }}
+  #         cache-from: type=gha
+  #         cache-to: type=gha,mode=max
