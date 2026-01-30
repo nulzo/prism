@@ -163,8 +163,6 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 
 }
 
-
-
 func (a *Adapter) Health(ctx context.Context) error {
 
 	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
@@ -177,8 +175,6 @@ func (a *Adapter) Health(ctx context.Context) error {
 
 	}
 
-
-
 	req.Header.Set("Authorization", "Bearer "+a.config.APIKey)
 
 	if org, ok := a.config.Config["organization"]; ok {
@@ -186,8 +182,6 @@ func (a *Adapter) Health(ctx context.Context) error {
 		req.Header.Set("OpenAI-Organization", org)
 
 	}
-
-
 
 	resp, err := a.client.Do(req)
 
@@ -197,17 +191,15 @@ func (a *Adapter) Health(ctx context.Context) error {
 
 	}
 
-	defer resp.Body.Close()
-
-
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 
 		return fmt.Errorf("health check failed with status: %d", resp.StatusCode)
 
 	}
-
-
 
 	return nil
 

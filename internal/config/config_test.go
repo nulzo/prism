@@ -35,9 +35,11 @@ providers:
 `
 	f, err := os.CreateTemp("", "config_*.yaml")
 	assert.NoError(t, err)
-	defer os.Remove(f.Name())
+	defer func() {
+		_ = os.Remove(f.Name())
+	}()
 
 	_, err = f.WriteString(configContent)
 	assert.NoError(t, err)
-	f.Close()
+	_ = f.Close()
 }

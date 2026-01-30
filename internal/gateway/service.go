@@ -98,11 +98,11 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		apiKeyID = apiKey.ID
 	} else {
 		if appName != "" {
-			userID = "anonymous"
-			apiKeyID = "anonymous"
+			userID = string(api.Anonymous)
+			apiKeyID = string(api.Anonymous)
 		} else {
-			userID = "system"
-			apiKeyID = "system"
+			userID = string(api.System)
+			apiKeyID = string(api.System)
 		}
 	}
 
@@ -208,11 +208,11 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			apiKeyID = apiKey.ID
 		} else {
 			if appName != "" {
-				userID = "anonymous"
-				apiKeyID = "anonymous"
+				userID = string(api.Anonymous)
+				apiKeyID = string(api.Anonymous)
 			} else {
-				userID = "system"
-				apiKeyID = "system"
+				userID = string(api.System)
+				apiKeyID = string(api.System)
 			}
 		}
 
@@ -234,10 +234,6 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 
 				// If choices present
 				if len(result.Response.Choices) > 0 {
-					// Approximate token counting if usage not provided?
-					// Ideally we rely on provider Usage.
-					// But for now, just pass through.
-
 					if result.Response.Choices[0].FinishReason != "" {
 						finishReason = result.Response.Choices[0].FinishReason
 					}

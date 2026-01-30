@@ -201,10 +201,10 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 						},
 					}}
 				}
-				if event.Delta != nil && event.Delta.Type == "stop_reason" {
-					// stop reason logic handled in message_stop usually, but sometimes here?
-					// Anthropic docs say stop_reason is in message_delta
-				}
+				// if event.Delta != nil && event.Delta.Type == "stop_reason" {
+				// 	// stop reason logic handled in message_stop usually, but sometimes here?
+				// 	// Anthropic docs say stop_reason is in message_delta
+				// }
 			case "message_stop":
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
@@ -253,7 +253,10 @@ func (a *Adapter) Health(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("health check failed with status: %d", resp.StatusCode)

@@ -40,7 +40,9 @@ func SendRequest(ctx context.Context, client HTTPClient, method, url string, hea
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	// Check for non-200 status codes
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
@@ -91,7 +93,9 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 		return fmt.Errorf("stream request failed: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		respBody, _ := io.ReadAll(resp.Body)

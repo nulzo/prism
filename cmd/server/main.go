@@ -70,7 +70,9 @@ func main() {
 		panic("failed to initialize logger: " + err.Error())
 	}
 	logger.SetGlobal(log)
-	defer log.Sync()
+	defer func() {
+		_ = log.Sync()
+	}()
 
 	val := validator.New()
 
@@ -88,7 +90,9 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to initialize database", zap.Error(err))
 	}
-	defer repo.Close()
+	defer func() {
+		_ = repo.Close()
+	}()
 
 	// Sync models to DB
 	ctx := context.Background()

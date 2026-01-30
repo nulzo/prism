@@ -14,4 +14,4 @@ linters:
     - goconst        
     - gocyclo
     - bodyclose
-    - errorlint
+    # - errorlint

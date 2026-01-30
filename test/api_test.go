@@ -163,11 +163,11 @@ func setupTestServer(t *testing.T) (*httptest.Server, *MockProvider) {
 
 	// 3. Components
 	cacheSvc := cache.NewMemoryCache()
-	
+
 	// Create Ingestor for analytics (required by Gateway service)
 	ingestor := analytics.NewIngestor(log, repo)
 	ingestor.Start(context.Background())
-	
+
 	routerSvc := gateway.NewService(log, repo, ingestor, cacheSvc)
 	analyticsSvc := analytics.NewService(repo)
 	val := validator.New()
@@ -175,9 +175,9 @@ func setupTestServer(t *testing.T) (*httptest.Server, *MockProvider) {
 	// 4. Config
 	cfg := &config.Config{
 		Server: config.ServerConfig{
-			Port:        0, // Random port
+			Port:        0,             // Random port
 			Env:         "development", // Must be development, production, or staging
-			AuthEnabled: false, // Disable auth for easy testing
+			AuthEnabled: false,         // Disable auth for easy testing
 		},
 		RateLimit: config.RateLimitConfig{
 			RequestsPerSecond: 100,
@@ -224,7 +224,10 @@ func makeRequest(t *testing.T, ts *httptest.Server, method, path string, payload
 	client := ts.Client()
 	resp, err := client.Do(req)
 	require.NoError(t, err)
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if target != nil {
 		// If we expect JSON but get something else, dump the body for debugging
@@ -251,7 +254,11 @@ func TestHealthCheck(t *testing.T) {
 
 	resp, err := http.Get(ts.URL + "/health")
 	require.NoError(t, err)
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 }
 

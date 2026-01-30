@@ -28,7 +28,7 @@ func (h *ModelHandler) ListModels(c *gin.Context) {
 	models, err := h.service.ListAllModels(c.Request.Context(), filter)
 	if err != nil {
 		// throw 500 internal server error
-		c.Error(api.InternalError("Failed to list models", err.Error()))
+		_ = c.Error(api.InternalError("Failed to list models", err.Error()))
 		return
 	}
 

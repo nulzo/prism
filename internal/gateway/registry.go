@@ -28,12 +28,12 @@ func (r *registry) addModel(m api.ModelDefinition) {
 	r.models[m.ID] = m
 }
 
-func (r *registry) getModel(id string) (api.ModelDefinition, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	m, ok := r.models[id]
-	return m, ok
-}
+// func (r *registry) getModel(id string) (api.ModelDefinition, bool) {
+// 	r.mu.RLock()
+// 	defer r.mu.RUnlock()
+// 	m, ok := r.models[id]
+// 	return m, ok
+// }
 
 func (r *registry) ResolveRoute(modelID string) (string, string, error) {
 	r.mu.RLock()

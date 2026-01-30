@@ -162,4 +162,5 @@ const (
 	Assistant      Role = "assistant"
 	System         Role = "system"
 	ModelAssistant Role = "model"
+	Anonymous      Role = "anonymous"
 )

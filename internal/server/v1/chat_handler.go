@@ -106,10 +106,7 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 			data, err := json.Marshal(result.Response)
 			if err == nil {
 				_, err := fmt.Fprintf(w, "data: %s\n\n", data)
-				if err != nil {
-					return false
-				}
-				return true
+				return err == nil
 			}
 		}
 

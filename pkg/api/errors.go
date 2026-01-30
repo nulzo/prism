@@ -20,7 +20,7 @@ type Problem struct {
 }
 
 func (p *Problem) MarshalJSON() ([]byte, error) {
-	type Alias Problem
+	// type Alias Problem
 	// Create a map to hold everything
 	m := make(map[string]interface{})
 

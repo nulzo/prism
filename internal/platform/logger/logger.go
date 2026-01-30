@@ -16,6 +16,12 @@ type Config struct {
 	EnableColor bool   // true to enable colors (only in console mode)
 }
 
+type Format string
+
+const (
+	Console Format = "console"
+)
+
 var (
 	globalLogger *zap.Logger
 	mu           sync.RWMutex
@@ -49,7 +55,7 @@ func New(cfg Config) (*zap.Logger, error) {
 	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
 
 	// Colorize the LEVEL (INFO, DEBUG) specifically
-	if cfg.Format == "console" && cfg.EnableColor {
+	if cfg.Format == string(Console) && cfg.EnableColor {
 		encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		encoderConfig.EncodeCaller = nil
 	} else {
@@ -58,14 +64,13 @@ func New(cfg Config) (*zap.Logger, error) {
 
 	// Select the encoding based on config
 	encoding := cfg.Format
-	if cfg.Format == "console" && cfg.EnableColor {
-		// USE OUR CUSTOM ENCODER
+	if cfg.Format == string(Console) && cfg.EnableColor {
 		encoding = "colored-console"
 	}
 
 	zapConfig := zap.Config{
 		Level:             zap.NewAtomicLevelAt(parseLevel(cfg.Level)),
-		Development:       cfg.Format == "console",
+		Development:       cfg.Format == string(Console),
 		Encoding:          encoding,
 		EncoderConfig:     encoderConfig,
 		OutputPaths:       []string{"stdout"},
@@ -103,8 +108,6 @@ func With(fields ...zap.Field) *zap.Logger {
 	return Get().With(fields...)
 }
 
-// --- Wrapper Functions ---
-
 func Info(msg string, fields ...zap.Field) {
 	Get().Info(msg, fields...)
 }
@@ -134,8 +137,6 @@ func Sync() {
 	}
 }
 
-// --- Helpers ---
-
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return strings.ToLower(value)
@@ -162,14 +163,11 @@ func parseLevel(lvl string) zapcore.Level {
 
 // shouldEnableColor checks NO_COLOR (standard) and LOG_COLOR
 func shouldEnableColor() bool {
-	// 1. Check strict NO_COLOR standard (https://no-color.org/)
 	if _, noColor := os.LookupEnv("NO_COLOR"); noColor {
 		return false
 	}
-	// 2. Allow explicit force enable/disable via LOG_COLOR
 	if val := os.Getenv("LOG_COLOR"); val != "" {
 		return val == "true" || val == "1"
 	}
-	// 3. Default: Enable color if terminal (simplified approach, assumes yes for dev experience)
 	return true
 }

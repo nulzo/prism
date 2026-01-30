@@ -20,7 +20,7 @@ func TestOpenAIChat(t *testing.T) {
 		assert.Equal(t, "Bearer test-key", r.Header.Get("Authorization"))
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{
+		_, err := w.Write([]byte(`{
 			"id": "chatcmpl-123",
 			"object": "chat.completion",
 			"created": 1677652288,
@@ -39,6 +39,10 @@ func TestOpenAIChat(t *testing.T) {
 				"total_tokens": 21
 			}
 		}`))
+
+		if err != nil {
+			return
+		}
 	}))
 	defer server.Close()
 

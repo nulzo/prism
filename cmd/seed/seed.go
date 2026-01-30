@@ -19,7 +19,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer repo.Close()
+	defer func() {
+		_ = repo.Close()
+	}()
 
 	ctx := context.Background()
 
