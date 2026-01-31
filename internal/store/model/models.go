@@ -72,27 +72,28 @@ type Model struct {
 
 // RequestLog captures the full detail of a completed inference request.
 type RequestLog struct {
-	ID              string        `db:"id" json:"id"`
-	UserID          string        `db:"user_id" json:"user_id"`
-	APIKeyID        string        `db:"api_key_id" json:"api_key_id"`
-	AppName         string        `db:"app_name" json:"app_name"`
-	ProviderID      string        `db:"provider_id" json:"provider_id"`
-	ModelID         string        `db:"model_id" json:"model_id"`
-	UpstreamModelID string        `db:"upstream_model_id" json:"upstream_model_id"`
-	UpstreamRemoteID string       `db:"upstream_remote_id" json:"upstream_remote_id"`
-	FinishReason    string        `db:"finish_reason" json:"finish_reason"`
-	InputTokens     int           `db:"input_tokens" json:"input_tokens"`
-	OutputTokens    int           `db:"output_tokens" json:"output_tokens"`
-	CachedTokens    int           `db:"cached_tokens" json:"cached_tokens"`
-	LatencyMS       int64         `db:"latency_ms" json:"latency_ms"`
-	TTFTMS          sql.NullInt64 `db:"ttft_ms" json:"ttft_ms,omitempty"`
-	StatusCode      int           `db:"status_code" json:"status_code"`
-	TotalCostMicros int64         `db:"total_cost_micros" json:"total_cost_micros"`
-	IsStreamed      bool          `db:"is_streamed" json:"is_streamed"`
-	IPAddress       string        `db:"ip_address" json:"ip_address"`
-	UserAgent       string        `db:"user_agent" json:"user_agent"`
-	MetaJSON        string        `db:"meta_json" json:"meta_json"`
-	CreatedAt       time.Time     `db:"created_at" json:"created_at"`
+	ID               string        `db:"id" json:"id"`
+	UpstreamID       string        `db:"upstream_id" json:"upstream_id"`
+	UserID           string        `db:"user_id" json:"user_id"`
+	APIKeyID         string        `db:"api_key_id" json:"api_key_id"`
+	AppName          string        `db:"app_name" json:"app_name"`
+	ProviderID       string        `db:"provider_id" json:"provider_id"`
+	ModelID          string        `db:"model_id" json:"model_id"`
+	UpstreamModelID  string        `db:"upstream_model_id" json:"upstream_model_id"`
+	UpstreamRemoteID string        `db:"upstream_remote_id" json:"upstream_remote_id"`
+	FinishReason     string        `db:"finish_reason" json:"finish_reason"`
+	InputTokens      int           `db:"input_tokens" json:"input_tokens"`
+	OutputTokens     int           `db:"output_tokens" json:"output_tokens"`
+	CachedTokens     int           `db:"cached_tokens" json:"cached_tokens"`
+	LatencyMS        int64         `db:"latency_ms" json:"latency_ms"`
+	TTFTMS           sql.NullInt64 `db:"ttft_ms" json:"ttft_ms,omitempty"`
+	StatusCode       int           `db:"status_code" json:"status_code"`
+	TotalCostMicros  int64         `db:"total_cost_micros" json:"total_cost_micros"`
+	IsStreamed       bool          `db:"is_streamed" json:"is_streamed"`
+	IPAddress        string        `db:"ip_address" json:"ip_address"`
+	UserAgent        string        `db:"user_agent" json:"user_agent"`
+	MetaJSON         string        `db:"meta_json" json:"meta_json"`
+	CreatedAt        time.Time     `db:"created_at" json:"created_at"`
 
 	// Detailed Usage (Joined but not in request_logs table)
 	UsageDetails *UsageDetails `db:"-" json:"usage_details,omitempty"`
@@ -132,7 +133,6 @@ type AuditEvent struct {
 
 // DailyStats represents aggregated usage data for a specific day.
 type DailyStats struct {
-
 	Date            string  `db:"date" json:"date"`
 	TotalRequests   int     `db:"total_requests" json:"total_requests"`
 	TotalTokens     int     `db:"total_tokens" json:"total_tokens"`

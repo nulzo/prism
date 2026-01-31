@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
@@ -79,6 +80,11 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	reqClone := *req
 	reqClone.Model = upstreamModelID
 
+	u, err := uuid.NewRandom()
+	if err != nil {
+		fmt.Errorf("failed to generate UUID: %v", err)
+	}
+
 	start := time.Now()
 	resp, err := provider.Chat(ctx, &reqClone)
 	if err != nil {
@@ -112,7 +118,8 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 	log := &model.RequestLog{
-		ID:               resp.ID,
+		ID:               u.String(),
+		UpstreamID:       resp.ID,
 		UserID:           userID,
 		APIKeyID:         apiKeyID,
 		AppName:          appName,
@@ -126,6 +133,8 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		IsStreamed:       false,
 		CreatedAt:        time.Now(),
 	}
+
+	resp.ID = u.String()
 
 	if resp.Usage != nil {
 		log.InputTokens = resp.Usage.PromptTokens
