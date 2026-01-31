@@ -97,6 +97,31 @@ func main() {
 	// Sync models to DB
 	ctx := context.Background()
 	if err := repo.WithTx(ctx, func(r store.Repository) error {
+		// Sync Providers first
+		var dbProviders []model.Provider
+		for _, p := range cfg.Providers {
+			// Encrypt API key? For now, we store as is or placeholder if config is source of truth.
+			// Since we load from config on every boot, we might just store "CONFIGURED" or similar to avoid saving secrets in plaintext DB if that's a concern.
+			// However, for functionality, if we want to move to dynamic config later, we'd need the real key.
+			// Assuming local SQLite is secured or we trust the env vars.
+			// Let's store a masked version or just empty if we rely on config-loaded instances.
+			// Actually, the Service uses the IN-MEMORY providers loaded from config.
+			// This DB sync is mainly for "Reporting" and "Audit" purposes so we know what providers existed.
+			
+			dbP := model.Provider{
+				ID:         p.ID,
+				Name:       p.ID, // Or mapped name
+				BaseURL:    "config", // We don't have base URL handy in the simple config struct sometimes?
+				IsEnabled:  p.Enabled,
+				Priority:   0, // Config doesn't specify priority explicitly usually?
+				ConfigJSON: "{}", 
+			}
+			dbProviders = append(dbProviders, dbP)
+		}
+		if err := r.Providers().SyncProviders(ctx, dbProviders); err != nil {
+			return err
+		}
+
 		var dbModels []model.Model
 		for _, m := range cfg.Models {
 			// Ensure upstream ID is set

@@ -119,8 +119,20 @@ type UsageDetails struct {
 	WebSearchRequests int `db:"web_search_requests" json:"web_search_requests"`
 }
 
+// AuditEvent represents a security or critical system event.
+type AuditEvent struct {
+	ID             string    `db:"id" json:"id"`
+	ActorUserID    string    `db:"actor_user_id" json:"actor_user_id"`
+	TargetResource string    `db:"target_resource" json:"target_resource"`
+	Action         string    `db:"action" json:"action"`
+	DetailsJSON    string    `db:"details_json" json:"details_json"`
+	IPAddress      string    `db:"ip_address" json:"ip_address,omitempty"`
+	CreatedAt      time.Time `db:"created_at" json:"created_at"`
+}
+
 // DailyStats represents aggregated usage data for a specific day.
 type DailyStats struct {
+
 	Date            string  `db:"date" json:"date"`
 	TotalRequests   int     `db:"total_requests" json:"total_requests"`
 	TotalTokens     int     `db:"total_tokens" json:"total_tokens"`

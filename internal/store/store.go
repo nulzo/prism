@@ -14,17 +14,22 @@ const (
 )
 
 // Repository is the main contract for the data layer.
-// It exposes sub-repositories for specific domains.
 type Repository interface {
 	APIKeys() APIKeyRepository
 	Requests() RequestRepository
 	Providers() ProviderRepository
 	Users() UserRepository
+	Audit() AuditRepository
 
 	// transaction support
 	WithTx(ctx context.Context, fn func(repo Repository) error) error
 
 	Close() error
+}
+
+type AuditRepository interface {
+	// Log records an audit event.
+	Log(ctx context.Context, event *model.AuditEvent) error
 }
 
 type APIKeyRepository interface {
@@ -56,6 +61,8 @@ type ProviderRepository interface {
 	GetModelPricing(ctx context.Context, modelID string) (*model.Model, error)
 	// SyncModels syncs the models from the configuration to the database.
 	SyncModels(ctx context.Context, models []model.Model) error
+	// SyncProviders syncs the providers from the configuration to the database.
+	SyncProviders(ctx context.Context, providers []model.Provider) error
 }
 
 type UserRepository interface {

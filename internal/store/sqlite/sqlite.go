@@ -73,6 +73,10 @@ func (r *SqliteRepository) Users() store.UserRepository {
 	return &userRepo{db: r.executor}
 }
 
+func (r *SqliteRepository) Audit() store.AuditRepository {
+	return &auditRepo{db: r.executor}
+}
+
 type apiKeyRepo struct {
 	db DB
 }
@@ -153,7 +157,7 @@ func (r *requestRepo) Log(ctx context.Context, log *model.RequestLog) error {
 			CURRENT_TIMESTAMP
 		)`
 		if _, err := r.db.NamedExecContext(ctx, queryDetails, log.UsageDetails); err != nil {
-			// If details fail, we log it but don't fail the main log? 
+			// If details fail, we log it but don't fail the main log?
 			// Or return error? Returning error might cause ingestor retry loop to duplicate main log if it wasn't transactional.
 			// Since we aren't in a guaranteed TX here, duplication risk exists on retry.
 			return fmt.Errorf("failed to log usage details: %w", err)
@@ -175,10 +179,11 @@ func (r *requestRepo) GetByID(ctx context.Context, id string) (*model.RequestLog
 	queryDetails := `SELECT * FROM request_usage_details WHERE request_id = ?`
 	if err := r.db.GetContext(ctx, &details, queryDetails, id); err == nil {
 		log.UsageDetails = &details
-	} else if err != sql.ErrNoRows {
-		// Log error but return partial data? Or fail?
-		// For now, return what we have, maybe details aren't there.
 	}
+	// } else if err != sql.ErrNoRows {
+	// 	// Log error but return partial data? Or fail?
+	// 	// For now, return what we have, maybe details aren't there.
+	// }
 
 	return &log, nil
 }
@@ -260,6 +265,33 @@ func (r *providerRepo) SyncModels(ctx context.Context, models []model.Model) err
 	return nil
 }
 
+func (r *providerRepo) SyncProviders(ctx context.Context, providers []model.Provider) error {
+	// Mark all as disabled first? Or just upsert?
+	// To strictly follow "sync", we should probably disable those not in the list, but for now let's just upsert active ones.
+
+	query := `
+	INSERT INTO providers (
+		id, name, base_url, api_key_enc, config_json, is_enabled, priority, created_at, updated_at
+	) VALUES (
+		:id, :name, :base_url, :api_key_enc, :config_json, :is_enabled, :priority, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+	)
+	ON CONFLICT(id) DO UPDATE SET
+		name = excluded.name,
+		base_url = excluded.base_url,
+		api_key_enc = excluded.api_key_enc,
+		config_json = excluded.config_json,
+		is_enabled = excluded.is_enabled,
+		priority = excluded.priority,
+		updated_at = CURRENT_TIMESTAMP`
+
+	for _, p := range providers {
+		if _, err := r.db.NamedExecContext(ctx, query, p); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 type userRepo struct {
 	db DB
 }
@@ -282,4 +314,19 @@ func (r *userRepo) GetWallet(ctx context.Context, userID string) (*model.Wallet,
 	var w model.Wallet
 	err := r.db.GetContext(ctx, &w, `SELECT * FROM wallets WHERE user_id = ?`, userID)
 	return &w, err
+}
+
+type auditRepo struct {
+	db DB
+}
+
+func (r *auditRepo) Log(ctx context.Context, event *model.AuditEvent) error {
+	query := `
+	INSERT INTO audit_events (
+		id, actor_user_id, target_resource, action, details_json, ip_address, created_at
+	) VALUES (
+		:id, :actor_user_id, :target_resource, :action, :details_json, :ip_address, :created_at
+	)`
+	_, err := r.db.NamedExecContext(ctx, query, event)
+	return err
 }
