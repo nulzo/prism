@@ -72,36 +72,34 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	showURL := fmt.Sprintf("%s/api/show", rootURL)
 
 	for _, m := range resp.Models {
-		// Detect capabilities via /api/show
 		isMultimodal := false
 		contextLength := 4096 // Default
 
 		var showResp struct {
 			Details struct {
-				Families []string `json:"families"`
-				Family   string   `json:"family"`
+				Families      []string `json:"families"`
+				Family        string   `json:"family"`
+				ParameterSize string   `json:"parameter_size"`
 			} `json:"details"`
 			ModelInfo map[string]interface{} `json:"model_info"`
 		}
 
-		reqBody := map[string]string{"name": m.Name}
-		// We ignore errors here and default to non-multimodal to avoid breaking the whole list
-		if err := httpclient.SendRequest(ctx, a.client, "POST", showURL, reqBody, nil, &showResp); err == nil {
-			// Check families for vision capabilities
+		reqBody := map[string]string{"model": m.Name}
+
+		if err := httpclient.SendRequest(ctx, a.client, "POST", showURL, nil, reqBody, &showResp); err == nil {
+
 			for _, f := range showResp.Details.Families {
 				if f == "clip" || f == "mllama" {
 					isMultimodal = true
 					break
 				}
 			}
-			// Fallback to single family check
+
 			if !isMultimodal && (showResp.Details.Family == "clip" || showResp.Details.Family == "mllama") {
 				isMultimodal = true
 			}
 
-			// Try to find context length in model_info
 			if showResp.ModelInfo != nil {
-				// keys can be "llama.context_length", "context_length", etc.
 				for k, v := range showResp.ModelInfo {
 					if strings.Contains(k, "context_length") {
 						if f, ok := v.(float64); ok {
