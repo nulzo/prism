@@ -82,7 +82,7 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	u, err := uuid.NewRandom()
 	if err != nil {
-		fmt.Errorf("failed to generate UUID: %v", err)
+		return nil, fmt.Errorf("failed to generate UUID: %v", err)
 	}
 
 	start := time.Now()
