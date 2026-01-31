@@ -88,10 +88,35 @@ type RequestLog struct {
 	TTFTMS          sql.NullInt64 `db:"ttft_ms" json:"ttft_ms,omitempty"`
 	StatusCode      int           `db:"status_code" json:"status_code"`
 	TotalCostMicros int64         `db:"total_cost_micros" json:"total_cost_micros"`
+	IsStreamed      bool          `db:"is_streamed" json:"is_streamed"`
 	IPAddress       string        `db:"ip_address" json:"ip_address"`
 	UserAgent       string        `db:"user_agent" json:"user_agent"`
 	MetaJSON        string        `db:"meta_json" json:"meta_json"`
 	CreatedAt       time.Time     `db:"created_at" json:"created_at"`
+
+	// Detailed Usage (Joined but not in request_logs table)
+	UsageDetails *UsageDetails `db:"-" json:"usage_details,omitempty"`
+}
+
+type UsageDetails struct {
+	RequestID string `db:"request_id" json:"request_id"`
+
+	PromptTokensCached     int `db:"prompt_tokens_cached" json:"prompt_tokens_cached"`
+	PromptTokensCacheWrite int `db:"prompt_tokens_cache_write" json:"prompt_tokens_cache_write"`
+	PromptTokensAudio      int `db:"prompt_tokens_audio" json:"prompt_tokens_audio"`
+	PromptTokensVideo      int `db:"prompt_tokens_video" json:"prompt_tokens_video"`
+
+	CompletionTokensReasoning int `db:"completion_tokens_reasoning" json:"completion_tokens_reasoning"`
+	CompletionTokensImage     int `db:"completion_tokens_image" json:"completion_tokens_image"`
+
+	CostMicros *int64 `db:"cost_micros" json:"cost_micros,omitempty"`
+	IsBYOK     bool   `db:"is_byok" json:"is_byok"`
+
+	UpstreamCostMicros           *int64 `db:"upstream_cost_micros" json:"upstream_cost_micros,omitempty"`
+	UpstreamPromptCostMicros     int64  `db:"upstream_prompt_cost_micros" json:"upstream_prompt_cost_micros"`
+	UpstreamCompletionCostMicros int64  `db:"upstream_completion_cost_micros" json:"upstream_completion_cost_micros"`
+
+	WebSearchRequests int `db:"web_search_requests" json:"web_search_requests"`
 }
 
 // DailyStats represents aggregated usage data for a specific day.

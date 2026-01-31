@@ -41,6 +41,8 @@ type APIKeyRepository interface {
 type RequestRepository interface {
 	// Log stores a completed request.
 	Log(ctx context.Context, log *model.RequestLog) error
+	// GetByID returns a single request log by ID, including usage details if available.
+	GetByID(ctx context.Context, id string) (*model.RequestLog, error)
 	// GetRecent returns the last N logs for a user.
 	GetRecent(ctx context.Context, userID string, limit int) ([]model.RequestLog, error)
 	// GetDailyStats returns aggregated stats grouped by day.

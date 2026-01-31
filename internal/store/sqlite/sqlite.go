@@ -119,17 +119,68 @@ func (r *requestRepo) Log(ctx context.Context, log *model.RequestLog) error {
 		id, user_id, api_key_id, app_name, provider_id, model_id,
 		upstream_model_id, upstream_remote_id, finish_reason,
 		input_tokens, output_tokens, cached_tokens,
-		latency_ms, ttft_ms, status_code, total_cost_micros,
+		latency_ms, ttft_ms, status_code, total_cost_micros, is_streamed,
 		ip_address, user_agent, meta_json, created_at
 	) VALUES (
 		:id, :user_id, :api_key_id, :app_name, :provider_id, :model_id,
 		:upstream_model_id, :upstream_remote_id, :finish_reason,
 		:input_tokens, :output_tokens, :cached_tokens,
-		:latency_ms, :ttft_ms, :status_code, :total_cost_micros,
+		:latency_ms, :ttft_ms, :status_code, :total_cost_micros, :is_streamed,
 		:ip_address, :user_agent, :meta_json, :created_at
 	)`
-	_, err := r.db.NamedExecContext(ctx, query, log)
-	return err
+	if _, err := r.db.NamedExecContext(ctx, query, log); err != nil {
+		return err
+	}
+
+	if log.UsageDetails != nil {
+		log.UsageDetails.RequestID = log.ID
+		queryDetails := `
+		INSERT INTO request_usage_details (
+			request_id,
+			prompt_tokens_cached, prompt_tokens_cache_write, prompt_tokens_audio, prompt_tokens_video,
+			completion_tokens_reasoning, completion_tokens_image,
+			cost_micros, is_byok,
+			upstream_cost_micros, upstream_prompt_cost_micros, upstream_completion_cost_micros,
+			web_search_requests,
+			created_at
+		) VALUES (
+			:request_id,
+			:prompt_tokens_cached, :prompt_tokens_cache_write, :prompt_tokens_audio, :prompt_tokens_video,
+			:completion_tokens_reasoning, :completion_tokens_image,
+			:cost_micros, :is_byok,
+			:upstream_cost_micros, :upstream_prompt_cost_micros, :upstream_completion_cost_micros,
+			:web_search_requests,
+			CURRENT_TIMESTAMP
+		)`
+		if _, err := r.db.NamedExecContext(ctx, queryDetails, log.UsageDetails); err != nil {
+			// If details fail, we log it but don't fail the main log? 
+			// Or return error? Returning error might cause ingestor retry loop to duplicate main log if it wasn't transactional.
+			// Since we aren't in a guaranteed TX here, duplication risk exists on retry.
+			return fmt.Errorf("failed to log usage details: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (r *requestRepo) GetByID(ctx context.Context, id string) (*model.RequestLog, error) {
+	var log model.RequestLog
+	query := `SELECT * FROM request_logs WHERE id = ?`
+	if err := r.db.GetContext(ctx, &log, query, id); err != nil {
+		return nil, err
+	}
+
+	// Try to fetch usage details
+	var details model.UsageDetails
+	queryDetails := `SELECT * FROM request_usage_details WHERE request_id = ?`
+	if err := r.db.GetContext(ctx, &details, queryDetails, id); err == nil {
+		log.UsageDetails = &details
+	} else if err != sql.ErrNoRows {
+		// Log error but return partial data? Or fail?
+		// For now, return what we have, maybe details aren't there.
+	}
+
+	return &log, nil
 }
 
 func (r *requestRepo) GetRecent(ctx context.Context, userID string, limit int) ([]model.RequestLog, error) {

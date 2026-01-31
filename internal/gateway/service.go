@@ -123,12 +123,50 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		FinishReason:     finishReason,
 		StatusCode:       200,
 		LatencyMS:        latency.Milliseconds(),
+		IsStreamed:       false,
 		CreatedAt:        time.Now(),
 	}
 
 	if resp.Usage != nil {
 		log.InputTokens = resp.Usage.PromptTokens
 		log.OutputTokens = resp.Usage.CompletionTokens
+		log.CachedTokens = 0 // Will be updated from details
+
+		details := &model.UsageDetails{
+			WebSearchRequests: 0, // Default
+		}
+
+		if resp.Usage.PromptTokensDetails != nil {
+			details.PromptTokensCached = resp.Usage.PromptTokensDetails.CachedTokens
+			details.PromptTokensCacheWrite = resp.Usage.PromptTokensDetails.CacheWriteTokens
+			details.PromptTokensAudio = resp.Usage.PromptTokensDetails.AudioTokens
+			details.PromptTokensVideo = resp.Usage.PromptTokensDetails.VideoTokens
+			log.CachedTokens = details.PromptTokensCached
+		}
+
+		if resp.Usage.CompletionTokensDetails != nil {
+			details.CompletionTokensReasoning = resp.Usage.CompletionTokensDetails.ReasoningTokens
+			details.CompletionTokensImage = resp.Usage.CompletionTokensDetails.ImageTokens
+		}
+
+		if resp.Usage.ServerToolUse != nil {
+			details.WebSearchRequests = resp.Usage.ServerToolUse.WebSearchRequests
+		}
+
+		if resp.Usage.CostDetails != nil {
+			details.UpstreamPromptCostMicros = int64(resp.Usage.CostDetails.UpstreamInferencePromptCost * 1000000)
+			details.UpstreamCompletionCostMicros = int64(resp.Usage.CostDetails.UpstreamInferenceCompletionCost * 1000000)
+			if resp.Usage.CostDetails.UpstreamInferenceCost != nil {
+				cost := int64(*resp.Usage.CostDetails.UpstreamInferenceCost * 1000000)
+				details.UpstreamCostMicros = &cost
+			}
+		}
+
+		if resp.Usage.IsBYOK != nil {
+			details.IsBYOK = *resp.Usage.IsBYOK
+		}
+
+		log.UsageDetails = details
 	}
 
 	pricing, err := s.repo.Providers().GetModelPricing(context.Background(), req.Model)
@@ -136,6 +174,10 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		inputCost := (int64(resp.Usage.PromptTokens) * pricing.InputCostMicrosPer1k) / 1000
 		outputCost := (int64(resp.Usage.CompletionTokens) * pricing.OutputCostMicrosPer1k) / 1000
 		log.TotalCostMicros = inputCost + outputCost
+
+		if log.UsageDetails != nil {
+			log.UsageDetails.CostMicros = &log.TotalCostMicros
+		}
 	}
 
 	s.ingestor.Log(log)
@@ -195,6 +237,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 		start := time.Now()
 		var ttft *time.Duration
 		var inputTokens, outputTokens int
+		var finalUsage *api.ResponseUsage
 		var finishReason string
 		var lastID string
 
@@ -230,6 +273,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 				if result.Response.Usage != nil {
 					inputTokens = result.Response.Usage.PromptTokens
 					outputTokens = result.Response.Usage.CompletionTokens
+					finalUsage = result.Response.Usage
 				}
 
 				// If choices present
@@ -263,9 +307,40 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			StatusCode:       200,
 			LatencyMS:        latency.Milliseconds(),
 			TTFTMS:           ttftMS,
+			IsStreamed:       true,
 			CreatedAt:        time.Now(),
 			InputTokens:      inputTokens,
 			OutputTokens:     outputTokens,
+		}
+
+		if finalUsage != nil {
+			details := &model.UsageDetails{}
+			if finalUsage.PromptTokensDetails != nil {
+				details.PromptTokensCached = finalUsage.PromptTokensDetails.CachedTokens
+				details.PromptTokensCacheWrite = finalUsage.PromptTokensDetails.CacheWriteTokens
+				details.PromptTokensAudio = finalUsage.PromptTokensDetails.AudioTokens
+				details.PromptTokensVideo = finalUsage.PromptTokensDetails.VideoTokens
+				log.CachedTokens = details.PromptTokensCached
+			}
+			if finalUsage.CompletionTokensDetails != nil {
+				details.CompletionTokensReasoning = finalUsage.CompletionTokensDetails.ReasoningTokens
+				details.CompletionTokensImage = finalUsage.CompletionTokensDetails.ImageTokens
+			}
+			if finalUsage.ServerToolUse != nil {
+				details.WebSearchRequests = finalUsage.ServerToolUse.WebSearchRequests
+			}
+			if finalUsage.CostDetails != nil {
+				details.UpstreamPromptCostMicros = int64(finalUsage.CostDetails.UpstreamInferencePromptCost * 1000000)
+				details.UpstreamCompletionCostMicros = int64(finalUsage.CostDetails.UpstreamInferenceCompletionCost * 1000000)
+				if finalUsage.CostDetails.UpstreamInferenceCost != nil {
+					cost := int64(*finalUsage.CostDetails.UpstreamInferenceCost * 1000000)
+					details.UpstreamCostMicros = &cost
+				}
+			}
+			if finalUsage.IsBYOK != nil {
+				details.IsBYOK = *finalUsage.IsBYOK
+			}
+			log.UsageDetails = details
 		}
 
 		if log.ID == "" {
@@ -279,6 +354,10 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			inputCost := (int64(inputTokens) * pricing.InputCostMicrosPer1k) / 1000
 			outputCost := (int64(outputTokens) * pricing.OutputCostMicrosPer1k) / 1000
 			log.TotalCostMicros = inputCost + outputCost
+
+			if log.UsageDetails != nil {
+				log.UsageDetails.CostMicros = &log.TotalCostMicros
+			}
 		}
 
 		s.ingestor.Log(log)

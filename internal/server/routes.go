@@ -31,4 +31,6 @@ func (s *Server) SetupRoutes() {
 	analyticsHandler := v1.NewAnalyticsHandler(s.analytics)
 	api.GET("/analytics/usage", analyticsHandler.GetUsage)
 
+	generationHandler := v1.NewGenerationHandler(s.repo)
+	api.GET("/generation", generationHandler.GetGeneration)
 }
