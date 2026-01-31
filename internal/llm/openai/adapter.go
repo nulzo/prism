@@ -12,6 +12,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -103,6 +104,16 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		return nil, a.handleUpstreamError(err)
 	}
 
+	// Post-process to extract thinking content
+	for i := range resp.Choices {
+		choice := &resp.Choices[i]
+		if choice.Message != nil {
+			content, reasoning := processing.ExtractThinking(choice.Message.Content.Text)
+			choice.Message.Content.Text = content
+			choice.Message.Reasoning = reasoning
+		}
+	}
+
 	return &resp, nil
 }
 
@@ -124,6 +135,9 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 	go func() {
 		defer close(ch)
 
+		// Map of parsers for each choice index
+		parsers := make(map[int]*processing.StreamParser)
+
 		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
 			// SSE format: data: {...}
 			if !strings.HasPrefix(line, "data: ") {
@@ -139,6 +153,24 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
 				// log error but continue
 				return nil
+			}
+
+			// Process thinking/reasoning tags
+			for i := range chatResp.Choices {
+				choice := &chatResp.Choices[i]
+				idx := choice.Index
+
+				parser, ok := parsers[idx]
+				if !ok {
+					parser = processing.NewStreamParser()
+					parsers[idx] = parser
+				}
+
+				if choice.Delta != nil {
+					c, r := parser.Process(choice.Delta.Content.Text)
+					choice.Delta.Content.Text = c
+					choice.Delta.Reasoning = r
+				}
 			}
 
 			ch <- api.StreamResult{Response: &chatResp}

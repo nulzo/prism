@@ -55,6 +55,7 @@ type ChatRequest struct {
 type ChatMessage struct {
 	Role       string     `json:"role" binding:"required,oneof=user assistant system"`
 	Content    Content    `json:"content"` // string or []ContentPart
+	Reasoning  string     `json:"reasoning,omitempty"`
 	Name       string     `json:"name,omitempty"`
 	ToolCallID string     `json:"tool_call_id,omitempty"`
 	ToolCalls  []ToolCall `json:"tool_calls,omitempty"` // For assistant messages

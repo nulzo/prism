@@ -11,6 +11,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -100,14 +101,17 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		text = gResp.Candidates[0].Content.Parts[0].Text
 	}
 
+	content, reasoning := processing.ExtractThinking(text)
+
 	return &api.ChatResponse{
 		ID:    fmt.Sprintf("gemini-%d", time.Now().Unix()),
 		Model: req.Model,
 		Choices: []api.Choice{{
 			Index: 0,
 			Message: &api.ChatMessage{
-				Role:    string(api.Assistant),
-				Content: api.Content{Text: text},
+				Role:      string(api.Assistant),
+				Content:   api.Content{Text: content},
+				Reasoning: reasoning,
 			},
 			FinishReason: "stop",
 		}},
@@ -134,6 +138,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 		defer close(ch)
 
 		headers := map[string]string{}
+		parser := processing.NewStreamParser()
 
 		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, shape, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
@@ -148,9 +153,13 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 
 			if len(gResp.Candidates) > 0 && len(gResp.Candidates[0].Content.Parts) > 0 {
 				text := gResp.Candidates[0].Content.Parts[0].Text
+				c, r := parser.Process(text)
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
-						Delta: &api.ChatMessage{Content: api.Content{Text: text}},
+						Delta: &api.ChatMessage{
+							Content:   api.Content{Text: c},
+							Reasoning: r,
+						},
 					}},
 				}}
 			}

@@ -11,6 +11,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -123,6 +124,8 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		}
 	}
 
+	content, reasoning := processing.ExtractThinking(fullText)
+
 	return &api.ChatResponse{
 		ID:      anthroResp.ID,
 		Object:  "chat.completion",
@@ -131,8 +134,9 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		Choices: []api.Choice{{
 			Index: 0,
 			Message: &api.ChatMessage{
-				Role:    "assistant",
-				Content: api.Content{Text: fullText},
+				Role:      "assistant",
+				Content:   api.Content{Text: content},
+				Reasoning: reasoning,
 			},
 			FinishReason: anthroResp.StopReason,
 		}},
@@ -162,6 +166,8 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 	go func() {
 		defer close(ch)
 
+		parser := processing.NewStreamParser()
+
 		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, ar, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
@@ -186,9 +192,13 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 				}
 			case "content_block_delta":
 				if event.Delta != nil && event.Delta.Type == "text_delta" {
+					c, r := parser.Process(event.Delta.Text)
 					ch <- api.StreamResult{Response: &api.ChatResponse{
 						Choices: []api.Choice{{
-							Delta: &api.ChatMessage{Content: api.Content{Text: event.Delta.Text}},
+							Delta: &api.ChatMessage{
+								Content:   api.Content{Text: c},
+								Reasoning: r,
+							},
 						}},
 					}}
 				}
