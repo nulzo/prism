@@ -76,37 +76,42 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 
 	// consume the channel and flush to http
 	c.Stream(func(w io.Writer) bool {
-		result, ok := <-streamChan
-		if !ok {
-			// channel is closed
-			_, err := io.WriteString(w, "data: [DONE]\n\n")
-			if err != nil {
+		select {
+		case <-c.Request.Context().Done():
+			// Client disconnected, stop processing
+			return false
+		case result, ok := <-streamChan:
+			if !ok {
+				// channel is closed
+				_, err := io.WriteString(w, "data: [DONE]\n\n")
+				if err != nil {
+					return false
+				}
 				return false
 			}
-			return false
-		}
 
-		if result.Err != nil {
-			errResp := api.ChatResponse{
-				Choices: []api.Choice{{
-					FinishReason: "error",
-					Error:        &api.ErrorResponse{Message: result.Err.Error()},
-				}},
-			}
-			data, _ := json.Marshal(errResp)
-			_, err := fmt.Fprintf(w, "data: %s\n\n", data)
-			if err != nil {
-				return false
-			}
-			// if there's an error we will stop streaming
-			return false
-		}
-
-		if result.Response != nil {
-			data, err := json.Marshal(result.Response)
-			if err == nil {
+			if result.Err != nil {
+				errResp := api.ChatResponse{
+					Choices: []api.Choice{{
+						FinishReason: "error",
+						Error:        &api.ErrorResponse{Message: result.Err.Error()},
+					}},
+				}
+				data, _ := json.Marshal(errResp)
 				_, err := fmt.Fprintf(w, "data: %s\n\n", data)
-				return err == nil
+				if err != nil {
+					return false
+				}
+				// if there's an error we will stop streaming
+				return false
+			}
+
+			if result.Response != nil {
+				data, err := json.Marshal(result.Response)
+				if err == nil {
+					_, err := fmt.Fprintf(w, "data: %s\n\n", data)
+					return err == nil
+				}
 			}
 		}
 

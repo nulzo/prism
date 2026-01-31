@@ -87,18 +87,12 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	start := time.Now()
 	resp, err := provider.Chat(ctx, &reqClone)
-	if err != nil {
-		return nil, fmt.Errorf("provider execution failed: %w", err)
-	}
-
 	latency := time.Since(start)
 
 	var userID, apiKeyID, appName string
-
 	if val, ok := ctx.Value(store.ContextKeyAppName).(string); ok {
 		appName = val
 	}
-
 	if apiKey, ok := ctx.Value(store.ContextKeyAPIKey).(*model.APIKey); ok {
 		userID = apiKey.UserID
 		apiKeyID = apiKey.ID
@@ -112,6 +106,31 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		}
 	}
 
+	if err != nil {
+		statusCode := 500
+		finishReason := "error"
+		if errors.Is(err, context.Canceled) {
+			statusCode = 499
+			finishReason = "canceled"
+		}
+
+		s.ingestor.Log(&model.RequestLog{
+			ID:              u.String(),
+			UserID:          userID,
+			APIKeyID:        apiKeyID,
+			AppName:         appName,
+			ProviderID:      provider.Name(),
+			ModelID:         req.Model,
+			UpstreamModelID: upstreamModelID,
+			FinishReason:    finishReason,
+			StatusCode:      statusCode,
+			LatencyMS:       latency.Milliseconds(),
+			IsStreamed:      false,
+			CreatedAt:       time.Now(),
+		})
+		return nil, fmt.Errorf("provider execution failed: %w", err)
+	}
+
 	finishReason := ""
 	if len(resp.Choices) > 0 {
 		finishReason = resp.Choices[0].FinishReason
@@ -119,7 +138,6 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	log := &model.RequestLog{
 		ID:               u.String(),
-		UpstreamID:       resp.ID,
 		UserID:           userID,
 		APIKeyID:         apiKeyID,
 		AppName:          appName,
@@ -293,14 +311,28 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 				}
 			}
 
-			outChan <- result
+			select {
+			case outChan <- result:
+			case <-ctx.Done():
+				// Stop sending tokens if client disconnected
+				goto finalize
+			}
 		}
 
+	finalize:
 		// Log after stream closes
 		latency := time.Since(start)
 		var ttftMS sql.NullInt64
 		if ttft != nil {
 			ttftMS = sql.NullInt64{Int64: ttft.Milliseconds(), Valid: true}
+		}
+
+		statusCode := 200
+		if ctx.Err() != nil {
+			statusCode = 499
+			if finishReason == "" {
+				finishReason = "canceled"
+			}
 		}
 
 		log := &model.RequestLog{
@@ -313,7 +345,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			UpstreamModelID:  upstreamID,
 			UpstreamRemoteID: lastID,
 			FinishReason:     finishReason,
-			StatusCode:       200,
+			StatusCode:       statusCode,
 			LatencyMS:        latency.Milliseconds(),
 			TTFTMS:           ttftMS,
 			IsStreamed:       true,
