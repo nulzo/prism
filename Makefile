@@ -70,4 +70,4 @@ docker-build: ## Build out docker image
 	docker build -t $(IMAGE_NAME):latest --build-arg PRISM_VERSION=$(VERSION) -f $(DOCKER_FILE) .
 
 docker-run: ## Run docker container from image
-	docker run -p 8080:8080 --env-file .env $(IMAGE_NAME):latest
+	docker run -p 8080:8080 -d --env-file .env $(IMAGE_NAME):latest
