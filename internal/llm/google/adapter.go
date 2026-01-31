@@ -40,8 +40,15 @@ func (a *Adapter) Name() string { return a.config.ID }
 func (a *Adapter) Type() string { return pn }
 
 type GeminiPart struct {
-	Text string `json:"text,omitempty"`
+	Text       string      `json:"text,omitempty"`
+	InlineData *GeminiBlob `json:"inlineData,omitempty"`
 }
+
+type GeminiBlob struct {
+	MimeType string `json:"mimeType"`
+	Data     string `json:"data"`
+}
+
 type GeminiContent struct {
 	Role  string       `json:"role,omitempty"`
 	Parts []GeminiPart `json:"parts"`
@@ -70,10 +77,37 @@ func Shape(req []api.ChatMessage) (GeminiRequest, error) {
 		if m.Role == string(api.Assistant) {
 			role = api.ModelAssistant
 		}
-		gr.Contents = append(gr.Contents, GeminiContent{
-			Role:  string(role),
-			Parts: []GeminiPart{{Text: m.Content.Text}},
-		})
+
+		var parts []GeminiPart
+		
+		// Text only
+		if m.Content.Text != "" && len(m.Content.Parts) == 0 {
+			parts = append(parts, GeminiPart{Text: m.Content.Text})
+		}
+
+		// Multipart
+		for _, p := range m.Content.Parts {
+			if p.Type == "text" {
+				parts = append(parts, GeminiPart{Text: p.Text})
+			} else if p.Type == "image_url" && p.ImageURL != nil {
+				imgData, err := processing.ProcessImageURL(p.ImageURL.URL)
+				if err == nil {
+					parts = append(parts, GeminiPart{
+						InlineData: &GeminiBlob{
+							MimeType: imgData.MediaType,
+							Data:     imgData.Data,
+						},
+					})
+				}
+			}
+		}
+
+		if len(parts) > 0 {
+			gr.Contents = append(gr.Contents, GeminiContent{
+				Role:  string(role),
+				Parts: parts,
+			})
+		}
 	}
 	return gr, nil
 }

@@ -38,8 +38,8 @@ func (a *Adapter) Name() string { return a.config.ID }
 func (a *Adapter) Type() string { return "anthropic" }
 
 type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role    string      `json:"role"`
+	Content interface{} `json:"content"` // string or []Content
 }
 type Request struct {
 	Model     string    `json:"model"`
@@ -56,8 +56,14 @@ type Response struct {
 	Usage      Usage     `json:"usage"`
 }
 type Content struct {
-	Type string `json:"type"`
-	Text string `json:"text"`
+	Type   string       `json:"type"`
+	Text   string       `json:"text,omitempty"`
+	Source *ImageSource `json:"source,omitempty"`
+}
+type ImageSource struct {
+	Type      string `json:"type"`       // "base64"
+	MediaType string `json:"media_type"` // "image/jpeg"
+	Data      string `json:"data"`
 }
 type Usage struct {
 	InputTokens  int `json:"input_tokens"`
@@ -89,10 +95,44 @@ func toAnthropicReq(req *api.ChatRequest) Request {
 		if m.Role == "system" {
 			ar.System += m.Content.Text + "\n"
 		} else {
-			ar.Messages = append(ar.Messages, Message{
-				Role:    m.Role,
-				Content: m.Content.Text,
-			})
+			var contentParts []Content
+
+			// Handle simple string content
+			if m.Content.Text != "" && len(m.Content.Parts) == 0 {
+				contentParts = append(contentParts, Content{
+					Type: "text",
+					Text: m.Content.Text,
+				})
+			}
+
+			// Handle multipart content
+			for _, part := range m.Content.Parts {
+				if part.Type == "text" {
+					contentParts = append(contentParts, Content{
+						Type: "text",
+						Text: part.Text,
+					})
+				} else if part.Type == "image_url" && part.ImageURL != nil {
+					imgData, err := processing.ProcessImageURL(part.ImageURL.URL)
+					if err == nil {
+						contentParts = append(contentParts, Content{
+							Type: "image",
+							Source: &ImageSource{
+								Type:      "base64",
+								MediaType: imgData.MediaType,
+								Data:      imgData.Data,
+							},
+						})
+					}
+				}
+			}
+
+			if len(contentParts) > 0 {
+				ar.Messages = append(ar.Messages, Message{
+					Role:    m.Role,
+					Content: contentParts,
+				})
+			}
 		}
 	}
 	return ar

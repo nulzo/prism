@@ -17,33 +17,32 @@ func ExtractThinking(text string) (content string, reasoning string) {
 	length := len(text)
 
 	for cursor < length {
-		// Find start of think block
+		// find the start of think block
 		startIdx := strings.Index(text[cursor:], ThinkStart)
 		if startIdx == -1 {
-			// No more think blocks
+			// therere no more think blocks
 			contentBuilder.WriteString(text[cursor:])
 			break
 		}
-		
+
 		realStart := cursor + startIdx
 		contentBuilder.WriteString(text[cursor:realStart])
-		
-		// Move cursor to inside the tag
+
+		// move the cursor to inside the tag
 		cursor = realStart + len(ThinkStart)
-		
-		// Find end of think block
+
+		// find the end of think block
 		endIdx := strings.Index(text[cursor:], ThinkEnd)
 		if endIdx == -1 {
-			// No end tag found, assume rest is reasoning (or malformed)
-			// For robustness, we take the rest as reasoning.
+			// no end tag found, assume rest is reasoning (or malformed)
 			reasoningBuilder.WriteString(text[cursor:])
 			break
 		}
-		
+
 		realEnd := cursor + endIdx
 		reasoningBuilder.WriteString(text[cursor:realEnd])
-		
-		// Move cursor past the end tag
+
+		// move cursor past the end tag
 		cursor = realEnd + len(ThinkEnd)
 	}
 
@@ -73,20 +72,20 @@ func (p *StreamParser) Process(input string) (content string, reasoning string) 
 
 	for cursor < length {
 		if !p.inBlock {
-			// Look for start tag
+			// look for the start tag
 			idx := strings.Index(text[cursor:], ThinkStart)
 			if idx != -1 {
-				// Found tag
+				// weve found the tag
 				realIdx := cursor + idx
 				contentBuilder.WriteString(text[cursor:realIdx])
 				cursor = realIdx + len(ThinkStart)
 				p.inBlock = true
 			} else {
-				// Check for partial tag at the end
-				// A partial tag is a suffix of text that is a prefix of ThinkStart
+				// we need to check for partial tag at the end
+				// this would be a suffix of text that is a prefix of `ThinkStart``
 				matchedPartial := false
-				
-				// We check from largest possible partial (len(ThinkStart)-1) down to 1
+
+				// we check from largest possible partial (len(ThinkStart)-1) down to 1
 				maxPartial := len(ThinkStart) - 1
 				if len(text[cursor:]) < maxPartial {
 					maxPartial = len(text[cursor:])
@@ -109,7 +108,7 @@ func (p *StreamParser) Process(input string) (content string, reasoning string) 
 				}
 			}
 		} else {
-			// Inside block, look for end tag
+			// inside block, look for end tag
 			idx := strings.Index(text[cursor:], ThinkEnd)
 			if idx != -1 {
 				realIdx := cursor + idx
@@ -117,9 +116,9 @@ func (p *StreamParser) Process(input string) (content string, reasoning string) 
 				cursor = realIdx + len(ThinkEnd)
 				p.inBlock = false
 			} else {
-				// Check for partial end tag
+				// chcek for partial end tag
 				matchedPartial := false
-				
+
 				maxPartial := len(ThinkEnd) - 1
 				if len(text[cursor:]) < maxPartial {
 					maxPartial = len(text[cursor:])
