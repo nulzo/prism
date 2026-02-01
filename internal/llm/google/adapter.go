@@ -53,25 +53,45 @@ type GeminiContent struct {
 	Role  string       `json:"role,omitempty"`
 	Parts []GeminiPart `json:"parts"`
 }
-type GeminiRequest struct {
-	Contents []GeminiContent `json:"contents"`
-}
+
 type GeminiCandidate struct {
 	Content      GeminiContent `json:"content"`
 	FinishReason string        `json:"finishReason"`
 }
+
 type GeminiUsageMetadata struct {
 	PromptTokenCount     int `json:"promptTokenCount"`
 	CandidatesTokenCount int `json:"candidatesTokenCount"`
 	TotalTokenCount      int `json:"totalTokenCount"`
 }
+
+type GeminiSafetySetting struct {
+	Category  string `json:"category"`
+	Threshold string `json:"threshold"`
+}
+
 type GeminiResponse struct {
 	Candidates    []GeminiCandidate   `json:"candidates"`
 	UsageMetadata GeminiUsageMetadata `json:"usageMetadata"`
 }
 
+type GeminiRequest struct {
+	Contents       []GeminiContent       `json:"contents"`
+	SafetySettings []GeminiSafetySetting `json:"safetySettings,omitempty"`
+}
+
 func Shape(req []api.ChatMessage) (GeminiRequest, error) {
-	gr := GeminiRequest{}
+	gr := GeminiRequest{
+		// default to having no moderation by default
+		SafetySettings: []GeminiSafetySetting{
+			{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "BLOCK_NONE"},
+			{Category: "HARM_CATEGORY_HATE_SPEECH", Threshold: "BLOCK_NONE"},
+			{Category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", Threshold: "BLOCK_NONE"},
+			{Category: "HARM_CATEGORY_DANGEROUS_CONTENT", Threshold: "BLOCK_NONE"},
+			{Category: "HARM_CATEGORY_CIVIC_INTEGRITY", Threshold: "BLOCK_NONE"},
+		},
+	}
+
 	for _, m := range req {
 		role := api.User
 		if m.Role == string(api.Assistant) {
@@ -79,13 +99,11 @@ func Shape(req []api.ChatMessage) (GeminiRequest, error) {
 		}
 
 		var parts []GeminiPart
-		
-		// Text only
+
 		if m.Content.Text != "" && len(m.Content.Parts) == 0 {
 			parts = append(parts, GeminiPart{Text: m.Content.Text})
 		}
 
-		// Multipart
 		for _, p := range m.Content.Parts {
 			if p.Type == "text" {
 				parts = append(parts, GeminiPart{Text: p.Text})
