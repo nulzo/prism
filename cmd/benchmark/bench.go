@@ -1,15 +1,18 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	vegeta "github.com/tsenart/vegeta/v12/lib"
@@ -18,6 +21,15 @@ import (
 const (
 	mockPort = 9091
 	appPort  = 8081
+)
+
+var (
+	streamChunk1 = []byte(`data: {"choices":[{"delta":{"content":"Bench"}}]}\n\n`)
+	streamChunk2 = []byte(`data: {"choices":[{"delta":{"content":"mark"}}]}\n\n`)
+	streamChunk3 = []byte(`data: {"choices":[{"delta":{"content":" safe"}}]}\n\n`)
+	streamChunk4 = []byte(`data: {"choices":[{"delta":{"content":" response"}}]}\n\n`)
+	streamDone   = []byte(`data: [DONE]\n\n`)
+	unaryResp    = []byte(`{"id":"bench-123","choices":[{"message":{"content":"Hello"}}]}`)
 )
 
 func main() {
@@ -49,15 +61,16 @@ func main() {
 	fmt.Println("Starting application...")
 	cmd := exec.Command("./bin/server")
 
-		// FORCE the app to use our config file and specific port
-		cmd.Env = append(os.Environ(), fmt.Sprintf("CONFIG_FILE=%s", configFile))
-	    cmd.Env = append(cmd.Env, fmt.Sprintf("SERVER_PORT=%d", appPort))
-	    cmd.Env = append(cmd.Env, "LOG_LEVEL=error")
-	    
-	    // Redirect output to file for debugging	// logFile, _ := os.Create("bench_server.log")
-	// defer logFile.Close()
-	// cmd.Stdout = logFile
-	// cmd.Stderr = logFile
+	// FORCE the app to use our config file and specific port
+	cmd.Env = append(os.Environ(), fmt.Sprintf("CONFIG_FILE=%s", configFile))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("SERVER_PORT=%d", appPort))
+	cmd.Env = append(cmd.Env, "LOG_LEVEL=error")
+
+	// Redirect output to file for debugging
+	logFile, _ := os.Create("bench_server.log")
+	defer logFile.Close()
+	cmd.Stdout = logFile
+	cmd.Stderr = logFile
 
 	if err := cmd.Start(); err != nil {
 		log.Fatalf("Failed to start app: %v", err)
@@ -71,8 +84,10 @@ func main() {
 	// Wait for app to be ready
 	waitForApp(fmt.Sprintf("http://localhost:%d/health", appPort))
 
+	// Signal channel to stop background tasks (monitor, chaos monkey)
+	done := make(chan struct{})
+
 	// monitor resource usage in background
-	done := make(chan bool)
 	go func() {
 		// Wait for pprof/expvar to initialize
 		time.Sleep(2 * time.Second)
@@ -92,18 +107,29 @@ func main() {
 		body = `{"model": "openai/gpt-3.5-turbo", "stream": true, "messages": [{"role": "user", "content": "Hello"}]}`
 	}
 
-	targeter := vegeta.NewStaticTargeter(vegeta.Target{
-		Method: "POST",
-		URL:    fmt.Sprintf("http://localhost:%d/api/v1/chat/completions", appPort),
-		Body:   []byte(body),
-		Header: http.Header{
-			"Content-Type":  []string{"application/json"},
-			"Authorization": []string{"Bearer bench-key-12345"},
-		},
-	})
+	// "Gold Standard" Targeter: Dynamically inject timestamp into headers
+	targeter := func(t *vegeta.Target) error {
+		t.Method = "POST"
+		t.URL = fmt.Sprintf("http://localhost:%d/api/v1/chat/completions", appPort)
+		t.Body = []byte(body)
+		t.Header = http.Header{
+			"Content-Type":      []string{"application/json"},
+			"Authorization":     []string{"Bearer bench-key-12345"},
+			"X-Benchmark-Start": []string{strconv.FormatInt(time.Now().UnixNano(), 10)},
+		}
+		return nil
+	}
 
 	if *chaos {
-		fmt.Println("CHAOS MODE ENABLED: Mock server will abruptly close some streaming connections.")
+		fmt.Println("CHAOS MODE ENABLED: Starting Chaos Monkey sidecar...")
+		chaosConcurrency := *rate / 10
+		if chaosConcurrency < 5 {
+			chaosConcurrency = 5
+		}
+		if chaosConcurrency > 50 {
+			chaosConcurrency = 50
+		}
+		go startChaosMonkey(fmt.Sprintf("http://localhost:%d/api/v1/chat/completions", appPort), chaosConcurrency, done)
 	}
 
 	attacker := vegeta.NewAttacker(vegeta.KeepAlive(true))
@@ -114,8 +140,8 @@ func main() {
 	}
 	metrics.Close()
 
-	// stop monitoring
-	done <- true
+	// stop monitoring and chaos monkey
+	close(done)
 
 	fmt.Println("--------------------------------------------------")
 	fmt.Println("99th percentile: ", metrics.Latencies.P99)
@@ -127,11 +153,13 @@ func main() {
 
 	if len(metrics.Errors) > 0 {
 		fmt.Println("Error Set (first 5 unique):")
+
 		uniqueErrors := make(map[string]bool)
 		count := 0
 		for _, msg := range metrics.Errors {
 			if !uniqueErrors[msg] && count < 5 {
 				fmt.Println(msg)
+
 				uniqueErrors[msg] = true
 				count++
 			}
@@ -140,6 +168,51 @@ func main() {
 
 	// Cleanup
 	os.Remove("bench.db")
+}
+
+func startChaosMonkey(url string, concurrency int, done chan struct{}) {
+	fmt.Printf("Starting Chaos Monkey with %d concurrent disrupters (random disconnects 1-200ms)\n", concurrency)
+	var wg sync.WaitGroup
+	wg.Add(concurrency)
+
+	for i := 0; i < concurrency; i++ {
+		go func() {
+			defer wg.Done()
+			client := &http.Client{
+				Transport: &http.Transport{
+					MaxIdleConns:        100,
+					MaxIdleConnsPerHost: 100,
+					DisableKeepAlives:   false,
+				},
+			}
+
+			payload := `{"model": "openai/gpt-3.5-turbo", "stream": true, "messages": [{"role": "user", "content": "Chaos Request"}]}`
+
+			for {
+				select {
+				case <-done:
+					return
+				default:
+					// Randomly disconnect between 1ms and 200ms
+					timeout := time.Duration(rand.Intn(200)+1) * time.Millisecond
+
+					ctx, cancel := context.WithTimeout(context.Background(), timeout)
+					req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(payload))
+					req.Header.Set("Content-Type", "application/json")
+					req.Header.Set("Authorization", "Bearer bench-key-12345")
+
+					resp, err := client.Do(req)
+					if err == nil {
+						resp.Body.Close()
+					}
+					cancel()
+
+					// Sleep briefly to control request rate per goroutine
+					time.Sleep(time.Duration(rand.Intn(50)) * time.Millisecond)
+				}
+			}
+		}()
+	}
 }
 
 func startMockServer() {
@@ -156,42 +229,44 @@ func startMockServer() {
 	})
 
 	mux.HandleFunc("/v1/chat/completions", func(w http.ResponseWriter, r *http.Request) {
+		startStr := r.Header.Get("X-Benchmark-Start")
+		if startStr != "" {
+			start, _ := strconv.ParseInt(startStr, 10, 64)
+			latency := time.Now().UnixNano() - start
+			// Sample 1% of requests to avoid console spam
+			if rand.Intn(100) == 0 {
+				fmt.Printf("DEBUG: Proxy Overhead: %v\n", time.Duration(latency))
+			}
+		}
+
 		var req map[string]interface{}
 		_ = json.NewDecoder(r.Body).Decode(&req)
 
 		if val, ok := req["stream"].(bool); ok && val {
 			w.Header().Set("Content-Type", "text/event-stream")
 			flusher, _ := w.(http.Flusher)
-			tokens := []string{"Bench", "mark", " safe", " response"}
-			for _, t := range tokens {
+
+			chunks := [][]byte{streamChunk1, streamChunk2, streamChunk3, streamChunk4}
+			for _, chunk := range chunks {
 				time.Sleep(50 * time.Millisecond)
-
-				resp := map[string]interface{}{
-					"choices": []interface{}{map[string]interface{}{"delta": map[string]string{"content": t}}},
-				}
-				b, _ := json.Marshal(resp)
-				fmt.Fprintf(w, "data: %s\n\n", b)
+				w.Write(chunk)
 				flusher.Flush()
-
-				// Simulate random server-side disconnect for Chaos mode (mocking upstream failure)
-				// Note: chaos is passed via global or we can detect it.
-				// We'll just always simulate it for now if we want to see server reaction.
 			}
-			fmt.Fprintf(w, "data: [DONE]\n\n")
+			w.Write(streamDone)
 			flusher.Flush()
 			return
 		}
 
 		time.Sleep(10 * time.Millisecond)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"id":"bench-123","choices":[{"message":{"content":"Hello"}}]}`))
+		w.Write(unaryResp)
 	})
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(200) })
 	_ = http.ListenAndServe(fmt.Sprintf(":%d", mockPort), mux)
 }
 
-func monitorResources(pid int, done chan bool) {
+func monitorResources(pid int, done chan struct{}) {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
@@ -203,7 +278,6 @@ func monitorResources(pid int, done chan bool) {
 		case <-done:
 			return
 		case <-ticker.C:
-			// 1. Fetch Memory Stats from application via expvar
 			resp, err := http.Get("http://127.0.0.1:6060/debug/vars")
 			if err != nil {
 				fmt.Printf("DEBUG: monitorResources failed to reach expvar: %v\n", err)
@@ -223,9 +297,6 @@ func monitorResources(pid int, done chan bool) {
 			}
 			resp.Body.Close()
 
-			// 2. Fetch CPU Stats from OS via 'ps'
-			// This is an external check, so it works even if pprof is slow,
-			// though pprof/expvar is still needed for memory.
 			cpu := 0.0
 			out, err := exec.Command("ps", "-p", strconv.Itoa(pid), "-o", "%cpu").Output()
 			if err == nil {
