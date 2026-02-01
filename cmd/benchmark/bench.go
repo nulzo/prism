@@ -56,7 +56,9 @@ func main() {
 	if err := os.WriteFile(configFile, []byte(benchConfig), 0644); err != nil {
 		log.Fatalf("Failed to write config: %v", err)
 	}
-	defer os.Remove(configFile)
+	defer func() {
+		_ = os.Remove(configFile)
+	}()
 
 	fmt.Println("Starting application...")
 	cmd := exec.Command("./bin/server")
@@ -68,7 +70,9 @@ func main() {
 
 	// Redirect output to file for debugging
 	logFile, _ := os.Create("bench_server.log")
-	defer logFile.Close()
+	defer func() {
+		_ = logFile.Close()
+	}()
 	cmd.Stdout = logFile
 	cmd.Stderr = logFile
 
@@ -77,7 +81,7 @@ func main() {
 	}
 	defer func() {
 		if cmd.Process != nil {
-			cmd.Process.Kill()
+			_ = cmd.Process.Kill()
 		}
 	}()
 
@@ -167,7 +171,7 @@ func main() {
 	}
 
 	// Cleanup
-	os.Remove("bench.db")
+	_ = os.Remove("bench.db")
 }
 
 func startChaosMonkey(url string, concurrency int, done chan struct{}) {
@@ -203,7 +207,7 @@ func startChaosMonkey(url string, concurrency int, done chan struct{}) {
 
 					resp, err := client.Do(req)
 					if err == nil {
-						resp.Body.Close()
+						_ = resp.Body.Close()
 					}
 					cancel()
 
@@ -220,7 +224,7 @@ func startMockServer() {
 
 	mux.HandleFunc("/v1/models", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{
+		_, _ = w.Write([]byte(`{
 			"object": "list",
 			"data": [
 				{"id": "gpt-3.5-turbo", "object": "model", "created": 1687882411, "owned_by": "openai"}
@@ -249,17 +253,20 @@ func startMockServer() {
 			chunks := [][]byte{streamChunk1, streamChunk2, streamChunk3, streamChunk4}
 			for _, chunk := range chunks {
 				time.Sleep(50 * time.Millisecond)
-				w.Write(chunk)
+				defer func() {
+					_, _ = w.Write(chunk)
+				}()
+
 				flusher.Flush()
 			}
-			w.Write(streamDone)
+			_, _ = w.Write(streamDone)
 			flusher.Flush()
 			return
 		}
 
 		time.Sleep(10 * time.Millisecond)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(unaryResp)
+		_, _ = w.Write(unaryResp)
 	})
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(200) })
@@ -292,10 +299,14 @@ func monitorResources(pid int, done chan struct{}) {
 			}
 
 			if err := json.NewDecoder(resp.Body).Decode(&vars); err != nil {
-				resp.Body.Close()
+				defer func() {
+					_ = resp.Body.Close()
+				}()
 				continue
 			}
-			resp.Body.Close()
+			defer func() {
+				_ = resp.Body.Close()
+			}()
 
 			cpu := 0.0
 			out, err := exec.Command("ps", "-p", strconv.Itoa(pid), "-o", "%cpu").Output()
@@ -320,8 +331,12 @@ func monitorResources(pid int, done chan struct{}) {
 func waitForApp(url string) {
 	for i := 0; i < 20; i++ {
 		resp, err := http.Get(url)
-		if err == nil && resp.StatusCode == 200 {
-			return
+		if err == nil {
+			if resp.StatusCode == 200 {
+				_ = resp.Body.Close()
+				return
+			}
+			_ = resp.Body.Close()
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
