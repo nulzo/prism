@@ -30,6 +30,8 @@ import (
 	_ "github.com/nulzo/model-router-api/internal/llm/google"
 	_ "github.com/nulzo/model-router-api/internal/llm/ollama"
 	_ "github.com/nulzo/model-router-api/internal/llm/openai"
+	_ "expvar"
+	_ "net/http/pprof"
 )
 
 // Version is the version of the application. We inject this during
@@ -166,6 +168,14 @@ func main() {
 		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
 		Handler: apiServer.Handler(),
 	}
+
+	// Start pprof server
+	go func() {
+		fmt.Println("CRITICAL: Starting pprof server on :6060")
+		if err := http.ListenAndServe(":6060", nil); err != nil {
+			fmt.Printf("CRITICAL: pprof server failed: %v\n", err)
+		}
+	}()
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
