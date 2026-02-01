@@ -26,12 +26,25 @@ type Adapter struct {
 }
 
 func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
+	fmt.Printf("DEBUG: OpenAI Adapter Init. ID=%s BaseURL='%s' APIKeyLen=%d\n", config.ID, config.BaseURL, len(config.APIKey))
 	if config.BaseURL == "" {
 		config.BaseURL = "https://api.openai.com/v1"
 	}
+
+	// Use a custom transport to support high concurrency
+	transport := &http.Transport{
+		MaxIdleConns:        500,
+		MaxIdleConnsPerHost: 500,
+		MaxConnsPerHost:     500, // Limit total connections to prevent storm
+		IdleConnTimeout:     90 * time.Second,
+	}
+
 	return &Adapter{
 		config: config,
-		client: &http.Client{Timeout: 60 * time.Second},
+		client: &http.Client{
+			Timeout:   60 * time.Second,
+			Transport: transport,
+		},
 	}, nil
 }
 

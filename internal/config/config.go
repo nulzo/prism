@@ -86,6 +86,17 @@ func LoadConfig() (*Config, error) {
 	v.SetDefault("rate_limit.burst", 20)
 	v.SetDefault("database.path", "./router.db")
 
+	// Allow explicit config file override for safety
+	if envConfigFile := os.Getenv("CONFIG_FILE"); envConfigFile != "" {
+		v.SetConfigFile(envConfigFile)
+	} else {
+		v.SetConfigName("config")
+		v.SetConfigType("yaml")
+		v.AddConfigPath(".")
+		v.AddConfigPath("./config")
+		v.AddConfigPath("./internal/config")
+	}
+
 	// Environment Variables
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
@@ -96,9 +107,17 @@ func LoadConfig() (*Config, error) {
 			return nil, fmt.Errorf("error reading config file: %w", err)
 		}
 	}
+	fmt.Println("DEBUG: Config loaded from:", v.ConfigFileUsed())
 
-	// Load models
+	// Load models from filesystem
 	allModels := loadModels()
+	
+	// Merge with models already in config (if any)
+	var configModels []api.ModelDefinition
+	if err := v.UnmarshalKey("models", &configModels); err == nil {
+		allModels = append(allModels, configModels...)
+	}
+	
 	v.Set("models", allModels)
 
 	var cfg Config
