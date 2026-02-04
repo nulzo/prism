@@ -163,12 +163,18 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	ticker := time.NewTicker(500 * time.Millisecond)
 	defer ticker.Stop()
 
+	// Safety timeout of 10 minutes to prevent infinite polling
+	timeout := time.NewTimer(10 * time.Minute)
+	defer timeout.Stop()
+
 	var finalImageURL string
 
 	for {
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()
+		case <-timeout.C:
+			return nil, fmt.Errorf("polling timed out after 10 minutes")
 		case <-ticker.C:
 			// Poll
 			pollReq, err := http.NewRequestWithContext(ctx, "GET", pollingURL, nil)
@@ -185,9 +191,15 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			defer pollResp.Body.Close()
 
 			var pollResult PollingResponse
-			// Read body for debugging if decode fails
 			bodyBytes, _ := io.ReadAll(pollResp.Body)
+
+			// Try to unmarshal regardless of status code, as errors often contain JSON details
 			if err := json.Unmarshal(bodyBytes, &pollResult); err != nil {
+				// If we can't parse JSON and status is bad, fail with status
+				if pollResp.StatusCode != http.StatusOK {
+					return nil, fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, string(bodyBytes))
+				}
+				// If status is OK but JSON is bad, return error
 				return nil, fmt.Errorf("failed to decode polling response: %w", err)
 			}
 
@@ -196,8 +208,19 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 					finalImageURL = pollResult.Result.Sample
 				}
 				goto DonePolling
-			} else if pollResult.Status == "Error" || pollResult.Status == "Failed" {
-				return nil, fmt.Errorf("generation failed: %s", pollResult.Message)
+			} else if pollResult.Status == "Error" || pollResult.Status == "Failed" ||
+				pollResult.Status == "Request Moderated" || pollResult.Status == "Content Moderated" ||
+				pollResult.Status == "Task not found" {
+				errMsg := pollResult.Message
+				if errMsg == "" {
+					errMsg = pollResult.Status
+				} else {
+					errMsg = fmt.Sprintf("%s (%s)", errMsg, pollResult.Status)
+				}
+				return nil, fmt.Errorf("generation failed: %s", errMsg)
+			} else if pollResp.StatusCode != http.StatusOK {
+				// Fallback: If status code is error but "Status" field didn't catch it
+				return nil, fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, pollResult.Message)
 			}
 			// Continue polling if "Processing" or "Pending"
 		}
