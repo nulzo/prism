@@ -11,6 +11,7 @@ import (
 
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -39,12 +40,6 @@ func (a *Adapter) Name() string { return a.config.ID }
 func (a *Adapter) Type() string { return pn }
 
 // Request structures
-type GenerationRequest struct {
-	Prompt string `json:"prompt"`
-	Width  int    `json:"width,omitempty"`
-	Height int    `json:"height,omitempty"`
-}
-
 type GenerationResponse struct {
 	ID         string `json:"id"`
 	PollingURL string `json:"polling_url"`
@@ -61,17 +56,25 @@ type PollingResponse struct {
 }
 
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
-
 	prompt := ""
+	var inputImages []string
+
 	for i := len(req.Messages) - 1; i >= 0; i-- {
 		if req.Messages[i].Role == string(api.User) {
 			// Extract text from Content
 			if req.Messages[i].Content.Text != "" {
 				prompt = req.Messages[i].Content.Text
-			} else {
-				for _, p := range req.Messages[i].Content.Parts {
-					if p.Type == "text" {
-						prompt += p.Text
+			}
+			
+			// Extract parts
+			for _, p := range req.Messages[i].Content.Parts {
+				if p.Type == "text" {
+					prompt += p.Text
+				} else if p.Type == "image_url" && p.ImageURL != nil {
+					// Process image to get base64 data
+					imgData, err := processing.ProcessImageURL(p.ImageURL.URL)
+					if err == nil {
+						inputImages = append(inputImages, imgData.Data)
 					}
 				}
 			}
@@ -83,20 +86,56 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		return nil, fmt.Errorf("no prompt found in messages")
 	}
 
-	bflReq := GenerationRequest{
-		Prompt: prompt,
-		Width:  1024,
-		Height: 1024,
+	// Prepare request body dynamically based on model
+	reqBodyMap := map[string]interface{}{
+		"prompt": prompt,
+		"width":  1024,
+		"height": 1024,
+	}
+
+	modelID := req.Model
+	
+	// Map input images to the correct field based on model
+	if len(inputImages) > 0 {
+		switch modelID {
+		case "flux-pro-1.0-fill", "flux-fill-pro":
+			// Inpainting requires "image" and optionally "mask"
+			reqBodyMap["image"] = inputImages[0]
+			if len(inputImages) > 1 {
+				reqBodyMap["mask"] = inputImages[1]
+			}
+			
+		case "flux-kontext-max", "flux-kontext-pro":
+			// Supports input_image, input_image_2, etc.
+			reqBodyMap["input_image"] = inputImages[0]
+			if len(inputImages) > 1 {
+				reqBodyMap["input_image_2"] = inputImages[1]
+			}
+			if len(inputImages) > 2 {
+				reqBodyMap["input_image_3"] = inputImages[2]
+			}
+			if len(inputImages) > 3 {
+				reqBodyMap["input_image_4"] = inputImages[3]
+			}
+			
+		case "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-pro-1.1-raw", "flux-2-pro":
+			// Standard models usually take "image_prompt" for variation/redux
+			reqBodyMap["image_prompt"] = inputImages[0]
+			
+		default:
+			// Fallback
+			reqBodyMap["image_prompt"] = inputImages[0]
+		}
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", a.config.BaseURL, req.Model)
 
-	reqBody, err := json.Marshal(bflReq)
+	jsonBody, err := json.Marshal(reqBodyMap)
 	if err != nil {
 		return nil, err
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(reqBody))
+	httpReq, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, err
 	}
@@ -166,6 +205,14 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 DonePolling:
+
+	// 5. Download the image and convert to base64
+	// BFL URLs are ephemeral (10 min), so we fetch it now to provide a persistent result
+	// and stay consistent with other providers in this app.
+	imgData, err := processing.ProcessImageURL(finalImageURL)
+	if err == nil {
+		finalImageURL = fmt.Sprintf("data:%s;base64,%s", imgData.MediaType, imgData.Data)
+	}
 
 	return &api.ChatResponse{
 		ID:      genResp.ID,
