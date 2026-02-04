@@ -47,18 +47,20 @@ type ChatRequest struct {
 	Route      string               `json:"route,omitempty"` // 'fallback'
 	Provider   *ProviderPreferences `json:"provider,omitempty"`
 	User       string               `json:"user,omitempty"`
+	Modalities []string             `json:"modalities,omitempty"`
 
 	// Debug options
 	Debug *DebugOptions `json:"debug,omitempty"`
 }
 
 type ChatMessage struct {
-	Role       string     `json:"role" binding:"required,oneof=user assistant system"`
-	Content    Content    `json:"content"` // string or []ContentPart
-	Reasoning  string     `json:"reasoning,omitempty"`
-	Name       string     `json:"name,omitempty"`
-	ToolCallID string     `json:"tool_call_id,omitempty"`
-	ToolCalls  []ToolCall `json:"tool_calls,omitempty"` // For assistant messages
+	Role       string        `json:"role" binding:"required,oneof=user assistant system"`
+	Content    Content       `json:"content"` // string or []ContentPart
+	Reasoning  string        `json:"reasoning,omitempty"`
+	Name       string        `json:"name,omitempty"`
+	ToolCallID string        `json:"tool_call_id,omitempty"`
+	ToolCalls  []ToolCall    `json:"tool_calls,omitempty"` // For assistant messages
+	Images     []ContentPart `json:"images,omitempty"`     // For image generation results
 }
 
 // Content handles the union type: string | []ContentPart

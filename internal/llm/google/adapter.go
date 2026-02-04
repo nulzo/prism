@@ -70,17 +70,23 @@ type GeminiSafetySetting struct {
 	Threshold string `json:"threshold"`
 }
 
+type GeminiGenerationConfig struct {
+	ResponseModalities []string `json:"responseModalities,omitempty"`
+	Temperature        float64  `json:"temperature,omitempty"`
+}
+
 type GeminiResponse struct {
 	Candidates    []GeminiCandidate   `json:"candidates"`
 	UsageMetadata GeminiUsageMetadata `json:"usageMetadata"`
 }
 
 type GeminiRequest struct {
-	Contents       []GeminiContent       `json:"contents"`
-	SafetySettings []GeminiSafetySetting `json:"safetySettings,omitempty"`
+	Contents         []GeminiContent         `json:"contents"`
+	SafetySettings   []GeminiSafetySetting   `json:"safetySettings,omitempty"`
+	GenerationConfig *GeminiGenerationConfig `json:"generationConfig,omitempty"`
 }
 
-func Shape(req []api.ChatMessage) (GeminiRequest, error) {
+func Shape(req *api.ChatRequest) (GeminiRequest, error) {
 	gr := GeminiRequest{
 		// default to having no moderation by default
 		SafetySettings: []GeminiSafetySetting{
@@ -92,7 +98,23 @@ func Shape(req []api.ChatMessage) (GeminiRequest, error) {
 		},
 	}
 
-	for _, m := range req {
+	if len(req.Modalities) > 0 {
+		gr.GenerationConfig = &GeminiGenerationConfig{}
+		var mods []string
+		for _, m := range req.Modalities {
+			mods = append(mods, strings.ToUpper(m))
+		}
+		gr.GenerationConfig.ResponseModalities = mods
+	}
+
+	if req.Temperature != 0 {
+		if gr.GenerationConfig == nil {
+			gr.GenerationConfig = &GeminiGenerationConfig{}
+		}
+		gr.GenerationConfig.Temperature = req.Temperature
+	}
+
+	for _, m := range req.Messages {
 		role := api.User
 		if m.Role == string(api.Assistant) {
 			role = api.ModelAssistant
@@ -131,7 +153,7 @@ func Shape(req []api.ChatMessage) (GeminiRequest, error) {
 }
 
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
-	var shape, _ = Shape(req.Messages)
+	var shape, _ = Shape(req)
 
 	url := fmt.Sprintf("%s/models/%s:generateContent?key=%s",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -148,12 +170,25 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		return nil, fmt.Errorf("no candidates from gemini")
 	}
 
-	text := ""
-	if len(gResp.Candidates[0].Content.Parts) > 0 {
-		text = gResp.Candidates[0].Content.Parts[0].Text
+	var sb strings.Builder
+	var images []api.ContentPart
+
+	for _, part := range gResp.Candidates[0].Content.Parts {
+		if part.Text != "" {
+			sb.WriteString(part.Text)
+		}
+		if part.InlineData != nil {
+			dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
+			images = append(images, api.ContentPart{
+				Type: "image_url",
+				ImageURL: &api.ImageURL{
+					URL: dataURL,
+				},
+			})
+		}
 	}
 
-	content, reasoning := processing.ExtractThinking(text)
+	content, reasoning := processing.ExtractThinking(sb.String())
 
 	return &api.ChatResponse{
 		ID:    fmt.Sprintf("gemini-%d", time.Now().Unix()),
@@ -164,6 +199,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 				Role:      string(api.Assistant),
 				Content:   api.Content{Text: content},
 				Reasoning: reasoning,
+				Images:    images,
 			},
 			FinishReason: "stop",
 		}},
@@ -178,7 +214,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 
-	var shape, _ = Shape(req.Messages)
+	var shape, _ = Shape(req)
 
 	url := fmt.Sprintf("%s/models/%s:streamGenerateContent?key=%s&alt=sse",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -204,13 +240,33 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			}
 
 			if len(gResp.Candidates) > 0 && len(gResp.Candidates[0].Content.Parts) > 0 {
-				text := gResp.Candidates[0].Content.Parts[0].Text
+				var sb strings.Builder
+				var images []api.ContentPart
+
+				for _, part := range gResp.Candidates[0].Content.Parts {
+					if part.Text != "" {
+						sb.WriteString(part.Text)
+					}
+					if part.InlineData != nil {
+						dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
+						images = append(images, api.ContentPart{
+							Type: "image_url",
+							ImageURL: &api.ImageURL{
+								URL: dataURL,
+							},
+						})
+					}
+				}
+
+				text := sb.String()
 				c, r := parser.Process(text)
+				
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
 						Delta: &api.ChatMessage{
 							Content:   api.Content{Text: c},
 							Reasoning: r,
+							Images:    images,
 						},
 					}},
 				}}
