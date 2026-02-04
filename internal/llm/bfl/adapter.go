@@ -65,7 +65,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			if req.Messages[i].Content.Text != "" {
 				prompt = req.Messages[i].Content.Text
 			}
-			
+
 			// Extract parts
 			for _, p := range req.Messages[i].Content.Parts {
 				if p.Type == "text" {
@@ -88,13 +88,17 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	// Prepare request body dynamically based on model
 	reqBodyMap := map[string]interface{}{
-		"prompt": prompt,
-		"width":  1024,
-		"height": 1024,
+		"prompt":           prompt,
+		"safety_tolerance": 5,
+	}
+
+	if len(inputImages) == 0 {
+		reqBodyMap["width"] = 1024
+		reqBodyMap["height"] = 1024
 	}
 
 	modelID := req.Model
-	
+
 	// Map input images to the correct field based on model
 	if len(inputImages) > 0 {
 		switch modelID {
@@ -104,27 +108,22 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			if len(inputImages) > 1 {
 				reqBodyMap["mask"] = inputImages[1]
 			}
-			
-		case "flux-kontext-max", "flux-kontext-pro":
-			// Supports input_image, input_image_2, etc.
+
+		case "flux-kontext-max", "flux-kontext-pro", "flux-2-pro", "flux-2-flex", "flux-2-klein-4b", "flux-2-klein-9b", "flux-2-max", "flux-2-dev":
 			reqBodyMap["input_image"] = inputImages[0]
-			if len(inputImages) > 1 {
-				reqBodyMap["input_image_2"] = inputImages[1]
+
+			for idx, img := range inputImages[1:] {
+				key := fmt.Sprintf("input_image_%d", idx+2)
+				reqBodyMap[key] = img
 			}
-			if len(inputImages) > 2 {
-				reqBodyMap["input_image_3"] = inputImages[2]
-			}
-			if len(inputImages) > 3 {
-				reqBodyMap["input_image_4"] = inputImages[3]
-			}
-			
-		case "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-pro-1.1-raw", "flux-2-pro":
+
+		case "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-pro-1.1-raw", "flux-pro-1.0", "flux-1.1-pro":
 			// Standard models usually take "image_prompt" for variation/redux
 			reqBodyMap["image_prompt"] = inputImages[0]
-			
+
 		default:
-			// Fallback
-			reqBodyMap["image_prompt"] = inputImages[0]
+			// Fallback try input_image as it's becoming standard for BFL editing
+			reqBodyMap["input_image"] = inputImages[0]
 		}
 	}
 
@@ -206,7 +205,6 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 DonePolling:
 
-	// 5. Download the image and convert to base64
 	// BFL URLs are ephemeral (10 min), so we fetch it now to provide a persistent result
 	// and stay consistent with other providers in this app.
 	imgData, err := processing.ProcessImageURL(finalImageURL)
