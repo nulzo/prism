@@ -1,0 +1,286 @@
+models:
+  - id: bfl/flux-pro-1.1
+    name: FLUX1.1 [pro]
+    provider_id: bfl
+    upstream_id: flux-pro-1.1
+    description: The standard for text-to-image generation with fast, reliable and consistently stunning results.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.04'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-pro-1.1-ultra
+    name: FLUX1.1 [pro] Ultra
+    provider_id: bfl
+    upstream_id: flux-pro-1.1-ultra
+    description: Ultra high-resolution image creation - with more pixels in every picture.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.06'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-pro-1.1-raw
+    name: FLUX1.1 [pro] Raw
+    provider_id: bfl
+    upstream_id: flux-pro-1.1-raw
+    description: High-quality, with a genuine feel of candid photography.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.06'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-kontext-pro
+    name: FLUX.1 Kontext [pro]
+    provider_id: bfl
+    upstream_id: flux-kontext-pro
+    description: Create and edit images with text and images.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.04'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-kontext-max
+    name: FLUX.1 Kontext [max]
+    provider_id: bfl
+    upstream_id: flux-kontext-max
+    description: Create and edit images with text and images, maximum quality.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.08'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-fill-pro
+    name: FLUX.1 Fill [pro]
+    provider_id: bfl
+    upstream_id: flux-fill-pro
+    description: Targeted and fast text-driven image inpainting.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.05'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-2-pro
+    name: FLUX.2 [pro]
+    provider_id: bfl
+    upstream_id: flux-2-pro
+    description: Production workflows, fast turnaround.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.03'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-2-flex
+    name: FLUX.2 [flex]
+    provider_id: bfl
+    upstream_id: flux-2-flex
+    description: Maximum quality, adjustable controls.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.05'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-2-dev
+    name: FLUX.2 [dev]
+    provider_id: bfl
+    upstream_id: flux-2-dev
+    description: Local development (non-commercial).
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-2-klein-4b
+    name: FLUX.2 [klein] 4B
+    provider_id: bfl
+    upstream_id: flux-2-klein-4b
+    description: Real-time, high volume.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.014'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true
+
+  - id: bfl/flux-2-klein-9b
+    name: FLUX.2 [klein] 9B
+    provider_id: bfl
+    upstream_id: flux-2-klein-9b
+    description: Balanced quality/speed.
+    enabled: true
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0.015'
+    config:
+      context_window: 0
+      max_output: 0
+      modality: [text, image]
+      image_support: true
+      tool_use: false
+      streaming_support: false
+    architecture:
+      input_modalities: [text]
+      output_modalities: [image]
+    top_provider:
+      context_length: 0
+      max_completion_tokens: 0
+      is_moderated: true

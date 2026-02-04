@@ -27,7 +27,7 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			log.Warn(fmt.Sprintf("%s %s %s",
 				cli.CrossMark(),
 				cli.Stylize(fmt.Sprintf("%s\t", pCfg.ID), cli.Black),
-				cli.Stylize("Skipping provider due to missing API key", cli.Yellow),
+				cli.Stylize(err.Error(), cli.Yellow),
 			))
 			continue
 		}

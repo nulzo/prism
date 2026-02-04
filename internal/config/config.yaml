@@ -49,3 +49,11 @@ providers:
     base_url: "ENV:OLLAMA_BASE_URL"
     enabled: true
     requires_auth: false
+
+  - id: "bfl"
+    type: "bfl"
+    name: "Black Forest Labs"
+    api_key: "ENV:BFL_API_KEY"
+    base_url: "https://api.bfl.ai/v1"
+    enabled: true
+    requires_auth: true

@@ -27,6 +27,7 @@ import (
 	"go.uber.org/zap"
 
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
+	_ "github.com/nulzo/model-router-api/internal/llm/bfl"
 	_ "github.com/nulzo/model-router-api/internal/llm/google"
 	_ "github.com/nulzo/model-router-api/internal/llm/ollama"
 	_ "github.com/nulzo/model-router-api/internal/llm/openai"

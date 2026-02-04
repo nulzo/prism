@@ -16,7 +16,7 @@ import (
 // ProviderConfig represents the configuration for a single AI provider.
 type ProviderConfig struct {
 	ID           string                `json:"id" yaml:"id" mapstructure:"id" validate:"required"`
-	Type         string                `json:"type" yaml:"type" mapstructure:"type" validate:"required,oneof=openai anthropic google ollama"`
+	Type         string                `json:"type" yaml:"type" mapstructure:"type" validate:"required,oneof=openai anthropic google ollama bfl"`
 	Name         string                `json:"name" yaml:"name" mapstructure:"name" validate:"required"`
 	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key" validate:"required_if=RequiresAuth true"`
 	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url" validate:"omitempty,url"`
