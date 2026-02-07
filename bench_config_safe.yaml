@@ -1,0 +1,21 @@
+
+server:
+  port: 8081
+  env: development
+  auth_enabled: false
+  api_keys: ["bench-key-12345"]
+rate_limit:
+  requests_per_second: 100000
+  burst: 100000
+log:
+  level: "error"
+database:
+  path: "bench.db"
+providers:
+  - id: openai
+    type: openai
+    name: OpenAI
+    api_key: "mock-key"
+    base_url: "http://localhost:9091/v1"
+    enabled: true
+    requires_auth: true

@@ -7,3 +7,7 @@
 # Prism
 
 Ultra-fast, low-latency, self-hostable AI gateway.
+
+## Installation
+
+todo...
