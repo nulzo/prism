@@ -10,4 +10,4 @@ Ultra-fast, low-latency, self-hostable AI gateway.
 
 ## Installation
 
-todo...
+todo... using with docker
