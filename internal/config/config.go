@@ -20,6 +20,7 @@ type ProviderConfig struct {
 	Name         string                `json:"name" yaml:"name" mapstructure:"name" validate:"required"`
 	APIKey       string                `json:"api_key" yaml:"api_key" mapstructure:"api_key" validate:"required_if=RequiresAuth true"`
 	BaseURL      string                `json:"base_url" yaml:"base_url" mapstructure:"base_url" validate:"omitempty,url"`
+	Timeout      string                `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
 	StaticModels []api.ModelDefinition `json:"-" yaml:"-" mapstructure:"-"`
 	Config       map[string]string     `json:"config" yaml:"config" mapstructure:"config"`
 	Enabled      bool                  `json:"enabled" yaml:"enabled" mapstructure:"enabled"`

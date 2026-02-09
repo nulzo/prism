@@ -39,10 +39,19 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 		IdleConnTimeout:     90 * time.Second,
 	}
 
+	timeout := 10 * time.Minute
+	if config.Timeout != "" {
+		if d, err := time.ParseDuration(config.Timeout); err == nil {
+			timeout = d
+		} else {
+			fmt.Printf("Warning: Invalid timeout format for provider %s: %v. Using default %v.\n", config.ID, err, timeout)
+		}
+	}
+
 	return &Adapter{
 		config: config,
 		client: &http.Client{
-			Timeout:   60 * time.Second,
+			Timeout:   timeout,
 			Transport: transport,
 		},
 	}, nil

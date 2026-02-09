@@ -46,10 +46,19 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 		return nil, err
 	}
 
+	timeout := 30 * time.Second
+	if config.Timeout != "" {
+		if d, err := time.ParseDuration(config.Timeout); err == nil {
+			timeout = d
+		} else {
+			fmt.Printf("Warning: Invalid timeout format for provider %s: %v. Using default %v.\n", config.ID, err, timeout)
+		}
+	}
+
 	return &Adapter{
 		Provider: oaAdapter,
 		config:   config,
-		client:   &http.Client{Timeout: 10 * time.Second},
+		client:   &http.Client{Timeout: timeout},
 	}, nil
 }
 

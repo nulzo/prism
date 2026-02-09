@@ -30,9 +30,19 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	if config.BaseURL == "" {
 		config.BaseURL = "https://generativelanguage.googleapis.com/v1beta"
 	}
+
+	timeout := 10 * time.Minute
+	if config.Timeout != "" {
+		if d, err := time.ParseDuration(config.Timeout); err == nil {
+			timeout = d
+		} else {
+			fmt.Printf("Warning: Invalid timeout format for provider %s: %v. Using default %v.\n", config.ID, err, timeout)
+		}
+	}
+
 	return &Adapter{
 		config: config,
-		client: &http.Client{Timeout: 60 * time.Second},
+		client: &http.Client{Timeout: timeout},
 	}, nil
 }
 

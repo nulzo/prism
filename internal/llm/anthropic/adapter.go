@@ -28,9 +28,19 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	if config.BaseURL == "" {
 		config.BaseURL = "https://api.anthropic.com/v1"
 	}
+
+	timeout := 10 * time.Minute
+	if config.Timeout != "" {
+		if d, err := time.ParseDuration(config.Timeout); err == nil {
+			timeout = d
+		} else {
+			fmt.Printf("Warning: Invalid timeout format for provider %s: %v. Using default %v.\n", config.ID, err, timeout)
+		}
+	}
+
 	return &Adapter{
 		config: config,
-		client: &http.Client{Timeout: 60 * time.Second},
+		client: &http.Client{Timeout: timeout},
 	}, nil
 }
 
@@ -144,7 +154,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	var anthroResp Response
 	headers := map[string]string{
-		"x-server-key":      a.config.APIKey,
+		"X-Api-Key":         a.config.APIKey,
 		"anthropic-version": "2023-06-01",
 	}
 	if v, ok := a.config.Config["version"]; ok {
@@ -196,7 +206,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 	url := fmt.Sprintf("%s/messages", strings.TrimRight(a.config.BaseURL, "/"))
 
 	headers := map[string]string{
-		"x-server-key":      a.config.APIKey,
+		"X-Api-Key":         a.config.APIKey,
 		"anthropic-version": "2023-06-01",
 	}
 	if v, ok := a.config.Config["version"]; ok {
@@ -284,7 +294,7 @@ func (a *Adapter) Health(ctx context.Context) error {
 	// as it requires auth and verifies connectivity.
 	url := "https://api.anthropic.com/v1/models?limit=1"
 	if a.config.BaseURL != "" {
-		url = fmt.Sprintf("%s/v1/models?limit=1", strings.TrimRight(a.config.BaseURL, "/"))
+		url = fmt.Sprintf("%s/models?limit=1", strings.TrimRight(a.config.BaseURL, "/"))
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)

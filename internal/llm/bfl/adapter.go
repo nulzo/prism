@@ -30,9 +30,19 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	if config.BaseURL == "" {
 		config.BaseURL = "https://api.bfl.ai/v1"
 	}
+
+	timeout := 5 * time.Minute
+	if config.Timeout != "" {
+		if d, err := time.ParseDuration(config.Timeout); err == nil {
+			timeout = d
+		} else {
+			fmt.Printf("Warning: Invalid timeout format for provider %s: %v. Using default %v.\n", config.ID, err, timeout)
+		}
+	}
+
 	return &Adapter{
 		config: config,
-		client: &http.Client{Timeout: 300 * time.Second}, // Long timeout for generation + polling
+		client: &http.Client{Timeout: timeout}, // Long timeout for generation + polling
 	}, nil
 }
 

@@ -29,9 +29,10 @@ providers:
     type: "anthropic"
     name: "Anthropic"
     api_key: "ENV:ANTHROPIC_API_KEY"
-    base_url: "https://api.anthropic.com"
+    base_url: "https://api.anthropic.com/v1"
     enabled: true
     requires_auth: true
+    timeout: "10m"
     config:
       version: "2023-06-01"
 
