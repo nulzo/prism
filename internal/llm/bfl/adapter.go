@@ -66,6 +66,25 @@ type PollingResponse struct {
 }
 
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+	prompt, inputImages, err := a.extractPromptAndImages(req)
+	if err != nil {
+		return nil, err
+	}
+
+	genResp, err := a.submitGenerationRequest(ctx, req.Model, prompt, inputImages)
+	if err != nil {
+		return nil, err
+	}
+
+	finalImageURL, err := a.pollForResult(ctx, genResp.PollingURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return a.constructResponse(req.Model, genResp.ID, finalImageURL)
+}
+
+func (a *Adapter) extractPromptAndImages(req *api.ChatRequest) (string, []string, error) {
 	prompt := ""
 	var inputImages []string
 
@@ -93,10 +112,13 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 	if prompt == "" {
-		return nil, fmt.Errorf("no prompt found in messages")
+		return "", nil, fmt.Errorf("no prompt found in messages")
 	}
 
-	// Prepare request body dynamically based on model
+	return prompt, inputImages, nil
+}
+
+func (a *Adapter) submitGenerationRequest(ctx context.Context, modelID, prompt string, inputImages []string) (*GenerationResponse, error) {
 	reqBodyMap := map[string]interface{}{
 		"prompt":           prompt,
 		"safety_tolerance": 5,
@@ -105,48 +127,20 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if len(inputImages) == 0 {
 		reqBodyMap["width"] = 1024
 		reqBodyMap["height"] = 1024
+	} else {
+		a.enrichRequestWithImages(modelID, inputImages, reqBodyMap)
 	}
 
-	modelID := req.Model
-
-	// Map input images to the correct field based on model
-	if len(inputImages) > 0 {
-		switch modelID {
-		case "flux-pro-1.0-fill", "flux-fill-pro":
-			// Inpainting requires "image" and optionally "mask"
-			reqBodyMap["image"] = inputImages[0]
-			if len(inputImages) > 1 {
-				reqBodyMap["mask"] = inputImages[1]
-			}
-
-		case "flux-kontext-max", "flux-kontext-pro", "flux-2-pro", "flux-2-flex", "flux-2-klein-4b", "flux-2-klein-9b", "flux-2-max", "flux-2-dev":
-			reqBodyMap["input_image"] = inputImages[0]
-
-			for idx, img := range inputImages[1:] {
-				key := fmt.Sprintf("input_image_%d", idx+2)
-				reqBodyMap[key] = img
-			}
-
-		case "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-pro-1.1-raw", "flux-pro-1.0", "flux-1.1-pro":
-			// Standard models usually take "image_prompt" for variation/redux
-			reqBodyMap["image_prompt"] = inputImages[0]
-
-		default:
-			// Fallback try input_image as it's becoming standard for BFL editing
-			reqBodyMap["input_image"] = inputImages[0]
-		}
-	}
-
-	endpoint := fmt.Sprintf("%s/%s", a.config.BaseURL, req.Model)
+	endpoint := fmt.Sprintf("%s/%s", a.config.BaseURL, modelID)
 
 	jsonBody, err := json.Marshal(reqBodyMap)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to marshal request body: %w", err)
 	}
 
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	httpReq.Header.Set("Content-Type", "application/json")
@@ -172,88 +166,124 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
 
-	pollingURL := genResp.PollingURL
+	return &genResp, nil
+}
+
+func (a *Adapter) enrichRequestWithImages(modelID string, inputImages []string, reqBodyMap map[string]interface{}) {
+	switch modelID {
+	case "flux-pro-1.0-fill", "flux-fill-pro":
+		// Inpainting requires "image" and optionally "mask"
+		reqBodyMap["image"] = inputImages[0]
+		if len(inputImages) > 1 {
+			reqBodyMap["mask"] = inputImages[1]
+		}
+
+	case "flux-kontext-max", "flux-kontext-pro", "flux-2-pro", "flux-2-flex", "flux-2-klein-4b", "flux-2-klein-9b", "flux-2-max", "flux-2-dev":
+		reqBodyMap["input_image"] = inputImages[0]
+		for idx, img := range inputImages[1:] {
+			key := fmt.Sprintf("input_image_%d", idx+2)
+			reqBodyMap[key] = img
+		}
+
+	case "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-pro-1.1-raw", "flux-pro-1.0", "flux-1.1-pro":
+		// Standard models usually take "image_prompt" for variation/redux
+		reqBodyMap["image_prompt"] = inputImages[0]
+
+	default:
+		// Fallback try input_image as it's becoming standard for BFL editing
+		reqBodyMap["input_image"] = inputImages[0]
+	}
+}
+
+func (a *Adapter) pollForResult(ctx context.Context, pollingURL string) (string, error) {
 	ticker := time.NewTicker(500 * time.Millisecond)
 	defer ticker.Stop()
 
 	// Safety timeout of 10 minutes to prevent infinite polling
+	// We rely on context cancellation mainly, but this is a failsafe
 	timeout := time.NewTimer(10 * time.Minute)
 	defer timeout.Stop()
-
-	var finalImageURL string
 
 	for {
 		select {
 		case <-ctx.Done():
-			return nil, ctx.Err()
+			return "", ctx.Err()
 		case <-timeout.C:
-			return nil, fmt.Errorf("polling timed out after 10 minutes")
+			return "", fmt.Errorf("polling timed out after 10 minutes")
 		case <-ticker.C:
-			// Poll
-			pollReq, err := http.NewRequestWithContext(ctx, "GET", pollingURL, nil)
+			res, err := a.checkPollStatus(ctx, pollingURL)
 			if err != nil {
-				return nil, err
+				return "", err
 			}
-			pollReq.Header.Set("accept", "application/json")
-			pollReq.Header.Set("x-key", a.config.APIKey)
-
-			pollResp, err := a.client.Do(pollReq)
-			if err != nil {
-				return nil, fmt.Errorf("polling failed: %w", err)
+			if res != "" {
+				return res, nil
 			}
-
-			defer func() {
-				_ = resp.Body.Close()
-			}()
-
-			var pollResult PollingResponse
-			bodyBytes, _ := io.ReadAll(pollResp.Body)
-
-			// Try to unmarshal regardless of status code, as errors often contain JSON details
-			if err := json.Unmarshal(bodyBytes, &pollResult); err != nil {
-				// If we can't parse JSON and status is bad, fail with status
-				if pollResp.StatusCode != http.StatusOK {
-					return nil, fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, string(bodyBytes))
-				}
-				// If status is OK but JSON is bad, return error
-				return nil, fmt.Errorf("failed to decode polling response: %w", err)
-			}
-
-			if pollResult.Status == "Ready" {
-				if pollResult.Result != nil {
-					finalImageURL = pollResult.Result.Sample
-				}
-				goto DonePolling
-			} else if pollResult.Status == "Error" || pollResult.Status == "Failed" ||
-				pollResult.Status == "Request Moderated" || pollResult.Status == "Content Moderated" ||
-				pollResult.Status == "Task not found" {
-				errMsg := pollResult.Message
-				if errMsg == "" {
-					errMsg = pollResult.Status
-				} else {
-					errMsg = fmt.Sprintf("%s (%s)", errMsg, pollResult.Status)
-				}
-				return nil, fmt.Errorf("generation failed: %s", errMsg)
-			} else if pollResp.StatusCode != http.StatusOK {
-				// Fallback: If status code is error but "Status" field didn't catch it
-				return nil, fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, pollResult.Message)
-			}
-			// Continue polling if "Processing" or "Pending"
 		}
 	}
+}
 
-DonePolling:
+func (a *Adapter) checkPollStatus(ctx context.Context, pollingURL string) (string, error) {
+	pollReq, err := http.NewRequestWithContext(ctx, "GET", pollingURL, nil)
+	if err != nil {
+		return "", err
+	}
+	pollReq.Header.Set("accept", "application/json")
+	pollReq.Header.Set("x-key", a.config.APIKey)
 
+	pollResp, err := a.client.Do(pollReq)
+	if err != nil {
+		return "", fmt.Errorf("polling failed: %w", err)
+	}
+
+	defer func() {
+		_ = pollResp.Body.Close()
+	}()
+
+	bodyBytes, _ := io.ReadAll(pollResp.Body)
+
+	var pollResult PollingResponse
+	if err := json.Unmarshal(bodyBytes, &pollResult); err != nil {
+		if pollResp.StatusCode != http.StatusOK {
+			return "", fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, string(bodyBytes))
+		}
+		return "", fmt.Errorf("failed to decode polling response: %w", err)
+	}
+
+	switch pollResult.Status {
+	case "Ready":
+		if pollResult.Result != nil {
+			return pollResult.Result.Sample, nil
+		}
+		return "", fmt.Errorf("status is Ready but result is missing")
+	case "Error", "Failed", "Request Moderated", "Content Moderated", "Task not found":
+		errMsg := pollResult.Message
+		if errMsg == "" {
+			errMsg = pollResult.Status
+		} else {
+			errMsg = fmt.Sprintf("%s (%s)", errMsg, pollResult.Status)
+		}
+		return "", fmt.Errorf("generation failed: %s", errMsg)
+	}
+
+	// Check for HTTP errors even if Status wasn't explicitly a failure state we know
+	if pollResp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("polling failed with status %d: %s", pollResp.StatusCode, pollResult.Message)
+	}
+
+	return "", nil // Continue polling
+}
+
+func (a *Adapter) constructResponse(modelID, id, imageURL string) (*api.ChatResponse, error) {
 	// BFL URLs are ephemeral (10 min), so we fetch it now to provide a persistent result
 	// and stay consistent with other providers in this app.
-	imgData, err := processing.ProcessImageURL(finalImageURL)
+	imgData, err := processing.ProcessImageURL(imageURL)
 	if err == nil {
-		finalImageURL = fmt.Sprintf("data:%s;base64,%s", imgData.MediaType, imgData.Data)
+		imageURL = fmt.Sprintf("data:%s;base64,%s", imgData.MediaType, imgData.Data)
 	}
 
 	return &api.ChatResponse{
-		ID:      genResp.ID,
-		Model:   req.Model,
+		ID:      id,
+		Model:   modelID,
 		Created: time.Now().Unix(),
 		Choices: []api.Choice{{
 			Index: 0,
@@ -264,7 +294,7 @@ DonePolling:
 						{
 							Type: "image_url",
 							ImageURL: &api.ImageURL{
-								URL: finalImageURL,
+								URL: imageURL,
 							},
 						},
 					},
@@ -273,7 +303,7 @@ DonePolling:
 					{
 						Type: "image_url",
 						ImageURL: &api.ImageURL{
-							URL: finalImageURL,
+							URL: imageURL,
 						},
 					},
 				},
