@@ -98,6 +98,7 @@ func toAnthropicReq(req *api.ChatRequest) Request {
 		MaxTokens: req.MaxTokens,
 		Stream:    req.Stream,
 	}
+
 	if ar.MaxTokens == 0 {
 		ar.MaxTokens = 4096
 	}

@@ -157,7 +157,10 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(resp.Body)
@@ -198,7 +201,10 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			if err != nil {
 				return nil, fmt.Errorf("polling failed: %w", err)
 			}
-			defer pollResp.Body.Close()
+
+			defer func() {
+				_ = resp.Body.Close()
+			}()
 
 			var pollResult PollingResponse
 			bodyBytes, _ := io.ReadAll(pollResp.Body)
