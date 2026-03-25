@@ -13,6 +13,7 @@ const (
 	OpenAI    ProviderName = "openai"
 	Anthropic ProviderName = "anthropic"
 	Google    ProviderName = "google"
+	Moonshot  ProviderName = "moonshot"
 )
 
 type Provider interface {
