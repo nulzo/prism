@@ -13,6 +13,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/processing"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -208,13 +209,70 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
+	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
 
-	// OpenAI provider now uses static configuration as the source of truth
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
 
-	// because the API does not provide pricing or detailed capability flags.
+	req.Header.Set("Authorization", "Bearer "+a.config.APIKey)
+	if org, ok := a.config.Config["organization"]; ok {
+		req.Header.Set("OpenAI-Organization", org)
+	}
 
-	return a.config.StaticModels, nil
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
+	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return a.config.StaticModels, nil
+	}
+
+	var upstreamResp struct {
+		Data []struct {
+			ID string `json:"id"`
+		} `json:"data"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&upstreamResp); err != nil {
+		return a.config.StaticModels, nil
+	}
+
+	// Create a map of existing models for quick lookup
+	existingModels := make(map[string]bool)
+	for _, m := range a.config.StaticModels {
+		existingModels[m.UpstreamID] = true
+	}
+
+	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
+	copy(mergedModels, a.config.StaticModels)
+
+	// Check for new models
+	for _, upstreamModel := range upstreamResp.Data {
+		if !existingModels[upstreamModel.ID] {
+			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
+			
+			// Add it with default/empty pricing so it's usable
+			newModel := api.ModelDefinition{
+				ID:          fmt.Sprintf("%s/%s", a.config.ID, upstreamModel.ID),
+				Name:        upstreamModel.ID,
+				ProviderID:  a.config.ID,
+				UpstreamID:  upstreamModel.ID,
+				Enabled:     true,
+				ContextLength: 8192, // default fallback
+				Pricing: api.ModelPricing{
+					Prompt:     "0",
+					Completion: "0",
+				},
+			}
+			mergedModels = append(mergedModels, newModel)
+		}
+	}
+
+	return mergedModels, nil
 }
 
 func (a *Adapter) Health(ctx context.Context) error {

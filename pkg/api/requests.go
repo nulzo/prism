@@ -21,8 +21,9 @@ type ChatRequest struct {
 	StreamOptions *StreamOptions `json:"stream_options,omitempty"`
 
 	// LLM Parameters
-	MaxTokens         int             `json:"max_tokens,omitempty"`
-	Temperature       float64         `json:"temperature,omitempty"`
+	MaxTokens             int             `json:"max_tokens,omitempty"`
+	MaxCompletionTokens   int             `json:"max_completion_tokens,omitempty"`
+	Temperature           float64         `json:"temperature,omitempty"`
 	TopP              float64         `json:"top_p,omitempty"`
 	TopK              int             `json:"top_k,omitempty"`
 	FrequencyPenalty  float64         `json:"frequency_penalty,omitempty"`

@@ -63,6 +63,6 @@ providers:
     type: "moonshot"
     name: "Moonshot AI"
     api_key: "ENV:MOONSHOT_API_KEY"
-    base_url: "https://api.moonshot.cn/v1"
+    base_url: "https://api.moonshot.ai/v1"
     enabled: true
     requires_auth: true

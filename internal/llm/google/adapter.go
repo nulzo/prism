@@ -12,6 +12,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/processing"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -305,8 +306,74 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
-	// Google provider uses static configuration
-	return a.config.StaticModels, nil
+	url := fmt.Sprintf("%s/models?key=%s",
+		strings.TrimRight(a.config.BaseURL, "/"),
+		a.config.APIKey,
+	)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return a.config.StaticModels, nil
+	}
+
+	var upstreamResp struct {
+		Models []struct {
+			Name            string `json:"name"`
+			InputTokenLimit int    `json:"inputTokenLimit"`
+		} `json:"models"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&upstreamResp); err != nil {
+		return a.config.StaticModels, nil
+	}
+
+	// Create a map of existing models for quick lookup
+	existingModels := make(map[string]bool)
+	for _, m := range a.config.StaticModels {
+		existingModels[m.UpstreamID] = true
+	}
+
+	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
+	copy(mergedModels, a.config.StaticModels)
+
+	// Check for new models
+	for _, upstreamModel := range upstreamResp.Models {
+		// Google returns names like "models/gemini-1.5-flash"
+		id := strings.TrimPrefix(upstreamModel.Name, "models/")
+		if !existingModels[id] {
+			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, id))
+			
+			// Add it with default/empty pricing so it's usable
+			newModel := api.ModelDefinition{
+				ID:          fmt.Sprintf("%s/%s", a.config.ID, id),
+				Name:        id,
+				ProviderID:  a.config.ID,
+				UpstreamID:  id,
+				Enabled:     true,
+				ContextLength: upstreamModel.InputTokenLimit,
+				Pricing: api.ModelPricing{
+					Prompt:     "0",
+					Completion: "0",
+				},
+			}
+			if newModel.ContextLength == 0 {
+				newModel.ContextLength = 32768 // default fallback
+			}
+			mergedModels = append(mergedModels, newModel)
+		}
+	}
+
+	return mergedModels, nil
 }
 
 func (a *Adapter) Health(ctx context.Context) error {

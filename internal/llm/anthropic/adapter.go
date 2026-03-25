@@ -12,6 +12,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/processing"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -286,8 +287,75 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
-	// Anthropic provider uses static configuration
-	return a.config.StaticModels, nil
+	url := "https://api.anthropic.com/v1/models"
+	if a.config.BaseURL != "" {
+		url = fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
+
+	req.Header.Set("x-api-key", a.config.APIKey)
+	req.Header.Set("anthropic-version", "2023-06-01")
+
+	if v, ok := a.config.Config["version"]; ok {
+		req.Header.Set("anthropic-version", v)
+	}
+
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return a.config.StaticModels, nil
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return a.config.StaticModels, nil
+	}
+
+	var upstreamResp struct {
+		Data []struct {
+			ID string `json:"id"`
+		} `json:"data"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&upstreamResp); err != nil {
+		return a.config.StaticModels, nil
+	}
+
+	// Create a map of existing models for quick lookup
+	existingModels := make(map[string]bool)
+	for _, m := range a.config.StaticModels {
+		existingModels[m.UpstreamID] = true
+	}
+
+	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
+	copy(mergedModels, a.config.StaticModels)
+
+	// Check for new models
+	for _, upstreamModel := range upstreamResp.Data {
+		if !existingModels[upstreamModel.ID] {
+			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
+			
+			// Add it with default/empty pricing so it's usable
+			newModel := api.ModelDefinition{
+				ID:          fmt.Sprintf("%s/%s", a.config.ID, upstreamModel.ID),
+				Name:        upstreamModel.ID,
+				ProviderID:  a.config.ID,
+				UpstreamID:  upstreamModel.ID,
+				Enabled:     true,
+				ContextLength: 200000, // default fallback for anthropic
+				Pricing: api.ModelPricing{
+					Prompt:     "0",
+					Completion: "0",
+				},
+			}
+			mergedModels = append(mergedModels, newModel)
+		}
+	}
+
+	return mergedModels, nil
 }
 
 func (a *Adapter) Health(ctx context.Context) error {
