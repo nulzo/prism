@@ -64,10 +64,20 @@ migrate-up: ## Run migration up
 	migrate -path migrations -database '$(PG_URL)?sslmode=disable' up
 
 ##@ Docker
-.PHONY: docker-build docker-run
+.PHONY: docker-build docker-run docker-down docker-rm
 
 docker-build: ## Build out docker image
 	docker build -t $(IMAGE_NAME):latest --build-arg PRISM_VERSION=$(VERSION) -f $(DOCKER_FILE) .
 
 docker-run: ## Run docker container from image
-	docker run -p 8080:8080 -d --env-file .env $(IMAGE_NAME):latest
+	docker run --name $(IMAGE_NAME) -p 8080:8080 -d --env-file .env $(IMAGE_NAME):latest
+
+docker-down: ## Stop the running docker container
+	docker stop $(IMAGE_NAME) || true
+
+docker-rm: ## Stop and remove the docker container
+	docker stop $(IMAGE_NAME) || true
+	docker rm $(IMAGE_NAME) || true
+
+docker-clean: ## Remove the docker image
+	docker rmi $(IMAGE_NAME):latest || true
