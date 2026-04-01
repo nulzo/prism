@@ -3,6 +3,7 @@ package google
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -66,14 +67,22 @@ type GeminiContent struct {
 }
 
 type GeminiCandidate struct {
-	Content      GeminiContent `json:"content"`
-	FinishReason string        `json:"finishReason"`
+	Content       GeminiContent        `json:"content"`
+	FinishReason  string               `json:"finishReason"`
+	SafetyRatings []GeminiSafetyRating `json:"safetyRatings,omitempty"`
 }
 
 type GeminiUsageMetadata struct {
 	PromptTokenCount     int `json:"promptTokenCount"`
 	CandidatesTokenCount int `json:"candidatesTokenCount"`
 	TotalTokenCount      int `json:"totalTokenCount"`
+}
+
+type GeminiSafetyRating struct {
+	Category    string `json:"category"`
+	Probability string `json:"probability,omitempty"`
+	Severity    string `json:"severity,omitempty"`
+	Blocked     bool   `json:"blocked,omitempty"`
 }
 
 type GeminiSafetySetting struct {
@@ -87,8 +96,23 @@ type GeminiGenerationConfig struct {
 }
 
 type GeminiResponse struct {
-	Candidates    []GeminiCandidate   `json:"candidates"`
-	UsageMetadata GeminiUsageMetadata `json:"usageMetadata"`
+	Candidates     []GeminiCandidate     `json:"candidates"`
+	UsageMetadata  GeminiUsageMetadata   `json:"usageMetadata"`
+	PromptFeedback *GeminiPromptFeedback `json:"promptFeedback,omitempty"`
+}
+
+type GeminiPromptFeedback struct {
+	BlockReason   string               `json:"blockReason,omitempty"`
+	SafetyRatings []GeminiSafetyRating `json:"safetyRatings,omitempty"`
+}
+
+type GeminiUpstreamErrorResponse struct {
+	Error struct {
+		Code    int         `json:"code"`
+		Message string      `json:"message"`
+		Status  string      `json:"status"`
+		Details interface{} `json:"details"`
+	} `json:"error"`
 }
 
 type GeminiRequest struct {
@@ -97,16 +121,20 @@ type GeminiRequest struct {
 	GenerationConfig *GeminiGenerationConfig `json:"generationConfig,omitempty"`
 }
 
+func defaultSafetySettings() []GeminiSafetySetting {
+	return []GeminiSafetySetting{
+		{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "BLOCK_NONE"},
+		{Category: "HARM_CATEGORY_HATE_SPEECH", Threshold: "BLOCK_NONE"},
+		{Category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", Threshold: "BLOCK_NONE"},
+		{Category: "HARM_CATEGORY_DANGEROUS_CONTENT", Threshold: "BLOCK_NONE"},
+	}
+}
+
 func Shape(req *api.ChatRequest) (GeminiRequest, error) {
 	gr := GeminiRequest{
-		// default to having no moderation by default
-		SafetySettings: []GeminiSafetySetting{
-			{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "BLOCK_NONE"},
-			{Category: "HARM_CATEGORY_HATE_SPEECH", Threshold: "BLOCK_NONE"},
-			{Category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", Threshold: "BLOCK_NONE"},
-			{Category: "HARM_CATEGORY_DANGEROUS_CONTENT", Threshold: "BLOCK_NONE"},
-			{Category: "HARM_CATEGORY_CIVIC_INTEGRITY", Threshold: "BLOCK_NONE"},
-		},
+		// Gemini only exposes configurable thresholds for these four categories.
+		// Core harms remain enforced by Google and cannot be disabled.
+		SafetySettings: defaultSafetySettings(),
 	}
 
 	if len(req.Modalities) > 0 {
@@ -163,6 +191,121 @@ func Shape(req *api.ChatRequest) (GeminiRequest, error) {
 	return gr, nil
 }
 
+func (a *Adapter) handleUpstreamError(err error) error {
+	var upstreamErr *httpclient.UpstreamError
+	if !errors.As(err, &upstreamErr) {
+		return err
+	}
+
+	var apiErr GeminiUpstreamErrorResponse
+	if jsonErr := json.Unmarshal(upstreamErr.Body, &apiErr); jsonErr != nil || apiErr.Error.Message == "" {
+		return api.NewError(
+			upstreamErr.StatusCode,
+			"Upstream Provider Error",
+			string(upstreamErr.Body),
+			api.WithLog(err),
+		)
+	}
+
+	opts := []api.ProblemOption{
+		api.WithType("about:blank"),
+		api.WithLog(err),
+		api.WithExtension("upstream_status", apiErr.Error.Status),
+	}
+	if apiErr.Error.Details != nil {
+		opts = append(opts, api.WithExtension("upstream_details", apiErr.Error.Details))
+	}
+
+	return api.NewError(
+		upstreamErr.StatusCode,
+		"Upstream Provider Error",
+		apiErr.Error.Message,
+		opts...,
+	)
+}
+
+func geminiResponseError(resp *GeminiResponse) error {
+	if resp.PromptFeedback != nil && resp.PromptFeedback.BlockReason != "" {
+		return api.NewError(
+			http.StatusBadRequest,
+			"Upstream Provider Error",
+			fmt.Sprintf("Gemini blocked the prompt: %s", resp.PromptFeedback.BlockReason),
+			api.WithType("about:blank"),
+			api.WithExtension("block_reason", resp.PromptFeedback.BlockReason),
+			api.WithExtension("safety_ratings", resp.PromptFeedback.SafetyRatings),
+		)
+	}
+
+	if len(resp.Candidates) == 0 {
+		return api.NewError(
+			http.StatusBadGateway,
+			"Upstream Provider Error",
+			"Gemini returned no candidates",
+			api.WithType("about:blank"),
+		)
+	}
+
+	candidate := resp.Candidates[0]
+	if candidate.FinishReason == "SAFETY" {
+		return api.NewError(
+			http.StatusBadRequest,
+			"Upstream Provider Error",
+			"Gemini blocked the generated response for safety reasons",
+			api.WithType("about:blank"),
+			api.WithExtension("finish_reason", candidate.FinishReason),
+			api.WithExtension("safety_ratings", candidate.SafetyRatings),
+		)
+	}
+
+	if len(candidate.Content.Parts) == 0 {
+		return api.NewError(
+			http.StatusBadGateway,
+			"Upstream Provider Error",
+			"Gemini returned an empty candidate",
+			api.WithType("about:blank"),
+			api.WithExtension("finish_reason", candidate.FinishReason),
+			api.WithExtension("safety_ratings", candidate.SafetyRatings),
+		)
+	}
+
+	return nil
+}
+
+func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, []api.ContentPart) {
+	var sb strings.Builder
+	var images []api.ContentPart
+	var audio []api.ContentPart
+
+	for _, part := range parts {
+		if part.Text != "" {
+			sb.WriteString(part.Text)
+		}
+		if part.InlineData == nil {
+			continue
+		}
+
+		dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
+		if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
+			audio = append(audio, api.ContentPart{
+				Type: "audio_url",
+				AudioURL: &api.AudioURL{
+					URL: dataURL,
+				},
+			})
+			continue
+		}
+
+		images = append(images, api.ContentPart{
+			Type: "image_url",
+			ImageURL: &api.ImageURL{
+				URL: dataURL,
+			},
+		})
+	}
+
+	return sb.String(), images, audio
+}
+
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
 	var shape, _ = Shape(req)
 
@@ -174,42 +317,16 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	var gResp GeminiResponse
 	if err := httpclient.SendRequest(ctx, a.client, "POST", url, nil, shape, &gResp); err != nil {
+		return nil, a.handleUpstreamError(err)
+	}
+
+	if err := geminiResponseError(&gResp); err != nil {
 		return nil, err
 	}
 
-	if len(gResp.Candidates) == 0 {
-		return nil, fmt.Errorf("no candidates from gemini")
-	}
+	text, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
 
-	var sb strings.Builder
-	var images []api.ContentPart
-	var audio []api.ContentPart
-
-	for _, part := range gResp.Candidates[0].Content.Parts {
-		if part.Text != "" {
-			sb.WriteString(part.Text)
-		}
-		if part.InlineData != nil {
-			dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
-			if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
-				audio = append(audio, api.ContentPart{
-					Type: "audio_url",
-					AudioURL: &api.AudioURL{
-						URL: dataURL,
-					},
-				})
-			} else {
-				images = append(images, api.ContentPart{
-					Type: "image_url",
-					ImageURL: &api.ImageURL{
-						URL: dataURL,
-					},
-				})
-			}
-		}
-	}
-
-	content, reasoning := processing.ExtractThinking(sb.String())
+	content, reasoning := processing.ExtractThinking(text)
 
 	return &api.ChatResponse{
 		ID:    fmt.Sprintf("gemini-%d", time.Now().Unix()),
@@ -223,7 +340,8 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 				Images:    images,
 				Audio:     audio,
 			},
-			FinishReason: "stop",
+			FinishReason:       strings.ToLower(gResp.Candidates[0].FinishReason),
+			NativeFinishReason: gResp.Candidates[0].FinishReason,
 		}},
 		Usage: &api.ResponseUsage{
 			PromptTokens:     gResp.UsageMetadata.PromptTokenCount,
@@ -261,36 +379,15 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 				return nil
 			}
 
-			if len(gResp.Candidates) > 0 && len(gResp.Candidates[0].Content.Parts) > 0 {
-				var sb strings.Builder
-				var images []api.ContentPart
-				var audio []api.ContentPart
-
-				for _, part := range gResp.Candidates[0].Content.Parts {
-					if part.Text != "" {
-						sb.WriteString(part.Text)
-					}
-					if part.InlineData != nil {
-						dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
-						if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
-							audio = append(audio, api.ContentPart{
-								Type: "audio_url",
-								AudioURL: &api.AudioURL{
-									URL: dataURL,
-								},
-							})
-						} else {
-							images = append(images, api.ContentPart{
-								Type: "image_url",
-								ImageURL: &api.ImageURL{
-									URL: dataURL,
-								},
-							})
-						}
-					}
+			if len(gResp.Candidates) == 0 {
+				if err := geminiResponseError(&gResp); err != nil {
+					return err
 				}
+				return nil
+			}
 
-				text := sb.String()
+			if len(gResp.Candidates[0].Content.Parts) > 0 {
+				text, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
 				c, r := parser.Process(text)
 
 				ch <- api.StreamResult{Response: &api.ChatResponse{
@@ -320,7 +417,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 		})
 
 		if err != nil {
-			ch <- api.StreamResult{Err: err}
+			ch <- api.StreamResult{Err: a.handleUpstreamError(err)}
 		}
 	}()
 

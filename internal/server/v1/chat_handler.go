@@ -41,8 +41,7 @@ func (h *ChatHandler) CreateCompletion(c *gin.Context) {
 
 	resp, err := h.service.Chat(c.Request.Context(), &req)
 	if err != nil {
-		// at this point we hit an upstream error, and we should surface it back
-		_ = c.Error(api.InternalError("Failed to process chat request", err.Error()))
+		_ = c.Error(err)
 		return
 	}
 
@@ -53,14 +52,7 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 	// call the gateway (service)
 	streamChan, err := h.service.StreamChat(c.Request.Context(), req)
 	if err != nil {
-		// if this is a domain problem, we should still serialize it properly
-		var problem *api.Problem
-		if errors.As(err, &problem) {
-			c.JSON(problem.Status, problem)
-			return
-		}
-
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		_ = c.Error(err)
 		return
 	}
 
@@ -94,7 +86,7 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 				errResp := api.ChatResponse{
 					Choices: []api.Choice{{
 						FinishReason: "error",
-						Error:        &api.ErrorResponse{Message: result.Err.Error()},
+						Error:        streamErrorResponse(result.Err),
 					}},
 				}
 				data, _ := json.Marshal(errResp)
@@ -117,4 +109,28 @@ func (h *ChatHandler) handleStream(c *gin.Context, req *api.ChatRequest) {
 
 		return true
 	})
+}
+
+func streamErrorResponse(err error) *api.ErrorResponse {
+	var problem *api.Problem
+	if errors.As(err, &problem) {
+		resp := &api.ErrorResponse{
+			Code:    problem.Status,
+			Message: problem.Detail,
+		}
+		if len(problem.Extensions) > 0 {
+			resp.Metadata = problem.Extensions
+		}
+		return resp
+	}
+
+	var appErr *api.Error
+	if errors.As(err, &appErr) {
+		return &api.ErrorResponse{
+			Code:    appErr.Code,
+			Message: appErr.Message,
+		}
+	}
+
+	return &api.ErrorResponse{Message: err.Error()}
 }

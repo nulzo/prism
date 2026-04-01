@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -17,8 +18,8 @@ func ErrorHandler() gin.HandlerFunc {
 		if len(c.Errors) > 0 {
 			err := c.Errors.Last().Err
 
-			// first, we need to check if it's a custom error
-			if problem, ok := err.(*api.Problem); ok {
+			var problem *api.Problem
+			if errors.As(err, &problem) {
 				// if there is an internal log attached, log it
 				if problem.Log != nil {
 					log.Printf("Internal Error: %v", problem.Log)
@@ -26,6 +27,17 @@ func ErrorHandler() gin.HandlerFunc {
 
 				// RFC 9457 dictates the json is at the root
 				c.JSON(problem.Status, problem)
+				c.Abort()
+				return
+			}
+
+			var appErr *api.Error
+			if errors.As(err, &appErr) {
+				if appErr.Log != nil {
+					log.Printf("Internal Error: %v", appErr.Log)
+				}
+
+				c.JSON(appErr.Code, api.ErrorResponse{Code: appErr.Code, Message: appErr.Message})
 				c.Abort()
 				return
 			}
