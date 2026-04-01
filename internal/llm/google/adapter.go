@@ -183,6 +183,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 
 	var sb strings.Builder
 	var images []api.ContentPart
+	var audio []api.ContentPart
 
 	for _, part := range gResp.Candidates[0].Content.Parts {
 		if part.Text != "" {
@@ -190,12 +191,21 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		}
 		if part.InlineData != nil {
 			dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
-			images = append(images, api.ContentPart{
-				Type: "image_url",
-				ImageURL: &api.ImageURL{
-					URL: dataURL,
-				},
-			})
+			if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
+				audio = append(audio, api.ContentPart{
+					Type: "audio_url",
+					AudioURL: &api.AudioURL{
+						URL: dataURL,
+					},
+				})
+			} else {
+				images = append(images, api.ContentPart{
+					Type: "image_url",
+					ImageURL: &api.ImageURL{
+						URL: dataURL,
+					},
+				})
+			}
 		}
 	}
 
@@ -211,6 +221,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 				Content:   api.Content{Text: content},
 				Reasoning: reasoning,
 				Images:    images,
+				Audio:     audio,
 			},
 			FinishReason: "stop",
 		}},
@@ -253,6 +264,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			if len(gResp.Candidates) > 0 && len(gResp.Candidates[0].Content.Parts) > 0 {
 				var sb strings.Builder
 				var images []api.ContentPart
+				var audio []api.ContentPart
 
 				for _, part := range gResp.Candidates[0].Content.Parts {
 					if part.Text != "" {
@@ -260,24 +272,34 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 					}
 					if part.InlineData != nil {
 						dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
-						images = append(images, api.ContentPart{
-							Type: "image_url",
-							ImageURL: &api.ImageURL{
-								URL: dataURL,
-							},
-						})
+						if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
+							audio = append(audio, api.ContentPart{
+								Type: "audio_url",
+								AudioURL: &api.AudioURL{
+									URL: dataURL,
+								},
+							})
+						} else {
+							images = append(images, api.ContentPart{
+								Type: "image_url",
+								ImageURL: &api.ImageURL{
+									URL: dataURL,
+								},
+							})
+						}
 					}
 				}
 
 				text := sb.String()
 				c, r := parser.Process(text)
-				
+
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
 						Delta: &api.ChatMessage{
 							Content:   api.Content{Text: c},
 							Reasoning: r,
 							Images:    images,
+							Audio:     audio,
 						},
 					}},
 				}}
@@ -352,14 +374,14 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 		id := strings.TrimPrefix(upstreamModel.Name, "models/")
 		if !existingModels[id] {
 			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, id))
-			
+
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
-				ID:          fmt.Sprintf("%s/%s", a.config.ID, id),
-				Name:        id,
-				ProviderID:  a.config.ID,
-				UpstreamID:  id,
-				Enabled:     true,
+				ID:            fmt.Sprintf("%s/%s", a.config.ID, id),
+				Name:          id,
+				ProviderID:    a.config.ID,
+				UpstreamID:    id,
+				Enabled:       true,
 				ContextLength: upstreamModel.InputTokenLimit,
 				Pricing: api.ModelPricing{
 					Prompt:     "0",

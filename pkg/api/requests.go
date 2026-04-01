@@ -21,19 +21,19 @@ type ChatRequest struct {
 	StreamOptions *StreamOptions `json:"stream_options,omitempty"`
 
 	// LLM Parameters
-	MaxTokens             int             `json:"max_tokens,omitempty"`
-	MaxCompletionTokens   int             `json:"max_completion_tokens,omitempty"`
-	Temperature           float64         `json:"temperature,omitempty"`
-	TopP              float64         `json:"top_p,omitempty"`
-	TopK              int             `json:"top_k,omitempty"`
-	FrequencyPenalty  float64         `json:"frequency_penalty,omitempty"`
-	PresencePenalty   float64         `json:"presence_penalty,omitempty"`
-	RepetitionPenalty float64         `json:"repetition_penalty,omitempty"`
-	Seed              int             `json:"seed,omitempty"`
-	LogitBias         map[int]float64 `json:"logit_bias,omitempty"`
-	TopLogprobs       int             `json:"top_logprobs,omitempty"`
-	MinP              float64         `json:"min_p,omitempty"`
-	TopA              float64         `json:"top_a,omitempty"`
+	MaxTokens           int             `json:"max_tokens,omitempty"`
+	MaxCompletionTokens int             `json:"max_completion_tokens,omitempty"`
+	Temperature         float64         `json:"temperature,omitempty"`
+	TopP                float64         `json:"top_p,omitempty"`
+	TopK                int             `json:"top_k,omitempty"`
+	FrequencyPenalty    float64         `json:"frequency_penalty,omitempty"`
+	PresencePenalty     float64         `json:"presence_penalty,omitempty"`
+	RepetitionPenalty   float64         `json:"repetition_penalty,omitempty"`
+	Seed                int             `json:"seed,omitempty"`
+	LogitBias           map[int]float64 `json:"logit_bias,omitempty"`
+	TopLogprobs         int             `json:"top_logprobs,omitempty"`
+	MinP                float64         `json:"min_p,omitempty"`
+	TopA                float64         `json:"top_a,omitempty"`
 
 	// Tool calling
 	Tools      []Tool      `json:"tools,omitempty"`
@@ -62,6 +62,7 @@ type ChatMessage struct {
 	ToolCallID string        `json:"tool_call_id,omitempty"`
 	ToolCalls  []ToolCall    `json:"tool_calls,omitempty"` // For assistant messages
 	Images     []ContentPart `json:"images,omitempty"`     // For image generation results
+	Audio      []ContentPart `json:"audio,omitempty"`      // For audio generation results
 }
 
 // Content handles the union type: string | []ContentPart
@@ -94,11 +95,16 @@ type ContentPart struct {
 	Type     string    `json:"type"`
 	Text     string    `json:"text,omitempty"`
 	ImageURL *ImageURL `json:"image_url,omitempty"`
+	AudioURL *AudioURL `json:"audio_url,omitempty"`
 }
 
 type ImageURL struct {
 	URL    string `json:"url"`
 	Detail string `json:"detail,omitempty"`
+}
+
+type AudioURL struct {
+	URL string `json:"url"`
 }
 
 type ResponseFormat struct {
