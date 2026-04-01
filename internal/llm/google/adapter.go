@@ -123,17 +123,18 @@ type GeminiRequest struct {
 
 func defaultSafetySettings() []GeminiSafetySetting {
 	return []GeminiSafetySetting{
-		{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "BLOCK_NONE"},
-		{Category: "HARM_CATEGORY_HATE_SPEECH", Threshold: "BLOCK_NONE"},
-		{Category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", Threshold: "BLOCK_NONE"},
-		{Category: "HARM_CATEGORY_DANGEROUS_CONTENT", Threshold: "BLOCK_NONE"},
+		{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "OFF"},
+		{Category: "HARM_CATEGORY_HATE_SPEECH", Threshold: "OFF"},
+		{Category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", Threshold: "OFF"},
+		{Category: "HARM_CATEGORY_DANGEROUS_CONTENT", Threshold: "OFF"},
 	}
 }
 
 func Shape(req *api.ChatRequest) (GeminiRequest, error) {
 	gr := GeminiRequest{
-		// Gemini only exposes configurable thresholds for these four categories.
-		// Core harms remain enforced by Google and cannot be disabled.
+		// Use the least restrictive documented setting for all configurable
+		// Gemini safety categories. Some provider-enforced core harms may still
+		// be blocked upstream and cannot be bypassed by the gateway.
 		SafetySettings: defaultSafetySettings(),
 	}
 
