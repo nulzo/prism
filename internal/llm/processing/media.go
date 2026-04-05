@@ -41,8 +41,8 @@ func parseDataURI(uri string) (*ImageData, error) {
 
 	// extract media type
 	// default to text/plain;charset=US-ASCII if omitted, but for images we expect it.
-	mediaType := "text/plain" 
-	
+	mediaType := "text/plain"
+
 	parts := strings.Split(meta, ";")
 	if len(parts) > 0 && strings.HasPrefix(parts[0], "data:") {
 		mediaType = parts[0][5:]
@@ -57,7 +57,7 @@ func parseDataURI(uri string) (*ImageData, error) {
 	}
 
 	if !isBase64 {
-		// If not base64, we might need to url decode, but for image inputs in these APIs, 
+		// If not base64, we might need to url decode, but for image inputs in these APIs,
 		// they are almost always base64.
 		return nil, fmt.Errorf("only base64 data URIs are supported for images")
 	}

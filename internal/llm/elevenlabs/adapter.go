@@ -113,7 +113,9 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
@@ -155,9 +157,9 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 	// ElevenLabs streaming is just returning the audio chunks
 	// For simplicity, we'll just call the non-streaming endpoint and return it as one chunk,
 	// or we can stream the response body.
-	
+
 	ch := make(chan api.StreamResult)
-	
+
 	go func() {
 		defer close(ch)
 		resp, err := a.Chat(ctx, req)
@@ -165,15 +167,15 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			ch <- api.StreamResult{Err: err}
 			return
 		}
-		
+
 		// Convert to stream format
 		resp.Object = "chat.completion.chunk"
 		resp.Choices[0].Delta = resp.Choices[0].Message
 		resp.Choices[0].Message = nil
-		
+
 		ch <- api.StreamResult{Response: resp}
 	}()
-	
+
 	return ch, nil
 }
 

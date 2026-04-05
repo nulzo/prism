@@ -31,7 +31,7 @@ func TestShape_ReferenceImage(t *testing.T) {
 				},
 			},
 		},
-		Modalities: []string{"image", "text"},
+		Modalities:  []string{"image", "text"},
 		Temperature: 0.7,
 	}
 
@@ -76,7 +76,7 @@ func TestShape_SimpleText(t *testing.T) {
 
 	geminiReq, err := Shape(req)
 	assert.NoError(t, err)
-	
+
 	assert.Len(t, geminiReq.Contents, 1)
 	assert.Equal(t, "user", geminiReq.Contents[0].Role)
 	assert.Equal(t, "Hello!", geminiReq.Contents[0].Parts[0].Text)

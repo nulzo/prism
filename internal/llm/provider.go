@@ -9,9 +9,9 @@ import (
 type ProviderName string
 
 const (
-	Ollama    ProviderName = "ollama"
-	OpenAI    ProviderName = "openai"
-	Anthropic ProviderName = "anthropic"
+	Ollama     ProviderName = "ollama"
+	OpenAI     ProviderName = "openai"
+	Anthropic  ProviderName = "anthropic"
 	Google     ProviderName = "google"
 	Moonshot   ProviderName = "moonshot"
 	ElevenLabs ProviderName = "elevenlabs"

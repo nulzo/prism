@@ -49,6 +49,7 @@ func (m *MockProvider) Chat(ctx context.Context, req *api.ChatRequest) (*api.Cha
 		},
 	}, nil
 }
+
 func (m *MockProvider) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 	go func() {
@@ -59,6 +60,7 @@ func (m *MockProvider) Stream(ctx context.Context, req *api.ChatRequest) (<-chan
 	}()
 	return ch, nil
 }
+
 func (m *MockProvider) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	return m.MockModels, nil
 }

@@ -3,29 +3,22 @@ package main
 import (
 	"context"
 	"errors"
+	_ "expvar"
 	"fmt"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
-	"strconv"
 
 	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
-	"github.com/nulzo/model-router-api/internal/platform/logger"
-	"github.com/nulzo/model-router-api/internal/server"
-	"github.com/nulzo/model-router-api/internal/server/validator"
-	"github.com/nulzo/model-router-api/internal/store"
-	"github.com/nulzo/model-router-api/internal/store/cache"
-	"github.com/nulzo/model-router-api/internal/store/model"
-	"github.com/nulzo/model-router-api/internal/store/sqlite"
-	"go.uber.org/zap"
-
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
 	_ "github.com/nulzo/model-router-api/internal/llm/bfl"
 	_ "github.com/nulzo/model-router-api/internal/llm/cosyvoice"
@@ -35,8 +28,14 @@ import (
 	_ "github.com/nulzo/model-router-api/internal/llm/ollama"
 	_ "github.com/nulzo/model-router-api/internal/llm/openai"
 	_ "github.com/nulzo/model-router-api/internal/llm/qwen3"
-	_ "expvar"
-	_ "net/http/pprof"
+	"github.com/nulzo/model-router-api/internal/platform/logger"
+	"github.com/nulzo/model-router-api/internal/server"
+	"github.com/nulzo/model-router-api/internal/server/validator"
+	"github.com/nulzo/model-router-api/internal/store"
+	"github.com/nulzo/model-router-api/internal/store/cache"
+	"github.com/nulzo/model-router-api/internal/store/model"
+	"github.com/nulzo/model-router-api/internal/store/sqlite"
+	"go.uber.org/zap"
 )
 
 // Version is the version of the application. We inject this during
@@ -114,14 +113,14 @@ func main() {
 			// Let's store a masked version or just empty if we rely on config-loaded instances.
 			// Actually, the Service uses the IN-MEMORY providers loaded from config.
 			// This DB sync is mainly for "Reporting" and "Audit" purposes so we know what providers existed.
-			
+
 			dbP := model.Provider{
 				ID:         p.ID,
-				Name:       p.ID, // Or mapped name
+				Name:       p.ID,     // Or mapped name
 				BaseURL:    "config", // We don't have base URL handy in the simple config struct sometimes?
 				IsEnabled:  p.Enabled,
 				Priority:   0, // Config doesn't specify priority explicitly usually?
-				ConfigJSON: "{}", 
+				ConfigJSON: "{}",
 			}
 			dbProviders = append(dbProviders, dbP)
 		}

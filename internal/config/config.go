@@ -112,13 +112,13 @@ func LoadConfig() (*Config, error) {
 
 	// Load models from filesystem
 	allModels := loadModels()
-	
+
 	// Merge with models already in config (if any)
 	var configModels []api.ModelDefinition
 	if err := v.UnmarshalKey("models", &configModels); err == nil {
 		allModels = append(allModels, configModels...)
 	}
-	
+
 	v.Set("models", allModels)
 
 	var cfg Config

@@ -7,13 +7,11 @@ import (
 	"strings"
 )
 
-var (
-	// Regex to tokenize JSON parts:
-	// 1. Keys (quoted strings followed by colon)
-	// 2. String values (quoted strings)
-	// 3. Numbers / Booleans / Null
-	jsonTokenRegex = regexp.MustCompile(`("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)`)
-)
+// Regex to tokenize JSON parts:
+// 1. Keys (quoted strings followed by colon)
+// 2. String values (quoted strings)
+// 3. Numbers / Booleans / Null
+var jsonTokenRegex = regexp.MustCompile(`("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)`)
 
 // HighlightJSON takes a JSON string (minified or indented) and applies ANSI colors.
 func HighlightJSON(jsonStr string) string {

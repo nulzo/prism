@@ -8,7 +8,6 @@ import (
 )
 
 func TestLoadConfig_Defaults(t *testing.T) {
-
 	os.Clearenv()
 	t.Setenv("SERVER_PORT", "9090")
 	t.Setenv("SERVER_ENV", "development")

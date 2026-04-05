@@ -51,30 +51,30 @@ func mapRequestLogToGenerationResponse(log *model.RequestLog) api.GenerationResp
 	totalCostUSD := float64(log.TotalCostMicros) / 1_000_000.0
 
 	data := api.GenerationData{
-		ID:                 log.ID,
-		UpstreamID:         log.UpstreamRemoteID,
-		TotalCost:          totalCostUSD,
-		CreatedAt:          log.CreatedAt,
-		Model:              log.ModelID,
-		AppID:              log.AppName,
-		Streamed:           log.IsStreamed,
-		ProviderName:       log.ProviderID,
-		Latency:            float64(log.LatencyMS),
-		GenerationTime:     float64(log.LatencyMS), // Approx
-		FinishReason:       log.FinishReason,
-		TokensPrompt:       log.InputTokens,
-		TokensCompletion:   log.OutputTokens,
-		NativeTokensPrompt: log.InputTokens, // Default unless details
+		ID:                     log.ID,
+		UpstreamID:             log.UpstreamRemoteID,
+		TotalCost:              totalCostUSD,
+		CreatedAt:              log.CreatedAt,
+		Model:                  log.ModelID,
+		AppID:                  log.AppName,
+		Streamed:               log.IsStreamed,
+		ProviderName:           log.ProviderID,
+		Latency:                float64(log.LatencyMS),
+		GenerationTime:         float64(log.LatencyMS), // Approx
+		FinishReason:           log.FinishReason,
+		TokensPrompt:           log.InputTokens,
+		TokensCompletion:       log.OutputTokens,
+		NativeTokensPrompt:     log.InputTokens,  // Default unless details
 		NativeTokensCompletion: log.OutputTokens, // Default unless details
-		Usage:              totalCostUSD,
-		APIType:            "chat",
-		Router:             "model-router",
-		NativeFinishReason: log.FinishReason,
+		Usage:                  totalCostUSD,
+		APIType:                "chat",
+		Router:                 "model-router",
+		NativeFinishReason:     log.FinishReason,
 	}
 
 	if log.UsageDetails != nil {
 		data.IsBYOK = log.UsageDetails.IsBYOK
-		
+
 		if log.UsageDetails.UpstreamCostMicros != nil {
 			cost := float64(*log.UsageDetails.UpstreamCostMicros) / 1_000_000.0
 			data.UpstreamInferenceCost = &cost
@@ -83,14 +83,14 @@ func mapRequestLogToGenerationResponse(log *model.RequestLog) api.GenerationResp
 		// Update natives with details
 		data.NativeTokensCached = &log.UsageDetails.PromptTokensCached
 		data.NativeTokensReasoning = &log.UsageDetails.CompletionTokensReasoning
-		
-		// numAudio := log.UsageDetails.PromptTokensAudio 
+
+		// numAudio := log.UsageDetails.PromptTokensAudio
 		// This is tokens, not count, but spec asks for NumInputAudioPrompt (count)
 		// We stored audio *tokens* not count. We can't map count 1:1 if we didn't store it.
 		// For now we assume 0 or null if unknown, or maybe we stored it in meta?
 		// Spec says "Number of audio inputs". We have "prompt_tokens_audio".
 		// We'll leave it null or 0.
-		
+
 		numSearch := log.UsageDetails.WebSearchRequests
 		data.NumSearchResults = &numSearch
 	}

@@ -92,7 +92,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if err := w.WriteField("spk_id", spkID); err != nil {
 		return nil, err
 	}
-	w.Close()
+	_ = w.Close()
 
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, &b)
 	if err != nil {
@@ -105,7 +105,9 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)

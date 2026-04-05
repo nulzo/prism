@@ -27,7 +27,6 @@ type Server struct {
 }
 
 func New(cfg *config.Config, logger *zap.Logger, repo store.Repository, service gateway.Service, analytics analytics.Service, v *validator.Validator) *Server {
-
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.New()

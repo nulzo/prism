@@ -6,7 +6,6 @@ import (
 )
 
 func (s *Server) SetupRoutes() {
-
 	s.router.Use(middleware.CORS())
 	s.router.Use(middleware.ErrorHandler())
 

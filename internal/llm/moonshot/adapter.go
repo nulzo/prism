@@ -203,7 +203,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			ch <- api.StreamResult{Response: &chatResp}
 			return nil
 		})
-
 		if err != nil {
 			ch <- api.StreamResult{Err: a.handleUpstreamError(err)}
 		}
@@ -226,7 +225,9 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	if err != nil {
 		return a.config.StaticModels, nil
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return a.config.StaticModels, nil
@@ -256,14 +257,14 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	for _, upstreamModel := range upstreamResp.Data {
 		if !existingModels[upstreamModel.ID] {
 			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
-			
+
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
-				ID:          fmt.Sprintf("%s/%s", a.config.ID, upstreamModel.ID),
-				Name:        upstreamModel.ID,
-				ProviderID:  a.config.ID,
-				UpstreamID:  upstreamModel.ID,
-				Enabled:     true,
+				ID:            fmt.Sprintf("%s/%s", a.config.ID, upstreamModel.ID),
+				Name:          upstreamModel.ID,
+				ProviderID:    a.config.ID,
+				UpstreamID:    upstreamModel.ID,
+				Enabled:       true,
 				ContextLength: upstreamModel.ContextLength,
 				Pricing: api.ModelPricing{
 					Prompt:     "0",

@@ -39,7 +39,6 @@ func TestOpenAIChat(t *testing.T) {
 				"total_tokens": 21
 			}
 		}`))
-
 		if err != nil {
 			return
 		}

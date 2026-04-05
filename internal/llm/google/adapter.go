@@ -305,7 +305,7 @@ func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, *api.A
 }
 
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
-	var shape, _ = Shape(req)
+	shape, _ := Shape(req)
 
 	url := fmt.Sprintf("%s/models/%s:generateContent?key=%s",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -352,7 +352,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 
-	var shape, _ = Shape(req)
+	shape, _ := Shape(req)
 
 	url := fmt.Sprintf("%s/models/%s:streamGenerateContent?key=%s&alt=sse",
 		strings.TrimRight(a.config.BaseURL, "/"),
@@ -413,7 +413,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			}
 			return nil
 		})
-
 		if err != nil {
 			ch <- api.StreamResult{Err: a.handleUpstreamError(err)}
 		}
@@ -437,7 +436,9 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	if err != nil {
 		return a.config.StaticModels, nil
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return a.config.StaticModels, nil

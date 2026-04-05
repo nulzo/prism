@@ -53,7 +53,7 @@ func main() {
 
 	// Create a temporary config file for the benchmark
 	configFile := "bench_config_safe.yaml"
-	if err := os.WriteFile(configFile, []byte(benchConfig), 0644); err != nil {
+	if err := os.WriteFile(configFile, []byte(benchConfig), 0o644); err != nil {
 		log.Fatalf("Failed to write config: %v", err)
 	}
 	defer func() {

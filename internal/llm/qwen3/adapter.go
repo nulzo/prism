@@ -64,9 +64,9 @@ func (a *Adapter) Type() string {
 func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
 	// Qwen3-TTS via vLLM-Omni uses the standard OpenAI chat/completions format
 	// with modalities and audio configuration.
-	
+
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
-	
+
 	// Ensure modalities are set for audio
 	hasAudio := false
 	for _, m := range req.Modalities {
@@ -75,11 +75,11 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 			break
 		}
 	}
-	
+
 	if !hasAudio {
 		req.Modalities = append(req.Modalities, "audio")
 	}
-	
+
 	if req.Audio == nil {
 		req.Audio = &api.AudioConfig{
 			Voice:  "default",
@@ -106,7 +106,9 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
@@ -124,9 +126,9 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
 	// For simplicity, we'll just call the non-streaming endpoint and return it as one chunk
 	// A full implementation would stream the SSE response.
-	
+
 	ch := make(chan api.StreamResult)
-	
+
 	go func() {
 		defer close(ch)
 		resp, err := a.Chat(ctx, req)
@@ -134,16 +136,16 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 			ch <- api.StreamResult{Err: err}
 			return
 		}
-		
+
 		resp.Object = "chat.completion.chunk"
 		if len(resp.Choices) > 0 {
 			resp.Choices[0].Delta = resp.Choices[0].Message
 			resp.Choices[0].Message = nil
 		}
-		
+
 		ch <- api.StreamResult{Response: resp}
 	}()
-	
+
 	return ch, nil
 }
 

@@ -48,7 +48,6 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 		}
 
 		models, err := providerInstance.Models(ctx)
-
 		if err != nil {
 			msg := fmt.Sprintf("%s %s %s",
 				cli.CrossMark(),

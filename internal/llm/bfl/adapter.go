@@ -317,7 +317,6 @@ func (a *Adapter) constructResponse(modelID, id, imageURL string) (*api.ChatResp
 }
 
 func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
-
 	ch := make(chan api.StreamResult)
 	go func() {
 		defer close(ch)
