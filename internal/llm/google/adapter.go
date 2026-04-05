@@ -272,10 +272,10 @@ func geminiResponseError(resp *GeminiResponse) error {
 	return nil
 }
 
-func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, []api.ContentPart) {
+func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, *api.AudioOutput) {
 	var sb strings.Builder
 	var images []api.ContentPart
-	var audio []api.ContentPart
+	var audio *api.AudioOutput
 
 	for _, part := range parts {
 		if part.Text != "" {
@@ -287,12 +287,9 @@ func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, []api.
 
 		dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
 		if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
-			audio = append(audio, api.ContentPart{
-				Type: "audio_url",
-				AudioURL: &api.AudioURL{
-					URL: dataURL,
-				},
-			})
+			audio = &api.AudioOutput{
+				Data: part.InlineData.Data,
+			}
 			continue
 		}
 

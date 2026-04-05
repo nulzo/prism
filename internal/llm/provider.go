@@ -12,8 +12,11 @@ const (
 	Ollama    ProviderName = "ollama"
 	OpenAI    ProviderName = "openai"
 	Anthropic ProviderName = "anthropic"
-	Google    ProviderName = "google"
-	Moonshot  ProviderName = "moonshot"
+	Google     ProviderName = "google"
+	Moonshot   ProviderName = "moonshot"
+	ElevenLabs ProviderName = "elevenlabs"
+	CosyVoice  ProviderName = "cosyvoice"
+	Qwen3      ProviderName = "qwen3"
 )
 
 type Provider interface {

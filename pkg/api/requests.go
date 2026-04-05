@@ -49,9 +49,15 @@ type ChatRequest struct {
 	Provider   *ProviderPreferences `json:"provider,omitempty"`
 	User       string               `json:"user,omitempty"`
 	Modalities []string             `json:"modalities,omitempty"`
+	Audio      *AudioConfig         `json:"audio,omitempty"`
 
 	// Debug options
 	Debug *DebugOptions `json:"debug,omitempty"`
+}
+
+type AudioConfig struct {
+	Voice  string `json:"voice,omitempty"`
+	Format string `json:"format,omitempty"`
 }
 
 type ChatMessage struct {
@@ -62,7 +68,14 @@ type ChatMessage struct {
 	ToolCallID string        `json:"tool_call_id,omitempty"`
 	ToolCalls  []ToolCall    `json:"tool_calls,omitempty"` // For assistant messages
 	Images     []ContentPart `json:"images,omitempty"`     // For image generation results
-	Audio      []ContentPart `json:"audio,omitempty"`      // For audio generation results
+	Audio      *AudioOutput  `json:"audio,omitempty"`      // For audio generation results
+}
+
+type AudioOutput struct {
+	ID         string `json:"id,omitempty"`
+	ExpiresAt  int64  `json:"expires_at,omitempty"`
+	Data       string `json:"data,omitempty"`
+	Transcript string `json:"transcript,omitempty"`
 }
 
 // Content handles the union type: string | []ContentPart
@@ -92,10 +105,16 @@ func (c Content) MarshalJSON() ([]byte, error) {
 }
 
 type ContentPart struct {
-	Type     string    `json:"type"`
-	Text     string    `json:"text,omitempty"`
-	ImageURL *ImageURL `json:"image_url,omitempty"`
-	AudioURL *AudioURL `json:"audio_url,omitempty"`
+	Type       string      `json:"type"`
+	Text       string      `json:"text,omitempty"`
+	ImageURL   *ImageURL   `json:"image_url,omitempty"`
+	AudioURL   *AudioURL   `json:"audio_url,omitempty"`
+	InputAudio *InputAudio `json:"input_audio,omitempty"`
+}
+
+type InputAudio struct {
+	Data   string `json:"data"`
+	Format string `json:"format"`
 }
 
 type ImageURL struct {

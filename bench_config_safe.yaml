@@ -19,3 +19,18 @@ providers:
     base_url: "http://localhost:9091/v1"
     enabled: true
     requires_auth: true
+  - id: elevenlabs
+    type: elevenlabs
+    name: ElevenLabs
+    api_key: "your-elevenlabs-key"
+    enabled: true
+  - id: cosyvoice
+    type: cosyvoice
+    name: CosyVoice
+    base_url: "http://localhost:50000"
+    enabled: true
+  - id: qwen3
+    type: qwen3
+    name: Qwen3-TTS
+    base_url: "http://localhost:8000/v1"
+    enabled: true

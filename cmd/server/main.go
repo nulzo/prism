@@ -28,10 +28,13 @@ import (
 
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
 	_ "github.com/nulzo/model-router-api/internal/llm/bfl"
+	_ "github.com/nulzo/model-router-api/internal/llm/cosyvoice"
+	_ "github.com/nulzo/model-router-api/internal/llm/elevenlabs"
 	_ "github.com/nulzo/model-router-api/internal/llm/google"
 	_ "github.com/nulzo/model-router-api/internal/llm/moonshot"
 	_ "github.com/nulzo/model-router-api/internal/llm/ollama"
 	_ "github.com/nulzo/model-router-api/internal/llm/openai"
+	_ "github.com/nulzo/model-router-api/internal/llm/qwen3"
 	_ "expvar"
 	_ "net/http/pprof"
 )
