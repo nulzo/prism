@@ -42,6 +42,10 @@ type ChatRequest struct {
 	// Advanced optional parameters
 	Prediction *Prediction `json:"prediction,omitempty"`
 
+	// Plugins and Extensions
+	Plugins    []PluginConfig    `json:"plugins,omitempty"`
+	Extensions []ExtensionConfig `json:"extensions,omitempty"`
+
 	// OpenRouter-only parameters
 	Transforms []string             `json:"transforms,omitempty"`
 	Models     []string             `json:"models,omitempty"`
@@ -55,20 +59,96 @@ type ChatRequest struct {
 	Debug *DebugOptions `json:"debug,omitempty"`
 }
 
+// UpstreamChatRequest is the provider-safe request shape that can be forwarded
+// to upstream model APIs. It intentionally excludes router-only fields such as
+// plugins, extensions, transforms, fallback routing, and debug flags.
+type UpstreamChatRequest struct {
+	Messages []ChatMessage `json:"messages"`
+	Model    string        `json:"model"`
+
+	ResponseFormat *ResponseFormat `json:"response_format,omitempty"`
+	Stop           *Stop           `json:"stop,omitempty"`
+	Stream         bool            `json:"stream,omitempty"`
+	StreamOptions  *StreamOptions  `json:"stream_options,omitempty"`
+
+	MaxTokens           int             `json:"max_tokens,omitempty"`
+	MaxCompletionTokens int             `json:"max_completion_tokens,omitempty"`
+	Temperature         float64         `json:"temperature,omitempty"`
+	TopP                float64         `json:"top_p,omitempty"`
+	TopK                int             `json:"top_k,omitempty"`
+	FrequencyPenalty    float64         `json:"frequency_penalty,omitempty"`
+	PresencePenalty     float64         `json:"presence_penalty,omitempty"`
+	RepetitionPenalty   float64         `json:"repetition_penalty,omitempty"`
+	Seed                int             `json:"seed,omitempty"`
+	LogitBias           map[int]float64 `json:"logit_bias,omitempty"`
+	TopLogprobs         int             `json:"top_logprobs,omitempty"`
+	MinP                float64         `json:"min_p,omitempty"`
+	TopA                float64         `json:"top_a,omitempty"`
+
+	Tools      []Tool      `json:"tools,omitempty"`
+	ToolChoice interface{} `json:"tool_choice,omitempty"`
+
+	Prediction *Prediction  `json:"prediction,omitempty"`
+	Modalities []string     `json:"modalities,omitempty"`
+	Audio      *AudioConfig `json:"audio,omitempty"`
+}
+
+func (r *ChatRequest) ToUpstream() *UpstreamChatRequest {
+	if r == nil {
+		return nil
+	}
+
+	upstream := &UpstreamChatRequest{
+		Messages:            append([]ChatMessage(nil), r.Messages...),
+		Model:               r.Model,
+		ResponseFormat:      r.ResponseFormat,
+		Stop:                r.Stop,
+		Stream:              r.Stream,
+		StreamOptions:       r.StreamOptions,
+		MaxTokens:           r.MaxTokens,
+		MaxCompletionTokens: r.MaxCompletionTokens,
+		Temperature:         r.Temperature,
+		TopP:                r.TopP,
+		TopK:                r.TopK,
+		FrequencyPenalty:    r.FrequencyPenalty,
+		PresencePenalty:     r.PresencePenalty,
+		RepetitionPenalty:   r.RepetitionPenalty,
+		Seed:                r.Seed,
+		TopLogprobs:         r.TopLogprobs,
+		MinP:                r.MinP,
+		TopA:                r.TopA,
+		Tools:               append([]Tool(nil), r.Tools...),
+		ToolChoice:          r.ToolChoice,
+		Prediction:          r.Prediction,
+		Modalities:          append([]string(nil), r.Modalities...),
+		Audio:               r.Audio,
+	}
+
+	if r.LogitBias != nil {
+		upstream.LogitBias = make(map[int]float64, len(r.LogitBias))
+		for k, v := range r.LogitBias {
+			upstream.LogitBias[k] = v
+		}
+	}
+
+	return upstream
+}
+
 type AudioConfig struct {
 	Voice  string `json:"voice,omitempty"`
 	Format string `json:"format,omitempty"`
 }
 
 type ChatMessage struct {
-	Role       string        `json:"role" binding:"required,oneof=user assistant system"`
-	Content    Content       `json:"content"` // string or []ContentPart
-	Reasoning  string        `json:"reasoning,omitempty"`
-	Name       string        `json:"name,omitempty"`
-	ToolCallID string        `json:"tool_call_id,omitempty"`
-	ToolCalls  []ToolCall    `json:"tool_calls,omitempty"` // For assistant messages
-	Images     []ContentPart `json:"images,omitempty"`     // For image generation results
-	Audio      *AudioOutput  `json:"audio,omitempty"`      // For audio generation results
+	Role        string        `json:"role" binding:"required,oneof=user assistant system tool"`
+	Content     Content       `json:"content"` // string or []ContentPart
+	Reasoning   string        `json:"reasoning,omitempty"`
+	Name        string        `json:"name,omitempty"`
+	ToolCallID  string        `json:"tool_call_id,omitempty"`
+	ToolCalls   []ToolCall    `json:"tool_calls,omitempty"`  // For assistant messages
+	Images      []ContentPart `json:"images,omitempty"`      // For image generation results
+	Audio       *AudioOutput  `json:"audio,omitempty"`       // For audio generation results
+	Annotations []interface{} `json:"annotations,omitempty"` // For file parsing results, etc.
 }
 
 type AudioOutput struct {
@@ -110,6 +190,12 @@ type ContentPart struct {
 	ImageURL   *ImageURL   `json:"image_url,omitempty"`
 	AudioURL   *AudioURL   `json:"audio_url,omitempty"`
 	InputAudio *InputAudio `json:"input_audio,omitempty"`
+	File       *FileInput  `json:"file,omitempty"`
+}
+
+type FileInput struct {
+	Filename string `json:"filename,omitempty"`
+	FileData string `json:"file_data"` // URL or data:application/pdf;base64,...
 }
 
 type InputAudio struct {
@@ -167,6 +253,18 @@ type FunctionDescription struct {
 type Prediction struct {
 	Type    string `json:"type"`
 	Content string `json:"content"`
+}
+
+type PluginConfig struct {
+	ID      string                 `json:"id"`
+	Enabled *bool                  `json:"enabled,omitempty"`
+	Config  map[string]interface{} `json:"config,omitempty"`
+}
+
+type ExtensionConfig struct {
+	ID      string                 `json:"id"`
+	Enabled *bool                  `json:"enabled,omitempty"`
+	Config  map[string]interface{} `json:"config,omitempty"`
 }
 
 type ProviderPreferences struct {

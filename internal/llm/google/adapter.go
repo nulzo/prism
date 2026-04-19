@@ -15,6 +15,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/pkg/api"
+	"go.uber.org/zap"
 )
 
 const pn string = "google"
@@ -121,6 +122,20 @@ type GeminiRequest struct {
 	GenerationConfig *GeminiGenerationConfig `json:"generationConfig,omitempty"`
 }
 
+func usesOpenAICompat(req *api.UpstreamChatRequest) bool {
+	if len(req.Tools) > 0 || req.ToolChoice != nil {
+		return true
+	}
+
+	for _, msg := range req.Messages {
+		if msg.Role == "tool" || len(msg.ToolCalls) > 0 || msg.ToolCallID != "" {
+			return true
+		}
+	}
+
+	return false
+}
+
 func defaultSafetySettings() []GeminiSafetySetting {
 	return []GeminiSafetySetting{
 		{Category: "HARM_CATEGORY_HARASSMENT", Threshold: "OFF"},
@@ -130,7 +145,7 @@ func defaultSafetySettings() []GeminiSafetySetting {
 	}
 }
 
-func Shape(req *api.ChatRequest) (GeminiRequest, error) {
+func Shape(req *api.UpstreamChatRequest) (GeminiRequest, error) {
 	gr := GeminiRequest{
 		// Use the least restrictive documented setting for all configurable
 		// Gemini safety categories. Some provider-enforced core harms may still
@@ -304,7 +319,20 @@ func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, *api.A
 	return sb.String(), images, audio
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
+	if usesOpenAICompat(req) {
+		logger.Debug("using Gemini OpenAI-compatible chat completions for tool-enabled request",
+			zap.String("provider", a.config.ID),
+			zap.String("model", req.Model),
+			zap.Int("tools", len(req.Tools)),
+		)
+		return a.chatOpenAICompat(ctx, req)
+	}
+
 	shape, _ := Shape(req)
 
 	url := fmt.Sprintf("%s/models/%s:generateContent?key=%s",
@@ -349,7 +377,42 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) chatOpenAICompat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
+	var resp api.ChatResponse
+
+	headers := map[string]string{
+		"Authorization": "Bearer " + a.config.APIKey,
+	}
+
+	url := fmt.Sprintf("%s/openai/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
+	req.Stream = false
+
+	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, req, &resp); err != nil {
+		return nil, a.handleUpstreamError(err)
+	}
+
+	for i := range resp.Choices {
+		choice := &resp.Choices[i]
+		if choice.Message != nil {
+			content, reasoning := processing.ExtractThinking(choice.Message.Content.Text)
+			choice.Message.Content.Text = content
+			choice.Message.Reasoning = reasoning
+		}
+	}
+
+	return &resp, nil
+}
+
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
+	if usesOpenAICompat(req) {
+		logger.Debug("using Gemini OpenAI-compatible stream chat completions for tool-enabled request",
+			zap.String("provider", a.config.ID),
+			zap.String("model", req.Model),
+			zap.Int("tools", len(req.Tools)),
+		)
+		return a.streamOpenAICompat(ctx, req)
+	}
+
 	ch := make(chan api.StreamResult)
 
 	shape, _ := Shape(req)
@@ -411,6 +474,64 @@ func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.
 					},
 				}}
 			}
+			return nil
+		})
+		if err != nil {
+			ch <- api.StreamResult{Err: a.handleUpstreamError(err)}
+		}
+	}()
+
+	return ch, nil
+}
+
+func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
+	ch := make(chan api.StreamResult)
+	req.Stream = true
+	req.StreamOptions = &api.StreamOptions{IncludeUsage: true}
+
+	url := fmt.Sprintf("%s/openai/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
+	headers := map[string]string{
+		"Authorization": "Bearer " + a.config.APIKey,
+	}
+
+	go func() {
+		defer close(ch)
+
+		parsers := make(map[int]*processing.StreamParser)
+
+		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
+			if !strings.HasPrefix(line, "data: ") {
+				return nil
+			}
+
+			data := strings.TrimPrefix(line, "data: ")
+			if data == "[DONE]" {
+				return nil
+			}
+
+			var chatResp api.ChatResponse
+			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
+				return nil
+			}
+
+			for i := range chatResp.Choices {
+				choice := &chatResp.Choices[i]
+				idx := choice.Index
+
+				parser, ok := parsers[idx]
+				if !ok {
+					parser = processing.NewStreamParser()
+					parsers[idx] = parser
+				}
+
+				if choice.Delta != nil {
+					c, r := parser.Process(choice.Delta.Content.Text)
+					choice.Delta.Content.Text = c
+					choice.Delta.Reasoning = r
+				}
+			}
+
+			ch <- api.StreamResult{Response: &chatResp}
 			return nil
 		})
 		if err != nil {

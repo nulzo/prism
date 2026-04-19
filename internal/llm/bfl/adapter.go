@@ -49,6 +49,10 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 func (a *Adapter) Name() string { return a.config.ID }
 func (a *Adapter) Type() string { return pn }
 
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingUnsupported}
+}
+
 // Request structures
 type GenerationResponse struct {
 	ID         string `json:"id"`
@@ -65,7 +69,7 @@ type PollingResponse struct {
 	Message string         `json:"message,omitempty"`
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	prompt, inputImages, err := a.extractPromptAndImages(req)
 	if err != nil {
 		return nil, err
@@ -84,7 +88,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return a.constructResponse(req.Model, genResp.ID, finalImageURL)
 }
 
-func (a *Adapter) extractPromptAndImages(req *api.ChatRequest) (string, []string, error) {
+func (a *Adapter) extractPromptAndImages(req *api.UpstreamChatRequest) (string, []string, error) {
 	prompt := ""
 	var inputImages []string
 
@@ -316,7 +320,7 @@ func (a *Adapter) constructResponse(modelID, id, imageURL string) (*api.ChatResp
 	}, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 	go func() {
 		defer close(ch)

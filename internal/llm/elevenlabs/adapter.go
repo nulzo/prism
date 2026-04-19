@@ -60,7 +60,11 @@ func (a *Adapter) Type() string {
 	return "elevenlabs"
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingUnsupported}
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	// ElevenLabs only supports text-to-speech
 	// Extract the text from the last user message
 	var text string
@@ -153,7 +157,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return chatResp, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	// ElevenLabs streaming is just returning the audio chunks
 	// For simplicity, we'll just call the non-streaming endpoint and return it as one chunk,
 	// or we can stream the response body.

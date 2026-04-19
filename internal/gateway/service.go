@@ -10,8 +10,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/analytics"
+	"github.com/nulzo/model-router-api/internal/extension"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
+	"github.com/nulzo/model-router-api/internal/plugin"
 	"github.com/nulzo/model-router-api/internal/store"
 	"github.com/nulzo/model-router-api/internal/store/cache"
 	"github.com/nulzo/model-router-api/internal/store/model"
@@ -43,16 +45,29 @@ type service struct {
 	mu        sync.RWMutex
 	providers map[string]llm.Provider
 	registry  *registry
+
+	// New components
+	plugins    *plugin.Registry
+	extensions *extension.Registry
 }
 
 func NewService(logger *zap.Logger, repo store.Repository, ingestor analytics.Ingestor, cache cache.CacheService) Service {
+	pReg := plugin.NewRegistry()
+	pReg.Register(plugin.NewContextCompressionPlugin(10)) // Example: keep last 10 messages
+
+	eReg := extension.NewRegistry()
+	eReg.Register(extension.NewDatetimeExtension())
+	eReg.Register(extension.NewWebSearchExtension("http://localhost:8080")) // Default SearXNG URL
+
 	return &service{
-		logger:    logger,
-		repo:      repo,
-		ingestor:  ingestor,
-		cache:     cache,
-		providers: make(map[string]llm.Provider),
-		registry:  newRegistry(),
+		logger:     logger,
+		repo:       repo,
+		ingestor:   ingestor,
+		cache:      cache,
+		providers:  make(map[string]llm.Provider),
+		registry:   newRegistry(),
+		plugins:    pReg,
+		extensions: eReg,
 	}
 }
 
@@ -86,7 +101,17 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 	start := time.Now()
-	resp, err := provider.Chat(ctx, &reqClone)
+
+	// Create orchestrator
+	orchestrator := NewPipelineOrchestrator(s.plugins, s.extensions)
+	s.logger.Debug("executing request through pipeline",
+		zap.String("provider", provider.Name()),
+		zap.String("model", reqClone.Model),
+		zap.Int("plugins_requested", len(reqClone.Plugins)),
+		zap.Int("extensions_requested", len(reqClone.Extensions)),
+	)
+	resp, err := orchestrator.Execute(ctx, &reqClone, provider)
+
 	latency := time.Since(start)
 
 	var userID, apiKeyID, appName string
@@ -241,6 +266,10 @@ func (s *service) GetProvider(providerID string) (llm.Provider, error) {
 }
 
 func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+	if len(req.Plugins) > 0 || len(req.Extensions) > 0 {
+		return nil, api.BadRequestError("streaming with plugins or extensions is not supported yet")
+	}
+
 	provider, upstreamID, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
 		logger.Warn("Provider routing failed for stream", zap.String("model", req.Model), zap.Error(err))
@@ -250,7 +279,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 	reqClone := *req
 	reqClone.Model = upstreamID
 
-	streamChan, err := provider.Stream(ctx, &reqClone)
+	streamChan, err := provider.Stream(ctx, reqClone.ToUpstream())
 	if err != nil {
 		return nil, err
 	}

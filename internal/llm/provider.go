@@ -22,8 +22,31 @@ const (
 type Provider interface {
 	Name() string
 	Type() string // e.g., "openai", "anthropic"
-	Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error)
-	Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error)
+	Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error)
+	Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error)
 	Models(ctx context.Context) ([]api.ModelDefinition, error)
 	Health(ctx context.Context) error
+}
+
+type ToolCallingMode string
+
+const (
+	ToolCallingUnsupported  ToolCallingMode = "unsupported"
+	ToolCallingOpenAICompat ToolCallingMode = "openai_compatible"
+	ToolCallingNative       ToolCallingMode = "native"
+)
+
+type Capabilities struct {
+	ToolCalling ToolCallingMode
+}
+
+type CapabilityDescriber interface {
+	Capabilities() Capabilities
+}
+
+func DescribeCapabilities(p Provider) Capabilities {
+	if describer, ok := p.(CapabilityDescriber); ok {
+		return describer.Capabilities()
+	}
+	return Capabilities{ToolCalling: ToolCallingUnsupported}
 }
