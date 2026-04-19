@@ -55,7 +55,7 @@ func TestOpenAIChat(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Execute
-	resp, err := adapter.Chat(context.Background(), &api.ChatRequest{
+	resp, err := adapter.Chat(context.Background(), &api.UpstreamChatRequest{
 		Model: "gpt-3.5-turbo",
 		Messages: []api.ChatMessage{
 			{Role: "user", Content: api.Content{Text: "Hi"}},

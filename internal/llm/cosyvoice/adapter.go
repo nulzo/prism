@@ -61,7 +61,11 @@ func (a *Adapter) Type() string {
 	return "cosyvoice"
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingUnsupported}
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	var text string
 	for i := len(req.Messages) - 1; i >= 0; i-- {
 		if req.Messages[i].Role == string(api.User) {
@@ -145,7 +149,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return chatResp, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 
 	go func() {

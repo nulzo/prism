@@ -93,7 +93,7 @@ type Delta struct {
 }
 
 // Convert Unified -> Anthropic
-func toAnthropicReq(req *api.ChatRequest) Request {
+func toAnthropicReq(req *api.UpstreamChatRequest) Request {
 	ar := Request{
 		Model:     req.Model,
 		MaxTokens: req.MaxTokens,
@@ -150,7 +150,11 @@ func toAnthropicReq(req *api.ChatRequest) Request {
 	return ar
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingUnsupported}
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	ar := toAnthropicReq(req)
 	ar.Stream = false
 
@@ -200,7 +204,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 	ar := toAnthropicReq(req)
 	ar.Stream = true

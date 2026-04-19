@@ -66,6 +66,10 @@ func (a *Adapter) Type() string {
 	return "moonshot"
 }
 
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
 // upstreamErrorResponse mirrors the standard OpenAI error shape
 type upstreamErrorResponse struct {
 	Error struct {
@@ -107,7 +111,7 @@ func (a *Adapter) handleUpstreamError(err error) error {
 	)
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	var resp api.ChatResponse
 	headers := map[string]string{
 		"Authorization": "Bearer " + a.config.APIKey,
@@ -141,7 +145,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return &resp, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 
 	// ensure stream is true

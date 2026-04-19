@@ -61,7 +61,11 @@ func (a *Adapter) Type() string {
 	return "qwen3"
 }
 
-func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
+func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	// Qwen3-TTS via vLLM-Omni uses the standard OpenAI chat/completions format
 	// with modalities and audio configuration.
 
@@ -123,7 +127,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return &chatResp, nil
 }
 
-func (a *Adapter) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	// For simplicity, we'll just call the non-streaming endpoint and return it as one chunk
 	// A full implementation would stream the SSE response.
 

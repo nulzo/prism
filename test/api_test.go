@@ -14,6 +14,7 @@ import (
 	"github.com/nulzo/model-router-api/internal/analytics"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
+	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/internal/server"
 	"github.com/nulzo/model-router-api/internal/server/validator"
@@ -36,7 +37,7 @@ type MockProvider struct {
 
 func (m *MockProvider) Name() string { return m.ID }
 func (m *MockProvider) Type() string { return "mock" }
-func (m *MockProvider) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
+func (m *MockProvider) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	m.Called = true
 	if m.MockChatResp != nil {
 		return m.MockChatResp, nil
@@ -50,7 +51,7 @@ func (m *MockProvider) Chat(ctx context.Context, req *api.ChatRequest) (*api.Cha
 	}, nil
 }
 
-func (m *MockProvider) Stream(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
+func (m *MockProvider) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 	go func() {
 		defer close(ch)
@@ -65,6 +66,9 @@ func (m *MockProvider) Models(ctx context.Context) ([]api.ModelDefinition, error
 	return m.MockModels, nil
 }
 func (m *MockProvider) Health(ctx context.Context) error { return nil }
+func (m *MockProvider) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
 
 // --- Test Setup ---
 

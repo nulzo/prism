@@ -73,14 +73,23 @@ type ErrorResponse struct {
 }
 
 type ToolCall struct {
-	ID       string       `json:"id"`
-	Type     string       `json:"type"`
-	Function FunctionCall `json:"function"`
+	ID           string            `json:"id"`
+	Type         string            `json:"type"`
+	Function     FunctionCall      `json:"function"`
+	ExtraContent *ToolExtraContent `json:"extra_content,omitempty"`
 }
 
 type FunctionCall struct {
 	Name      string `json:"name"`
 	Arguments string `json:"arguments"` // JSON string
+}
+
+type ToolExtraContent struct {
+	Google *GoogleToolExtraContent `json:"google,omitempty"`
+}
+
+type GoogleToolExtraContent struct {
+	ThoughtSignature string `json:"thought_signature,omitempty"`
 }
 
 type StreamResult struct {
