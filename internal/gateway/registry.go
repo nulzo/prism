@@ -2,117 +2,86 @@ package gateway
 
 import (
 	"context"
-	"fmt"
-	"strings"
-	"sync"
 
+	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-// registry is a private helper struct to manage model definitions.
-// It is thread-safe.
-type registry struct {
-	models map[string]api.ModelDefinition
-	mu     sync.RWMutex
-}
-
-func newRegistry() *registry {
-	return &registry{
-		models: make(map[string]api.ModelDefinition),
-	}
-}
-
-func (r *registry) addModel(m api.ModelDefinition) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	r.models[m.ID] = m
-}
-
-// func (r *registry) getModel(id string) (api.ModelDefinition, bool) {
-// 	r.mu.RLock()
-// 	defer r.mu.RUnlock()
-// 	m, ok := r.models[id]
-// 	return m, ok
-// }
-
-func (r *registry) ResolveRoute(modelID string) (string, string, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	if m, ok := r.models[modelID]; ok {
-		upstreamID := m.UpstreamID
-		if upstreamID == "" {
-			upstreamID = modelID
-		}
-		return m.ProviderID, upstreamID, nil
-	}
-
-	return "", "", fmt.Errorf("model not found: %s", modelID)
-}
-
-// listAndFilter converts internal definitions to the public API response format
-// and applies filters.
+// ListAllModels is a thin adapter over Catalog.Filter that emits the
+// public OpenRouter-shaped Model records. The gateway is intentionally
+// dumb here: all non-trivial work lives in the catalog so the HTTP
+// handler and every other consumer sees the same truth.
 func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error) {
-	s.registry.mu.RLock()
-	defer s.registry.mu.RUnlock()
-
-	var results []api.Model
-
-	for _, def := range s.registry.models {
-		m := api.Model{
-			ID:            def.ID,
-			Name:          def.Name,
-			Provider:      def.ProviderID,
-			Description:   def.Description,
-			ContextLength: def.ContextLength,
-			Pricing: api.Pricing{
-				Prompt:            def.Pricing.Prompt,
-				Completion:        def.Pricing.Completion,
-				Request:           def.Pricing.Request,
-				Image:             def.Pricing.Image,
-				WebSearch:         def.Pricing.WebSearch,
-				InternalReasoning: def.Pricing.InternalReasoning,
-				InputCacheRead:    def.Pricing.InputCacheRead,
-				InputCacheWrite:   def.Pricing.InputCacheWrite,
-			},
-			Architecture: api.Architecture{
-				InputModalities:  def.Architecture.InputModalities,
-				OutputModalities: def.Architecture.OutputModalities,
-				Tokenizer:        def.Architecture.Tokenizer,
-				InstructType:     def.Architecture.InstructType,
-			},
-			TopProvider: api.TopProvider{
-				ContextLength:       def.TopProvider.ContextLength,
-				MaxCompletionTokens: def.TopProvider.MaxCompletionTokens,
-				IsModerated:         def.TopProvider.IsModerated,
-			},
-			OwnedBy: "system",
-		}
-
-		if filter.Provider != "" && !strings.EqualFold(m.Provider, filter.Provider) {
-			continue
-		}
-		if filter.ID != "" && !strings.Contains(strings.ToLower(m.ID), strings.ToLower(filter.ID)) {
-			continue
-		}
-		if filter.OwnedBy != "" && !strings.EqualFold(m.OwnedBy, filter.OwnedBy) {
-			continue
-		}
-		if filter.Modality != "" {
-			found := false
-			for _, mod := range m.Architecture.InputModalities {
-				if strings.EqualFold(mod, filter.Modality) {
-					found = true
-					break
-				}
-			}
-			if !found {
-				continue
-			}
-		}
-
-		results = append(results, m)
+	entries := s.catalog.Filter(filter)
+	out := make([]api.Model, 0, len(entries))
+	for _, e := range entries {
+		out = append(out, entryToPublic(e))
 	}
+	return out, nil
+}
 
-	return results, nil
+// entryToPublic projects a catalog.Entry into the OpenRouter-aligned public
+// Model shape. OwnedBy defaults to the provider id (which is what
+// OpenRouter exposes for its own listings) but falls back to "system" for
+// entries with no provider attached.
+func entryToPublic(e catalog.Entry) api.Model {
+	owned := e.ProviderID
+	if owned == "" {
+		owned = "system"
+	}
+	canonical := e.CanonicalSlug
+	if canonical == "" {
+		canonical = e.ID
+	}
+	m := api.Model{
+		ID:                  e.ID,
+		CanonicalSlug:       canonical,
+		HuggingFaceID:       e.HuggingFaceID,
+		Object:              "model",
+		OwnedBy:             owned,
+		Provider:            e.ProviderID,
+		Name:                e.Name,
+		Description:         e.Description,
+		ContextLength:       e.ContextLength,
+		SupportedParameters: append([]string(nil), e.SupportedParameters...),
+		DefaultParameters:   cloneMap(e.DefaultParameters),
+		Architecture: api.Architecture{
+			InputModalities:  e.Architecture.InputModalities,
+			OutputModalities: e.Architecture.OutputModalities,
+			Tokenizer:        e.Architecture.Tokenizer,
+			InstructType:     e.Architecture.InstructType,
+		},
+		Pricing: api.Pricing{
+			Prompt:            e.Pricing.Prompt,
+			Completion:        e.Pricing.Completion,
+			Request:           e.Pricing.Request,
+			Image:             e.Pricing.Image,
+			WebSearch:         e.Pricing.WebSearch,
+			InternalReasoning: e.Pricing.InternalReasoning,
+			InputCacheRead:    e.Pricing.InputCacheRead,
+			InputCacheWrite:   e.Pricing.InputCacheWrite,
+		},
+		TopProvider: api.TopProvider{
+			ContextLength:       e.TopProvider.ContextLength,
+			MaxCompletionTokens: e.TopProvider.MaxCompletionTokens,
+			IsModerated:         e.TopProvider.IsModerated,
+		},
+	}
+	if !e.LastUpdated.IsZero() {
+		m.Created = e.LastUpdated.Unix()
+	}
+	return m
+}
+
+// cloneMap returns a defensive copy so the public Model response can't be
+// mutated through a shared reference into the catalog snapshot.
+func cloneMap(src map[string]interface{}) map[string]interface{} {
+	if len(src) == 0 {
+		return nil
+	}
+	out := make(map[string]interface{}, len(src))
+	for k, v := range src {
+		out[k] = v
+	}
+	return out
 }

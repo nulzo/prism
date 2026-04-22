@@ -26,6 +26,9 @@ func (s *Server) SetupRoutes() {
 
 	modelsHandler := v1.NewModelHandler(s.service)
 	api.GET("/models", modelsHandler.ListModels)
+	// Admin-style endpoint: force a catalog rehydrate. Scoped with
+	// `?provider=<id>` (repeatable) for targeted refreshes.
+	api.POST("/models/refresh", modelsHandler.RefreshModels)
 
 	analyticsHandler := v1.NewAnalyticsHandler(s.analytics)
 	api.GET("/analytics/usage", analyticsHandler.GetUsage)

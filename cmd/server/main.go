@@ -10,12 +10,12 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"strconv"
 	"strings"
 	"syscall"
 	"time"
 
 	"github.com/nulzo/model-router-api/internal/analytics"
+	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
@@ -42,6 +42,20 @@ import (
 // the docker build stage.
 var Version = "snapshot"
 
+// parseDurationOr returns the parsed duration or the provided fallback when
+// the input is empty or unparsable. Keeping the helper in main.go avoids
+// bleeding config-shape concerns into the catalog package itself.
+func parseDurationOr(s string, fallback time.Duration) time.Duration {
+	if s == "" {
+		return fallback
+	}
+	d, err := time.ParseDuration(s)
+	if err != nil || d <= 0 {
+		return fallback
+	}
+	return d
+}
+
 const rawBanner = `
    ________   _______   ________  ________  _______  
   ╱        ╲╱╱       ╲ ╱        ╲╱        ╲╱       ╲╲
@@ -49,19 +63,6 @@ const rawBanner = `
 ╱╱      __╱        _╱╱         ╱-        ╱         ╱ 
 ╲╲_____╱  ╲____╱___╱ ╲╲_______╱╲_______╱╱╲__╱__╱__╱  
 `
-
-func parseCost(costStr string) int64 {
-	if costStr == "" {
-		return 0
-	}
-	val, err := strconv.ParseFloat(costStr, 64)
-	if err != nil {
-		return 0
-	}
-	// Logic: Input is Dollars per 1M tokens. Output is Micros per 1K tokens.
-	// Micros per 1K = (DollarsPer1M * 1,000,000) / 1000 = DollarsPer1M * 1000.
-	return int64(val * 1000)
-}
 
 func main() {
 	cfg, err := config.LoadConfig()
@@ -100,59 +101,24 @@ func main() {
 		_ = repo.Close()
 	}()
 
-	// Sync models to DB
+	// Sync *providers* to the DB up front. Models sync is handled by the
+	// catalog's DB sink on every hydrate so we don't duplicate work here.
 	ctx := context.Background()
 	if err := repo.WithTx(ctx, func(r store.Repository) error {
-		// Sync Providers first
-		var dbProviders []model.Provider
+		dbProviders := make([]model.Provider, 0, len(cfg.Providers))
 		for _, p := range cfg.Providers {
-			// Encrypt API key? For now, we store as is or placeholder if config is source of truth.
-			// Since we load from config on every boot, we might just store "CONFIGURED" or similar to avoid saving secrets in plaintext DB if that's a concern.
-			// However, for functionality, if we want to move to dynamic config later, we'd need the real key.
-			// Assuming local SQLite is secured or we trust the env vars.
-			// Let's store a masked version or just empty if we rely on config-loaded instances.
-			// Actually, the Service uses the IN-MEMORY providers loaded from config.
-			// This DB sync is mainly for "Reporting" and "Audit" purposes so we know what providers existed.
-
-			dbP := model.Provider{
+			dbProviders = append(dbProviders, model.Provider{
 				ID:         p.ID,
-				Name:       p.ID,     // Or mapped name
-				BaseURL:    "config", // We don't have base URL handy in the simple config struct sometimes?
+				Name:       p.ID,
+				BaseURL:    "config",
 				IsEnabled:  p.Enabled,
-				Priority:   0, // Config doesn't specify priority explicitly usually?
+				Priority:   0,
 				ConfigJSON: "{}",
-			}
-			dbProviders = append(dbProviders, dbP)
+			})
 		}
-		if err := r.Providers().SyncProviders(ctx, dbProviders); err != nil {
-			return err
-		}
-
-		var dbModels []model.Model
-		for _, m := range cfg.Models {
-			// Ensure upstream ID is set
-			upstreamID := m.UpstreamID
-			if upstreamID == "" {
-				// Fallback if needed, or maybe it is part of ID?
-				// Usually upstream_id is required in config.
-				upstreamID = m.ID
-			}
-
-			dbM := model.Model{
-				ID:                    m.ID,
-				ProviderID:            m.ProviderID,
-				ProviderModelID:       upstreamID,
-				IsEnabled:             m.Enabled,
-				IsPublic:              true, // Default to true as config implies availability
-				InputCostMicrosPer1k:  parseCost(m.Pricing.Prompt),
-				OutputCostMicrosPer1k: parseCost(m.Pricing.Completion),
-				ContextWindow:         m.ContextLength,
-			}
-			dbModels = append(dbModels, dbM)
-		}
-		return r.Providers().SyncModels(ctx, dbModels)
+		return r.Providers().SyncProviders(ctx, dbProviders)
 	}); err != nil {
-		logger.Fatal("Failed to sync models", zap.Error(err))
+		logger.Fatal("Failed to sync providers", zap.Error(err))
 	}
 
 	// Initialize Analytics Ingestor
@@ -160,11 +126,47 @@ func main() {
 	ingestor.Start(context.Background())
 	defer ingestor.Stop()
 
-	routerService := gateway.NewService(log, repo, ingestor, cacheService)
+	// Parse catalog timings with sane defaults so the config stays optional.
+	refreshInterval := parseDurationOr(cfg.Catalog.RefreshInterval, 15*time.Minute)
+	hydrateTimeout := parseDurationOr(cfg.Catalog.HydrateTimeout, 20*time.Second)
+
+	cat := catalog.New(catalog.Options{
+		Logger:         log,
+		HydrateTimeout: hydrateTimeout,
+		Static:         cfg.Models,
+		Sinks:          []catalog.Sink{catalog.NewDBSink(repo)},
+	})
+
+	routerService := gateway.NewServiceWithCatalog(log, repo, ingestor, cacheService, cat)
 	analyticsService := analytics.NewService(repo)
 
-	// Bootstrap providers
+	// Bootstrap providers (registers them with the catalog + gateway).
 	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
+
+	// Kick the first hydrate synchronously so `/api/v1/models` returns a
+	// fully-formed list the moment the HTTP server starts accepting traffic.
+	// Failures here are logged, not fatal — operators typically want the
+	// gateway to stay up with the static YAML view rather than crash loop
+	// when one provider is having a bad day.
+	hydrateCtx, cancelHydrate := context.WithTimeout(ctx, hydrateTimeout+5*time.Second)
+	if res, err := routerService.RefreshCatalog(hydrateCtx); err != nil {
+		log.Warn("initial catalog hydrate failed", zap.Error(err))
+	} else {
+		log.Info("catalog ready",
+			zap.Int("models", res.TotalModels),
+			zap.Int("added", len(res.Added)),
+			zap.Duration("duration", res.Duration),
+		)
+	}
+	cancelHydrate()
+
+	// Background rehydrate loop so upstream catalog drift (new models,
+	// deprecations, pricing changes) propagates without a redeploy.
+	if refreshInterval > 0 {
+		watchCtx, cancelWatch := context.WithCancel(context.Background())
+		defer cancelWatch()
+		go cat.Watch(watchCtx, refreshInterval)
+	}
 
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
 

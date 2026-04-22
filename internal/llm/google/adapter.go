@@ -55,6 +55,10 @@ func (a *Adapter) Type() string { return pn }
 type GeminiPart struct {
 	Text       string      `json:"text,omitempty"`
 	InlineData *GeminiBlob `json:"inlineData,omitempty"`
+	// Thought is Gemini's marker that this part is a thinking trace rather
+	// than the user-visible answer. Present only on response parts for
+	// models that return thoughts (e.g. gemini-*-thinking).
+	Thought bool `json:"thought,omitempty"`
 }
 
 type GeminiBlob struct {
@@ -77,6 +81,35 @@ type GeminiUsageMetadata struct {
 	PromptTokenCount     int `json:"promptTokenCount"`
 	CandidatesTokenCount int `json:"candidatesTokenCount"`
 	TotalTokenCount      int `json:"totalTokenCount"`
+	// ThoughtsTokenCount is Gemini's reasoning-tokens counter. Only present
+	// on thinking-capable models when thinking actually ran.
+	ThoughtsTokenCount int `json:"thoughtsTokenCount,omitempty"`
+	CachedContentTokenCount int `json:"cachedContentTokenCount,omitempty"`
+}
+
+// toResponseUsage converts Gemini usage metadata into the unified
+// ResponseUsage shape with reasoning/cache details populated where
+// available.
+func (u GeminiUsageMetadata) toResponseUsage() *api.ResponseUsage {
+	if u.TotalTokenCount == 0 && u.PromptTokenCount == 0 && u.CandidatesTokenCount == 0 {
+		return nil
+	}
+	usage := &api.ResponseUsage{
+		PromptTokens:     u.PromptTokenCount,
+		CompletionTokens: u.CandidatesTokenCount,
+		TotalTokens:      u.TotalTokenCount,
+	}
+	if u.ThoughtsTokenCount > 0 {
+		usage.CompletionTokensDetails = &api.CompletionTokensDetails{
+			ReasoningTokens: u.ThoughtsTokenCount,
+		}
+	}
+	if u.CachedContentTokenCount > 0 {
+		usage.PromptTokensDetails = &api.PromptTokensDetails{
+			CachedTokens: u.CachedContentTokenCount,
+		}
+	}
+	return usage
 }
 
 type GeminiSafetyRating struct {
@@ -92,8 +125,19 @@ type GeminiSafetySetting struct {
 }
 
 type GeminiGenerationConfig struct {
-	ResponseModalities []string `json:"responseModalities,omitempty"`
-	Temperature        float64  `json:"temperature,omitempty"`
+	ResponseModalities []string                `json:"responseModalities,omitempty"`
+	Temperature        float64                 `json:"temperature,omitempty"`
+	ThinkingConfig     *GeminiThinkingConfig   `json:"thinkingConfig,omitempty"`
+}
+
+// GeminiThinkingConfig controls reasoning output for Gemini thinking models.
+// See https://ai.google.dev/gemini-api/docs/thinking. ThinkingBudget=0 turns
+// thinking off; omitting it defers to the model default. IncludeThoughts=true
+// asks Gemini to emit `thought: true` parts so we can surface them as
+// reasoning tokens.
+type GeminiThinkingConfig struct {
+	ThinkingBudget  *int `json:"thinkingBudget,omitempty"`
+	IncludeThoughts bool `json:"includeThoughts,omitempty"`
 }
 
 type GeminiResponse struct {
@@ -167,6 +211,30 @@ func Shape(req *api.UpstreamChatRequest) (GeminiRequest, error) {
 			gr.GenerationConfig = &GeminiGenerationConfig{}
 		}
 		gr.GenerationConfig.Temperature = req.Temperature
+	}
+
+	// Translate the router's ReasoningConfig into Gemini's thinkingConfig.
+	// Only Gemini "-thinking" models honor this; for non-thinking models
+	// the extra field is ignored upstream so we always emit it when the
+	// caller asked for reasoning.
+	if req.Reasoning != nil && (req.Reasoning.IsEnabled() || req.Reasoning.Exclude) {
+		if gr.GenerationConfig == nil {
+			gr.GenerationConfig = &GeminiGenerationConfig{}
+		}
+		cfg := &GeminiThinkingConfig{IncludeThoughts: !req.Reasoning.Exclude}
+		switch {
+		case req.Reasoning.MaxTokens > 0:
+			b := req.Reasoning.MaxTokens
+			cfg.ThinkingBudget = &b
+		case req.Reasoning.Effort != "":
+			// Gemini exposes a numeric budget, so map effort buckets to a
+			// conservative token count. Numbers chosen to roughly mirror
+			// OpenRouter's effort percentages applied to a 24k budget.
+			if budget := effortToThinkingBudget(req.Reasoning.Effort); budget != nil {
+				cfg.ThinkingBudget = budget
+			}
+		}
+		gr.GenerationConfig.ThinkingConfig = cfg
 	}
 
 	for _, m := range req.Messages {
@@ -287,14 +355,21 @@ func geminiResponseError(resp *GeminiResponse) error {
 	return nil
 }
 
-func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, *api.AudioOutput) {
-	var sb strings.Builder
-	var images []api.ContentPart
-	var audio *api.AudioOutput
+// extractResponseParts splits Gemini response parts into the four wire
+// projections we care about: visible text, reasoning text (parts with
+// `thought: true`), images, and audio. Thought and content parts are kept
+// in their original order so streaming consumers can interleave them
+// correctly.
+func extractResponseParts(parts []GeminiPart) (content string, reasoning string, images []api.ContentPart, audio *api.AudioOutput) {
+	var textSB, thoughtSB strings.Builder
 
 	for _, part := range parts {
 		if part.Text != "" {
-			sb.WriteString(part.Text)
+			if part.Thought {
+				thoughtSB.WriteString(part.Text)
+			} else {
+				textSB.WriteString(part.Text)
+			}
 		}
 		if part.InlineData == nil {
 			continue
@@ -302,21 +377,59 @@ func extractResponseParts(parts []GeminiPart) (string, []api.ContentPart, *api.A
 
 		dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
 		if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
-			audio = &api.AudioOutput{
-				Data: part.InlineData.Data,
-			}
+			audio = &api.AudioOutput{Data: part.InlineData.Data}
 			continue
 		}
 
 		images = append(images, api.ContentPart{
-			Type: "image_url",
-			ImageURL: &api.ImageURL{
-				URL: dataURL,
-			},
+			Type:     "image_url",
+			ImageURL: &api.ImageURL{URL: dataURL},
 		})
 	}
 
-	return sb.String(), images, audio
+	return textSB.String(), thoughtSB.String(), images, audio
+}
+
+// effortToThinkingBudget maps OpenRouter-style effort buckets to Gemini
+// `thinkingBudget` token counts. Defaults calibrated so `high`/`xhigh`
+// unlock the full adaptive budget (-1 signals "auto" to Gemini), while
+// `none` turns thinking off entirely. Unknown inputs return nil so the
+// provider default applies.
+// stripReasoningField returns a copy of the request with the router-only
+// `Reasoning` field cleared. Providers proxied via the OpenAI-compat shim
+// reject unknown fields, so we must hide the normalized control before
+// forwarding. Reasoning is still propagated to the caller because the
+// response stream carries `reasoning_content` deltas that
+// ChatMessage.UnmarshalJSON collapses into our `Reasoning` field.
+func stripReasoningField(req *api.UpstreamChatRequest) *api.UpstreamChatRequest {
+	if req == nil || req.Reasoning == nil {
+		return req
+	}
+	cp := *req
+	cp.Reasoning = nil
+	return &cp
+}
+
+func effortToThinkingBudget(effort string) *int {
+	var v int
+	switch strings.ToLower(strings.TrimSpace(effort)) {
+	case "xhigh", "high":
+		v = -1
+		return &v
+	case "medium":
+		v = 4096
+		return &v
+	case "low":
+		v = 1024
+		return &v
+	case "minimal":
+		v = 256
+		return &v
+	case "none":
+		v = 0
+		return &v
+	}
+	return nil
 }
 
 func (a *Adapter) Capabilities() llm.Capabilities {
@@ -350,9 +463,16 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 		return nil, err
 	}
 
-	text, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
+	text, thoughtText, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
 
-	content, reasoning := processing.ExtractThinking(text)
+	// Prefer the explicit `thought: true` parts when the thinking-aware
+	// model returned them; fall back to the legacy <think> tag heuristic
+	// only if we didn't get any native thinking content.
+	reasoning := thoughtText
+	content := text
+	if reasoning == "" {
+		content, reasoning = processing.ExtractThinking(text)
+	}
 
 	return &api.ChatResponse{
 		ID:    fmt.Sprintf("gemini-%d", time.Now().Unix()),
@@ -369,11 +489,7 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 			FinishReason:       strings.ToLower(gResp.Candidates[0].FinishReason),
 			NativeFinishReason: gResp.Candidates[0].FinishReason,
 		}},
-		Usage: &api.ResponseUsage{
-			PromptTokens:     gResp.UsageMetadata.PromptTokenCount,
-			CompletionTokens: gResp.UsageMetadata.CandidatesTokenCount,
-			TotalTokens:      gResp.UsageMetadata.TotalTokenCount,
-		},
+		Usage: gResp.UsageMetadata.toResponseUsage(),
 	}, nil
 }
 
@@ -387,7 +503,13 @@ func (a *Adapter) chatOpenAICompat(ctx context.Context, req *api.UpstreamChatReq
 	url := fmt.Sprintf("%s/openai/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 	req.Stream = false
 
-	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, req, &resp); err != nil {
+	// Gemini's OpenAI-compat shim rejects unknown fields. Strip the
+	// router-only reasoning object; when it's set, the tool-enabled path
+	// below will surface reasoning via the provider's reasoning_content /
+	// reasoning deltas (already aliased by ChatMessage.UnmarshalJSON).
+	payload := stripReasoningField(req)
+
+	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, payload, &resp); err != nil {
 		return nil, a.handleUpstreamError(err)
 	}
 
@@ -448,8 +570,17 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 			}
 
 			if len(gResp.Candidates[0].Content.Parts) > 0 {
-				text, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
-				c, r := parser.Process(text)
+				text, thoughtText, images, audio := extractResponseParts(gResp.Candidates[0].Content.Parts)
+				// When the model signals reasoning explicitly, forward it
+				// as-is and bypass the <think> tag scanner; otherwise let
+				// the parser handle legacy tag-based reasoning.
+				var c, r string
+				if thoughtText != "" {
+					c = text
+					r = thoughtText
+				} else {
+					c, r = parser.Process(text)
+				}
 
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
@@ -464,14 +595,10 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 			}
 
 			// Handle usage metadata if present in stream
-			if gResp.UsageMetadata.TotalTokenCount > 0 {
+			if usage := gResp.UsageMetadata.toResponseUsage(); usage != nil {
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{},
-					Usage: &api.ResponseUsage{
-						PromptTokens:     gResp.UsageMetadata.PromptTokenCount,
-						CompletionTokens: gResp.UsageMetadata.CandidatesTokenCount,
-						TotalTokens:      gResp.UsageMetadata.TotalTokenCount,
-					},
+					Usage:   usage,
 				}}
 			}
 			return nil
@@ -494,12 +621,14 @@ func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatR
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
 
+	payload := stripReasoningField(req)
+
 	go func() {
 		defer close(ch)
 
 		parsers := make(map[int]*processing.StreamParser)
 
-		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
+		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, payload, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
@@ -516,17 +645,24 @@ func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatR
 
 			for i := range chatResp.Choices {
 				choice := &chatResp.Choices[i]
+				if choice.Delta == nil {
+					continue
+				}
+				// Trust a native reasoning delta when the provider sends
+				// one (reasoning_content is folded into Reasoning by the
+				// unmarshaller) and skip the tag-scanner.
+				if choice.Delta.Reasoning != "" {
+					continue
+				}
 				idx := choice.Index
-
 				parser, ok := parsers[idx]
 				if !ok {
 					parser = processing.NewStreamParser()
 					parsers[idx] = parser
 				}
-
-				if choice.Delta != nil {
-					c, r := parser.Process(choice.Delta.Content.Text)
-					choice.Delta.Content.Text = c
+				c, r := parser.Process(choice.Delta.Content.Text)
+				choice.Delta.Content.Text = c
+				if r != "" {
 					choice.Delta.Reasoning = r
 				}
 			}
@@ -585,12 +721,14 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
 	copy(mergedModels, a.config.StaticModels)
 
-	// Check for new models
+	// Discover new models — debug per-entry, one info summary at the end.
+	var added int
 	for _, upstreamModel := range upstreamResp.Models {
 		// Google returns names like "models/gemini-1.5-flash"
 		id := strings.TrimPrefix(upstreamModel.Name, "models/")
 		if !existingModels[id] {
-			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, id))
+			logger.Debug(fmt.Sprintf("provider %q discovered upstream model not in static config: %s", a.config.ID, id))
+			added++
 
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
@@ -610,6 +748,10 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 			}
 			mergedModels = append(mergedModels, newModel)
 		}
+	}
+
+	if added > 0 {
+		logger.Info(fmt.Sprintf("provider %q hydrated: %d upstream models added (%d total)", a.config.ID, added, len(mergedModels)))
 	}
 
 	return mergedModels, nil

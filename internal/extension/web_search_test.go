@@ -10,10 +10,24 @@ import (
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-func TestWebSearchExtension_Name(t *testing.T) {
+func TestWebSearchExtension_Identity(t *testing.T) {
 	ext := NewWebSearchExtension("")
-	if ext.Name() != "prism:web_search" {
-		t.Errorf("expected name 'prism:web_search', got '%s'", ext.Name())
+	if got, want := ext.ID(), "prism:web_search"; got != want {
+		t.Errorf("ID: got %q, want %q", got, want)
+	}
+	// The wire tool name must satisfy OpenAI's function-name schema
+	// (^[a-zA-Z0-9_-]{1,64}$) because Gemini's OpenAI-compat shim
+	// silently drops tools with illegal names. Colons in the ID get
+	// sanitised to underscores.
+	if got, want := ext.ToolName(), "prism_web_search"; got != want {
+		t.Errorf("ToolName: got %q, want %q", got, want)
+	}
+	tool, err := ext.BuildTool(api.ExtensionConfig{})
+	if err != nil {
+		t.Fatalf("BuildTool: %v", err)
+	}
+	if tool.Function.Name != ext.ToolName() {
+		t.Errorf("tool function name: got %q, want %q", tool.Function.Name, ext.ToolName())
 	}
 }
 

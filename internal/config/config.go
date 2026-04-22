@@ -38,9 +38,23 @@ type Config struct {
 	Redis     RedisConfig           `mapstructure:"redis" validate:"required"`
 	RateLimit RateLimitConfig       `mapstructure:"rate_limit" validate:"required"`
 	Database  DatabaseConfig        `mapstructure:"database" validate:"required"`
+	Catalog   CatalogConfig         `mapstructure:"catalog"`
 	Providers []ProviderConfig      `mapstructure:"providers"`
 	Routes    []RouteConfig         `mapstructure:"routes" validate:"dive"`
 	Models    []api.ModelDefinition `mapstructure:"models"`
+}
+
+// CatalogConfig controls the model-catalog hydration loop. The catalog
+// rebuilds its in-memory view by fanning out `provider.Models(ctx)` across
+// every enabled provider and merging the result with the static YAML
+// entries. RefreshInterval > 0 enables a background ticker; 0 disables
+// automatic refreshes (operators can still trigger refresh via the admin
+// endpoint).
+type CatalogConfig struct {
+	RefreshInterval string `mapstructure:"refresh_interval"`
+	// HydrateTimeout caps how long any single provider's Models() call may
+	// run during hydration; slow providers don't block the whole catalog.
+	HydrateTimeout string `mapstructure:"hydrate_timeout"`
 }
 
 type RateLimitConfig struct {

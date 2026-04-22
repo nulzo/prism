@@ -31,15 +31,15 @@ func NewWebSearchExtension(searxngURL string) *WebSearchExtension {
 	}
 }
 
-func (t *WebSearchExtension) Name() string {
-	return "prism:web_search"
-}
+func (t *WebSearchExtension) ID() string { return "prism:web_search" }
+
+func (t *WebSearchExtension) ToolName() string { return DefaultToolName(t.ID()) }
 
 func (t *WebSearchExtension) BuildTool(config api.ExtensionConfig) (api.Tool, error) {
 	return api.Tool{
 		Type: "function",
 		Function: api.FunctionDescription{
-			Name:        t.Name(),
+			Name:        t.ToolName(),
 			Description: "Search the web for current information, news, and facts.",
 			Parameters: map[string]interface{}{
 				"type": "object",

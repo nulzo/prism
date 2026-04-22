@@ -117,25 +117,38 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
 
-	// handle headers if present in config
 	if org, ok := a.config.Config["organization"]; ok {
 		headers["OpenAI-Organization"] = org
 	}
 
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 
-	// ensure stream is false for this method
 	req.Stream = false
 
-	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, req, &resp); err != nil {
+	payload := a.buildUpstreamPayload(req)
+
+	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, payload, &resp); err != nil {
 		return nil, a.handleUpstreamError(err)
 	}
 
-	// Post-process to extract thinking content
+	// OpenAI-compat providers return reasoning in a few shapes:
+	//   * DeepSeek, Qwen, Moonshot: `message.reasoning_content` (aliased
+	//     into Reasoning by ChatMessage.UnmarshalJSON already).
+	//   * OpenRouter, xAI: `message.reasoning`.
+	//   * Legacy/non-compliant: `<think>...</think>` tags inside content.
+	// We only fall back to the tag-extraction heuristic when the upstream
+	// didn't populate a dedicated field, so a reasoning-aware provider
+	// doesn't pay for redundant post-processing.
 	for i := range resp.Choices {
 		choice := &resp.Choices[i]
-		if choice.Message != nil {
-			content, reasoning := processing.ExtractThinking(choice.Message.Content.Text)
+		if choice.Message == nil {
+			continue
+		}
+		if choice.Message.Reasoning != "" {
+			continue
+		}
+		content, reasoning := processing.ExtractThinking(choice.Message.Content.Text)
+		if reasoning != "" {
 			choice.Message.Content.Text = content
 			choice.Message.Reasoning = reasoning
 		}
@@ -147,7 +160,6 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
 
-	// ensure stream is true
 	req.Stream = true
 	req.StreamOptions = &api.StreamOptions{IncludeUsage: true}
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
@@ -159,43 +171,56 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 		headers["OpenAI-Organization"] = org
 	}
 
+	payload := a.buildUpstreamPayload(req)
+
 	go func() {
 		defer close(ch)
 
-		// Map of parsers for each choice index
+		// Per-choice parsers that handle the legacy `<think>` tag case. We
+		// only route content through the parser when the provider hasn't
+		// already populated a first-class reasoning field for the same
+		// chunk; this keeps the fast path (modern providers) free of
+		// any extra string work.
 		parsers := make(map[int]*processing.StreamParser)
 
-		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
-			// SSE format: data: {...}
+		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, payload, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
 
 			data := strings.TrimPrefix(line, "data: ")
 			if data == "[DONE]" {
-				return nil // we can't return special error to stop, loop continues until end of body or context cancel
+				return nil
 			}
 
 			var chatResp api.ChatResponse
 			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
-				// log error but continue
 				return nil
 			}
 
-			// Process thinking/reasoning tags
 			for i := range chatResp.Choices {
 				choice := &chatResp.Choices[i]
-				idx := choice.Index
+				if choice.Delta == nil {
+					continue
+				}
 
+				// If the provider sent a native reasoning delta (either
+				// `reasoning` or `reasoning_content`, aliased by the
+				// ChatMessage unmarshaller), skip the tag-scanner entirely.
+				if choice.Delta.Reasoning != "" {
+					continue
+				}
+
+				idx := choice.Index
 				parser, ok := parsers[idx]
 				if !ok {
 					parser = processing.NewStreamParser()
 					parsers[idx] = parser
 				}
 
-				if choice.Delta != nil {
-					c, r := parser.Process(choice.Delta.Content.Text)
-					choice.Delta.Content.Text = c
+				c, r := parser.Process(choice.Delta.Content.Text)
+				choice.Delta.Content.Text = c
+				if r != "" {
 					choice.Delta.Reasoning = r
 				}
 			}
@@ -209,6 +234,85 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	}()
 
 	return ch, nil
+}
+
+// upstreamPayload mirrors the subset of UpstreamChatRequest that
+// OpenAI-compatible providers accept plus the native reasoning controls
+// (reasoning_effort and, when the base URL looks like OpenRouter, the
+// structured `reasoning` object). We purposely do NOT forward the generic
+// `reasoning` field by default because strict OpenAI-compatible shims
+// (Gemini, DeepSeek direct, Moonshot) will 400 on unknown fields.
+type upstreamPayload struct {
+	*api.UpstreamChatRequest
+	ReasoningEffort string             `json:"reasoning_effort,omitempty"`
+	Reasoning       *upstreamReasoning `json:"reasoning,omitempty"`
+}
+
+type upstreamReasoning struct {
+	Effort    string `json:"effort,omitempty"`
+	MaxTokens int    `json:"max_tokens,omitempty"`
+	Exclude   bool   `json:"exclude,omitempty"`
+}
+
+// buildUpstreamPayload translates the router's normalized ReasoningConfig
+// into the native shape each OpenAI-compatible upstream actually accepts.
+// It never mutates the caller's request. When reasoning is not requested
+// the original request is returned verbatim so the JSON encoder takes
+// the zero-copy fast path.
+func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
+	if req == nil {
+		return req
+	}
+	r := req.Reasoning
+	// Always strip the router-only Reasoning field before serialization;
+	// non-OpenRouter upstreams reject unknown fields and we re-add the
+	// native equivalents below when a reasoning request is actually active.
+	inner := *req
+	inner.Reasoning = nil
+	if r == nil || (!r.IsEnabled() && !r.Exclude) {
+		return &inner
+	}
+
+	out := upstreamPayload{UpstreamChatRequest: &inner}
+
+	if r.Effort != "" {
+		out.ReasoningEffort = normalizeEffort(r.Effort)
+	}
+
+	// Pass the full object through only to upstreams that we know accept
+	// it (OpenRouter and other gateway-style endpoints). This check is
+	// deliberately loose — exact hostname matching is brittle across self-
+	// hosted OpenRouter deployments.
+	if strings.Contains(a.config.BaseURL, "openrouter") {
+		out.Reasoning = &upstreamReasoning{
+			Effort:    r.Effort,
+			MaxTokens: r.MaxTokens,
+			Exclude:   r.Exclude,
+		}
+	}
+
+	return out
+}
+
+// normalizeEffort clamps OpenRouter-style effort values to the subset OpenAI
+// actually accepts. `xhigh` / `none` are OpenRouter extensions; we map them
+// to the nearest valid bucket rather than drop the field.
+func normalizeEffort(e string) string {
+	switch strings.ToLower(strings.TrimSpace(e)) {
+	case "xhigh", "high":
+		return "high"
+	case "medium":
+		return "medium"
+	case "low":
+		return "low"
+	case "minimal":
+		return "minimal"
+	case "none":
+		// OpenAI has no explicit off-switch; omit the header by returning "".
+		return ""
+	default:
+		return "medium"
+	}
 }
 
 func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
@@ -255,10 +359,14 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
 	copy(mergedModels, a.config.StaticModels)
 
-	// Check for new models
+	// Discover new models. We log each addition at Debug — emitting them at
+	// Warn produced hundreds of lines per hydrate cycle for large providers
+	// (OpenAI surfaces 150+ models) and drowned out actionable log output.
+	var added int
 	for _, upstreamModel := range upstreamResp.Data {
 		if !existingModels[upstreamModel.ID] {
-			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
+			logger.Debug(fmt.Sprintf("provider %q discovered upstream model not in static config: %s", a.config.ID, upstreamModel.ID))
+			added++
 
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
@@ -275,6 +383,10 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 			}
 			mergedModels = append(mergedModels, newModel)
 		}
+	}
+
+	if added > 0 {
+		logger.Info(fmt.Sprintf("provider %q hydrated: %d upstream models added (%d total)", a.config.ID, added, len(mergedModels)))
 	}
 
 	return mergedModels, nil

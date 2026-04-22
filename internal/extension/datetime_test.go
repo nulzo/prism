@@ -9,10 +9,20 @@ import (
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-func TestDatetimeExtension_Name(t *testing.T) {
+func TestDatetimeExtension_Identity(t *testing.T) {
 	ext := NewDatetimeExtension()
-	if ext.Name() != "prism:datetime" {
-		t.Errorf("expected name 'prism:datetime', got '%s'", ext.Name())
+	if got, want := ext.ID(), "prism:datetime"; got != want {
+		t.Errorf("ID: got %q, want %q", got, want)
+	}
+	if got, want := ext.ToolName(), "prism_datetime"; got != want {
+		t.Errorf("ToolName: got %q, want %q", got, want)
+	}
+	tool, err := ext.BuildTool(api.ExtensionConfig{})
+	if err != nil {
+		t.Fatalf("BuildTool: %v", err)
+	}
+	if tool.Function.Name != ext.ToolName() {
+		t.Errorf("tool function name: got %q, want %q", tool.Function.Name, ext.ToolName())
 	}
 }
 

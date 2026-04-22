@@ -70,9 +70,14 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 				return nil, buildErr
 			}
 			upstreamReq.Tools = append(upstreamReq.Tools, toolDef)
-			activeExtensions[ext.Name()] = ext
-			activeExtensionConfigs[ext.Name()] = extConf
-			log.Debug("enabling extension", zap.String("extension", ext.Name()))
+			// Key by wire function name so tool_call lookups match the
+			// sanitised identifier the LLM was shown.
+			activeExtensions[toolDef.Function.Name] = ext
+			activeExtensionConfigs[toolDef.Function.Name] = extConf
+			log.Debug("enabling extension",
+				zap.String("extension_id", ext.ID()),
+				zap.String("tool_name", toolDef.Function.Name),
+			)
 		} else {
 			log.Warn("requested extension not found", zap.String("extension", extConf.ID))
 		}
@@ -113,8 +118,11 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 			)
 		}
 
-		// Check if the model wants to call a tool
-		if len(resp.Choices) > 0 && resp.Choices[0].FinishReason == "tool_calls" && resp.Choices[0].Message != nil {
+		// Presence of a matching tool call — not `finish_reason` —
+		// drives the loop. Several OpenAI-compat providers (Gemini,
+		// Moonshot) emit tool calls under `finish_reason: "stop"`, so
+		// gating on finish_reason silently swallows tool execution.
+		if len(resp.Choices) > 0 && resp.Choices[0].Message != nil && len(resp.Choices[0].Message.ToolCalls) > 0 {
 			hasExtension := false
 
 			// Append the assistant's tool call message to history

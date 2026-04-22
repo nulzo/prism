@@ -53,12 +53,23 @@ type Message struct {
 	Content interface{} `json:"content"` // string or []Content
 }
 type Request struct {
-	Model     string    `json:"model"`
-	Messages  []Message `json:"messages"`
-	System    string    `json:"system,omitempty"`
-	MaxTokens int       `json:"max_tokens"`
-	Stream    bool      `json:"stream,omitempty"`
+	Model     string          `json:"model"`
+	Messages  []Message       `json:"messages"`
+	System    string          `json:"system,omitempty"`
+	MaxTokens int             `json:"max_tokens"`
+	Stream    bool            `json:"stream,omitempty"`
+	Thinking  *ThinkingConfig `json:"thinking,omitempty"`
 }
+
+// ThinkingConfig is Anthropic's native extended-thinking control. See
+// https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking.
+// Type is always "enabled" when sent; BudgetTokens caps how much reasoning
+// the model may do per turn.
+type ThinkingConfig struct {
+	Type         string `json:"type"`
+	BudgetTokens int    `json:"budget_tokens"`
+}
+
 type Response struct {
 	ID         string    `json:"id"`
 	Content    []Content `json:"content"`
@@ -67,29 +78,39 @@ type Response struct {
 	Usage      Usage     `json:"usage"`
 }
 type Content struct {
-	Type   string       `json:"type"`
-	Text   string       `json:"text,omitempty"`
-	Source *ImageSource `json:"source,omitempty"`
+	Type string `json:"type"`
+	Text string `json:"text,omitempty"`
+	// Thinking and Signature are populated when Type is "thinking" or
+	// "redacted_thinking". Signature must be round-tripped unchanged on
+	// subsequent requests for tool use to work.
+	Thinking  string       `json:"thinking,omitempty"`
+	Signature string       `json:"signature,omitempty"`
+	Data      string       `json:"data,omitempty"` // "redacted_thinking" payload
+	Source    *ImageSource `json:"source,omitempty"`
 }
 type ImageSource struct {
-	Type      string `json:"type"`       // "base64"
-	MediaType string `json:"media_type"` // "image/jpeg"
+	Type      string `json:"type"`
+	MediaType string `json:"media_type"`
 	Data      string `json:"data"`
 }
 type Usage struct {
-	InputTokens  int `json:"input_tokens"`
-	OutputTokens int `json:"output_tokens"`
+	InputTokens              int `json:"input_tokens"`
+	OutputTokens             int `json:"output_tokens"`
+	CacheCreationInputTokens int `json:"cache_creation_input_tokens,omitempty"`
+	CacheReadInputTokens     int `json:"cache_read_input_tokens,omitempty"`
 }
 type StreamEvent struct {
 	Type         string   `json:"type"`
 	Delta        *Delta   `json:"delta,omitempty"`
-	ContentBlock *Content `json:"content_block,omitempty"` // For content_block_start
+	ContentBlock *Content `json:"content_block,omitempty"`
 	Index        int      `json:"index,omitempty"`
-	Usage        *Usage   `json:"usage,omitempty"` // For message_start
+	Usage        *Usage   `json:"usage,omitempty"`
 }
 type Delta struct {
-	Type string `json:"type"`
-	Text string `json:"text"`
+	Type      string `json:"type"`
+	Text      string `json:"text,omitempty"`
+	Thinking  string `json:"thinking,omitempty"`
+	Signature string `json:"signature,omitempty"`
 }
 
 // Convert Unified -> Anthropic
@@ -103,6 +124,26 @@ func toAnthropicReq(req *api.UpstreamChatRequest) Request {
 	if ar.MaxTokens == 0 {
 		ar.MaxTokens = 4096
 	}
+
+	// Translate the normalized ReasoningConfig into Anthropic's extended-
+	// thinking block. Anthropic only accepts a token budget (no effort
+	// string), so map effort buckets onto budget values that roughly
+	// mirror OpenRouter's percentages.
+	if req.Reasoning != nil && req.Reasoning.IsEnabled() {
+		budget := req.Reasoning.MaxTokens
+		if budget == 0 {
+			budget = effortToThinkingBudget(req.Reasoning.Effort)
+		}
+		if budget > 0 {
+			if budget >= ar.MaxTokens {
+				// Anthropic requires budget_tokens < max_tokens; give the
+				// answer at least 512 tokens of breathing room.
+				ar.MaxTokens = budget + 512
+			}
+			ar.Thinking = &ThinkingConfig{Type: "enabled", BudgetTokens: budget}
+		}
+	}
+
 	for _, m := range req.Messages {
 		if m.Role == "system" {
 			ar.System += m.Content.Text + "\n"
@@ -172,15 +213,23 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 		return nil, err
 	}
 
-	// Convert Anthropic -> Unified
-	fullText := ""
-	for _, c := range anthroResp.Content {
-		if c.Type == "text" {
-			fullText += c.Text
-		}
+	content, reasoning, reasoningDetails := extractContent(anthroResp.Content)
+
+	// Only fall back to legacy <think> tag stripping when the provider did
+	// not return a native thinking block, so modern Claude models don't pay
+	// for redundant post-processing.
+	if reasoning == "" {
+		content, reasoning = processing.ExtractThinking(content)
 	}
 
-	content, reasoning := processing.ExtractThinking(fullText)
+	msg := &api.ChatMessage{
+		Role:      "assistant",
+		Content:   api.Content{Text: content},
+		Reasoning: reasoning,
+	}
+	if len(reasoningDetails) > 0 {
+		msg.ReasoningDetails = reasoningDetails
+	}
 
 	return &api.ChatResponse{
 		ID:      anthroResp.ID,
@@ -188,20 +237,80 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 		Created: time.Now().Unix(),
 		Model:   anthroResp.Model,
 		Choices: []api.Choice{{
-			Index: 0,
-			Message: &api.ChatMessage{
-				Role:      "assistant",
-				Content:   api.Content{Text: content},
-				Reasoning: reasoning,
-			},
+			Index:        0,
+			Message:      msg,
 			FinishReason: anthroResp.StopReason,
 		}},
-		Usage: &api.ResponseUsage{
-			PromptTokens:     anthroResp.Usage.InputTokens,
-			CompletionTokens: anthroResp.Usage.OutputTokens,
-			TotalTokens:      anthroResp.Usage.InputTokens + anthroResp.Usage.OutputTokens,
-		},
+		Usage: anthropicUsage(anthroResp.Usage),
 	}, nil
+}
+
+// extractContent walks the Anthropic content-block array and separates
+// visible text from thinking/redacted_thinking blocks. The reasoning
+// details preserve the original block order + signatures so the agentic
+// loop can replay them on the assistant turn that precedes the tool
+// result (required for Claude tool use to work).
+func extractContent(blocks []Content) (text string, reasoning string, details []api.ReasoningDetail) {
+	var textSB, thoughtSB strings.Builder
+	for i, c := range blocks {
+		switch c.Type {
+		case "text":
+			textSB.WriteString(c.Text)
+		case "thinking":
+			thoughtSB.WriteString(c.Thinking)
+			details = append(details, api.ReasoningDetail{
+				Type:      "reasoning.text",
+				Text:      c.Thinking,
+				Signature: c.Signature,
+				Format:    "anthropic-claude-v1",
+				Index:     i,
+			})
+		case "redacted_thinking":
+			details = append(details, api.ReasoningDetail{
+				Type:   "reasoning.encrypted",
+				Data:   c.Data,
+				Format: "anthropic-claude-v1",
+				Index:  i,
+			})
+		}
+	}
+	return textSB.String(), thoughtSB.String(), details
+}
+
+// anthropicUsage converts Anthropic's usage shape into the unified usage
+// type with cache-read/cache-write breakdowns populated where available.
+func anthropicUsage(u Usage) *api.ResponseUsage {
+	usage := &api.ResponseUsage{
+		PromptTokens:     u.InputTokens,
+		CompletionTokens: u.OutputTokens,
+		TotalTokens:      u.InputTokens + u.OutputTokens,
+	}
+	if u.CacheReadInputTokens > 0 || u.CacheCreationInputTokens > 0 {
+		usage.PromptTokensDetails = &api.PromptTokensDetails{
+			CachedTokens:     u.CacheReadInputTokens,
+			CacheWriteTokens: u.CacheCreationInputTokens,
+		}
+	}
+	return usage
+}
+
+// effortToThinkingBudget maps OpenRouter-style effort buckets onto an
+// Anthropic `budget_tokens` value. Anthropic rejects budgets below 1024,
+// so `minimal` rounds up to the minimum.
+func effortToThinkingBudget(effort string) int {
+	switch strings.ToLower(strings.TrimSpace(effort)) {
+	case "xhigh":
+		return 32000
+	case "high":
+		return 16000
+	case "medium":
+		return 8000
+	case "low":
+		return 2000
+	case "minimal":
+		return 1024
+	}
+	return 0
 }
 
 func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
@@ -223,6 +332,14 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 		defer close(ch)
 
 		parser := processing.NewStreamParser()
+		// Track the block type per index so we can interpret the
+		// subsequent delta events correctly (text vs thinking vs
+		// signature).
+		blockTypes := map[int]string{}
+		// Buffer thinking text per block so we can emit it as a
+		// reasoning_detail on block close (when we know the signature).
+		thinkingBufs := map[int]*strings.Builder{}
+		thinkingSigs := map[int]string{}
 
 		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, ar, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
@@ -235,19 +352,37 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 				return nil
 			}
 
-			// Map Anthropic Events to OpenAI-compatible chunks
 			switch event.Type {
 			case "message_start":
 				if event.Usage != nil {
-					// Input tokens are sent here
 					ch <- api.StreamResult{Response: &api.ChatResponse{
-						Usage: &api.ResponseUsage{
-							PromptTokens: event.Usage.InputTokens,
-						},
+						Usage: anthropicUsage(*event.Usage),
 					}}
 				}
+			case "content_block_start":
+				if event.ContentBlock != nil {
+					blockTypes[event.Index] = event.ContentBlock.Type
+					if event.ContentBlock.Type == "redacted_thinking" {
+						ch <- api.StreamResult{Response: &api.ChatResponse{
+							Choices: []api.Choice{{
+								Delta: &api.ChatMessage{
+									ReasoningDetails: []api.ReasoningDetail{{
+										Type:   "reasoning.encrypted",
+										Data:   event.ContentBlock.Data,
+										Format: "anthropic-claude-v1",
+										Index:  event.Index,
+									}},
+								},
+							}},
+						}}
+					}
+				}
 			case "content_block_delta":
-				if event.Delta != nil && event.Delta.Type == "text_delta" {
+				if event.Delta == nil {
+					return nil
+				}
+				switch event.Delta.Type {
+				case "text_delta":
 					c, r := parser.Process(event.Delta.Text)
 					ch <- api.StreamResult{Response: &api.ChatResponse{
 						Choices: []api.Choice{{
@@ -257,9 +392,51 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 							},
 						}},
 					}}
+				case "thinking_delta":
+					// Stream the thought text to the client as reasoning
+					// and also buffer it so we can emit a typed detail
+					// block with the signature at block close.
+					buf, ok := thinkingBufs[event.Index]
+					if !ok {
+						buf = &strings.Builder{}
+						thinkingBufs[event.Index] = buf
+					}
+					buf.WriteString(event.Delta.Thinking)
+					ch <- api.StreamResult{Response: &api.ChatResponse{
+						Choices: []api.Choice{{
+							Delta: &api.ChatMessage{
+								Reasoning: event.Delta.Thinking,
+							},
+						}},
+					}}
+				case "signature_delta":
+					// Anthropic sends the signature once per thinking
+					// block after its text has streamed; store it so we
+					// can attach it on block close.
+					thinkingSigs[event.Index] += event.Delta.Signature
 				}
+			case "content_block_stop":
+				// Flush the buffered thinking block as a reasoning_detail
+				// so the caller can replay it verbatim on the next turn.
+				if buf, ok := thinkingBufs[event.Index]; ok {
+					ch <- api.StreamResult{Response: &api.ChatResponse{
+						Choices: []api.Choice{{
+							Delta: &api.ChatMessage{
+								ReasoningDetails: []api.ReasoningDetail{{
+									Type:      "reasoning.text",
+									Text:      buf.String(),
+									Signature: thinkingSigs[event.Index],
+									Format:    "anthropic-claude-v1",
+									Index:     event.Index,
+								}},
+							},
+						}},
+					}}
+					delete(thinkingBufs, event.Index)
+					delete(thinkingSigs, event.Index)
+				}
+				delete(blockTypes, event.Index)
 			case "message_delta":
-				// Output tokens and stop reason sent here
 				if event.Usage != nil {
 					ch <- api.StreamResult{Response: &api.ChatResponse{
 						Usage: &api.ResponseUsage{
@@ -267,10 +444,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 						},
 					}}
 				}
-				// if event.Delta != nil && event.Delta.Type == "stop_reason" {
-				// 	// stop reason logic handled in message_stop usually, but sometimes here?
-				// 	// Anthropic docs say stop_reason is in message_delta
-				// }
 			case "message_stop":
 				ch <- api.StreamResult{Response: &api.ChatResponse{
 					Choices: []api.Choice{{
@@ -338,10 +511,12 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
 	copy(mergedModels, a.config.StaticModels)
 
-	// Check for new models
+	// Discover new models — debug per-entry, one info summary at the end.
+	var added int
 	for _, upstreamModel := range upstreamResp.Data {
 		if !existingModels[upstreamModel.ID] {
-			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
+			logger.Debug(fmt.Sprintf("provider %q discovered upstream model not in static config: %s", a.config.ID, upstreamModel.ID))
+			added++
 
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
@@ -358,6 +533,10 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 			}
 			mergedModels = append(mergedModels, newModel)
 		}
+	}
+
+	if added > 0 {
+		logger.Info(fmt.Sprintf("provider %q hydrated: %d upstream models added (%d total)", a.config.ID, added, len(mergedModels)))
 	}
 
 	return mergedModels, nil

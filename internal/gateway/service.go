@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/analytics"
+	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/internal/extension"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
@@ -28,8 +29,19 @@ var (
 
 // Service defines the business logic for routing requests.
 type Service interface {
-	// RegisterProvider registers a new model provider and syncs its models
+	// RegisterProvider registers a new model provider. The gateway stores
+	// the provider reference for request-time routing; the catalog is
+	// responsible for pulling the provider's model list on hydration.
 	RegisterProvider(ctx context.Context, p llm.Provider) error
+
+	// RefreshCatalog re-hydrates the catalog. If providerIDs is empty every
+	// registered provider is refreshed; otherwise only the named subset.
+	// Exposed as a Service method (not just on Catalog) so the HTTP admin
+	// handler can stay thin.
+	RefreshCatalog(ctx context.Context, providerIDs ...string) (*catalog.HydrateResult, error)
+	// Catalog returns the underlying catalog for callers that need richer
+	// queries than ListAllModels exposes.
+	Catalog() *catalog.Catalog
 
 	GetProviderForModel(ctx context.Context, modelID string) (llm.Provider, string, error)
 	ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error)
@@ -44,20 +56,30 @@ type service struct {
 	cache     cache.CacheService
 	mu        sync.RWMutex
 	providers map[string]llm.Provider
-	registry  *registry
+	catalog   *catalog.Catalog
 
-	// New components
 	plugins    *plugin.Registry
 	extensions *extension.Registry
 }
 
+// NewService wires the gateway with a fresh catalog. The caller is
+// responsible for seeding the catalog with static entries (typically via
+// NewServiceWithCatalog) and for triggering the first hydration at
+// startup.
 func NewService(logger *zap.Logger, repo store.Repository, ingestor analytics.Ingestor, cache cache.CacheService) Service {
+	return NewServiceWithCatalog(logger, repo, ingestor, cache, catalog.New(catalog.Options{Logger: logger}))
+}
+
+// NewServiceWithCatalog lets bootstrap inject a pre-configured Catalog
+// (with static YAML entries, DB sink, custom hydrate timeout). Preferred
+// in production wiring; NewService stays for tests.
+func NewServiceWithCatalog(logger *zap.Logger, repo store.Repository, ingestor analytics.Ingestor, cache cache.CacheService, cat *catalog.Catalog) Service {
 	pReg := plugin.NewRegistry()
-	pReg.Register(plugin.NewContextCompressionPlugin(10)) // Example: keep last 10 messages
+	pReg.Register(plugin.NewContextCompressionPlugin(10))
 
 	eReg := extension.NewRegistry()
 	eReg.Register(extension.NewDatetimeExtension())
-	eReg.Register(extension.NewWebSearchExtension("http://localhost:8888")) // Default SearXNG URL
+	eReg.Register(extension.NewWebSearchExtension("http://localhost:8888"))
 
 	return &service{
 		logger:     logger,
@@ -65,26 +87,38 @@ func NewService(logger *zap.Logger, repo store.Repository, ingestor analytics.In
 		ingestor:   ingestor,
 		cache:      cache,
 		providers:  make(map[string]llm.Provider),
-		registry:   newRegistry(),
+		catalog:    cat,
 		plugins:    pReg,
 		extensions: eReg,
 	}
 }
 
 func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
-	models, _ := p.Models(ctx)
-
 	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	s.providers[p.Name()] = p
-
-	for _, m := range models {
-		s.registry.addModel(m)
+	s.mu.Unlock()
+	s.catalog.Add(p)
+	// Eagerly hydrate just this provider so the catalog reflects it
+	// immediately. The caller can rely on `GetProviderForModel` returning
+	// the right route the moment RegisterProvider returns; without this
+	// step the route is only resolvable after the next Hydrate() pass.
+	// Errors are non-fatal — static YAML entries can still carry the
+	// model — but we surface them so operators can see why the refresh
+	// failed.
+	if _, err := s.catalog.Hydrate(ctx, p.Name()); err != nil {
+		s.logger.Warn("initial provider hydrate failed",
+			zap.String("provider", p.Name()),
+			zap.Error(err),
+		)
 	}
-
 	return nil
 }
+
+func (s *service) RefreshCatalog(ctx context.Context, providerIDs ...string) (*catalog.HydrateResult, error) {
+	return s.catalog.Hydrate(ctx, providerIDs...)
+}
+
+func (s *service) Catalog() *catalog.Catalog { return s.catalog }
 
 func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
 	provider, upstreamModelID, err := s.GetProviderForModel(ctx, req.Model)
@@ -95,9 +129,17 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	reqClone := *req
 	reqClone.Model = upstreamModelID
 
-	u, err := uuid.NewRandom()
-	if err != nil {
-		return nil, fmt.Errorf("failed to generate UUID: %v", err)
+	// Prefer the request-scoped generation id (set by the HTTP layer so the
+	// `X-Generation-Id` header, the response body, and the analytics record
+	// share a value). Fall back to a fresh UUID when invoked outside the HTTP
+	// path (tests, future internal callers).
+	genID := GenerationID(ctx)
+	if genID == "" {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate UUID: %v", err)
+		}
+		genID = u.String()
 	}
 
 	start := time.Now()
@@ -140,7 +182,7 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		}
 
 		s.ingestor.Log(&model.RequestLog{
-			ID:              u.String(),
+			ID:              genID,
 			UserID:          userID,
 			APIKeyID:        apiKeyID,
 			AppName:         appName,
@@ -162,7 +204,7 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 	log := &model.RequestLog{
-		ID:               u.String(),
+		ID:               genID,
 		UserID:           userID,
 		APIKeyID:         apiKeyID,
 		AppName:          appName,
@@ -177,7 +219,7 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 		CreatedAt:        time.Now(),
 	}
 
-	resp.ID = u.String()
+	resp.ID = genID
 
 	if resp.Usage != nil {
 		log.InputTokens = resp.Usage.PromptTokens
@@ -237,17 +279,22 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	return resp, nil
 }
 
-// GetProviderForModel finds the best provider for a given model ID and returns the provider and the upstream model ID
+// GetProviderForModel resolves a public model ID via the catalog and returns
+// the matching provider instance plus the upstream model ID to send on the
+// wire. If the catalog knows the model but no active provider matches the
+// catalog's claim, we return a ProviderError (500) because the config is
+// internally inconsistent; missing models return a BadRequestError (400).
 func (s *service) GetProviderForModel(ctx context.Context, modelID string) (llm.Provider, string, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	providerID, upstreamModelID, err := s.registry.ResolveRoute(modelID)
-	if err != nil {
-		return nil, "", api.BadRequestError(fmt.Sprintf("route resolution failed for model '%s': %v", modelID, err))
+	providerID, upstreamModelID, ok := s.catalog.Resolve(modelID)
+	if !ok {
+		return nil, "", api.BadRequestError(fmt.Sprintf("route resolution failed for model '%s': not found in catalog", modelID))
 	}
 
-	if p, exists := s.providers[providerID]; exists {
+	s.mu.RLock()
+	p, exists := s.providers[providerID]
+	s.mu.RUnlock()
+
+	if exists {
 		return p, upstreamModelID, nil
 	}
 
@@ -266,10 +313,6 @@ func (s *service) GetProvider(providerID string) (llm.Provider, error) {
 }
 
 func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {
-	if len(req.Plugins) > 0 || len(req.Extensions) > 0 {
-		return nil, api.BadRequestError("streaming with plugins or extensions is not supported yet")
-	}
-
 	provider, upstreamID, err := s.GetProviderForModel(ctx, req.Model)
 	if err != nil {
 		logger.Warn("Provider routing failed for stream", zap.String("model", req.Model), zap.Error(err))
@@ -279,7 +322,11 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 	reqClone := *req
 	reqClone.Model = upstreamID
 
-	streamChan, err := provider.Stream(ctx, reqClone.ToUpstream())
+	// Single source of truth for streaming. The pipeline forwards provider
+	// chunks unchanged when no extensions/plugins are bound (zero overhead),
+	// and runs the agentic tool-calling loop in-stream when they are.
+	orchestrator := NewPipelineOrchestrator(s.plugins, s.extensions)
+	streamChan, err := orchestrator.Stream(ctx, &reqClone, provider)
 	if err != nil {
 		return nil, err
 	}
@@ -315,6 +362,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			}
 		}
 
+		genID := GenerationID(ctx)
 		for result := range streamChan {
 			// Record TTFT on first successful token
 			if ttft == nil && result.Response != nil {
@@ -323,7 +371,15 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			}
 
 			if result.Response != nil {
-				lastID = result.Response.ID
+				if result.Response.ID != "" {
+					lastID = result.Response.ID
+				}
+				// Stamp the gateway-issued generation id on every chunk so
+				// the response body always agrees with the X-Generation-Id
+				// header (regardless of what the upstream provider chose).
+				if genID != "" {
+					result.Response.ID = genID
+				}
 
 				// Capture usage if provided (some providers send it in last chunk)
 				if result.Response.Usage != nil {
@@ -364,8 +420,15 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 			}
 		}
 
+		// Prefer the request-scoped generation id (matches X-Generation-Id
+		// header + every chunk's `id` field). Fall back to the upstream id
+		// if for some reason the gateway didn't assign one.
+		logID := genID
+		if logID == "" {
+			logID = lastID
+		}
 		log := &model.RequestLog{
-			ID:               lastID, // Might be empty if stream failed immediately
+			ID:               logID,
 			UserID:           userID,
 			APIKeyID:         apiKeyID,
 			AppName:          appName,

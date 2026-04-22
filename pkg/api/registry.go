@@ -18,6 +18,20 @@ type ModelDefinition struct {
 	Architecture  ModelArchitecture `mapstructure:"architecture" json:"architecture"`
 	TopProvider   ModelTopProvider  `mapstructure:"top_provider" json:"top_provider"`
 
+	// CanonicalSlug is the vendor's preferred model identifier (e.g.
+	// "openai/gpt-4o"). Defaults to ID when unset so every listing has a
+	// stable slug for SDKs to pin.
+	CanonicalSlug string `mapstructure:"canonical_slug" json:"canonical_slug,omitempty"`
+	// HuggingFaceID points to the model's HF page for open-weight catalogues.
+	HuggingFaceID string `mapstructure:"hugging_face_id" json:"hugging_face_id,omitempty"`
+	// SupportedParameters is an advisory capability list so UIs can show or
+	// hide feature toggles (e.g. "reasoning" only for models that honor it).
+	SupportedParameters []string `mapstructure:"supported_parameters" json:"supported_parameters,omitempty"`
+	// DefaultParameters is a free-form map of recommended defaults keyed
+	// by the OpenAI-compat parameter name. Intentionally untyped so
+	// providers can ship arbitrary defaults without a schema bump.
+	DefaultParameters map[string]interface{} `mapstructure:"default_parameters" json:"default_parameters,omitempty"`
+
 	// Metadata for management
 	Source      string    `mapstructure:"source" json:"source"` // "auto" or "manual"
 	LastUpdated time.Time `mapstructure:"last_updated" json:"last_updated"`
