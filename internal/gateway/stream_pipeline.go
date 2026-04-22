@@ -384,7 +384,7 @@ func emitToolEvents(
 			"kind":      kind,
 			"tool_name": tc.Function.Name,
 			"tool_id":   tc.ID,
-			"arguments": tc.Function.Arguments,
+			"arguments": SanitizeArguments(tc.Function.Arguments),
 		}
 		if results != nil {
 			if r, ok := results[tc.ID]; ok {

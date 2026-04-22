@@ -125,6 +125,13 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 		if len(resp.Choices) > 0 && resp.Choices[0].Message != nil && len(resp.Choices[0].Message.ToolCalls) > 0 {
 			hasExtension := false
 
+			// Sanitize tool calls before appending to history so the
+			// provider sees clean JSON on the next iteration.
+			for i := range resp.Choices[0].Message.ToolCalls {
+				tc := &resp.Choices[0].Message.ToolCalls[i]
+				tc.Function.Arguments = SanitizeArguments(tc.Function.Arguments)
+			}
+
 			// Append the assistant's tool call message to history
 			upstreamReq.Messages = append(upstreamReq.Messages, *resp.Choices[0].Message)
 

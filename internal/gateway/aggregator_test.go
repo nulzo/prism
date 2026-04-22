@@ -139,3 +139,24 @@ func TestStreamAggregator_NilChunkSafe(t *testing.T) {
 		t.Fatalf("FinalResponse returned nil")
 	}
 }
+
+func TestSanitizeArguments_Fallback(t *testing.T) {
+	cases := []struct {
+		in, want string
+	}{
+		{"", "{}"},
+		{"   ", "{}"},
+		{`{"q":"foo"}`, `{"q":"foo"}`},
+		{`{"q":"foo"}{"q":"bar"}`, `{"q":"bar"}`},
+		{`{"q":"foo"} {"q":"bar"}`, `{"q":"bar"}`},
+		{"{\"q\":\"foo\"}\n{\"q\":\"bar\"}", `{"q":"bar"}`},
+		{`{"q":"foo"}garbage{"q":"bar"}`, `{"q":"foo"}`}, // garbage stops the decoder
+		{`not json`, "{}"}, // garbage input degrades to empty object
+	}
+	for _, tc := range cases {
+		got := SanitizeArguments(tc.in)
+		if got != tc.want {
+			t.Fatalf("SanitizeArguments(%q) = %q, want %q", tc.in, got, tc.want)
+		}
+	}
+}
