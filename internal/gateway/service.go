@@ -57,7 +57,7 @@ func NewService(logger *zap.Logger, repo store.Repository, ingestor analytics.In
 
 	eReg := extension.NewRegistry()
 	eReg.Register(extension.NewDatetimeExtension())
-	eReg.Register(extension.NewWebSearchExtension("http://localhost:8080")) // Default SearXNG URL
+	eReg.Register(extension.NewWebSearchExtension("http://localhost:8888")) // Default SearXNG URL
 
 	return &service{
 		logger:     logger,

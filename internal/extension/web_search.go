@@ -21,7 +21,7 @@ type WebSearchExtension struct {
 func NewWebSearchExtension(searxngURL string) *WebSearchExtension {
 	if searxngURL == "" {
 		// Default to a local instance, or you could configure a public one
-		searxngURL = "http://localhost:8080"
+		searxngURL = "http://localhost:8888"
 	}
 	return &WebSearchExtension{
 		SearxngURL: searxngURL,
