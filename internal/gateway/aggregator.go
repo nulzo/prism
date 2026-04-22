@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"encoding/json"
 	"strings"
 
 	"github.com/nulzo/model-router-api/pkg/api"
@@ -57,7 +58,7 @@ func (a *ToolCallAccumulator) ApplyAt(slot int, delta api.ToolCall) {
 		cur.Function.Name = delta.Function.Name
 	}
 	if delta.Function.Arguments != "" {
-		cur.Function.Arguments += delta.Function.Arguments
+		cur.Function.Arguments = mergeToolArguments(cur.Function.Arguments, delta.Function.Arguments)
 	}
 	if delta.ExtraContent != nil {
 		cur.ExtraContent = delta.ExtraContent
@@ -80,6 +81,60 @@ func (a *ToolCallAccumulator) Snapshot() []api.ToolCall {
 
 // Empty reports whether any tool-call deltas have been applied.
 func (a *ToolCallAccumulator) Empty() bool { return len(a.bySlot) == 0 }
+
+// mergeToolArguments combines the previously-accumulated tool_call arguments
+// with an incoming delta. Most OpenAI-compatible providers stream genuine
+// incremental JSON fragments (`{"que` → `ry":"` → `foo"}`), where simple
+// concatenation is correct. A handful of providers — Google's Gemini
+// OpenAI-compat layer being the poster child — instead re-send the *full*
+// arguments JSON in every delta ("snapshot mode"). Naïve concatenation
+// there produces `{"query":"foo"}{"query":"foo"}` and the downstream tool
+// invocation fails with `invalid character '{' after top-level value`.
+//
+// Strategy: try to decode the accumulated buffer as JSON. If it parses,
+// the buffer already represents a complete argument object, so a new
+// delta that also parses on its own is a snapshot — replace the buffer
+// with the delta. Otherwise fall back to concatenation (incremental mode).
+func mergeToolArguments(current, delta string) string {
+	if current == "" {
+		return delta
+	}
+	if !isCompleteJSONValue(current) {
+		return current + delta
+	}
+	if isCompleteJSONValue(delta) {
+		// Both sides are parseable → snapshot. Prefer the longer snapshot
+		// when they differ in length (providers occasionally reorder keys
+		// on repeat but usually extend the payload).
+		if len(delta) >= len(current) {
+			return delta
+		}
+		return current
+	}
+	// Current is complete but delta isn't — provider likely started a
+	// fresh incremental stream after a snapshot. Replace with delta so
+	// subsequent concatenation yields valid JSON.
+	return delta
+}
+
+// isCompleteJSONValue reports whether s is a self-contained JSON value.
+// Uses json.Decoder so we can detect the "trailing data" case (concatenated
+// snapshots) explicitly — a strict json.Unmarshal would silently reject
+// those with the same error that triggers the tool_call bug we're fixing.
+func isCompleteJSONValue(s string) bool {
+	trimmed := strings.TrimSpace(s)
+	if trimmed == "" {
+		return false
+	}
+	dec := json.NewDecoder(strings.NewReader(trimmed))
+	var v json.RawMessage
+	if err := dec.Decode(&v); err != nil {
+		return false
+	}
+	// Anything trailing after the first value means it isn't a single
+	// complete value (likely a concatenated snapshot).
+	return !dec.More()
+}
 
 // StreamAggregator collects deltas from a single upstream stream into a
 // non-streaming-shaped ChatResponse. It also tracks finish reason, usage,
