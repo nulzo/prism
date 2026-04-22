@@ -271,14 +271,37 @@ func (o *PipelineOrchestrator) executeExtensions(
 			continue
 		}
 
+		// Defense-in-depth: normalize the arguments string one more
+		// time at the call site. The accumulator already produces
+		// valid JSON for every streaming pattern we know about, but a
+		// future provider could invent a new chunking scheme; the
+		// scanner-based SanitizeArguments here guarantees we hand
+		// Execute a single self-contained JSON value regardless.
+		rawArgs := tc.Function.Arguments
+		args := SanitizeArguments(rawArgs)
 		log.Debug("executing extension",
 			zap.String("extension", tc.Function.Name),
 			zap.String("tool_call_id", tc.ID),
+			zap.Int("arguments_bytes", len(args)),
 		)
-		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(tc.Function.Arguments))
+		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(args))
 		if err != nil {
+			// Include the raw upstream arguments in the log at DEBUG
+			// so operators diagnosing a new provider's streaming
+			// quirks can see what bytes the accumulator assembled.
+			// We don't leak the raw value into the tool-result
+			// message to the model — that's why `result` below is a
+			// concise error envelope instead.
 			log.Warn("extension execution failed",
-				zap.String("extension", tc.Function.Name), zap.Error(err))
+				zap.String("extension", tc.Function.Name),
+				zap.String("tool_call_id", tc.ID),
+				zap.Error(err),
+			)
+			log.Debug("extension execution failed: raw arguments",
+				zap.String("extension", tc.Function.Name),
+				zap.String("raw_arguments", rawArgs),
+				zap.String("sanitized_arguments", args),
+			)
 			result = fmt.Sprintf(`{"error":%q}`, err.Error())
 		}
 

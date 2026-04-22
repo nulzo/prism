@@ -132,17 +132,33 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 				// Is it an active extension?
 				if ext, ok := activeExtensions[tc.Function.Name]; ok {
 					hasExtension = true
+					// Defense-in-depth: same scanner-based normalization
+					// the streaming pipeline uses. Non-streaming tool
+					// calls go through adapter.Chat so the raw
+					// accumulator isn't involved, but providers still
+					// occasionally return slightly malformed arguments
+					// (extra whitespace, trailing commas on legacy OSS
+					// models) and this guarantees we hand Execute a
+					// single valid JSON value.
+					rawArgs := tc.Function.Arguments
+					args := SanitizeArguments(rawArgs)
 					log.Debug("executing extension",
 						zap.String("extension", tc.Function.Name),
 						zap.String("tool_call_id", tc.ID),
+						zap.Int("arguments_bytes", len(args)),
 					)
 
-					// Execute the extension
-					resultStr, execErr := ext.Execute(ctx, activeExtensionConfigs[tc.Function.Name], []byte(tc.Function.Arguments))
+					resultStr, execErr := ext.Execute(ctx, activeExtensionConfigs[tc.Function.Name], []byte(args))
 					if execErr != nil {
 						log.Warn("extension execution failed",
 							zap.String("extension", tc.Function.Name),
+							zap.String("tool_call_id", tc.ID),
 							zap.Error(execErr),
+						)
+						log.Debug("extension execution failed: raw arguments",
+							zap.String("extension", tc.Function.Name),
+							zap.String("raw_arguments", rawArgs),
+							zap.String("sanitized_arguments", args),
 						)
 						resultStr = `{"error": "` + execErr.Error() + `"}`
 					}
