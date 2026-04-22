@@ -1,0 +1,38 @@
+# Keep the build context lean — everything here either bloats the
+# image (router.db, bin/), leaks secrets (.env), or is redundant with
+# the source tree already COPYed in the Dockerfile.
+
+.git
+.github
+.golangci.yml
+.env
+.env.local
+.env.*.local
+
+bin/
+build/*
+!build/Dockerfile
+
+docs/
+scripts/.venv/
+scripts/__pycache__/
+
+# Local dev artifacts
+router.db
+router.db-*
+*.sqlite
+*.sqlite-journal
+*.log
+
+# Host compose state shouldn't end up inside the image
+docker-compose.yml
+docker-compose.*.yml
+deploy/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Test output
+coverage.out
+*.test

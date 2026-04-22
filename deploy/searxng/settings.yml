@@ -1,0 +1,34 @@
+# Minimal settings overlay for the bundled SearXNG container.
+#
+# Why this file exists at all: the upstream image ships a settings.yml
+# that only exposes the HTML front-end. Our web-search extension talks
+# JSON, which requires two toggles — `search.formats` and a matching
+# `use_default_settings: true` so we inherit the 200+ engines without
+# having to redeclare them.
+#
+# Rotate `server.secret_key` in production (env-substituted via
+# ${SEARXNG_SECRET} is fine too; searxng replaces env refs at boot).
+
+use_default_settings: true
+
+server:
+  # HTTP port inside the container. Compose maps 8888:8080 on the host,
+  # and the prism container hits `http://searxng:8080` over the bridge
+  # network.
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "change-me-in-production"
+  limiter: false
+  image_proxy: false
+
+# Enable JSON so the web-search extension can parse `/search?format=json`.
+# The other formats come along for the ride — HTML stays available for
+# interactive debugging on `localhost:8888`.
+search:
+  formats:
+    - html
+    - json
+
+# UI tweaks are cosmetic and only show up if a human loads the page.
+ui:
+  static_use_hash: true

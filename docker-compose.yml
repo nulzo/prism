@@ -1,0 +1,97 @@
+# Prism + SearXNG, wired together on a shared bridge network so the
+# web-search extension can reach searxng by service name. From inside
+# the prism container, `http://searxng:8080` resolves to the searxng
+# container's internal port — that's the port searxng actually listens
+# on, regardless of whatever host-port mapping we publish.
+#
+# Boot with:   docker compose up -d --build
+# Tail logs:   docker compose logs -f prism
+# Tear down:   docker compose down
+#
+# Data that should survive `down` lives in named volumes (sqlite DB,
+# searxng cache). The searxng settings file is a host bind mount so
+# it's version-controlled alongside the code.
+
+name: prism
+
+services:
+  prism:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: prism:latest
+    container_name: prism
+    restart: unless-stopped
+    depends_on:
+      searxng:
+        condition: service_started
+    environment:
+      # Extension wiring — service name + internal port, not the host
+      # mapping. If prism is ever run outside compose, override this
+      # env var (or unset it to fall back to http://localhost:8888).
+      SEARXNG_URL: http://searxng:8080
+      SERVER_PORT: "8080"
+      SERVER_AUTH_ENABLED: "false"
+      # Provider keys are read via godotenv + viper; the .env file at
+      # the repo root is picked up automatically by `docker compose`.
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL:-https://api.anthropic.com}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      GOOGLE_BASE_URL: ${GOOGLE_BASE_URL:-https://generativelanguage.googleapis.com/v1beta}
+      # Ollama running on the docker host (not inside the compose
+      # network). `host.docker.internal` is provided by the
+      # `extra_hosts` block below so this works on Linux too.
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      BFL_API_KEY: ${BFL_API_KEY:-}
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Persist the sqlite catalog across container restarts. The
+      # Dockerfile defaults WORKDIR to /root, and the server writes
+      # router.db relative to its cwd.
+      - prism-data:/root
+    networks:
+      - prism-net
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    environment:
+      # Base URL is only used to build absolute links in the HTML UI;
+      # our JSON consumer doesn't care, but searxng warns if it's not
+      # set. Leave the SECRET_KEY fixed for dev — rotate in prod.
+      SEARXNG_BASE_URL: http://localhost:8888/
+      SEARXNG_SECRET: ${SEARXNG_SECRET:-change-me-in-production}
+    ports:
+      # Expose 8888 on the host for manual browser use + curl smoke
+      # tests. Prism itself does NOT talk to this mapping — it hits
+      # the container-internal port 8080 over the bridge network.
+      - "8888:8080"
+    volumes:
+      # Bind-mount our settings overlay; searxng reads /etc/searxng/
+      # settings.yml on boot and merges it with the image default.
+      # JSON output is off by default upstream; the overlay turns it
+      # back on so the web-search extension can parse responses.
+      - ./deploy/searxng/settings.yml:/etc/searxng/settings.yml:ro
+      - searxng-data:/var/cache/searxng
+    networks:
+      - prism-net
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+
+networks:
+  prism-net:
+    driver: bridge
+
+volumes:
+  prism-data:
+  searxng-data:

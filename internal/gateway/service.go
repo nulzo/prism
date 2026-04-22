@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -79,7 +80,16 @@ func NewServiceWithCatalog(logger *zap.Logger, repo store.Repository, ingestor a
 
 	eReg := extension.NewRegistry()
 	eReg.Register(extension.NewDatetimeExtension())
-	eReg.Register(extension.NewWebSearchExtension("http://localhost:8888"))
+	// The web-search extension needs to know where its SearXNG instance
+	// lives. In the bundled docker-compose stack the two containers share
+	// a bridge network and searxng is reachable at its service name on
+	// the container port (8080). Outside of compose the developer can
+	// override via env; the default falls back to a host-local install.
+	searxngURL := os.Getenv("SEARXNG_URL")
+	if searxngURL == "" {
+		searxngURL = "http://localhost:8888"
+	}
+	eReg.Register(extension.NewWebSearchExtension(searxngURL))
 
 	return &service{
 		logger:     logger,
