@@ -16,7 +16,7 @@ import (
 // MaxAgenticIterations bounds the agentic tool-calling loop so a misbehaving
 // model can't drive unbounded extension execution. Mirrors OpenRouter's
 // default ceiling of five iterations per request.
-const MaxAgenticIterations = 5
+const MaxAgenticIterations = 10
 
 // streamBufferSize sizes the outbound channel between the pipeline goroutine
 // and the HTTP handler. Small enough to bound memory if the client is slow,
@@ -179,9 +179,8 @@ func (o *PipelineOrchestrator) runAgenticLoop(
 	out chan<- api.StreamResult,
 ) *StreamAggregator {
 	hasExtensions := len(activeExts) > 0
-	var lastAgg *StreamAggregator
 
-	for iter := 0; iter < MaxAgenticIterations; iter++ {
+	for iter := 0; iter <= MaxAgenticIterations; iter++ {
 		log.Debug("provider stream iteration", zap.Int("iteration", iter+1))
 
 		upstream, err := provider.Stream(ctx, upstreamReq)
@@ -191,7 +190,6 @@ func (o *PipelineOrchestrator) runAgenticLoop(
 		}
 
 		agg := NewStreamAggregator()
-		lastAgg = agg
 		tail := newTailBuffer(4)
 
 		for result := range upstream {
@@ -227,11 +225,25 @@ func (o *PipelineOrchestrator) runAgenticLoop(
 			zap.Int("tool_calls", len(agg.ToolCalls())),
 			zap.Int("content_bytes", len(agg.AssistantMessage().Content.Text)),
 		)
-		if hasExtensions && hasMatchingExtension(agg.ToolCalls(), activeExts) {
+		if hasExtensions && iter < MaxAgenticIterations && hasMatchingExtension(agg.ToolCalls(), activeExts) {
 			tail.Drop() // suppress trailing tool_calls/stop + usage-only chunks
 			emitToolEvents(ctx, out, agg.ToolCalls(), activeExts, "tool_call", nil)
 			if !o.executeExtensions(ctx, log, agg, activeExts, activeExtConfigs, upstreamReq, out) {
 				return nil
+			}
+
+			// If this was the last allowed tool-calling iteration, append a
+			// system prompt to force the model to answer on the next turn.
+			if iter == MaxAgenticIterations-1 {
+				log.Warn("agentic loop hit MaxAgenticIterations, forcing final answer", zap.Int("max", MaxAgenticIterations))
+				upstreamReq.Messages = append(upstreamReq.Messages, api.ChatMessage{
+					Role: "system",
+					Content: api.Content{
+						Text: "You have reached the maximum number of tool calls. Please provide a final answer to the user based on the information you have gathered so far.",
+					},
+				})
+				// Force the model to stop calling tools.
+				upstreamReq.ToolChoice = "none"
 			}
 			continue
 		}
@@ -243,8 +255,8 @@ func (o *PipelineOrchestrator) runAgenticLoop(
 		return agg
 	}
 
-	log.Warn("agentic loop hit MaxAgenticIterations", zap.Int("max", MaxAgenticIterations))
-	return lastAgg
+	// Unreachable: the loop always returns either an aggregator or nil.
+	return nil
 }
 
 // executeExtensions runs each tool call that maps to an active extension,
@@ -271,37 +283,14 @@ func (o *PipelineOrchestrator) executeExtensions(
 			continue
 		}
 
-		// Defense-in-depth: normalize the arguments string one more
-		// time at the call site. The accumulator already produces
-		// valid JSON for every streaming pattern we know about, but a
-		// future provider could invent a new chunking scheme; the
-		// scanner-based SanitizeArguments here guarantees we hand
-		// Execute a single self-contained JSON value regardless.
-		rawArgs := tc.Function.Arguments
-		args := SanitizeArguments(rawArgs)
 		log.Debug("executing extension",
 			zap.String("extension", tc.Function.Name),
 			zap.String("tool_call_id", tc.ID),
-			zap.Int("arguments_bytes", len(args)),
 		)
-		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(args))
+		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(tc.Function.Arguments))
 		if err != nil {
-			// Include the raw upstream arguments in the log at DEBUG
-			// so operators diagnosing a new provider's streaming
-			// quirks can see what bytes the accumulator assembled.
-			// We don't leak the raw value into the tool-result
-			// message to the model — that's why `result` below is a
-			// concise error envelope instead.
 			log.Warn("extension execution failed",
-				zap.String("extension", tc.Function.Name),
-				zap.String("tool_call_id", tc.ID),
-				zap.Error(err),
-			)
-			log.Debug("extension execution failed: raw arguments",
-				zap.String("extension", tc.Function.Name),
-				zap.String("raw_arguments", rawArgs),
-				zap.String("sanitized_arguments", args),
-			)
+				zap.String("extension", tc.Function.Name), zap.Error(err))
 			result = fmt.Sprintf(`{"error":%q}`, err.Error())
 		}
 
@@ -384,7 +373,7 @@ func emitToolEvents(
 			"kind":      kind,
 			"tool_name": tc.Function.Name,
 			"tool_id":   tc.ID,
-			"arguments": SanitizeArguments(tc.Function.Arguments),
+			"arguments": tc.Function.Arguments,
 		}
 		if results != nil {
 			if r, ok := results[tc.ID]; ok {
