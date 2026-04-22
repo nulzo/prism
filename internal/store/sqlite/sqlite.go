@@ -236,6 +236,21 @@ func (r *providerRepo) SyncModels(ctx context.Context, models []model.Model) err
 		return err
 	}
 
+	// The `models` table has two uniqueness constraints:
+	//   (1) PRIMARY KEY(id)
+	//   (2) UNIQUE(provider_id, provider_model_id)
+	//
+	// Upstream catalog hydration can legitimately surface a row that
+	// collides on constraint (2) but carries a different global `id`
+	// (e.g. YAML renamed `openai/gpt-4` to `openai/gpt-4-legacy` while
+	// the upstream `/v1/models` endpoint still reports `gpt-4`, or the
+	// provider adopted a canonical slug). `ON CONFLICT(id)` only covers
+	// the primary key, so the composite-unique clash would surface as
+	// `UNIQUE constraint failed: models.provider_id, models.provider_model_id`.
+	//
+	// Defensively drop any stale row that shares the composite key but
+	// no longer matches the authoritative id, then run the upsert.
+	dropStale := `DELETE FROM models WHERE provider_id = ? AND provider_model_id = ? AND id != ?`
 	query := `
 	INSERT INTO models (
 		id, provider_id, provider_model_id, is_enabled, is_public,
@@ -257,6 +272,9 @@ func (r *providerRepo) SyncModels(ctx context.Context, models []model.Model) err
 		updated_at = CURRENT_TIMESTAMP`
 
 	for _, m := range models {
+		if _, err := r.db.ExecContext(ctx, dropStale, m.ProviderID, m.ProviderModelID, m.ID); err != nil {
+			return err
+		}
 		if _, err := r.db.NamedExecContext(ctx, query, m); err != nil {
 			return err
 		}

@@ -257,10 +257,12 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
 	copy(mergedModels, a.config.StaticModels)
 
-	// Check for new models
+	// Discover new models — debug per-entry, one info summary at the end.
+	var added int
 	for _, upstreamModel := range upstreamResp.Data {
 		if !existingModels[upstreamModel.ID] {
-			logger.Warn(fmt.Sprintf("Provider '%s' has a new model available upstream that is not in config: %s", a.config.ID, upstreamModel.ID))
+			logger.Debug(fmt.Sprintf("provider %q discovered upstream model not in static config: %s", a.config.ID, upstreamModel.ID))
+			added++
 
 			// Add it with default/empty pricing so it's usable
 			newModel := api.ModelDefinition{
@@ -277,6 +279,10 @@ func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
 			}
 			mergedModels = append(mergedModels, newModel)
 		}
+	}
+
+	if added > 0 {
+		logger.Info(fmt.Sprintf("provider %q hydrated: %d upstream models added (%d total)", a.config.ID, added, len(mergedModels)))
 	}
 
 	return mergedModels, nil

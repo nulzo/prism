@@ -57,6 +57,20 @@ type ChatRequest struct {
 
 	// Debug options
 	Debug *DebugOptions `json:"debug,omitempty"`
+
+	// Reasoning / thinking tokens (OpenRouter-aligned, see
+	// https://openrouter.ai/docs/use-cases/reasoning-tokens). One of
+	// Effort or MaxTokens may be set; if both are unset, Enabled defaults
+	// from the presence of either field. Providers that cannot honor the
+	// exact requested shape (e.g. Anthropic only accepts MaxTokens, OpenAI
+	// only accepts Effort) translate across in their adapters.
+	Reasoning *ReasoningConfig `json:"reasoning,omitempty"`
+
+	// IncludeReasoning is the legacy OpenRouter parameter that predates the
+	// `reasoning` object. `true` is equivalent to `reasoning: {}`;
+	// `false` is equivalent to `reasoning: { "exclude": true }`. Ignored
+	// when Reasoning is already set so the newer field always wins.
+	IncludeReasoning *bool `json:"include_reasoning,omitempty"`
 }
 
 // UpstreamChatRequest is the provider-safe request shape that can be forwarded
@@ -91,6 +105,12 @@ type UpstreamChatRequest struct {
 	Prediction *Prediction  `json:"prediction,omitempty"`
 	Modalities []string     `json:"modalities,omitempty"`
 	Audio      *AudioConfig `json:"audio,omitempty"`
+
+	// Reasoning is the normalized reasoning configuration forwarded to
+	// provider adapters. The adapter is responsible for translating this
+	// into its native shape (reasoning_effort, thinking_config,
+	// thinking.budget_tokens, etc.) before it hits the upstream API.
+	Reasoning *ReasoningConfig `json:"reasoning,omitempty"`
 }
 
 func (r *ChatRequest) ToUpstream() *UpstreamChatRequest {
@@ -122,6 +142,7 @@ func (r *ChatRequest) ToUpstream() *UpstreamChatRequest {
 		Prediction:          r.Prediction,
 		Modalities:          append([]string(nil), r.Modalities...),
 		Audio:               r.Audio,
+		Reasoning:           r.Reasoning.Normalize(r.IncludeReasoning),
 	}
 
 	if r.LogitBias != nil {
@@ -140,15 +161,127 @@ type AudioConfig struct {
 }
 
 type ChatMessage struct {
-	Role        string        `json:"role" binding:"required,oneof=user assistant system tool"`
-	Content     Content       `json:"content"` // string or []ContentPart
-	Reasoning   string        `json:"reasoning,omitempty"`
-	Name        string        `json:"name,omitempty"`
-	ToolCallID  string        `json:"tool_call_id,omitempty"`
-	ToolCalls   []ToolCall    `json:"tool_calls,omitempty"`  // For assistant messages
-	Images      []ContentPart `json:"images,omitempty"`      // For image generation results
-	Audio       *AudioOutput  `json:"audio,omitempty"`       // For audio generation results
-	Annotations []interface{} `json:"annotations,omitempty"` // For file parsing results, etc.
+	Role string `json:"role" binding:"required,oneof=user assistant system tool"`
+	// Content handles the union string | []ContentPart.
+	Content Content `json:"content"`
+	// Reasoning is the normalized "thinking" text. Providers expose this
+	// under a few different names; the UnmarshalJSON hook collapses them:
+	//   * OpenRouter / Anthropic / default: `reasoning`
+	//   * DeepSeek and most OpenAI-compat providers: `reasoning_content`
+	// We always emit `reasoning` on the wire for consistency.
+	Reasoning string `json:"reasoning,omitempty"`
+	// ReasoningDetails is the typed, provider-preserving view of reasoning
+	// (OpenRouter `reasoning_details` array). Each entry is one of
+	// reasoning.text / reasoning.summary / reasoning.encrypted. This must be
+	// passed back verbatim in the next request's assistant message for
+	// providers (notably Anthropic) that require the reasoning block chain
+	// to remain intact across a tool-use round-trip.
+	ReasoningDetails []ReasoningDetail `json:"reasoning_details,omitempty"`
+	Name             string            `json:"name,omitempty"`
+	ToolCallID       string            `json:"tool_call_id,omitempty"`
+	ToolCalls        []ToolCall        `json:"tool_calls,omitempty"`
+	Images           []ContentPart     `json:"images,omitempty"`
+	Audio            *AudioOutput      `json:"audio,omitempty"`
+	Annotations      []interface{}     `json:"annotations,omitempty"`
+}
+
+// chatMessageAlias is a shadow type used to break json.Unmarshal recursion so
+// ChatMessage.UnmarshalJSON can add post-processing (reasoning_content alias
+// collapse) without infinite loop.
+type chatMessageAlias ChatMessage
+
+// UnmarshalJSON folds the OpenAI-compat `reasoning_content` field into
+// `Reasoning` so downstream code only has to look in one place. If both are
+// present, `reasoning` wins (OpenRouter's canonical field).
+func (m *ChatMessage) UnmarshalJSON(data []byte) error {
+	var wire struct {
+		chatMessageAlias
+		ReasoningContent string `json:"reasoning_content,omitempty"`
+	}
+	if err := json.Unmarshal(data, &wire); err != nil {
+		return err
+	}
+	*m = ChatMessage(wire.chatMessageAlias)
+	if m.Reasoning == "" && wire.ReasoningContent != "" {
+		m.Reasoning = wire.ReasoningContent
+	}
+	return nil
+}
+
+// ReasoningConfig is the OpenRouter-style reasoning control. Exactly one of
+// Effort or MaxTokens should be set; adapters translate whichever is set
+// into their native control. Exclude=true means the provider should still
+// reason but the result must not appear in the response body.
+type ReasoningConfig struct {
+	// Effort is one of "xhigh", "high", "medium", "low", "minimal", "none".
+	// Intended for OpenAI-style providers (o-series, GPT-5, Grok).
+	Effort string `json:"effort,omitempty"`
+	// MaxTokens is a direct token budget for reasoning. Intended for
+	// Anthropic and Gemini thinking models.
+	MaxTokens int `json:"max_tokens,omitempty"`
+	// Exclude hides reasoning tokens from the response while still allowing
+	// the provider to reason internally (where supported).
+	Exclude bool `json:"exclude,omitempty"`
+	// Enabled lets callers opt-in to reasoning at a default level without
+	// specifying effort or max_tokens. Providers treat `enabled: true` as
+	// medium effort.
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// Normalize returns a concrete ReasoningConfig after merging in the legacy
+// `include_reasoning` boolean. Returns nil when neither the struct nor the
+// legacy flag indicates any reasoning request, so the upstream layer only
+// has to check for a non-nil config.
+func (r *ReasoningConfig) Normalize(legacyInclude *bool) *ReasoningConfig {
+	if r != nil {
+		// Copy so callers can't mutate the original after ToUpstream.
+		out := *r
+		return &out
+	}
+	if legacyInclude == nil {
+		return nil
+	}
+	if *legacyInclude {
+		enabled := true
+		return &ReasoningConfig{Enabled: &enabled}
+	}
+	// include_reasoning=false is OpenRouter shorthand for "reason but hide it"
+	return &ReasoningConfig{Exclude: true}
+}
+
+// IsEnabled reports whether the caller has asked for reasoning at all. The
+// provider may still decide to skip based on model capabilities.
+func (r *ReasoningConfig) IsEnabled() bool {
+	if r == nil {
+		return false
+	}
+	if r.Enabled != nil && !*r.Enabled {
+		return false
+	}
+	return r.Effort != "" || r.MaxTokens > 0 || (r.Enabled != nil && *r.Enabled)
+}
+
+// ReasoningDetail is one entry in the OpenRouter-aligned `reasoning_details`
+// array. The `Type` field drives which of the content fields is populated.
+type ReasoningDetail struct {
+	// Type is "reasoning.text", "reasoning.summary", or "reasoning.encrypted".
+	Type string `json:"type"`
+	// Text is populated for type=reasoning.text.
+	Text string `json:"text,omitempty"`
+	// Summary is populated for type=reasoning.summary.
+	Summary string `json:"summary,omitempty"`
+	// Data is populated for type=reasoning.encrypted (base64-encoded blob).
+	Data string `json:"data,omitempty"`
+	// Signature is a cryptographic signature (Anthropic) when available.
+	Signature string `json:"signature,omitempty"`
+	// ID is a stable identifier for this detail within the response.
+	ID string `json:"id,omitempty"`
+	// Format is the origin format so downstream consumers can route:
+	// "anthropic-claude-v1", "openai-responses-v1", "google-gemini-v1",
+	// "xai-responses-v1", or "unknown".
+	Format string `json:"format,omitempty"`
+	// Index preserves the ordering across detail chunks.
+	Index int `json:"index,omitempty"`
 }
 
 type AudioOutput struct {

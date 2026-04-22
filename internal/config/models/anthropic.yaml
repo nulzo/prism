@@ -1,4 +1,106 @@
 models:
+  - id: anthropic/claude-opus-4.7
+    name: "Anthropic: Claude Opus 4.7"
+    provider_id: anthropic
+    upstream_id: claude-4.7-opus-20260416
+    description: "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on..."
+    enabled: true
+    pricing:
+      prompt: '0.000005'
+      completion: '0.000025'
+      request: '0'
+      image: '0'
+      web_search: '0.01'
+      input_cache_read: '0.0000005'
+      input_cache_write: '0.00000625'
+    config:
+      context_window: 1000000
+      max_output: 128000
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+    context_length: 1000000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+      tokenizer: Claude
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 128000
+      is_moderated: true
+    canonical_slug: "anthropic/claude-4.7-opus-20260416"
+    supported_parameters: ["include_reasoning", "max_tokens", "reasoning", "response_format", "stop", "structured_outputs", "tool_choice", "tools", "verbosity"]
+
+  - id: anthropic/claude-opus-4.6-fast
+    name: "Anthropic: Claude Opus 4.6 (Fast)"
+    provider_id: anthropic
+    upstream_id: claude-4.6-opus-fast-20260407
+    description: "Fast-mode variant of [Opus 4.6](/anthropic/claude-opus-4.6) - identical capabilities with higher output speed at premium 6x pricing.\n\nLearn more in Anthropic's docs: https://platform.claude.com/docs/en/build-with-claude/fast-mode"
+    enabled: true
+    pricing:
+      prompt: '0.00003'
+      completion: '0.00015'
+      request: '0'
+      image: '0'
+      web_search: '0.01'
+      input_cache_read: '0.000003'
+      input_cache_write: '0.0000375'
+    config:
+      context_window: 1000000
+      max_output: 128000
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+    context_length: 1000000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+      tokenizer: Claude
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 128000
+      is_moderated: true
+    canonical_slug: "anthropic/claude-4.6-opus-fast-20260407"
+    supported_parameters: ["include_reasoning", "max_tokens", "reasoning", "response_format", "stop", "structured_outputs", "temperature", "tool_choice", "tools", "top_p", "verbosity"]
+
+  - id: anthropic/claude-sonnet-4.6
+    name: "Anthropic: Claude Sonnet 4.6"
+    provider_id: anthropic
+    upstream_id: claude-4.6-sonnet-20260217
+    description: "Sonnet 4.6 is Anthropic's most capable Sonnet-class model yet, with frontier performance across coding, agents, and professional work. It excels at iterative development, complex codebase navigation, end-to-end project management with..."
+    enabled: true
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+      web_search: '0.01'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
+    config:
+      context_window: 1000000
+      max_output: 128000
+      modality: [text, image]
+      image_support: true
+      tool_use: true
+      streaming_support: true
+    source: auto
+    context_length: 1000000
+    architecture:
+      input_modalities: [text, image]
+      output_modalities: [text]
+      tokenizer: Claude
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 128000
+      is_moderated: true
+    canonical_slug: "anthropic/claude-4.6-sonnet-20260217"
+    supported_parameters: ["include_reasoning", "max_completion_tokens", "max_tokens", "reasoning", "response_format", "stop", "structured_outputs", "temperature", "tool_choice", "tools", "top_k", "top_p", "verbosity"]
+
   - id: anthropic/claude-2
     name: Claude 2.0 / 2.1
     provider_id: anthropic

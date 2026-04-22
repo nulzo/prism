@@ -106,17 +106,27 @@ func StreamRequest(ctx context.Context, client HTTPClient, method, url string, h
 		}
 	}
 
-	scanner := bufio.NewScanner(resp.Body)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if line == "" {
-			continue
+	reader := bufio.NewReaderSize(resp.Body, 64*1024)
+	for {
+		lineBytes, err := reader.ReadBytes('\n')
+		if len(lineBytes) > 0 {
+			lineBytes = bytes.TrimRight(lineBytes, "\r\n")
 		}
 
-		if err := processLine(line); err != nil {
+		line := string(lineBytes)
+		if line != "" {
+			if processErr := processLine(line); processErr != nil {
+				return processErr
+			}
+		}
+
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
 			return err
 		}
 	}
 
-	return scanner.Err()
+	return nil
 }

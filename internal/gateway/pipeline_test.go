@@ -45,8 +45,11 @@ func TestPipelineOrchestrator_Execute(t *testing.T) {
 		chatFunc: func(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 			callCount++
 			if callCount == 1 {
-				if len(req.Tools) != 1 || req.Tools[0].Function.Name != "prism:datetime" {
-					t.Fatalf("expected exactly one injected extension tool prism:datetime, got %+v", req.Tools)
+				// The wire tool name is the sanitised form (prism_datetime)
+				// because OpenAI's function-name schema forbids colons and
+				// Gemini's OpenAI-compat shim silently drops illegal names.
+				if len(req.Tools) != 1 || req.Tools[0].Function.Name != "prism_datetime" {
+					t.Fatalf("expected exactly one injected extension tool prism_datetime, got %+v", req.Tools)
 				}
 			}
 			if callCount == 2 {
@@ -71,7 +74,7 @@ func TestPipelineOrchestrator_Execute(t *testing.T) {
 										ID:   "call_123",
 										Type: "function",
 										Function: api.FunctionCall{
-											Name:      "prism:datetime",
+											Name:      "prism_datetime",
 											Arguments: `{"timezone": "UTC"}`,
 										},
 										ExtraContent: &api.ToolExtraContent{

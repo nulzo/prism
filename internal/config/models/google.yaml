@@ -514,8 +514,8 @@ models:
     description: Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
     enabled: true
     pricing:
-      prompt: '0.5'
-      completion: '3'
+      prompt: '0.25'
+      completion: '1.50'
       request: '0'
       image: '0'
       input_cache_read: '0.05'

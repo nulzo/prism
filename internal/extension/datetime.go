@@ -15,15 +15,15 @@ func NewDatetimeExtension() *DatetimeExtension {
 	return &DatetimeExtension{}
 }
 
-func (t *DatetimeExtension) Name() string {
-	return "prism:datetime"
-}
+func (t *DatetimeExtension) ID() string { return "prism:datetime" }
+
+func (t *DatetimeExtension) ToolName() string { return DefaultToolName(t.ID()) }
 
 func (t *DatetimeExtension) BuildTool(config api.ExtensionConfig) (api.Tool, error) {
 	return api.Tool{
 		Type: "function",
 		Function: api.FunctionDescription{
-			Name:        t.Name(),
+			Name:        t.ToolName(),
 			Description: "Get the current date and time.",
 			Parameters: map[string]interface{}{
 				"type": "object",
