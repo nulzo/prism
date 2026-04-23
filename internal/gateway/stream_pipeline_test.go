@@ -22,11 +22,13 @@ type streamingMockProvider struct {
 	caps    llm.Capabilities
 }
 
-func (m *streamingMockProvider) Name() string                         { return "mock" }
-func (m *streamingMockProvider) Type() string                         { return "mock" }
-func (m *streamingMockProvider) Capabilities() llm.Capabilities       { return m.caps }
-func (m *streamingMockProvider) Models(ctx context.Context) ([]api.ModelDefinition, error) { return nil, nil }
-func (m *streamingMockProvider) Health(ctx context.Context) error     { return nil }
+func (m *streamingMockProvider) Name() string                   { return "mock" }
+func (m *streamingMockProvider) Type() string                   { return "mock" }
+func (m *streamingMockProvider) Capabilities() llm.Capabilities { return m.caps }
+func (m *streamingMockProvider) Models(ctx context.Context) ([]api.ModelDefinition, error) {
+	return nil, nil
+}
+func (m *streamingMockProvider) Health(ctx context.Context) error { return nil }
 
 func (m *streamingMockProvider) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	return nil, nil

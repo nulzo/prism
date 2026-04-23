@@ -163,10 +163,10 @@ func SanitizeArguments(s string) string {
 	if s == "" {
 		return "{}"
 	}
-	
+
 	dec := json.NewDecoder(strings.NewReader(s))
 	var lastValid json.RawMessage
-	
+
 	for {
 		var v json.RawMessage
 		if err := dec.Decode(&v); err != nil {
@@ -174,7 +174,7 @@ func SanitizeArguments(s string) string {
 		}
 		lastValid = v
 	}
-	
+
 	if lastValid == nil {
 		return "{}"
 	}

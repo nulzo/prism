@@ -8,14 +8,14 @@ type Model struct {
 	CanonicalSlug string `json:"canonical_slug,omitempty"`
 	// HuggingFaceID points to the model's HF page when available (nominally
 	// populated by the catalog for open-weight providers).
-	HuggingFaceID string `json:"hugging_face_id,omitempty"`
-	Created       int64  `json:"created"`
-	Object        string `json:"object"`
-	OwnedBy       string `json:"owned_by"`
-	Provider      string `json:"provider,omitempty"`
-	Name          string `json:"name"`
-	Description   string `json:"description"`
-	ContextLength int    `json:"context_length"`
+	HuggingFaceID string       `json:"hugging_face_id,omitempty"`
+	Created       int64        `json:"created"`
+	Object        string       `json:"object"`
+	OwnedBy       string       `json:"owned_by"`
+	Provider      string       `json:"provider,omitempty"`
+	Name          string       `json:"name"`
+	Description   string       `json:"description"`
+	ContextLength int          `json:"context_length"`
 	Architecture  Architecture `json:"architecture"`
 	Pricing       Pricing      `json:"pricing"`
 	TopProvider   TopProvider  `json:"top_provider"`

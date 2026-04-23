@@ -20,6 +20,7 @@ func (m *mockProvider) Type() string { return "mock" }
 func (m *mockProvider) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	return m.chatFunc(ctx, req)
 }
+
 func (m *mockProvider) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	return nil, nil
 }

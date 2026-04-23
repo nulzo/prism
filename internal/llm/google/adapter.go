@@ -83,7 +83,7 @@ type GeminiUsageMetadata struct {
 	TotalTokenCount      int `json:"totalTokenCount"`
 	// ThoughtsTokenCount is Gemini's reasoning-tokens counter. Only present
 	// on thinking-capable models when thinking actually ran.
-	ThoughtsTokenCount int `json:"thoughtsTokenCount,omitempty"`
+	ThoughtsTokenCount      int `json:"thoughtsTokenCount,omitempty"`
 	CachedContentTokenCount int `json:"cachedContentTokenCount,omitempty"`
 }
 
@@ -125,9 +125,9 @@ type GeminiSafetySetting struct {
 }
 
 type GeminiGenerationConfig struct {
-	ResponseModalities []string                `json:"responseModalities,omitempty"`
-	Temperature        float64                 `json:"temperature,omitempty"`
-	ThinkingConfig     *GeminiThinkingConfig   `json:"thinkingConfig,omitempty"`
+	ResponseModalities []string              `json:"responseModalities,omitempty"`
+	Temperature        float64               `json:"temperature,omitempty"`
+	ThinkingConfig     *GeminiThinkingConfig `json:"thinkingConfig,omitempty"`
 }
 
 // GeminiThinkingConfig controls reasoning output for Gemini thinking models.

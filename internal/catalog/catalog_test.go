@@ -30,15 +30,17 @@ func (f *fakeProvider) Models(ctx context.Context) ([]api.ModelDefinition, error
 	}
 	return f.models, nil
 }
+
 func (f *fakeProvider) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	return nil, errors.New("not implemented")
 }
+
 func (f *fakeProvider) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	return nil, errors.New("not implemented")
 }
-func (f *fakeProvider) Health(ctx context.Context) error    { return nil }
-func (f *fakeProvider) Config() config.ProviderConfig       { return config.ProviderConfig{ID: f.name} }
-func (f *fakeProvider) Capabilities() llm.Capabilities      { return llm.Capabilities{} }
+func (f *fakeProvider) Health(ctx context.Context) error { return nil }
+func (f *fakeProvider) Config() config.ProviderConfig    { return config.ProviderConfig{ID: f.name} }
+func (f *fakeProvider) Capabilities() llm.Capabilities   { return llm.Capabilities{} }
 
 // --- tests ---------------------------------------------------------------
 

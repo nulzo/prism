@@ -198,10 +198,10 @@ func (c *Catalog) Providers() []string {
 // the caller so the admin endpoint / logs can surface human-readable diff
 // summaries.
 type HydrateResult struct {
-	Providers map[string]ProviderResult
-	Added     []string
-	Removed   []string
-	Updated   []string
+	Providers   map[string]ProviderResult
+	Added       []string
+	Removed     []string
+	Updated     []string
 	TotalModels int
 	Duration    time.Duration
 }
