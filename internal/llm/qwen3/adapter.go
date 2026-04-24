@@ -12,6 +12,7 @@ import (
 
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/llm"
+	"github.com/nulzo/model-router-api/internal/llm/processing"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -91,7 +92,15 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 		}
 	}
 
-	payloadBytes, err := json.Marshal(req)
+	payload := struct {
+		*api.UpstreamChatRequest
+		Messages []processing.CompatMessage `json:"messages"`
+	}{
+		UpstreamChatRequest: req,
+		Messages:            processing.FormatOpenAIMessages(req.Messages),
+	}
+
+	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}

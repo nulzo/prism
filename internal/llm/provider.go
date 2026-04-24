@@ -17,6 +17,7 @@ const (
 	ElevenLabs ProviderName = "elevenlabs"
 	CosyVoice  ProviderName = "cosyvoice"
 	Qwen3      ProviderName = "qwen3"
+	DeepSeek   ProviderName = "deepseek"
 )
 
 type Provider interface {

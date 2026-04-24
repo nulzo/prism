@@ -1,4 +1,4 @@
-package moonshot
+package deepseek
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	llm.Register("moonshot", NewAdapter)
+	llm.Register("deepseek", NewAdapter)
 }
 
 type Adapter struct {
@@ -27,9 +27,8 @@ type Adapter struct {
 }
 
 func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
-	fmt.Printf("DEBUG: Moonshot Adapter Init. ID=%s BaseURL='%s' APIKeyLen=%d\n", config.ID, config.BaseURL, len(config.APIKey))
 	if config.BaseURL == "" {
-		config.BaseURL = "https://api.moonshot.ai/v1"
+		config.BaseURL = "https://api.deepseek.com"
 	}
 
 	timeout := 10 * time.Minute
@@ -53,7 +52,7 @@ func (a *Adapter) Name() string {
 }
 
 func (a *Adapter) Type() string {
-	return "moonshot"
+	return "deepseek"
 }
 
 func (a *Adapter) Capabilities() llm.Capabilities {
@@ -101,9 +100,15 @@ func (a *Adapter) handleUpstreamError(err error) error {
 	)
 }
 
+type thinkingConfig struct {
+	Type string `json:"type"`
+}
+
 type upstreamPayload struct {
 	*api.UpstreamChatRequest
-	Messages []processing.CompatMessage `json:"messages"`
+	Messages        []processing.CompatMessage `json:"messages"`
+	Thinking        *thinkingConfig            `json:"thinking,omitempty"`
+	ReasoningEffort string                     `json:"reasoning_effort,omitempty"`
 }
 
 func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
@@ -111,18 +116,31 @@ func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
 		return req
 	}
 
-	// Moonshot uses max_completion_tokens instead of max_tokens
-	if req.MaxTokens > 0 {
-		req.MaxCompletionTokens = req.MaxTokens
-		req.MaxTokens = 0
-	}
-
+	r := req.Reasoning
 	inner := *req
 	inner.Reasoning = nil // Strip router-only Reasoning field
 
 	out := upstreamPayload{
 		UpstreamChatRequest: &inner,
 		Messages:            processing.FormatOpenAIMessages(inner.Messages),
+	}
+
+	if r == nil || (!r.IsEnabled() && !r.Exclude) {
+		return out
+	}
+
+	// DeepSeek supports "thinking: {type: 'enabled'}" and "reasoning_effort"
+	out.Thinking = &thinkingConfig{Type: "enabled"}
+	
+	if r.Effort != "" {
+		effort := strings.ToLower(strings.TrimSpace(r.Effort))
+		if effort == "xhigh" || effort == "high" {
+			out.ReasoningEffort = "high"
+		} else if effort == "low" || effort == "minimal" {
+			out.ReasoningEffort = "low"
+		} else {
+			out.ReasoningEffort = "medium"
+		}
 	}
 
 	return out
@@ -171,11 +189,11 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	req.StreamOptions = &api.StreamOptions{IncludeUsage: true}
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
 
-	payload := a.buildUpstreamPayload(req)
-
 	headers := map[string]string{
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
+
+	payload := a.buildUpstreamPayload(req)
 
 	go func() {
 		defer close(ch)
@@ -184,26 +202,31 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 		parsers := make(map[int]*processing.StreamParser)
 
 		err := httpclient.StreamRequest(ctx, a.stream, "POST", url, headers, payload, func(line string) error {
-			// SSE format: data: {...}
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
 
 			data := strings.TrimPrefix(line, "data: ")
 			if data == "[DONE]" {
-				return nil // we can't return special error to stop, loop continues until end of body or context cancel
+				return nil
 			}
 
 			var chatResp api.ChatResponse
 			if err := json.Unmarshal([]byte(data), &chatResp); err != nil {
-				// log error but continue
 				return nil
 			}
 
-			// Process thinking/reasoning tags
 			for i := range chatResp.Choices {
 				choice := &chatResp.Choices[i]
 				idx := choice.Index
+
+				if choice.Delta == nil {
+					continue
+				}
+
+				if choice.Delta.Reasoning != "" {
+					continue
+				}
 
 				parser, ok := parsers[idx]
 				if !ok {
@@ -211,15 +234,10 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 					parsers[idx] = parser
 				}
 
-				if choice.Delta != nil {
-					if choice.Delta.Reasoning != "" {
-						continue
-					}
-					c, r := parser.Process(choice.Delta.Content.Text)
-					choice.Delta.Content.Text = c
-					if r != "" {
-						choice.Delta.Reasoning = r
-					}
+				c, r := parser.Process(choice.Delta.Content.Text)
+				choice.Delta.Content.Text = c
+				if r != "" {
+					choice.Delta.Reasoning = r
 				}
 			}
 

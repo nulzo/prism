@@ -1,7 +1,10 @@
 package processing
 
 import (
+	"encoding/json"
 	"testing"
+
+	"github.com/nulzo/model-router-api/pkg/api"
 )
 
 func TestExtractThinking(t *testing.T) {
@@ -116,5 +119,65 @@ func TestStreamParser(t *testing.T) {
 				t.Errorf("StreamParser reasoning = %q, want %q", fullReasoning, tt.wantReasoning)
 			}
 		})
+	}
+}
+
+func TestCompatMessageReasoningContent(t *testing.T) {
+	msg := api.ChatMessage{
+		Role:      "assistant",
+		Reasoning: "native thinking",
+		Content:   api.Content{Text: "calling a tool"},
+		ToolCalls: []api.ToolCall{{
+			ID:   "call_1",
+			Type: "function",
+			Function: api.FunctionCall{
+				Name:      "search",
+				Arguments: "{}",
+			},
+		}},
+	}
+
+	raw, err := json.Marshal(CompatMessage{Message: msg})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var got map[string]any
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := got["reasoning"]; ok {
+		t.Fatalf("expected reasoning to be stripped, got %s", raw)
+	}
+	if got["reasoning_content"] != "native thinking" {
+		t.Fatalf("reasoning_content = %v, want native thinking; raw=%s", got["reasoning_content"], raw)
+	}
+}
+
+func TestCompatMessageMissingToolCallReasoningUsesNonEmptyPlaceholder(t *testing.T) {
+	msg := api.ChatMessage{
+		Role:    "assistant",
+		Content: api.Content{Text: "calling a tool"},
+		ToolCalls: []api.ToolCall{{
+			ID:   "call_1",
+			Type: "function",
+			Function: api.FunctionCall{
+				Name:      "search",
+				Arguments: "{}",
+			},
+		}},
+	}
+
+	raw, err := json.Marshal(CompatMessage{Message: msg})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var got map[string]any
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	if got["reasoning_content"] != " " {
+		t.Fatalf("reasoning_content = %q, want single-space placeholder; raw=%s", got["reasoning_content"], raw)
 	}
 }

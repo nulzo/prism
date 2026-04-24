@@ -21,6 +21,7 @@ import (
 	_ "github.com/nulzo/model-router-api/internal/llm/anthropic"
 	_ "github.com/nulzo/model-router-api/internal/llm/bfl"
 	_ "github.com/nulzo/model-router-api/internal/llm/cosyvoice"
+	_ "github.com/nulzo/model-router-api/internal/llm/deepseek"
 	_ "github.com/nulzo/model-router-api/internal/llm/elevenlabs"
 	_ "github.com/nulzo/model-router-api/internal/llm/google"
 	_ "github.com/nulzo/model-router-api/internal/llm/moonshot"

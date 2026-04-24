@@ -69,3 +69,11 @@ providers:
     base_url: "https://api.moonshot.ai/v1"
     enabled: true
     requires_auth: true
+
+  - id: "deepseek"
+    type: "deepseek"
+    name: "DeepSeek"
+    api_key: "ENV:DEEPSEEK_API_KEY"
+    base_url: "https://api.deepseek.com"
+    enabled: true
+    requires_auth: true

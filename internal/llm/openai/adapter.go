@@ -234,8 +234,9 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 // (Gemini, DeepSeek direct, Moonshot) will 400 on unknown fields.
 type upstreamPayload struct {
 	*api.UpstreamChatRequest
-	ReasoningEffort string             `json:"reasoning_effort,omitempty"`
-	Reasoning       *upstreamReasoning `json:"reasoning,omitempty"`
+	Messages        []processing.CompatMessage `json:"messages"`
+	ReasoningEffort string                     `json:"reasoning_effort,omitempty"`
+	Reasoning       *upstreamReasoning         `json:"reasoning,omitempty"`
 }
 
 type upstreamReasoning struct {
@@ -259,11 +260,15 @@ func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
 	// native equivalents below when a reasoning request is actually active.
 	inner := *req
 	inner.Reasoning = nil
-	if r == nil || (!r.IsEnabled() && !r.Exclude) {
-		return &inner
+
+	out := upstreamPayload{
+		UpstreamChatRequest: &inner,
+		Messages:            processing.FormatOpenAIMessages(inner.Messages),
 	}
 
-	out := upstreamPayload{UpstreamChatRequest: &inner}
+	if r == nil || (!r.IsEnabled() && !r.Exclude) {
+		return out
+	}
 
 	if r.Effort != "" {
 		out.ReasoningEffort = normalizeEffort(r.Effort)
