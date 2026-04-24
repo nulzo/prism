@@ -34,6 +34,22 @@ func (a *ToolCallAccumulator) Apply(deltas []api.ToolCall) {
 		slot := i
 		if delta.Index != nil {
 			slot = *delta.Index
+		} else if delta.ID != "" {
+			// Find existing slot by ID or create new
+			found := false
+			for s, tc := range a.bySlot {
+				if tc.ID == delta.ID {
+					slot = s
+					found = true
+					break
+				}
+			}
+			if !found {
+				slot = a.maxIdx + 1
+			}
+		} else if a.maxIdx >= 0 {
+			// If no index and no ID, assume it appends to the latest active slot
+			slot = a.maxIdx
 		}
 		a.ApplyAt(slot, delta)
 	}
