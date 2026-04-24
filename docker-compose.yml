@@ -46,6 +46,7 @@ services:
       # `extra_hosts` block below so this works on Linux too.
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       BFL_API_KEY: ${BFL_API_KEY:-}
+      MOONSHOT_API_KEY: ${MOONSHOT_API_KEY:-}
     ports:
       - "8080:8080"
     extra_hosts:
