@@ -153,9 +153,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	return ch, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
-	return a.config.StaticModels, nil
-}
 
 func (a *Adapter) Health(ctx context.Context) error {
 	return nil

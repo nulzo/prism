@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/nulzo/model-router-api/internal/analytics"
-	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/gateway"
@@ -43,8 +42,7 @@ import (
 var Version = "snapshot"
 
 // parseDurationOr returns the parsed duration or the provided fallback when
-// the input is empty or unparsable. Keeping the helper in main.go avoids
-// bleeding config-shape concerns into the catalog package itself.
+// the input is empty or unparsable.
 func parseDurationOr(s string, fallback time.Duration) time.Duration {
 	if s == "" {
 		return fallback
@@ -115,8 +113,6 @@ func main() {
 		_ = repo.Close()
 	}()
 
-	// Sync *providers* to the DB up front. Models sync is handled by the
-	// catalog's DB sink on every hydrate so we don't duplicate work here.
 	ctx := context.Background()
 	if err := repo.WithTx(ctx, func(r store.Repository) error {
 		dbProviders := make([]model.Provider, 0, len(cfg.Providers))
@@ -140,47 +136,11 @@ func main() {
 	ingestor.Start(context.Background())
 	defer ingestor.Stop()
 
-	// Parse catalog timings with sane defaults so the config stays optional.
-	refreshInterval := parseDurationOr(cfg.Catalog.RefreshInterval, 15*time.Minute)
-	hydrateTimeout := parseDurationOr(cfg.Catalog.HydrateTimeout, 20*time.Second)
-
-	cat := catalog.New(catalog.Options{
-		Logger:         log,
-		HydrateTimeout: hydrateTimeout,
-		Static:         cfg.Models,
-		Sinks:          []catalog.Sink{catalog.NewDBSink(repo)},
-	})
-
-	routerService := gateway.NewServiceWithCatalog(log, repo, ingestor, cacheService, cat)
+	routerService := gateway.NewService(log, repo, ingestor, cacheService)
 	analyticsService := analytics.NewService(repo)
 
-	// Bootstrap providers (registers them with the catalog + gateway).
+	// Bootstrap providers
 	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
-
-	// Kick the first hydrate synchronously so `/api/v1/models` returns a
-	// fully-formed list the moment the HTTP server starts accepting traffic.
-	// Failures here are logged, not fatal — operators typically want the
-	// gateway to stay up with the static YAML view rather than crash loop
-	// when one provider is having a bad day.
-	hydrateCtx, cancelHydrate := context.WithTimeout(ctx, hydrateTimeout+5*time.Second)
-	if res, err := routerService.RefreshCatalog(hydrateCtx); err != nil {
-		log.Warn("initial catalog hydrate failed", zap.Error(err))
-	} else {
-		log.Info("catalog ready",
-			zap.Int("models", res.TotalModels),
-			zap.Int("added", len(res.Added)),
-			zap.Duration("duration", res.Duration),
-		)
-	}
-	cancelHydrate()
-
-	// Background rehydrate loop so upstream catalog drift (new models,
-	// deprecations, pricing changes) propagates without a redeploy.
-	if refreshInterval > 0 {
-		watchCtx, cancelWatch := context.WithCancel(context.Background())
-		defer cancelWatch()
-		go cat.Watch(watchCtx, refreshInterval)
-	}
 
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
 	readTimeout := parseDurationAllowZero(cfg.Server.ReadTimeout, 30*time.Second)

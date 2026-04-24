@@ -24,7 +24,6 @@ type Provider interface {
 	Type() string // e.g., "openai", "anthropic"
 	Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error)
 	Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error)
-	Models(ctx context.Context) ([]api.ModelDefinition, error)
 	Health(ctx context.Context) error
 }
 

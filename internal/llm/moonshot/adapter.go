@@ -13,7 +13,6 @@ import (
 	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/processing"
-	"github.com/nulzo/model-router-api/internal/platform/logger"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
@@ -206,78 +205,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	return ch, nil
 }
 
-func (a *Adapter) Models(ctx context.Context) ([]api.ModelDefinition, error) {
-	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
-
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
-	if err != nil {
-		return a.config.StaticModels, nil
-	}
-
-	req.Header.Set("Authorization", "Bearer "+a.config.APIKey)
-
-	resp, err := a.client.Do(req)
-	if err != nil {
-		return a.config.StaticModels, nil
-	}
-	defer func() {
-		_ = resp.Body.Close()
-	}()
-
-	if resp.StatusCode != http.StatusOK {
-		return a.config.StaticModels, nil
-	}
-
-	var upstreamResp struct {
-		Data []struct {
-			ID            string `json:"id"`
-			ContextLength int    `json:"context_length"`
-		} `json:"data"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&upstreamResp); err != nil {
-		return a.config.StaticModels, nil
-	}
-
-	// Create a map of existing models for quick lookup
-	existingModels := make(map[string]bool)
-	for _, m := range a.config.StaticModels {
-		existingModels[m.UpstreamID] = true
-	}
-
-	mergedModels := make([]api.ModelDefinition, len(a.config.StaticModels))
-	copy(mergedModels, a.config.StaticModels)
-
-	// Discover new models — debug per-entry, one info summary at the end.
-	var added int
-	for _, upstreamModel := range upstreamResp.Data {
-		if !existingModels[upstreamModel.ID] {
-			logger.Debug(fmt.Sprintf("provider %q discovered upstream model not in static config: %s", a.config.ID, upstreamModel.ID))
-			added++
-
-			// Add it with default/empty pricing so it's usable
-			newModel := api.ModelDefinition{
-				ID:            fmt.Sprintf("%s/%s", a.config.ID, upstreamModel.ID),
-				Name:          upstreamModel.ID,
-				ProviderID:    a.config.ID,
-				UpstreamID:    upstreamModel.ID,
-				Enabled:       true,
-				ContextLength: upstreamModel.ContextLength,
-				Pricing: api.ModelPricing{
-					Prompt:     "0",
-					Completion: "0",
-				},
-			}
-			mergedModels = append(mergedModels, newModel)
-		}
-	}
-
-	if added > 0 {
-		logger.Info(fmt.Sprintf("provider %q hydrated: %d upstream models added (%d total)", a.config.ID, added, len(mergedModels)))
-	}
-
-	return mergedModels, nil
-}
 
 func (a *Adapter) Health(ctx context.Context) error {
 	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))

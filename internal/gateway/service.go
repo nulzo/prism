@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/analytics"
-	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/internal/extension"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
@@ -30,19 +30,8 @@ var (
 
 // Service defines the business logic for routing requests.
 type Service interface {
-	// RegisterProvider registers a new model provider. The gateway stores
-	// the provider reference for request-time routing; the catalog is
-	// responsible for pulling the provider's model list on hydration.
-	RegisterProvider(ctx context.Context, p llm.Provider) error
-
-	// RefreshCatalog re-hydrates the catalog. If providerIDs is empty every
-	// registered provider is refreshed; otherwise only the named subset.
-	// Exposed as a Service method (not just on Catalog) so the HTTP admin
-	// handler can stay thin.
-	RefreshCatalog(ctx context.Context, providerIDs ...string) (*catalog.HydrateResult, error)
-	// Catalog returns the underlying catalog for callers that need richer
-	// queries than ListAllModels exposes.
-	Catalog() *catalog.Catalog
+	// RegisterProvider registers a new model provider.
+	RegisterProvider(ctx context.Context, p llm.Provider, models []api.ModelDefinition) error
 
 	GetProviderForModel(ctx context.Context, modelID string) (llm.Provider, string, error)
 	ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error)
@@ -57,34 +46,19 @@ type service struct {
 	cache     cache.CacheService
 	mu        sync.RWMutex
 	providers map[string]llm.Provider
-	catalog   *catalog.Catalog
+	models    map[string]api.ModelDefinition
 
 	plugins    *plugin.Registry
 	extensions *extension.Registry
 }
 
-// NewService wires the gateway with a fresh catalog. The caller is
-// responsible for seeding the catalog with static entries (typically via
-// NewServiceWithCatalog) and for triggering the first hydration at
-// startup.
+// NewService wires the gateway with static models.
 func NewService(logger *zap.Logger, repo store.Repository, ingestor analytics.Ingestor, cache cache.CacheService) Service {
-	return NewServiceWithCatalog(logger, repo, ingestor, cache, catalog.New(catalog.Options{Logger: logger}))
-}
-
-// NewServiceWithCatalog lets bootstrap inject a pre-configured Catalog
-// (with static YAML entries, DB sink, custom hydrate timeout). Preferred
-// in production wiring; NewService stays for tests.
-func NewServiceWithCatalog(logger *zap.Logger, repo store.Repository, ingestor analytics.Ingestor, cache cache.CacheService, cat *catalog.Catalog) Service {
 	pReg := plugin.NewRegistry()
 	pReg.Register(plugin.NewContextCompressionPlugin(10))
 
 	eReg := extension.NewRegistry()
 	eReg.Register(extension.NewDatetimeExtension())
-	// The web-search extension needs to know where its SearXNG instance
-	// lives. In the bundled docker-compose stack the two containers share
-	// a bridge network and searxng is reachable at its service name on
-	// the container port (8080). Outside of compose the developer can
-	// override via env; the default falls back to a host-local install.
 	searxngURL := os.Getenv("SEARXNG_URL")
 	if searxngURL == "" {
 		searxngURL = "http://localhost:8888"
@@ -97,38 +71,21 @@ func NewServiceWithCatalog(logger *zap.Logger, repo store.Repository, ingestor a
 		ingestor:   ingestor,
 		cache:      cache,
 		providers:  make(map[string]llm.Provider),
-		catalog:    cat,
+		models:     make(map[string]api.ModelDefinition),
 		plugins:    pReg,
 		extensions: eReg,
 	}
 }
 
-func (s *service) RegisterProvider(ctx context.Context, p llm.Provider) error {
+func (s *service) RegisterProvider(ctx context.Context, p llm.Provider, models []api.ModelDefinition) error {
 	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.providers[p.Name()] = p
-	s.mu.Unlock()
-	s.catalog.Add(p)
-	// Eagerly hydrate just this provider so the catalog reflects it
-	// immediately. The caller can rely on `GetProviderForModel` returning
-	// the right route the moment RegisterProvider returns; without this
-	// step the route is only resolvable after the next Hydrate() pass.
-	// Errors are non-fatal — static YAML entries can still carry the
-	// model — but we surface them so operators can see why the refresh
-	// failed.
-	if _, err := s.catalog.Hydrate(ctx, p.Name()); err != nil {
-		s.logger.Warn("initial provider hydrate failed",
-			zap.String("provider", p.Name()),
-			zap.Error(err),
-		)
+	for _, m := range models {
+		s.models[m.ID] = m
 	}
 	return nil
 }
-
-func (s *service) RefreshCatalog(ctx context.Context, providerIDs ...string) (*catalog.HydrateResult, error) {
-	return s.catalog.Hydrate(ctx, providerIDs...)
-}
-
-func (s *service) Catalog() *catalog.Catalog { return s.catalog }
 
 func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {
 	provider, upstreamModelID, err := s.GetProviderForModel(ctx, req.Model)
@@ -295,20 +252,39 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 // catalog's claim, we return a ProviderError (500) because the config is
 // internally inconsistent; missing models return a BadRequestError (400).
 func (s *service) GetProviderForModel(ctx context.Context, modelID string) (llm.Provider, string, error) {
-	providerID, upstreamModelID, ok := s.catalog.Resolve(modelID)
-	if !ok {
-		return nil, "", api.BadRequestError(fmt.Sprintf("route resolution failed for model '%s': not found in catalog", modelID))
-	}
-
 	s.mu.RLock()
-	p, exists := s.providers[providerID]
-	s.mu.RUnlock()
+	defer s.mu.RUnlock()
 
-	if exists {
-		return p, upstreamModelID, nil
+	// 1. Try exact match in static registry
+	if m, ok := s.models[modelID]; ok {
+		p, exists := s.providers[m.ProviderID]
+		if exists {
+			upstreamID := m.UpstreamID
+			if upstreamID == "" {
+				upstreamID = m.ID
+			}
+			return p, upstreamID, nil
+		}
+		return nil, "", api.ProviderError(fmt.Sprintf("provider '%s' configured but not active/loaded", m.ProviderID), nil)
 	}
 
-	return nil, "", api.ProviderError(fmt.Sprintf("provider '%s' configured but not active/loaded", providerID), nil)
+	// 2. Permissive Pass-Through: check if the prefix matches a loaded provider
+	parts := strings.SplitN(modelID, "/", 2)
+	if len(parts) == 2 {
+		providerID := parts[0]
+		upstreamID := parts[1]
+
+		if p, exists := s.providers[providerID]; exists {
+			s.logger.Debug("using permissive pass-through for unlisted model",
+				zap.String("model_id", modelID),
+				zap.String("provider", providerID),
+				zap.String("upstream_id", upstreamID),
+			)
+			return p, upstreamID, nil
+		}
+	}
+
+	return nil, "", api.BadRequestError(fmt.Sprintf("route resolution failed for model '%s': not found in models and no matching provider prefix", modelID))
 }
 
 func (s *service) GetProvider(providerID string) (llm.Provider, error) {

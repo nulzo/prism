@@ -3,28 +3,28 @@ package gateway
 import (
 	"context"
 
-	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/pkg/api"
 )
 
-// ListAllModels is a thin adapter over Catalog.Filter that emits the
-// public OpenRouter-shaped Model records. The gateway is intentionally
-// dumb here: all non-trivial work lives in the catalog so the HTTP
-// handler and every other consumer sees the same truth.
+// ListAllModels emits the public OpenRouter-shaped Model records.
 func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error) {
-	entries := s.catalog.Filter(filter)
-	out := make([]api.Model, 0, len(entries))
-	for _, e := range entries {
-		out = append(out, entryToPublic(e))
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	out := make([]api.Model, 0, len(s.models))
+	for _, m := range s.models {
+		// Apply filter
+		if filter.Provider != "" && m.ProviderID != filter.Provider {
+			continue
+		}
+		
+		out = append(out, entryToPublic(m))
 	}
 	return out, nil
 }
 
-// entryToPublic projects a catalog.Entry into the OpenRouter-aligned public
-// Model shape. OwnedBy defaults to the provider id (which is what
-// OpenRouter exposes for its own listings) but falls back to "system" for
-// entries with no provider attached.
-func entryToPublic(e catalog.Entry) api.Model {
+// entryToPublic projects an api.ModelDefinition into the OpenRouter-aligned public Model shape.
+func entryToPublic(e api.ModelDefinition) api.Model {
 	owned := e.ProviderID
 	if owned == "" {
 		owned = "system"
@@ -44,7 +44,6 @@ func entryToPublic(e catalog.Entry) api.Model {
 		Description:         e.Description,
 		ContextLength:       e.ContextLength,
 		SupportedParameters: append([]string(nil), e.SupportedParameters...),
-		DefaultParameters:   cloneMap(e.DefaultParameters),
 		Architecture: api.Architecture{
 			InputModalities:  e.Architecture.InputModalities,
 			OutputModalities: e.Architecture.OutputModalities,
@@ -71,17 +70,4 @@ func entryToPublic(e catalog.Entry) api.Model {
 		m.Created = e.LastUpdated.Unix()
 	}
 	return m
-}
-
-// cloneMap returns a defensive copy so the public Model response can't be
-// mutated through a shared reference into the catalog snapshot.
-func cloneMap(src map[string]interface{}) map[string]interface{} {
-	if len(src) == 0 {
-		return nil
-	}
-	out := make(map[string]interface{}, len(src))
-	for k, v := range src {
-		out[k] = v
-	}
-	return out
 }

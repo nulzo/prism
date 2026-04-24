@@ -204,7 +204,7 @@ func setupTestServer(t *testing.T) (*httptest.Server, *MockProvider) {
 			{ID: "test-model", ProviderID: "mock-provider", UpstreamID: "mock-model", Enabled: true},
 		},
 	}
-	err = routerSvc.RegisterProvider(context.Background(), mockP)
+	err = routerSvc.RegisterProvider(context.Background(), mockP, mockP.MockModels)
 	require.NoError(t, err)
 
 	// 6. Server

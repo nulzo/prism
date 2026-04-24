@@ -47,16 +47,7 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			continue
 		}
 
-		models, err := providerInstance.Models(ctx)
-		if err != nil {
-			msg := fmt.Sprintf("%s %s %s",
-				cli.CrossMark(),
-				cli.Stylize(pCfg.ID, cli.Red),
-				cli.Stylize(fmt.Sprintf("(Failed: %v)", err), cli.Red),
-			)
-			log.Error(msg)
-		}
-
+		models := pCfg.StaticModels
 		if len(models) == 0 {
 			msg := fmt.Sprintf("%s %s %s",
 				cli.CrossMark(),
@@ -79,7 +70,7 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 		cancel()
 
 		// register with the service
-		if err := service.RegisterProvider(ctx, providerInstance); err != nil {
+		if err := service.RegisterProvider(ctx, providerInstance, models); err != nil {
 			log.Error("Failed to register provider", zap.String("id", pCfg.ID), zap.Error(err))
 			continue
 		}
