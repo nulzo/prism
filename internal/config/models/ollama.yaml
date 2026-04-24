@@ -1,17 +1,378 @@
 models:
-  - id: "ollama/llama3"
-    name: "Llama 3 (Local)"
-    provider_id: "ollama"
-    upstream_id: "llama3"
-    description: "Meta's open source model running locally."
+
+  - id: ollama/ollama/codegeex4
+    name: ollama/codegeex4
+    provider_id: ollama
+    upstream_id: ollama/codegeex4
+    description: ''
     enabled: true
+    context_length: 8192
     pricing:
-      input: 0.00
-      output: 0.00
-    config:
-      context_window: 8192
-      max_output: 4096
-      modality: ["text"]
-      tool_use: false
-      streaming_support: true
-    source: "manual"
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/codegemma
+    name: ollama/codegemma
+    provider_id: ollama
+    upstream_id: ollama/codegemma
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/codellama
+    name: ollama/codellama
+    provider_id: ollama
+    upstream_id: ollama/codellama
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/deepseek-coder-v2-base
+    name: ollama/deepseek-coder-v2-base
+    provider_id: ollama
+    upstream_id: ollama/deepseek-coder-v2-base
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/deepseek-coder-v2-instruct
+    name: ollama/deepseek-coder-v2-instruct
+    provider_id: ollama
+    upstream_id: ollama/deepseek-coder-v2-instruct
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/deepseek-coder-v2-lite-base
+    name: ollama/deepseek-coder-v2-lite-base
+    provider_id: ollama
+    upstream_id: ollama/deepseek-coder-v2-lite-base
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/deepseek-coder-v2-lite-instruct
+    name: ollama/deepseek-coder-v2-lite-instruct
+    provider_id: ollama
+    upstream_id: ollama/deepseek-coder-v2-lite-instruct
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/deepseek-v3.1:671b-cloud
+    name: ollama/deepseek-v3.1:671b-cloud
+    provider_id: ollama
+    upstream_id: ollama/deepseek-v3.1:671b-cloud
+    description: ''
+    enabled: true
+    context_length: 163840
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/gpt-oss:120b-cloud
+    name: ollama/gpt-oss:120b-cloud
+    provider_id: ollama
+    upstream_id: ollama/gpt-oss:120b-cloud
+    description: ''
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/gpt-oss:20b-cloud
+    name: ollama/gpt-oss:20b-cloud
+    provider_id: ollama
+    upstream_id: ollama/gpt-oss:20b-cloud
+    description: ''
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/internlm2_5-20b-chat
+    name: ollama/internlm2_5-20b-chat
+    provider_id: ollama
+    upstream_id: ollama/internlm2_5-20b-chat
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama2
+    name: ollama/llama2
+    provider_id: ollama
+    upstream_id: ollama/llama2
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama2-uncensored
+    name: ollama/llama2-uncensored
+    provider_id: ollama
+    upstream_id: ollama/llama2-uncensored
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama2:13b
+    name: ollama/llama2:13b
+    provider_id: ollama
+    upstream_id: ollama/llama2:13b
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama2:70b
+    name: ollama/llama2:70b
+    provider_id: ollama
+    upstream_id: ollama/llama2:70b
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama2:7b
+    name: ollama/llama2:7b
+    provider_id: ollama
+    upstream_id: ollama/llama2:7b
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama3
+    name: ollama/llama3
+    provider_id: ollama
+    upstream_id: ollama/llama3
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama3.1
+    name: ollama/llama3.1
+    provider_id: ollama
+    upstream_id: ollama/llama3.1
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama3:70b
+    name: ollama/llama3:70b
+    provider_id: ollama
+    upstream_id: ollama/llama3:70b
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/llama3:8b
+    name: ollama/llama3:8b
+    provider_id: ollama
+    upstream_id: ollama/llama3:8b
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mistral
+    name: ollama/mistral
+    provider_id: ollama
+    upstream_id: ollama/mistral
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mistral-7B-Instruct-v0.1
+    name: ollama/mistral-7B-Instruct-v0.1
+    provider_id: ollama
+    upstream_id: ollama/mistral-7B-Instruct-v0.1
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mistral-7B-Instruct-v0.2
+    name: ollama/mistral-7B-Instruct-v0.2
+    provider_id: ollama
+    upstream_id: ollama/mistral-7B-Instruct-v0.2
+    description: ''
+    enabled: true
+    context_length: 32768
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mistral-large-instruct-2407
+    name: ollama/mistral-large-instruct-2407
+    provider_id: ollama
+    upstream_id: ollama/mistral-large-instruct-2407
+    description: ''
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mixtral-8x22B-Instruct-v0.1
+    name: ollama/mixtral-8x22B-Instruct-v0.1
+    provider_id: ollama
+    upstream_id: ollama/mixtral-8x22B-Instruct-v0.1
+    description: ''
+    enabled: true
+    context_length: 65536
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/mixtral-8x7B-Instruct-v0.1
+    name: ollama/mixtral-8x7B-Instruct-v0.1
+    provider_id: ollama
+    upstream_id: ollama/mixtral-8x7B-Instruct-v0.1
+    description: ''
+    enabled: true
+    context_length: 32768
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/orca-mini
+    name: ollama/orca-mini
+    provider_id: ollama
+    upstream_id: ollama/orca-mini
+    description: ''
+    enabled: true
+    context_length: 4096
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/qwen3-coder:480b-cloud
+    name: ollama/qwen3-coder:480b-cloud
+    provider_id: ollama
+    upstream_id: ollama/qwen3-coder:480b-cloud
+    description: ''
+    enabled: true
+    context_length: 262144
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: ollama/ollama/vicuna
+    name: ollama/vicuna
+    provider_id: ollama
+    upstream_id: ollama/vicuna
+    description: ''
+    enabled: true
+    context_length: 2048
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'

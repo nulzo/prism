@@ -44,6 +44,7 @@ func entryToPublic(e api.ModelDefinition) api.Model {
 		Description:         e.Description,
 		ContextLength:       e.ContextLength,
 		SupportedParameters: append([]string(nil), e.SupportedParameters...),
+		DefaultParameters:   cloneMap(e.DefaultParameters),
 		Architecture: api.Architecture{
 			InputModalities:  e.Architecture.InputModalities,
 			OutputModalities: e.Architecture.OutputModalities,
@@ -65,9 +66,26 @@ func entryToPublic(e api.ModelDefinition) api.Model {
 			MaxCompletionTokens: e.TopProvider.MaxCompletionTokens,
 			IsModerated:         e.TopProvider.IsModerated,
 		},
+		PerRequestLimits: e.PerRequestLimits,
+		KnowledgeCutoff:  e.KnowledgeCutoff,
+		ExpirationDate:   e.ExpirationDate,
+		Links:            e.Links,
 	}
 	if !e.LastUpdated.IsZero() {
 		m.Created = e.LastUpdated.Unix()
 	}
 	return m
+}
+
+// cloneMap returns a defensive copy so the public Model response can't be
+// mutated through a shared reference into the catalog snapshot.
+func cloneMap(src map[string]interface{}) map[string]interface{} {
+	if len(src) == 0 {
+		return nil
+	}
+	out := make(map[string]interface{}, len(src))
+	for k, v := range src {
+		out[k] = v
+	}
+	return out
 }

@@ -32,6 +32,11 @@ type ModelDefinition struct {
 	// providers can ship arbitrary defaults without a schema bump.
 	DefaultParameters map[string]interface{} `mapstructure:"default_parameters" json:"default_parameters,omitempty"`
 
+	PerRequestLimits *PerRequestLimits `mapstructure:"per_request_limits" json:"per_request_limits,omitempty"`
+	KnowledgeCutoff  *string           `mapstructure:"knowledge_cutoff" json:"knowledge_cutoff,omitempty"`
+	ExpirationDate   *string           `mapstructure:"expiration_date" json:"expiration_date,omitempty"`
+	Links            map[string]string `mapstructure:"links" json:"links,omitempty"`
+
 	// Metadata for management
 	Source      string    `mapstructure:"source" json:"source"` // "auto" or "manual"
 	LastUpdated time.Time `mapstructure:"last_updated" json:"last_updated"`

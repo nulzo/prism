@@ -1,31 +1,17 @@
-name: Google
-id: google
-pricing_urls: ['https://ai.google.dev/gemini-api/docs/pricing', 'https://cloud.google.com/vertex-ai/generative-ai/pricing']
 models:
+
   - id: google/claude-3-5-haiku
     name: claude-3-5-haiku
     provider_id: google
     upstream_id: claude-3-5-haiku
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '0.8'
-      completion: '4'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.08'
-      input_cache_write: '1'
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-3-5-sonnet
     name: claude-3-5-sonnet
@@ -33,24 +19,12 @@ models:
     upstream_id: claude-3-5-sonnet
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '3'
-      completion: '15'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.3'
-      input_cache_write: '3.75'
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-3-7-sonnet
     name: claude-3-7-sonnet
@@ -58,24 +32,12 @@ models:
     upstream_id: claude-3-7-sonnet
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '3'
-      completion: '15'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.3'
-      input_cache_write: '3.75'
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-3-haiku
     name: claude-3-haiku
@@ -83,24 +45,12 @@ models:
     upstream_id: claude-3-haiku
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '0.25'
-      completion: '1.25'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.03'
-      input_cache_write: '0.3'
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-3-opus
     name: claude-3-opus
@@ -108,24 +58,12 @@ models:
     upstream_id: claude-3-opus
     description: ''
     enabled: true
-    context_length: 128000
+    context_length: 0
     pricing:
-      prompt: '15'
-      completion: '75'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '1.5'
-      input_cache_write: '18.75'
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-4-opus
     name: claude-4-opus
@@ -133,24 +71,12 @@ models:
     upstream_id: claude-4-opus
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '15'
-      completion: '75'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '1.5'
-      input_cache_write: '18.75'
-    architecture:
-      input_modalities: [text]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
 
   - id: google/claude-4-sonnet
     name: claude-4-sonnet
@@ -158,504 +84,886 @@ models:
     upstream_id: claude-4-sonnet
     description: ''
     enabled: true
-    context_length: 200000
+    context_length: 0
     pricing:
-      prompt: '3'
-      completion: '15'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.3'
-      input_cache_write: '3.75'
-    architecture:
-      input_modalities: [text]
-      output_modalities: [text]
-      tokenizer: unknown
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 4096
-      is_moderated: false
-    source: auto
+
+  - id: google/claude-opus-4-6
+    name: claude-opus-4-6
+    provider_id: google
+    upstream_id: claude-opus-4-6
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: google/claude-opus-4-7
+    name: claude-opus-4-7
+    provider_id: google
+    upstream_id: claude-opus-4-7
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
 
   - id: google/gemini-1.0-pro-vision-001
     name: gemini 1.0 pro vision
     provider_id: google
     upstream_id: gemini-1.0-pro-vision-001
-    description: Google's first-generation advanced multimodal model that can understand text, code, and images. It provides strong reasoning capabilities and follows instructions effectively.
+    description: Google's first-generation advanced multimodal model that can understand
+      text, code, and images. It provides strong reasoning capabilities and follows
+      instructions effectively.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.125'
-      completion: '0.375'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 32768
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 32768
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 32768
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-1.5-flash
     name: gemini 1.5 flash
     provider_id: google
     upstream_id: gemini-1.5-flash
-    description: A faster, more cost-effective variant of Gemini 1.5 that maintains strong capabilities while optimizing for performance and cost efficiency. Suitable for production deployments requiring high throughput.
+    description: A faster, more cost-effective variant of Gemini 1.5 that maintains
+      strong capabilities while optimizing for performance and cost efficiency. Suitable
+      for production deployments requiring high throughput.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.075'
-      completion: '0.3'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.01875'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-1.5-pro
     name: gemini 1.5 Pro
     provider_id: google
     upstream_id: gemini-1.5-pro
-    description: Google's most capable multimodal model with an extremely long context window of up to 1 million tokens. It excels at complex reasoning, long-form content processing, and multimodal understanding.
+    description: Google's most capable multimodal model with an extremely long context
+      window of up to 1 million tokens. It excels at complex reasoning, long-form
+      content processing, and multimodal understanding.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '1.25'
-      completion: '5.0'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-2.0-flash
     name: gemini 2.0 flash
     provider_id: google
     upstream_id: gemini-2.0-flash
-    description: The newest generation of Google's Gemini models, featuring improved reasoning, instruction following, and factual accuracy, with the Flash variant optimized for cost-efficiency and performance.
+    description: The newest generation of Google's Gemini models, featuring improved
+      reasoning, instruction following, and factual accuracy, with the Flash variant
+      optimized for cost-efficiency and performance.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.1'
-      completion: '0.4'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.025'
+
+  - id: google/gemini-2.0-flash-001
+    name: 'Google: Gemini 2.0 Flash'
+    provider_id: google
+    upstream_id: gemini-2.0-flash-001
+    description: Gemini Flash 2.0 offers a significantly faster time to first token
+      (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining
+      quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5).
+      It...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
       input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
+      context_length: 1048576
+      max_completion_tokens: 8192
       is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2024-08-31'
+    expiration_date: '2026-06-01'
+    links:
+      details: /api/v1/models/google/gemini-2.0-flash-001/endpoints
 
   - id: google/gemini-2.0-flash-lite
     name: gemini 2.0 flash lite
     provider_id: google
     upstream_id: gemini-2.0-flash-lite
-    description: A lighter, more cost-effective version of Gemini 2.0 Flash, designed for applications requiring high efficiency while maintaining good performance. Ideal for high-volume, cost-sensitive deployments.
+    description: A lighter, more cost-effective version of Gemini 2.0 Flash, designed
+      for applications requiring high efficiency while maintaining good performance.
+      Ideal for high-volume, cost-sensitive deployments.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.075'
-      completion: '0.3'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
+
+  - id: google/gemini-2.0-flash-lite-001
+    name: 'Google: Gemini 2.0 Flash Lite'
+    provider_id: google
+    upstream_id: gemini-2.0-flash-lite-001
+    description: Gemini 2.0 Flash Lite offers a significantly faster time to first
+      token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while
+      maintaining quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5),...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
+      context_length: 1048576
+      max_completion_tokens: 8192
       is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2024-08-31'
+    expiration_date: '2026-06-01'
+    links:
+      details: /api/v1/models/google/gemini-2.0-flash-lite-001/endpoints
 
   - id: google/gemini-2.5-flash
-    name: Gemini 2.5 Flash
+    name: 'Google: Gemini 2.5 Flash'
     provider_id: google
     upstream_id: gemini-2.5-flash
-    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking" capabilities, enabling it to provide responses with greater accuracy and nuanced context handling.
+    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically
+      designed for advanced reasoning, coding, mathematics, and scientific tasks.
+      It includes built-in "thinking" capabilities, enabling it to provide responses
+      with greater...
     enabled: true
+    context_length: 1048576
     pricing:
-      prompt: '0.3'
-      completion: '2.5'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.03'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
-
-  - id: google/gemini-2.5-flash-image
-    name: Gemini 2.5 Flash Image
-    provider_id: google
-    upstream_id: gemini-2.5-flash-image
-    description: Google's specialized image generation model optimized for fast, high-quality image generation. Outputs images at 1024x1024 resolution, with each image consuming 1290 output tokens.
-    enabled: true
-    pricing:
-      prompt: '0.3'
-      completion: '30.0'
+      prompt: '0'
+      completion: '0.000003'
       request: '0'
       image: '0'
       input_cache_read: '0'
       input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
+      context_length: 1048576
+      max_completion_tokens: 65535
       is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash/endpoints
 
-  - id: google/gemini-2.5-flash-lite
-    name: Gemini 2.5 Flash Lite
+  - id: google/gemini-2.5-flash-image
+    name: 'Google: Nano Banana (Gemini 2.5 Flash Image)'
     provider_id: google
-    upstream_id: gemini-2.5-flash-lite
-    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance across common benchmarks compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning) is disabled to prioritize speed, but developers can enable it via the Reasoning API parameter to selectively trade off cost for intelligence.
+    upstream_id: gemini-2.5-flash-image
+    description: Gemini 2.5 Flash Image, a.k.a. "Nano Banana," is now generally available.
+      It is a state of the art image generation model with contextual understanding.
+      It is capable of image generation,...
     enabled: true
+    context_length: 32768
     pricing:
-      prompt: '0.1'
-      completion: '0.4'
+      prompt: '0'
+      completion: '0.000003'
       request: '0'
       image: '0'
-      input_cache_read: '0.01'
+      input_cache_read: '0'
       input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image->text
+        - image
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
+      context_length: 32768
+      max_completion_tokens: 32768
       is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash-image/endpoints
+
+  - id: google/gemini-2.5-flash-lite
+    name: 'Google: Gemini 2.5 Flash Lite'
+    provider_id: google
+    upstream_id: gemini-2.5-flash-lite
+    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini
+      2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved
+      throughput, faster token generation, and better performance...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65535
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash-lite/endpoints
+
+  - id: google/gemini-2.5-flash-lite-preview-09-2025
+    name: 'Google: Gemini 2.5 Flash Lite Preview 09-2025'
+    provider_id: google
+    upstream_id: gemini-2.5-flash-lite-preview-09-2025
+    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini
+      2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved
+      throughput, faster token generation, and better performance...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65535
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash-lite-preview-09-2025/endpoints
 
   - id: google/gemini-2.5-flash-preview
     name: Gemini 2.5 Flash Preview 05-20
     provider_id: google
     upstream_id: gemini-2.5-flash-preview
-    description: Gemini 2.5 Flash May 20th Checkpoint is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking" capabilities, enabling it to provide responses with greater accuracy and nuanced context handling.
+    description: Gemini 2.5 Flash May 20th Checkpoint is Google's state-of-the-art
+      workhorse model, specifically designed for advanced reasoning, coding, mathematics,
+      and scientific tasks. It includes built-in "thinking" capabilities, enabling
+      it to provide responses with greater accuracy and nuanced context handling.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.15'
-      completion: '0.6'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-2.5-pro
-    name: Gemini 2.5 Pro
+    name: 'Google: Gemini 2.5 Pro'
     provider_id: google
     upstream_id: gemini-2.5-pro
-    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs "thinking" capabilities, enabling it to reason through responses with enhanced accuracy and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks, including first-place positioning on the LMArena leaderboard, reflecting superior human-preference alignment and complex problem-solving abilities.
+    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for
+      advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking”
+      capabilities, enabling it to reason through responses with enhanced accuracy...
     enabled: true
+    context_length: 1048576
     pricing:
-      prompt: '1.25'
-      completion: '10'
+      prompt: '0.000001'
+      completion: '0.00001'
       request: '0'
-      image: '0'
-      input_cache_read: '0.125'
+      image: '0.000001'
+      input_cache_read: '0'
       input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
+      context_length: 1048576
+      max_completion_tokens: 65536
       is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-pro/endpoints
+
+  - id: google/gemini-2.5-pro-preview
+    name: 'Google: Gemini 2.5 Pro Preview 06-05'
+    provider_id: google
+    upstream_id: gemini-2.5-pro-preview
+    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for
+      advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking”
+      capabilities, enabling it to reason through responses with enhanced accuracy...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0.000001'
+      completion: '0.00001'
+      request: '0'
+      image: '0.000001'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-pro-preview-06-05/endpoints
+
+  - id: google/gemini-2.5-pro-preview-05-06
+    name: 'Google: Gemini 2.5 Pro Preview 05-06'
+    provider_id: google
+    upstream_id: gemini-2.5-pro-preview-05-06
+    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for
+      advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking”
+      capabilities, enabling it to reason through responses with enhanced accuracy...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0.000001'
+      completion: '0.00001'
+      request: '0'
+      image: '0.000001'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65535
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-pro-preview-03-25/endpoints
 
   - id: google/gemini-3-flash-preview
-    name: Gemini 3 Flash Preview
+    name: 'Google: Gemini 3 Flash Preview'
     provider_id: google
     upstream_id: gemini-3-flash-preview
-    description: Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
+    description: Gemini 3 Flash Preview is a high speed, high value thinking model
+      designed for agentic workflows, multi turn chat, and coding assistance. It delivers
+      near Pro level reasoning and tool...
     enabled: true
+    context_length: 1048576
     pricing:
-      prompt: '0.5'
-      completion: '3'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.05'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
-      is_moderated: false
-
-  - id: google/gemini-3.1-flash-lite-preview
-    name: Gemini 3.1 Flash Preview
-    provider_id: google
-    upstream_id: gemini-3.1-flash-lite-preview
-    description: Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
-    enabled: true
-    pricing:
-      prompt: '0.25'
-      completion: '1.50'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.05'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
-      is_moderated: false
-
-  - id: google/gemini-3-pro-image-preview
-    name: Gemini 3 Pro Image Preview
-    provider_id: google
-    upstream_id: gemini-3-pro-image-preview
-    description: Google's image generation model optimized for high-quality image generation. Supports 1K/2K and 4K resolution outputs with flexible pricing based on image dimensions.
-    enabled: true
-    pricing:
-      prompt: '2'
-      completion: '120'
+      prompt: '0'
+      completion: '0.000003'
       request: '0'
       image: '0'
       input_cache_read: '0'
       input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
+      context_length: 1048576
+      max_completion_tokens: 65536
       is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3-flash-preview-20251217/endpoints
+
+  - id: google/gemini-3-pro-image-preview
+    name: 'Google: Nano Banana Pro (Gemini 3 Pro Image Preview)'
+    provider_id: google
+    upstream_id: gemini-3-pro-image-preview
+    description: Nano Banana Pro is Google’s most advanced image-generation and editing
+      model, built on Gemini 3 Pro. It extends the original Nano Banana with significantly
+      improved multimodal reasoning, real-world grounding, and...
+    enabled: true
+    context_length: 65536
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000012'
+      request: '0'
+      image: '0.000002'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+        - image
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 65536
+      max_completion_tokens: 32768
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3-pro-image-preview-20251120/endpoints
 
   - id: google/gemini-3-pro-preview
     name: Gemini 3 Pro Preview
     provider_id: google
     upstream_id: gemini-3-pro-preview
-    description: The best model in the world for multimodal understanding, and our most powerful agentic and vibe-coding model yet.
+    description: The best model in the world for multimodal understanding, and our
+      most powerful agentic and vibe-coding model yet.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '2'
-      completion: '12'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.2'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
-
-  - id: google/gemini-3.1-pro-preview
-    name: Gemini 3.1 Pro Preview
-    provider_id: google
-    upstream_id: gemini-3.1-pro-preview
-    description: The best model in the world for multimodal understanding, and our most powerful agentic and vibe-coding model yet.
-    enabled: true
-    pricing:
-      prompt: '2'
-      completion: '12'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.2'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-3.1-flash-image-preview
-    name: Gemini 3.1 Flash Image Preview
+    name: 'Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)'
     provider_id: google
     upstream_id: gemini-3.1-flash-image-preview
-    description: The best model in the world for multimodal understanding, and our most powerful agentic and vibe-coding model yet.
+    description: Gemini 3.1 Flash Image Preview, a.k.a. "Nano Banana 2," is Google’s
+      latest state of the art image generation and editing model, delivering Pro-level
+      visual quality at Flash speed. It combines...
     enabled: true
+    context_length: 65536
     pricing:
-      prompt: '2'
-      completion: '12'
+      prompt: '0'
+      completion: '0.000003'
       request: '0'
       image: '0'
-      input_cache_read: '0.2'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image->text
+        - image
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
     top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
+      context_length: 65536
+      max_completion_tokens: 65536
       is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3.1-flash-image-preview-20260226/endpoints
+
+  - id: google/gemini-3.1-flash-lite-preview
+    name: 'Google: Gemini 3.1 Flash Lite Preview'
+    provider_id: google
+    upstream_id: gemini-3.1-flash-lite-preview
+    description: Gemini 3.1 Flash Lite Preview is Google's high-efficiency model optimized
+      for high-volume use cases. It outperforms Gemini 2.5 Flash Lite on overall quality
+      and approaches Gemini 2.5 Flash performance across...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0.000002'
+      request: '0'
+      image: '0'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3.1-flash-lite-preview-20260303/endpoints
+
+  - id: google/gemini-3.1-pro-preview
+    name: 'Google: Gemini 3.1 Pro Preview'
+    provider_id: google
+    upstream_id: gemini-3.1-pro-preview
+    description: Gemini 3.1 Pro Preview is Google’s frontier reasoning model, delivering
+      enhanced software engineering performance, improved agentic reliability, and
+      more efficient token usage across complex workflows. Building on the multimodal
+      foundation...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000012'
+      request: '0'
+      image: '0.000002'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3.1-pro-preview-20260219/endpoints
+
+  - id: google/gemini-3.1-pro-preview-customtools
+    name: 'Google: Gemini 3.1 Pro Preview Custom Tools'
+    provider_id: google
+    upstream_id: gemini-3.1-pro-preview-customtools
+    description: Gemini 3.1 Pro Preview Custom Tools is a variant of Gemini 3.1 Pro
+      that improves tool selection behavior by preventing overuse of a general bash
+      tool when more efficient third-party...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000012'
+      request: '0'
+      image: '0.000002'
+      input_cache_read: '0'
+      input_cache_write: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - file
+        - audio
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/google/gemini-3.1-pro-preview-customtools-20260219/endpoints
 
   - id: google/gemini-embedding-001
     name: gemini-embedding-001
@@ -663,89 +971,43 @@ models:
     upstream_id: gemini-embedding-001
     description: ''
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.15'
+      prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-flash-1.5
     name: Gemini 1.5 Flash
     provider_id: google
     upstream_id: gemini-flash-1.5
-    description: Gemini 1.5 Flash is a foundation model that performs well at a variety of multimodal tasks such as visual understanding, classification, summarization, and creating content from image, audio and video. It's adept at processing visual and text inputs such as photographs, documents, infographics, and screenshots.
+    description: Gemini 1.5 Flash is a foundation model that performs well at a variety
+      of multimodal tasks such as visual understanding, classification, summarization,
+      and creating content from image, audio and video. It's adept at processing visual
+      and text inputs such as photographs, documents, infographics, and screenshots.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.075'
-      completion: '0.3'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.01875'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-flash-1.5-8b
     name: gemini 1.5 flash
     provider_id: google
     upstream_id: gemini-flash-1.5-8b
-    description: A faster, more cost-effective variant of Gemini 1.5 that maintains strong capabilities while optimizing for performance and cost efficiency. Suitable for production deployments requiring high throughput.
+    description: A faster, more cost-effective variant of Gemini 1.5 that maintains
+      strong capabilities while optimizing for performance and cost efficiency. Suitable
+      for production deployments requiring high throughput.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.0375'
-      completion: '0.15'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.01'
-      input_cache_write: '0'
-    config:
-      context_window: 1000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 1000000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 1000000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-live-2.5-flash-preview
     name: gemini-live-2.5-flash-preview
@@ -753,160 +1015,750 @@ models:
     upstream_id: gemini-live-2.5-flash-preview
     description: ''
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.5'
-      completion: '2'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-pro
     name: gemini 1.0 pro
     provider_id: google
     upstream_id: gemini-pro
-    description: Google's first-generation advanced multimodal model that can understand text, code, and images. It provides strong reasoning capabilities and follows instructions effectively.
+    description: Google's first-generation advanced multimodal model that can understand
+      text, code, and images. It provides strong reasoning capabilities and follows
+      instructions effectively.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '0.125'
-      completion: '0.375'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 32768
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 32768
-    architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
-    top_provider:
-      context_length: 32768
-      max_completion_tokens: 4096
-      is_moderated: false
 
   - id: google/gemini-pro-1.5
     name: Gemini 1.5 Pro
     provider_id: google
     upstream_id: gemini-pro-1.5
-    description: Google's latest multimodal model, supports image and video[0] in text or chat prompts.
+    description: Google's latest multimodal model, supports image and video[0] in
+      text or chat prompts.
     enabled: true
+    context_length: 0
     pricing:
-      prompt: '1.25'
-      completion: '5'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0.3125'
-      input_cache_write: '0'
-    config:
-      context_window: 2000000
-      max_output: 4096
-      modality: [text, image]
-      image_support: true
-      tool_use: true
-      streaming_support: true
-    source: auto
-    context_length: 2000000
+
+  - id: google/gemma-2-27b-it
+    name: 'Google: Gemma 2 27B'
+    provider_id: google
+    upstream_id: gemma-2-27b-it
+    description: Gemma 2 27B by Google is an open model built from the same research
+      and technology used to create the [Gemini models](/models?q=gemini). Gemma models
+      are well-suited for a variety of...
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0.000001'
+      completion: '0.000001'
+      request: '0'
+      image: '0'
     architecture:
-      input_modalities: [text, image]
-      output_modalities: [text]
+      input_modalities:
+        - text->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
     top_provider:
-      context_length: 2000000
-      max_completion_tokens: 4096
+      context_length: 8192
+      max_completion_tokens: 2048
       is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - max_tokens
+      - presence_penalty
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-06-30'
+    links:
+      details: /api/v1/models/google/gemma-2-27b-it/endpoints
 
   - id: google/gemma-3
     name: Gemma 3 (free)
     provider_id: google
     upstream_id: gemma-3
-    description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.
+    description: Lightweight, state-of the art, open model built from the same technology
+      that powers our Gemini models.
     enabled: true
+    context_length: 0
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text]
-      image_support: false
-      tool_use: false
-      streaming_support: true
-    source: auto
-    context_length: 128000
+
+  - id: google/gemma-3-12b-it
+    name: 'Google: Gemma 3 12B'
+    provider_id: google
+    upstream_id: gemma-3-12b-it
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
     architecture:
-      input_modalities: [text]
-      output_modalities: [text]
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
     top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
+      context_length: 131072
+      max_completion_tokens: null
       is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - temperature
+      - top_k
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-12b-it/endpoints
+
+  - id: google/gemma-3-12b-it:free
+    name: 'Google: Gemma 3 12B (free)'
+    provider_id: google
+    upstream_id: gemma-3-12b-it:free
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 32768
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
+    top_provider:
+      context_length: 32768
+      max_completion_tokens: 8192
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - seed
+      - stop
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-12b-it/endpoints
+
+  - id: google/gemma-3-27b-it
+    name: 'Google: Gemma 3 27B'
+    provider_id: google
+    upstream_id: gemma-3-27b-it
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 16384
+      is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_k
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-27b-it/endpoints
+
+  - id: google/gemma-3-27b-it:free
+    name: 'Google: Gemma 3 27B (free)'
+    provider_id: google
+    upstream_id: gemma-3-27b-it:free
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 8192
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - stop
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-27b-it/endpoints
+
+  - id: google/gemma-3-4b-it
+    name: 'Google: Gemma 3 4B'
+    provider_id: google
+    upstream_id: gemma-3-4b-it
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 131072
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: null
+      is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - temperature
+      - top_k
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-4b-it/endpoints
+
+  - id: google/gemma-3-4b-it:free
+    name: 'Google: Gemma 3 4B (free)'
+    provider_id: google
+    upstream_id: gemma-3-4b-it:free
+    description: Gemma 3 introduces multimodality, supporting vision-language input
+      and text outputs. It handles context windows up to 128k tokens, understands
+      over 140 languages, and offers improved math, reasoning, and chat capabilities,...
+    enabled: true
+    context_length: 32768
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+      output_modalities:
+        - text
+      tokenizer: Gemini
+      instruct_type: gemma
+    top_provider:
+      context_length: 32768
+      max_completion_tokens: 8192
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - stop
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-4b-it/endpoints
 
   - id: google/gemma-3n
     name: Gemma 3n (free)
     provider_id: google
     upstream_id: gemma-3n
-    description: Our open model built for efficient performance on everyday devices like mobile phones, laptops, and tablets.
+    description: Our open model built for efficient performance on everyday devices
+      like mobile phones, laptops, and tablets.
     enabled: true
+    context_length: 0
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
-    config:
-      context_window: 128000
-      max_output: 4096
-      modality: [text]
-      image_support: false
-      tool_use: false
-      streaming_support: true
-    source: auto
-    context_length: 128000
-    architecture:
-      input_modalities: [text]
-      output_modalities: [text]
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
-  - id: google/lyria-3-pro-preview
-    name: lyria-3-pro-preview
+
+  - id: google/gemma-3n-e2b-it:free
+    name: 'Google: Gemma 3n 2B (free)'
     provider_id: google
-    upstream_id: lyria-3-pro-preview
+    upstream_id: gemma-3n-e2b-it:free
+    description: Gemma 3n E2B IT is a multimodal, instruction-tuned model developed
+      by Google DeepMind, designed to operate efficiently at an effective parameter
+      size of 2B while leveraging a 6B architecture. Based...
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text->text
+      output_modalities:
+        - text
+      tokenizer: Other
+      instruct_type: null
+    top_provider:
+      context_length: 8192
+      max_completion_tokens: 2048
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3n-e2b-it/endpoints
+
+  - id: google/gemma-3n-e4b-it
+    name: 'Google: Gemma 3n 4B'
+    provider_id: google
+    upstream_id: gemma-3n-e4b-it
+    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and
+      low-resource devices, such as phones, laptops, and tablets. It supports multimodal
+      inputs—including text, visual data, and audio—enabling diverse tasks...
     enabled: true
     context_length: 32768
     pricing:
-      prompt: "0"
-      completion: "0"
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
     architecture:
-      input_modalities: [text]
-      output_modalities: [text, audio]
-    config:
-      modality: [text, audio]
+      input_modalities:
+        - text->text
+      output_modalities:
+        - text
+      tokenizer: Other
+      instruct_type: null
+    top_provider:
+      context_length: 32768
+      max_completion_tokens: null
+      is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - repetition_penalty
+      - stop
+      - temperature
+      - top_k
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3n-e4b-it/endpoints
+
+  - id: google/gemma-3n-e4b-it:free
+    name: 'Google: Gemma 3n 4B (free)'
+    provider_id: google
+    upstream_id: gemma-3n-e4b-it:free
+    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and
+      low-resource devices, such as phones, laptops, and tablets. It supports multimodal
+      inputs—including text, visual data, and audio—enabling diverse tasks...
+    enabled: true
+    context_length: 8192
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text->text
+      output_modalities:
+        - text
+      tokenizer: Other
+      instruct_type: null
+    top_provider:
+      context_length: 8192
+      max_completion_tokens: 2048
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3n-e4b-it/endpoints
+
+  - id: google/gemma-4-26b-a4b-it
+    name: 'Google: Gemma 4 26B A4B '
+    provider_id: google
+    upstream_id: gemma-4-26b-a4b-it
+    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE)
+      model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate
+      per token during inference — delivering near-31B quality at...
+    enabled: true
+    context_length: 262144
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemma
+      instruct_type: null
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: null
+      is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_logprobs
+      - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 64
+    links:
+      details: /api/v1/models/google/gemma-4-26b-a4b-it-20260403/endpoints
+
+  - id: google/gemma-4-26b-a4b-it:free
+    name: 'Google: Gemma 4 26B A4B  (free)'
+    provider_id: google
+    upstream_id: gemma-4-26b-a4b-it:free
+    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE)
+      model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate
+      per token during inference — delivering near-31B quality at...
+    enabled: true
+    context_length: 262144
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemma
+      instruct_type: null
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: 32768
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 64
+    links:
+      details: /api/v1/models/google/gemma-4-26b-a4b-it-20260403/endpoints
+
+  - id: google/gemma-4-31b-it
+    name: 'Google: Gemma 4 31B'
+    provider_id: google
+    upstream_id: gemma-4-31b-it
+    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal
+      model supporting text and image input with text output. Features a 256K token
+      context window, configurable thinking/reasoning mode, native function...
+    enabled: true
+    context_length: 262144
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemma
+      instruct_type: null
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: null
+      is_moderated: false
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_logprobs
+      - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 64
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/gemma-4-31b-it-20260402/endpoints
+
+  - id: google/gemma-4-31b-it:free
+    name: 'Google: Gemma 4 31B (free)'
+    provider_id: google
+    upstream_id: gemma-4-31b-it:free
+    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal
+      model supporting text and image input with text output. Features a 256K token
+      context window, configurable thinking/reasoning mode, native function...
+    enabled: true
+    context_length: 262144
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video->text
+      output_modalities:
+        - text
+      tokenizer: Gemma
+      instruct_type: null
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: 32768
+      is_moderated: false
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - seed
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 64
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/gemma-4-31b-it-20260402/endpoints
+
+  - id: google/lyria-3-clip-preview
+    name: 'Google: Lyria 3 Clip Preview'
+    provider_id: google
+    upstream_id: lyria-3-clip-preview
+    description: 30 second duration clips are priced at $0.04 per clip. Lyria 3 is
+      Google's family of music generation models, available through the Gemini API.
+      With Lyria 3, you can generate...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+        - audio
+      output_modalities:
+        - text
+      tokenizer: Other
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/lyria-3-clip-preview-20260330/endpoints
+
+  - id: google/lyria-3-pro-preview
+    name: 'Google: Lyria 3 Pro Preview'
+    provider_id: google
+    upstream_id: lyria-3-pro-preview
+    description: Full-length songs are priced at $0.08 per song. Lyria 3 is Google's
+      family of music generation models, available through the Gemini API. With Lyria
+      3, you can generate high-quality, 48kHz...
+    enabled: true
+    context_length: 1048576
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image->text
+        - audio
+      output_modalities:
+        - text
+      tokenizer: Other
+      instruct_type: null
+    top_provider:
+      context_length: 1048576
+      max_completion_tokens: 65536
+      is_moderated: false
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - seed
+      - temperature
+      - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/google/lyria-3-pro-preview-20260330/endpoints

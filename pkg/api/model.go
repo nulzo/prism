@@ -27,7 +27,10 @@ type Model struct {
 	// model (OpenRouter ships `temperature`, `top_p`, `frequency_penalty`).
 	// Typed as a free-form map so new keys don't require a schema change.
 	DefaultParameters map[string]interface{} `json:"default_parameters,omitempty"`
-	PerRequestLimits  *PerRequestLimits      `json:"per_request_limits,omitempty"`
+	PerRequestLimits  *PerRequestLimits      `json:"per_request_limits"`
+	KnowledgeCutoff   *string                `json:"knowledge_cutoff"`
+	ExpirationDate    *string                `json:"expiration_date"`
+	Links             map[string]string      `json:"links,omitempty"`
 }
 
 type ModelFilter struct {
