@@ -83,12 +83,12 @@ models:
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000025'
+      completion: '0.00000125'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.0000003'
     architecture:
       input_modalities:
         - text
@@ -121,8 +121,21 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000025'
+      completion: '0.00000125'
+      request: '0'
+      image: '0'
+
+  - id: anthropic/claude-3-opus
+    name: Claude 3 Opus
+    provider_id: anthropic
+    upstream_id: claude-3-opus
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000015'
+      completion: '0.000075'
       request: '0'
       image: '0'
 
@@ -178,11 +191,11 @@ models:
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.0000008'
       completion: '0.000004'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000008'
       input_cache_write: '0.000001'
     architecture:
       input_modalities:
@@ -212,6 +225,19 @@ models:
     links:
       details: /api/v1/models/anthropic/claude-3-5-haiku/endpoints
 
+  - id: anthropic/claude-3.5-sonnet
+    name: Claude 3.5 Sonnet
+    provider_id: anthropic
+    upstream_id: claude-3.5-sonnet
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+
   - id: anthropic/claude-3.7-sonnet
     name: 'Anthropic: Claude 3.7 Sonnet'
     provider_id: anthropic
@@ -226,8 +252,8 @@ models:
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000004'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
     architecture:
       input_modalities:
         - text
@@ -277,8 +303,8 @@ models:
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000004'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
     architecture:
       input_modalities:
         - text
@@ -339,16 +365,29 @@ models:
       request: '0'
       image: '0'
 
+  - id: anthropic/claude-4.5-haiku
+    name: Claude 4.5 Haiku
+    provider_id: anthropic
+    upstream_id: claude-4.5-haiku
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000001'
+      completion: '0.000005'
+      request: '0'
+      image: '0'
+
   - id: anthropic/claude-haiku-4-5
-    name: claude-haiku-4-5
+    name: Claude Haiku 4.5
     provider_id: anthropic
     upstream_id: claude-haiku-4-5
     description: Fastest and most intelligent Haiku model
     enabled: true
     context_length: 64000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000005'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -379,8 +418,8 @@ models:
       completion: '0.000005'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000001'
+      input_cache_read: '0.0000001'
+      input_cache_write: '0.00000125'
     architecture:
       input_modalities:
         - text
@@ -426,8 +465,8 @@ models:
       completion: '0.000075'
       request: '0'
       image: '0'
-      input_cache_read: '0.000002'
-      input_cache_write: '0.000019'
+      input_cache_read: '0.0000015'
+      input_cache_write: '0.00001875'
     architecture:
       input_modalities:
         - text
@@ -476,15 +515,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-opus-4-1
-    name: claude-opus-4-1
+    name: Claude Opus 4.1
     provider_id: anthropic
     upstream_id: claude-opus-4-1
     description: Most intelligent model for complex tasks
     enabled: true
     context_length: 32000
     pricing:
-      prompt: '0.000015'
-      completion: '0.000075'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -515,15 +554,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-opus-4-5
-    name: claude-opus-4-5
+    name: Claude Opus 4.5
     provider_id: anthropic
     upstream_id: claude-opus-4-5
     description: Premium model combining maximum intelligence with practical performance
     enabled: true
     context_length: 64000
     pricing:
-      prompt: '0.000005'
-      completion: '0.000025'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -541,15 +580,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-opus-4-6
-    name: claude-opus-4-6
+    name: Claude Opus 4.6
     provider_id: anthropic
     upstream_id: claude-opus-4-6
     description: Our most intelligent model for building agents and coding
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000005'
-      completion: '0.000025'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -567,15 +606,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-opus-4-7
-    name: claude-opus-4-7
+    name: Claude Opus 4.7
     provider_id: anthropic
     upstream_id: claude-opus-4-7
     description: Our most capable model for complex reasoning and agentic coding
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000005'
-      completion: '0.000025'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -606,8 +645,8 @@ models:
       completion: '0.000075'
       request: '0'
       image: '0'
-      input_cache_read: '0.000002'
-      input_cache_write: '0.000019'
+      input_cache_read: '0.0000015'
+      input_cache_write: '0.00001875'
     architecture:
       input_modalities:
         - text
@@ -659,8 +698,8 @@ models:
       completion: '0.000025'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000006'
+      input_cache_read: '0.0000005'
+      input_cache_write: '0.00000625'
     architecture:
       input_modalities:
         - text
@@ -710,8 +749,8 @@ models:
       completion: '0.000025'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000006'
+      input_cache_read: '0.0000005'
+      input_cache_write: '0.00000625'
     architecture:
       input_modalities:
         - text
@@ -764,7 +803,7 @@ models:
       request: '0'
       image: '0'
       input_cache_read: '0.000003'
-      input_cache_write: '0.000037'
+      input_cache_write: '0.0000375'
     architecture:
       input_modalities:
         - text
@@ -813,8 +852,8 @@ models:
       completion: '0.000025'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000006'
+      input_cache_read: '0.0000005'
+      input_cache_write: '0.00000625'
     architecture:
       input_modalities:
         - text
@@ -861,8 +900,8 @@ models:
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000004'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
     architecture:
       input_modalities:
         - text
@@ -924,15 +963,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-sonnet-4-5
-    name: claude-sonnet-4-5
+    name: Claude Sonnet 4.5
     provider_id: anthropic
     upstream_id: claude-sonnet-4-5
     description: Our best combination of speed and intelligence
     enabled: true
     context_length: 64000
     pricing:
-      prompt: '0.000003'
-      completion: '0.000015'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -950,15 +989,15 @@ models:
       image: '0'
 
   - id: anthropic/claude-sonnet-4-6
-    name: claude-sonnet-4-6
+    name: Claude Sonnet 4.6
     provider_id: anthropic
     upstream_id: claude-sonnet-4-6
     description: Our best combination of speed and intelligence
     enabled: true
     context_length: 64000
     pricing:
-      prompt: '0.000003'
-      completion: '0.000015'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -976,8 +1015,8 @@ models:
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000004'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
     architecture:
       input_modalities:
         - text
@@ -1014,6 +1053,19 @@ models:
     links:
       details: /api/v1/models/anthropic/claude-4.5-sonnet-20250929/endpoints
 
+  - id: anthropic/claude-sonnet-4.5-200k
+    name: Claude Sonnet 4 and 4.5 >200k
+    provider_id: anthropic
+    upstream_id: claude-sonnet-4.5-200k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000006'
+      completion: '0.0000225'
+      request: '0'
+      image: '0'
+
   - id: anthropic/claude-sonnet-4.6
     name: 'Anthropic: Claude Sonnet 4.6'
     provider_id: anthropic
@@ -1029,8 +1081,8 @@ models:
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000004'
+      input_cache_read: '0.0000003'
+      input_cache_write: '0.00000375'
     architecture:
       input_modalities:
         - text

@@ -8,8 +8,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.0000006'
+      completion: '0.0000025'
       request: '0'
       image: '0'
 
@@ -21,8 +21,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.0000006'
+      completion: '0.0000025'
       request: '0'
       image: '0'
 
@@ -34,8 +34,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.0000006'
+      completion: '0.0000025'
       request: '0'
       image: '0'
 
@@ -47,7 +47,7 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000115'
       completion: '0.000008'
       request: '0'
       image: '0'
@@ -60,7 +60,7 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000115'
       completion: '0.000008'
       request: '0'
       image: '0'
@@ -73,7 +73,7 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
+      prompt: '0.0000006'
       completion: '0.000003'
       request: '0'
       image: '0'
@@ -86,7 +86,7 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000095'
       completion: '0.000004'
       request: '0'
       image: '0'
@@ -138,7 +138,7 @@ models:
     enabled: true
     context_length: 8192
     pricing:
-      prompt: '0'
+      prompt: '0.0000002'
       completion: '0.000002'
       request: '0'
       image: '0'
@@ -151,8 +151,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.0000006'
+      completion: '0.0000025'
       request: '0'
       image: '0'
 
@@ -242,7 +242,7 @@ models:
     enabled: true
     context_length: 8192
     pricing:
-      prompt: '0'
+      prompt: '0.0000002'
       completion: '0.000002'
       request: '0'
       image: '0'
@@ -255,7 +255,7 @@ models:
     enabled: true
     context_length: 8192
     pricing:
-      prompt: '0'
+      prompt: '0.0000002'
       completion: '0.000002'
       request: '0'
       image: '0'
@@ -268,7 +268,7 @@ models:
     enabled: true
     context_length: 8192
     pricing:
-      prompt: '0'
+      prompt: '0.0000002'
       completion: '0.000002'
       request: '0'
       image: '0'

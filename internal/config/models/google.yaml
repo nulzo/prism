@@ -147,6 +147,45 @@ models:
       request: '0'
       image: '0'
 
+  - id: google/gemini-1.5-flash-128k
+    name: Gemini 1.5 Flash >128k
+    provider_id: google
+    upstream_id: gemini-1.5-flash-128k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.00000015'
+      completion: '0.0000006'
+      request: '0'
+      image: '0'
+
+  - id: google/gemini-1.5-flash-8b
+    name: Gemini 1.5 Flash-8B ≤128k
+    provider_id: google
+    upstream_id: gemini-1.5-flash-8b
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.0000000375'
+      completion: '0.00000015'
+      request: '0'
+      image: '0'
+
+  - id: google/gemini-1.5-flash-8b-128k
+    name: Gemini 1.5 Flash-8B >128k
+    provider_id: google
+    upstream_id: gemini-1.5-flash-8b-128k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000000075'
+      completion: '0.0000003'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-1.5-pro
     name: gemini 1.5 Pro
     provider_id: google
@@ -159,6 +198,19 @@ models:
     pricing:
       prompt: '0'
       completion: '0'
+      request: '0'
+      image: '0'
+
+  - id: google/gemini-1.5-pro-128k
+    name: Gemini 1.5 Pro >128k
+    provider_id: google
+    upstream_id: gemini-1.5-pro-128k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
       request: '0'
       image: '0'
 
@@ -186,14 +238,14 @@ models:
       quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5).
       It...
     enabled: true
-    context_length: 1048576
+    context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.0000004'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000001'
+      input_cache_read: '0.000000025'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -206,7 +258,7 @@ models:
       tokenizer: Gemini
       instruct_type: null
     top_provider:
-      context_length: 1048576
+      context_length: 1000000
       max_completion_tokens: 8192
       is_moderated: false
     supported_parameters:
@@ -253,10 +305,10 @@ models:
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000075'
+      completion: '0.0000003'
       request: '0'
-      image: '0'
+      image: '0.000000075'
     architecture:
       input_modalities:
         - text
@@ -298,16 +350,16 @@ models:
     description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically
       designed for advanced reasoning, coding, mathematics, and scientific tasks.
       It includes built-in "thinking" capabilities, enabling it to provide responses
-      with greater...
+      with greater accuracy and nuanced context handling.
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
-      completion: '0.000003'
+      prompt: '0.0000003'
+      completion: '0.0000025'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000003'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -347,18 +399,18 @@ models:
     name: 'Google: Nano Banana (Gemini 2.5 Flash Image)'
     provider_id: google
     upstream_id: gemini-2.5-flash-image
-    description: Gemini 2.5 Flash Image, a.k.a. "Nano Banana," is now generally available.
-      It is a state of the art image generation model with contextual understanding.
-      It is capable of image generation,...
+    description: Google's specialized image generation model optimized for fast, high-quality
+      image generation. Outputs images at 1024x1024 resolution, with each image consuming
+      1290 output tokens.
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0.000003'
+      prompt: '0.0000003'
+      completion: '0.0000025'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000003'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -394,16 +446,19 @@ models:
     upstream_id: gemini-2.5-flash-lite
     description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini
       2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved
-      throughput, faster token generation, and better performance...
+      throughput, faster token generation, and better performance across common benchmarks
+      compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning)
+      is disabled to prioritize speed, but developers can enable it via the Reasoning
+      API parameter to selectively trade off cost for intelligence.
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.0000004'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000001'
+      input_cache_read: '0.00000001'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -449,12 +504,12 @@ models:
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.0000004'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000001'
+      input_cache_read: '0.00000001'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -506,22 +561,38 @@ models:
       request: '0'
       image: '0'
 
+  - id: google/gemini-2.5-flash-preview-09-2025
+    name: Gemini 2.5 Flash Preview (09-2025)
+    provider_id: google
+    upstream_id: gemini-2.5-flash-preview-09-2025
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000025'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-2.5-pro
     name: 'Google: Gemini 2.5 Pro'
     provider_id: google
     upstream_id: gemini-2.5-pro
-    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for
-      advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking”
-      capabilities, enabling it to reason through responses with enhanced accuracy...
+    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for
+      advanced reasoning, coding, mathematics, and scientific tasks. It employs "thinking"
+      capabilities, enabling it to reason through responses with enhanced accuracy
+      and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on
+      multiple benchmarks, including first-place positioning on the LMArena leaderboard,
+      reflecting superior human-preference alignment and complex problem-solving abilities.
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
-      image: '0.000001'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.00000125'
+      input_cache_read: '0.000000125'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -557,6 +628,19 @@ models:
     links:
       details: /api/v1/models/google/gemini-2.5-pro/endpoints
 
+  - id: google/gemini-2.5-pro-200k
+    name: Gemini 2.5 Pro >200k
+    provider_id: google
+    upstream_id: gemini-2.5-pro-200k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-2.5-pro-preview
     name: 'Google: Gemini 2.5 Pro Preview 06-05'
     provider_id: google
@@ -567,12 +651,12 @@ models:
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
-      image: '0.000001'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.00000125'
+      input_cache_read: '0.000000125'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -603,6 +687,32 @@ models:
     links:
       details: /api/v1/models/google/gemini-2.5-pro-preview-06-05/endpoints
 
+  - id: google/gemini-2.5-pro-preview-03-25
+    name: Gemini 2.5 Pro Preview ≤200k
+    provider_id: google
+    upstream_id: gemini-2.5-pro-preview-03-25
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.00000125'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+
+  - id: google/gemini-2.5-pro-preview-03-25-200k
+    name: Gemini 2.5 Pro Preview >200k
+    provider_id: google
+    upstream_id: gemini-2.5-pro-preview-03-25-200k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-2.5-pro-preview-05-06
     name: 'Google: Gemini 2.5 Pro Preview 05-06'
     provider_id: google
@@ -613,12 +723,12 @@ models:
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
-      image: '0.000001'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.00000125'
+      input_cache_read: '0.000000125'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -654,22 +764,48 @@ models:
     links:
       details: /api/v1/models/google/gemini-2.5-pro-preview-03-25/endpoints
 
+  - id: google/gemini-3-1-pro-preview
+    name: Gemini 3.1 Pro ≤200k
+    provider_id: google
+    upstream_id: gemini-3-1-pro-preview
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000012'
+      request: '0'
+      image: '0'
+
+  - id: google/gemini-3-1-pro-preview-200k
+    name: Gemini 3.1 Pro >200k
+    provider_id: google
+    upstream_id: gemini-3-1-pro-preview-200k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000004'
+      completion: '0.000018'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-3-flash-preview
     name: 'Google: Gemini 3 Flash Preview'
     provider_id: google
     upstream_id: gemini-3-flash-preview
-    description: Gemini 3 Flash Preview is a high speed, high value thinking model
-      designed for agentic workflows, multi turn chat, and coding assistance. It delivers
-      near Pro level reasoning and tool...
+    description: Google's ultra-fast frontier model optimized for speed and efficiency.
+      Delivers state-of-the-art performance while maintaining low latency and cost,
+      with improved reasoning and coding capabilities.
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
+      prompt: '0.0000005'
       completion: '0.000003'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.0000005'
+      input_cache_read: '0.00000005'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -708,9 +844,9 @@ models:
     name: 'Google: Nano Banana Pro (Gemini 3 Pro Image Preview)'
     provider_id: google
     upstream_id: gemini-3-pro-image-preview
-    description: Nano Banana Pro is Google’s most advanced image-generation and editing
-      model, built on Gemini 3 Pro. It extends the original Nano Banana with significantly
-      improved multimodal reasoning, real-world grounding, and...
+    description: Google's image generation model optimized for high-quality image
+      generation. Supports 1K/2K and 4K resolution outputs with flexible pricing based
+      on image dimensions.
     enabled: true
     context_length: 65536
     pricing:
@@ -718,8 +854,8 @@ models:
       completion: '0.000012'
       request: '0'
       image: '0.000002'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.0000002'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -764,17 +900,31 @@ models:
       request: '0'
       image: '0'
 
+  - id: google/gemini-3-pro-preview-200k
+    name: Gemini 3 Pro >200k
+    provider_id: google
+    upstream_id: gemini-3-pro-preview-200k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000004'
+      completion: '0.000018'
+      request: '0'
+      image: '0'
+
   - id: google/gemini-3.1-flash-image-preview
     name: 'Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)'
     provider_id: google
     upstream_id: gemini-3.1-flash-image-preview
-    description: Gemini 3.1 Flash Image Preview, a.k.a. "Nano Banana 2," is Google’s
-      latest state of the art image generation and editing model, delivering Pro-level
-      visual quality at Flash speed. It combines...
+    description: Google's latest image generation model (Nano Banana 2) optimized
+      for fast, high-quality image generation. Supports multiple output resolutions
+      from 512px to 4K, with text and thinking output priced separately from image
+      output tokens.
     enabled: true
     context_length: 65536
     pricing:
-      prompt: '0'
+      prompt: '0.0000005'
       completion: '0.000003'
       request: '0'
       image: '0'
@@ -815,18 +965,18 @@ models:
     name: 'Google: Gemini 3.1 Flash Lite Preview'
     provider_id: google
     upstream_id: gemini-3.1-flash-lite-preview
-    description: Gemini 3.1 Flash Lite Preview is Google's high-efficiency model optimized
-      for high-volume use cases. It outperforms Gemini 2.5 Flash Lite on overall quality
-      and approaches Gemini 2.5 Flash performance across...
+    description: Google's fastest and most cost-efficient Gemini 3 series model, built
+      for intelligence at scale. Optimized for high-volume, low-latency applications
+      while maintaining strong multimodal capabilities.
     enabled: true
     context_length: 1048576
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.00000025'
+      completion: '0.0000015'
       request: '0'
-      image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      image: '0.00000025'
+      input_cache_read: '0.000000025'
+      input_cache_write: '0.0000000833'
     architecture:
       input_modalities:
         - text
@@ -868,10 +1018,9 @@ models:
     name: 'Google: Gemini 3.1 Pro Preview'
     provider_id: google
     upstream_id: gemini-3.1-pro-preview
-    description: Gemini 3.1 Pro Preview is Google’s frontier reasoning model, delivering
-      enhanced software engineering performance, improved agentic reliability, and
-      more efficient token usage across complex workflows. Building on the multimodal
-      foundation...
+    description: The latest performance, intelligence, and usability improvements
+      to the best model family in the world for multimodal understanding, agentic
+      capabilities, and vibe-coding.
     enabled: true
     context_length: 1048576
     pricing:
@@ -879,8 +1028,8 @@ models:
       completion: '0.000012'
       request: '0'
       image: '0.000002'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.0000002'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -929,8 +1078,8 @@ models:
       completion: '0.000012'
       request: '0'
       image: '0.000002'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.0000002'
+      input_cache_write: '0.000000375'
     architecture:
       input_modalities:
         - text
@@ -1061,8 +1210,8 @@ models:
     enabled: true
     context_length: 8192
     pricing:
-      prompt: '0.000001'
-      completion: '0.000001'
+      prompt: '0.00000065'
+      completion: '0.00000065'
       request: '0'
       image: '0'
     architecture:
@@ -1115,8 +1264,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000004'
+      completion: '0.00000013'
       request: '0'
       image: '0'
     architecture:
@@ -1193,8 +1342,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000008'
+      completion: '0.00000016'
       request: '0'
       image: '0'
     architecture:
@@ -1282,8 +1431,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000004'
+      completion: '0.00000008'
       request: '0'
       image: '0'
     architecture:
@@ -1410,8 +1559,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000006'
+      completion: '0.00000012'
       request: '0'
       image: '0'
     architecture:
@@ -1485,8 +1634,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000006'
+      completion: '0.00000033'
       request: '0'
       image: '0'
     architecture:
@@ -1583,8 +1732,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000013'
+      completion: '0.00000038'
       request: '0'
       image: '0'
     architecture:

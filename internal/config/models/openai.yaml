@@ -144,7 +144,7 @@ models:
       image: '0'
 
   - id: openai/chatgpt-4o-latest
-    name: chatgpt-4o-latest
+    name: ChatGPT-4o
     provider_id: openai
     upstream_id: chatgpt-4o-latest
     description: OpenAI ChatGPT 4o is continually updated by OpenAI to point to the
@@ -154,8 +154,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000005'
-      completion: '0.000015'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -195,7 +195,7 @@ models:
     enabled: true
     context_length: 100000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.0000015'
       completion: '0.000006'
       request: '0'
       image: '0'
@@ -364,8 +364,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.0000008'
+      completion: '0.0000032'
       request: '0'
       image: '0'
 
@@ -377,8 +377,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000002'
+      completion: '0.0000008'
       request: '0'
       image: '0'
 
@@ -403,7 +403,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000004'
+      prompt: '0.00000375'
       completion: '0.000015'
       request: '0'
       image: '0'
@@ -416,7 +416,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000004'
+      prompt: '0.00000375'
       completion: '0.000015'
       request: '0'
       image: '0'
@@ -442,8 +442,8 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000003'
+      completion: '0.0000012'
       request: '0'
       image: '0'
 
@@ -484,8 +484,8 @@ models:
     enabled: true
     context_length: 16385
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.0000005'
+      completion: '0.0000015'
       request: '0'
       image: '0'
     architecture:
@@ -526,8 +526,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.0000005'
+      completion: '0.0000015'
       request: '0'
       image: '0'
 
@@ -584,8 +584,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -595,7 +595,7 @@ models:
     upstream_id: gpt-3.5-turbo-16k
     description: 'This model offers four times the context length of gpt-3.5-turbo,
       allowing it to support approximately 20 pages of text in a single request at
-      a higher cost. Training data: up...'
+      a higher cost. Training data: up to Sep 2021.'
     enabled: true
     context_length: 16385
     pricing:
@@ -643,7 +643,7 @@ models:
     enabled: true
     context_length: 4095
     pricing:
-      prompt: '0.000002'
+      prompt: '0.0000015'
       completion: '0.000002'
       request: '0'
       image: '0'
@@ -679,9 +679,9 @@ models:
     name: 'OpenAI: GPT-4'
     provider_id: openai
     upstream_id: gpt-4
-    description: OpenAI's flagship model, GPT-4 is a large-scale multimodal language
-      model capable of solving difficult problems with greater accuracy than previous
-      models due to its broader general knowledge and advanced reasoning...
+    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating
+      sophisticated capabilities in complex reasoning, theory of mind, and narrative
+      understanding.
     enabled: true
     context_length: 8191
     pricing:
@@ -970,9 +970,9 @@ models:
     name: 'OpenAI: GPT-4.1'
     provider_id: openai
     upstream_id: gpt-4.1
-    description: GPT-4.1 is a flagship large language model optimized for advanced
-      instruction following, real-world software engineering, and long-context reasoning.
-      It supports a 1 million token context window and outperforms GPT-4o and...
+    description: GPT-4.1 is OpenAI's latest flagship model, offering major improvements
+      in coding, instruction following, and long context understanding with up to
+      1 million tokens of context.
     enabled: true
     context_length: 1047576
     pricing:
@@ -980,7 +980,7 @@ models:
       completion: '0.000008'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000005'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1026,17 +1026,17 @@ models:
     name: 'OpenAI: GPT-4.1 Mini'
     provider_id: openai
     upstream_id: gpt-4.1-mini
-    description: GPT-4.1 Mini is a mid-sized model delivering performance competitive
-      with GPT-4o at substantially lower latency and cost. It retains a 1 million
-      token context window and scores 45.1% on hard...
+    description: GPT-4.1 Mini is a significant leap in small model performance, matching
+      or exceeding GPT-4o in many benchmarks while reducing latency by nearly half
+      and cost by 83%.
     enabled: true
     context_length: 1047576
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.0000004'
+      completion: '0.0000016'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000001'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1073,8 +1073,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.0000004'
+      completion: '0.0000016'
       request: '0'
       image: '0'
 
@@ -1082,17 +1082,17 @@ models:
     name: 'OpenAI: GPT-4.1 Nano'
     provider_id: openai
     upstream_id: gpt-4.1-nano
-    description: For tasks that demand low latency, GPT‑4.1 nano is the fastest and
-      cheapest model in the GPT-4.1 series. It delivers exceptional performance at
-      a small size with its 1 million...
+    description: GPT-4.1 Nano is OpenAI's fastest and cheapest model, delivering exceptional
+      performance for its size with a 1 million token context window, ideal for classification
+      and autocompletion tasks.
     enabled: true
     context_length: 1047576
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.0000004'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000025'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1129,8 +1129,21 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.0000004'
+      request: '0'
+      image: '0'
+
+  - id: openai/gpt-4.5
+    name: GPT-4.5
+    provider_id: openai
+    upstream_id: gpt-4.5
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000075'
+      completion: '0.00015'
       request: '0'
       image: '0'
 
@@ -1154,13 +1167,12 @@ models:
     name: 'OpenAI: GPT-4o'
     provider_id: openai
     upstream_id: gpt-4o
-    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both
-      text and image inputs with text outputs. It maintains the intelligence level
-      of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...
+    description: GPT-4 Optimized (GPT-4o) is designed for high performance in reasoning,
+      creativity, and technical tasks while maintaining consistent output quality.
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1257,11 +1269,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0.000001'
+      input_cache_read: '0.00000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1307,11 +1319,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0.000001'
+      input_cache_read: '0.00000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1350,13 +1362,11 @@ models:
     name: 'OpenAI: GPT-4o Audio'
     provider_id: openai
     upstream_id: gpt-4o-audio-preview
-    description: The gpt-4o-audio-preview model adds support for audio inputs as prompts.
-      This enhancement allows the model to detect nuances within audio recordings
-      and add depth to generated user experiences. Audio outputs...
+    description: Audio model for gpt-4o
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1404,7 +1414,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1417,7 +1427,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1426,17 +1436,18 @@ models:
     name: 'OpenAI: GPT-4o-mini'
     provider_id: openai
     upstream_id: gpt-4o-mini
-    description: GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o),
-      supporting both text and image inputs with text outputs. As their most advanced
-      small model, it is many multiples more affordable...
+    description: GPT-4o Mini is a cost-optimized variant of GPT-4o, designed for high-efficiency
+      processing while maintaining strong performance. It excels in rapid inference
+      and resource-efficient operations, making it ideal for production deployments
+      requiring a balance of cost and capability.
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000075'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1482,11 +1493,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000075'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1535,7 +1546,7 @@ models:
       image: '0'
 
   - id: openai/gpt-4o-mini-audio-preview
-    name: gpt-4o-mini-audio-preview
+    name: gpt 4o mini audio preview
     provider_id: openai
     upstream_id: gpt-4o-mini-audio-preview
     description: Audio model for gpt-4o mini
@@ -1543,7 +1554,7 @@ models:
     context_length: 16384
     pricing:
       prompt: '0'
-      completion: '0.000001'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1555,8 +1566,8 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
 
@@ -1568,8 +1579,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1581,8 +1592,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
 
@@ -1595,8 +1606,8 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
     architecture:
@@ -1627,8 +1638,8 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
 
@@ -1640,8 +1651,8 @@ models:
     enabled: true
     context_length: 16000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000005'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1653,7 +1664,7 @@ models:
     enabled: true
     context_length: 16000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.000005'
       request: '0'
       image: '0'
@@ -1666,7 +1677,7 @@ models:
     enabled: true
     context_length: 16000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.000005'
       request: '0'
       image: '0'
@@ -1679,8 +1690,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000003'
-      completion: '0.00001'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1692,7 +1703,7 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1705,7 +1716,7 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1718,8 +1729,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000005'
-      completion: '0.00002'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1758,7 +1769,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1790,7 +1801,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1803,8 +1814,8 @@ models:
     enabled: true
     context_length: 16000
     pricing:
-      prompt: '0.000003'
-      completion: '0.00001'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -1816,7 +1827,7 @@ models:
     enabled: true
     context_length: 16000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1842,17 +1853,16 @@ models:
     name: 'OpenAI: GPT-5'
     provider_id: openai
     upstream_id: gpt-5
-    description: GPT-5 is OpenAI’s most advanced model, offering major improvements
-      in reasoning, code quality, and user experience. It is optimized for complex
-      tasks that require step-by-step reasoning, instruction following, and accuracy...
+    description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic
+      tasks across domains.
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1896,7 +1906,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1910,11 +1920,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1946,7 +1956,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -1961,11 +1971,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2011,7 +2021,7 @@ models:
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0.000001'
+      input_cache_read: '0.00000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2060,11 +2070,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.000002'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000025'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2106,17 +2116,16 @@ models:
     name: 'OpenAI: GPT-5 Mini'
     provider_id: openai
     upstream_id: gpt-5-mini
-    description: GPT-5 Mini is a compact version of GPT-5, designed to handle lighter-weight
-      reasoning tasks. It provides the same instruction-following and safety-tuning
-      benefits as GPT-5, but with reduced latency and cost....
+    description: GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's
+      great for well-defined tasks and precise prompts.
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0'
+      prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000025'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2160,7 +2169,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0'
+      prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
@@ -2169,17 +2178,16 @@ models:
     name: 'OpenAI: GPT-5 Nano'
     provider_id: openai
     upstream_id: gpt-5-nano
-    description: GPT-5-Nano is the smallest and fastest variant in the GPT-5 system,
-      optimized for developer tools, rapid interactions, and ultra-low latency environments.
-      While limited in reasoning depth compared to its larger...
+    description: GPT-5 Nano is OpenAI's fastest, cheapest version of GPT-5. It's great
+      for summarization and classification tasks.
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000005'
+      completion: '0.0000004'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000001'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2223,8 +2231,8 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000005'
+      completion: '0.0000004'
       request: '0'
       image: '0'
 
@@ -2293,7 +2301,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -2306,7 +2314,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -2315,17 +2323,15 @@ models:
     name: 'OpenAI: GPT-5.1'
     provider_id: openai
     upstream_id: gpt-5.1
-    description: GPT-5.1 is the latest frontier-grade model in the GPT-5 series, offering
-      stronger general-purpose reasoning, improved instruction adherence, and a more
-      natural conversational style compared to GPT-5. It uses adaptive reasoning...
+    description: The best model for coding and agentic tasks across industries
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000013'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2368,7 +2374,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -2383,11 +2389,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2425,7 +2431,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -2440,11 +2446,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2488,11 +2494,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000125'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2534,11 +2540,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0'
+      prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000003'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2576,17 +2582,15 @@ models:
     name: 'OpenAI: GPT-5.2'
     provider_id: openai
     upstream_id: gpt-5.2
-    description: GPT-5.2 is the latest frontier-grade model in the GPT-5 series, offering
-      stronger agentic and long context perfomance compared to GPT-5.1. It uses adaptive
-      reasoning to allocate computation dynamically, responding quickly...
+    description: The best model for coding and agentic tasks across industries
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000175'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2629,7 +2633,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
@@ -2644,11 +2648,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000175'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2686,7 +2690,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
@@ -2702,11 +2706,11 @@ models:
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000175'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2741,9 +2745,7 @@ models:
     name: 'OpenAI: GPT-5.2 Pro'
     provider_id: openai
     upstream_id: gpt-5.2-pro
-    description: GPT-5.2 Pro is OpenAI’s most advanced model, offering major improvements
-      in agentic coding and long context performance over GPT-5 Pro. It is optimized
-      for complex tasks that require step-by-step reasoning,...
+    description: Version of GPT-5.2 that produces smarter and more precise responses.
     enabled: true
     context_length: 400000
     pricing:
@@ -2803,11 +2805,11 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000175'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2848,7 +2850,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
@@ -2857,18 +2859,15 @@ models:
     name: 'OpenAI: GPT-5.3-Codex'
     provider_id: openai
     upstream_id: gpt-5.3-codex
-    description: GPT-5.3-Codex is OpenAI’s most advanced agentic coding model, combining
-      the frontier software engineering performance of GPT-5.2-Codex with the broader
-      reasoning and professional knowledge capabilities of GPT-5.2. It achieves state-of-the-art
-      results...
+    description: The most capable agentic coding model
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000002'
+      prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000175'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2907,17 +2906,15 @@ models:
     name: 'OpenAI: GPT-5.4'
     provider_id: openai
     upstream_id: gpt-5.4
-    description: GPT-5.4 is OpenAI’s latest frontier model, unifying the Codex and
-      GPT lines into a single system. It features a 1M+ token context window (922K
-      input, 128K output) with support for...
+    description: OpenAI's most capable model with a 1.05M token context window.
     enabled: true
     context_length: 1050000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.000015'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000025'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -2960,8 +2957,21 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.000015'
+      request: '0'
+      image: '0'
+
+  - id: openai/gpt-5.4-272k
+    name: GPT-5.4 >272k
+    provider_id: openai
+    upstream_id: gpt-5.4-272k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000005'
+      completion: '0.0000225'
       request: '0'
       image: '0'
 
@@ -3023,17 +3033,15 @@ models:
     name: 'OpenAI: GPT-5.4 Mini'
     provider_id: openai
     upstream_id: gpt-5.4-mini
-    description: GPT-5.4 mini brings the core capabilities of GPT-5.4 to a faster,
-      more efficient model optimized for high-throughput workloads. It supports text
-      and image inputs with strong performance across reasoning, coding,...
+    description: Our strongest mini model yet for coding, computer use, and subagents.
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000005'
+      prompt: '0.00000075'
+      completion: '0.0000045'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000075'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -3073,17 +3081,15 @@ models:
     name: 'OpenAI: GPT-5.4 Nano'
     provider_id: openai
     upstream_id: gpt-5.4-nano
-    description: GPT-5.4 nano is the most lightweight and cost-efficient variant of
-      the GPT-5.4 family, optimized for speed-critical and high-volume tasks. It supports
-      text and image inputs and is designed for low-latency...
+    description: Our cheapest GPT-5.4-class model for simple high-volume tasks.
     enabled: true
     context_length: 400000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000002'
+      completion: '0.00000125'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000002'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -3123,9 +3129,7 @@ models:
     name: 'OpenAI: GPT-5.4 Pro'
     provider_id: openai
     upstream_id: gpt-5.4-pro
-    description: GPT-5.4 Pro is OpenAI's most advanced model, building on GPT-5.4's
-      unified architecture with enhanced reasoning capabilities for complex, high-stakes
-      tasks. It features a 1M+ token context window (922K input, 128K...
+    description: Version of GPT-5.4 that produces smarter and more precise responses.
     enabled: true
     context_length: 1050000
     pricing:
@@ -3179,6 +3183,19 @@ models:
       request: '0'
       image: '0'
 
+  - id: openai/gpt-5.4-pro-272k
+    name: GPT-5.4 Pro >272k
+    provider_id: openai
+    upstream_id: gpt-5.4-pro-272k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.00006'
+      completion: '0.00027'
+      request: '0'
+      image: '0'
+
   - id: openai/gpt-5.5
     name: gpt-5.5
     provider_id: openai
@@ -3192,6 +3209,19 @@ models:
       request: '0'
       image: '0'
 
+  - id: openai/gpt-5.5-pro
+    name: GPT-5.5 Pro ≤272k
+    provider_id: openai
+    upstream_id: gpt-5.5-pro
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.00003'
+      completion: '0.00018'
+      request: '0'
+      image: '0'
+
   - id: openai/gpt-audio
     name: 'OpenAI: GPT Audio'
     provider_id: openai
@@ -3202,7 +3232,7 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -3249,7 +3279,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -3262,7 +3292,7 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000003'
+      prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
@@ -3277,8 +3307,8 @@ models:
     enabled: true
     context_length: 128000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
     architecture:
@@ -3324,8 +3354,8 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
 
@@ -3337,8 +3367,8 @@ models:
     enabled: true
     context_length: 16384
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
 
@@ -3394,6 +3424,32 @@ models:
       request: '0'
       image: '0'
 
+  - id: openai/gpt-image-2-image
+    name: gpt-image-2 (image gen) image tokens
+    provider_id: openai
+    upstream_id: gpt-image-2-image
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000008'
+      completion: '0.00003'
+      request: '0'
+      image: '0'
+
+  - id: openai/gpt-image-2-text
+    name: gpt-image-2 (image gen) text tokens
+    provider_id: openai
+    upstream_id: gpt-image-2-text
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000005'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+
   - id: openai/gpt-oss-120b
     name: 'OpenAI: gpt-oss-120b'
     provider_id: openai
@@ -3404,8 +3460,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000039'
+      completion: '0.00000019'
       request: '0'
       image: '0'
     architecture:
@@ -3499,8 +3555,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000003'
+      completion: '0.00000014'
       request: '0'
       image: '0'
     architecture:
@@ -3596,11 +3652,11 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000075'
+      completion: '0.0000003'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000037'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -3639,8 +3695,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -3678,8 +3734,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0'
+      completion: '0'
       request: '0'
       image: '0'
 
@@ -3691,8 +3747,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
 
@@ -3704,8 +3760,8 @@ models:
     enabled: true
     context_length: 4096
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.0000006'
+      completion: '0.0000024'
       request: '0'
       image: '0'
 
@@ -4194,9 +4250,7 @@ models:
     name: 'OpenAI: o1'
     provider_id: openai
     upstream_id: o1
-    description: The latest and strongest model family from OpenAI, o1 is designed
-      to spend more time thinking before responding. The o1 model series is trained
-      with large-scale reinforcement learning to reason...
+    description: O1 is a model that offers a balance between cost and performance.
     enabled: true
     context_length: 200000
     pricing:
@@ -4204,7 +4258,7 @@ models:
       completion: '0.00006'
       request: '0'
       image: '0'
-      input_cache_read: '0.000008'
+      input_cache_read: '0.0000075'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4265,13 +4319,26 @@ models:
       request: '0'
       image: '0'
 
+  - id: openai/o1-preview
+    name: o1 and o1-preview
+    provider_id: openai
+    upstream_id: o1-preview
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000015'
+      completion: '0.00006'
+      request: '0'
+      image: '0'
+
   - id: openai/o1-pro
     name: 'OpenAI: o1-pro'
     provider_id: openai
     upstream_id: o1-pro
     description: The o1 series of models are trained with reinforcement learning to
       think before they answer and perform complex reasoning. The o1-pro model uses
-      more compute to think harder and provide...
+      more compute to think harder and provide consistently better answers.
     enabled: true
     context_length: 200000
     pricing:
@@ -4320,9 +4387,11 @@ models:
     name: 'OpenAI: o3'
     provider_id: openai
     upstream_id: o3
-    description: o3 is a well-rounded and powerful model across domains. It sets a
-      new standard for math, science, coding, and visual reasoning tasks. It also
-      excels at technical writing and instruction-following....
+    description: 'o3 is a well-rounded and powerful model across domains. It sets
+      a new standard for math, science, coding, and visual reasoning tasks. It also
+      excels at technical writing and instruction-following. Use it to think through
+      multi-step problems that involve analysis across text, code, and images. Note
+      that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations'
     enabled: true
     context_length: 200000
     pricing:
@@ -4330,7 +4399,7 @@ models:
       completion: '0.000008'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000005'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4386,7 +4455,7 @@ models:
       completion: '0.00004'
       request: '0'
       image: '0'
-      input_cache_read: '0.000003'
+      input_cache_read: '0.0000025'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4444,15 +4513,14 @@ models:
     upstream_id: o3-mini
     description: OpenAI o3-mini is a cost-efficient language model optimized for STEM
       reasoning tasks, particularly excelling in science, mathematics, and coding.
-      This model supports the `reasoning_effort` parameter, which can be set to...
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
-      input_cache_read: '0.000001'
+      input_cache_read: '0.00000055'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4494,8 +4562,8 @@ models:
     enabled: true
     context_length: 100000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
 
@@ -4510,11 +4578,11 @@ models:
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
-      input_cache_read: '0.000001'
+      input_cache_read: '0.00000055'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4551,7 +4619,7 @@ models:
     upstream_id: o3-pro
     description: The o-series of models are trained with reinforcement learning to
       think before they answer and perform complex reasoning. The o3-pro model uses
-      more compute to think harder and provide consistently...
+      more compute to think harder and provide consistently better answers.
     enabled: true
     context_length: 200000
     pricing:
@@ -4606,17 +4674,16 @@ models:
     name: 'OpenAI: o4 Mini'
     provider_id: openai
     upstream_id: o4-mini
-    description: OpenAI o4-mini is a compact reasoning model in the o-series, optimized
-      for fast, cost-efficient performance while retaining strong multimodal and agentic
-      capabilities. It supports tool use and demonstrates competitive reasoning...
+    description: OpenAI o4-mini-high is the same model as o4-mini with reasoning_effort
+      set to high.
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000275'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4652,8 +4719,8 @@ models:
     enabled: true
     context_length: 100000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
 
@@ -4672,7 +4739,7 @@ models:
       completion: '0.000008'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000005'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -4734,11 +4801,11 @@ models:
     enabled: true
     context_length: 200000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.0000011'
+      completion: '0.0000044'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000275'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -5031,7 +5098,7 @@ models:
       image: '0'
 
   - id: openai/text-embedding-3-large
-    name: text-embedding-3-large
+    name: text embedding 3
     provider_id: openai
     upstream_id: text-embedding-3-large
     description: Text Embedding 3 is a model that offers a balance between cost and
@@ -5045,7 +5112,7 @@ models:
       image: '0'
 
   - id: openai/text-embedding-3-small
-    name: text-embedding-3-small
+    name: text embedding 3
     provider_id: openai
     upstream_id: text-embedding-3-small
     description: Text Embedding 3 is a model that offers a balance between cost and
@@ -5059,7 +5126,7 @@ models:
       image: '0'
 
   - id: openai/text-embedding-ada-002
-    name: text-embedding-ada-002
+    name: text embedding ada
     provider_id: openai
     upstream_id: text-embedding-ada-002
     description: Text Embedding Ada is a model that offers a balance between cost
@@ -5080,7 +5147,7 @@ models:
     enabled: true
     context_length: 8191
     pricing:
-      prompt: '0'
+      prompt: '0.0000001'
       completion: '0'
       request: '0'
       image: '0'

@@ -10,8 +10,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000012'
+      completion: '0.00000039'
       request: '0'
       image: '0'
     architecture:
@@ -53,8 +53,8 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000004'
+      completion: '0.0000001'
       request: '0'
       image: '0'
     architecture:
@@ -102,7 +102,7 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0.000001'
+      prompt: '0.00000066'
       completion: '0.000001'
       request: '0'
       image: '0'
@@ -140,11 +140,11 @@ models:
     enabled: true
     context_length: 32768
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.00000104'
+      completion: '0.00000416'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000208'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -179,12 +179,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000026'
+      completion: '0.00000078'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.000000052'
+      input_cache_write: '0.000000325'
     architecture:
       input_modalities:
         - text->text
@@ -219,12 +219,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000026'
+      completion: '0.00000078'
       request: '0'
       image: '0'
       input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_write: '0.000000325'
     architecture:
       input_modalities:
         - text->text
@@ -264,12 +264,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000026'
+      completion: '0.00000078'
       request: '0'
       image: '0'
       input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_write: '0.000000325'
     architecture:
       input_modalities:
         - text->text
@@ -310,11 +310,11 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000000325'
+      completion: '0.00000013'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000000065'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -349,8 +349,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
+      prompt: '0.00000052'
+      completion: '0.00000208'
       request: '0'
       image: '0'
     architecture:
@@ -393,11 +393,11 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001365'
+      completion: '0.0000004095'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.0000000273'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -432,8 +432,8 @@ models:
     enabled: true
     context_length: 32000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000025'
+      completion: '0.00000075'
       request: '0'
       image: '0'
     architecture:
@@ -475,8 +475,8 @@ models:
     enabled: true
     context_length: 40960
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000006'
+      completion: '0.00000024'
       request: '0'
       image: '0'
     architecture:
@@ -523,8 +523,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.000000455'
+      completion: '0.00000182'
       request: '0'
       image: '0'
     architecture:
@@ -564,8 +564,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000071'
+      completion: '0.0000001'
       request: '0'
       image: '0'
     architecture:
@@ -612,8 +612,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000001495'
+      completion: '0.000001495'
       request: '0'
       image: '0'
     architecture:
@@ -663,8 +663,8 @@ models:
     enabled: true
     context_length: 40960
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000008'
+      completion: '0.00000028'
       request: '0'
       image: '0'
     architecture:
@@ -716,8 +716,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000009'
+      completion: '0.0000003'
       request: '0'
       image: '0'
     architecture:
@@ -762,11 +762,11 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000008'
+      completion: '0.0000004'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000008'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -811,11 +811,11 @@ models:
     enabled: true
     context_length: 40960
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000008'
+      completion: '0.00000024'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000004'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -860,11 +860,11 @@ models:
     enabled: true
     context_length: 40960
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000005'
+      completion: '0.0000004'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000005'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -916,11 +916,11 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
+      prompt: '0.00000022'
       completion: '0.000001'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000022'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -964,8 +964,8 @@ models:
     enabled: true
     context_length: 160000
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000007'
+      completion: '0.00000027'
       request: '0'
       image: '0'
     architecture:
@@ -1007,12 +1007,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.000000195'
+      completion: '0.000000975'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_read: '0.000000039'
+      input_cache_write: '0.0000002437'
     architecture:
       input_modalities:
         - text->text
@@ -1051,11 +1051,11 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.0000008'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000011'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1101,12 +1101,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0.000001'
-      completion: '0.000003'
+      prompt: '0.00000065'
+      completion: '0.00000325'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000001'
+      input_cache_read: '0.00000013'
+      input_cache_write: '0.0000008125'
     architecture:
       input_modalities:
         - text->text
@@ -1185,12 +1185,12 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.00000078'
+      completion: '0.0000039'
       request: '0'
       image: '0'
-      input_cache_read: '0'
-      input_cache_write: '0.000001'
+      input_cache_read: '0.000000156'
+      input_cache_write: '0.000000975'
     architecture:
       input_modalities:
         - text->text
@@ -1230,8 +1230,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0.000001'
-      completion: '0.000004'
+      prompt: '0.00000078'
+      completion: '0.0000039'
       request: '0'
       image: '0'
     architecture:
@@ -1275,8 +1275,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000009'
+      completion: '0.0000011'
       request: '0'
       image: '0'
     architecture:
@@ -1363,8 +1363,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000000975'
+      completion: '0.00000078'
       request: '0'
       image: '0'
     architecture:
@@ -1415,11 +1415,11 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000002'
+      completion: '0.00000088'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.00000011'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1467,8 +1467,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000003'
+      prompt: '0.00000026'
+      completion: '0.0000026'
       request: '0'
       image: '0'
     architecture:
@@ -1520,8 +1520,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000013'
+      completion: '0.00000052'
       request: '0'
       image: '0'
     architecture:
@@ -1573,8 +1573,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.00000013'
+      completion: '0.00000156'
       request: '0'
       image: '0'
     architecture:
@@ -1627,8 +1627,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000104'
+      completion: '0.000000416'
       request: '0'
       image: '0'
     architecture:
@@ -1673,8 +1673,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000008'
+      completion: '0.0000005'
       request: '0'
       image: '0'
     architecture:
@@ -1723,8 +1723,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.000000117'
+      completion: '0.000001365'
       request: '0'
       image: '0'
     architecture:
@@ -1767,8 +1767,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.00000026'
+      completion: '0.00000208'
       request: '0'
       image: '0'
     architecture:
@@ -1824,8 +1824,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.000000195'
+      completion: '0.00000156'
       request: '0'
       image: '0'
     architecture:
@@ -1882,8 +1882,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.0000001625'
+      completion: '0.0000013'
       request: '0'
       image: '0'
     architecture:
@@ -1939,11 +1939,11 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.00000039'
+      completion: '0.00000234'
       request: '0'
       image: '0'
-      input_cache_read: '0'
+      input_cache_read: '0.000000195'
       input_cache_write: '0'
     architecture:
       input_modalities:
@@ -1998,8 +1998,8 @@ models:
     enabled: true
     context_length: 262144
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000001'
+      completion: '0.00000015'
       request: '0'
       image: '0'
     architecture:
@@ -2054,12 +2054,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000000065'
+      completion: '0.00000026'
       request: '0'
       image: '0'
       input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_write: '0.0000000813'
     architecture:
       input_modalities:
         - text
@@ -2103,12 +2103,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.00000026'
+      completion: '0.00000156'
       request: '0'
       image: '0'
       input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_write: '0.000000325'
     architecture:
       input_modalities:
         - text
@@ -2151,12 +2151,12 @@ models:
     enabled: true
     context_length: 1000000
     pricing:
-      prompt: '0'
-      completion: '0.000002'
+      prompt: '0.000000325'
+      completion: '0.00000195'
       request: '0'
       image: '0'
       input_cache_read: '0'
-      input_cache_write: '0'
+      input_cache_write: '0.0000004062'
     architecture:
       input_modalities:
         - text
@@ -2192,6 +2192,19 @@ models:
     links:
       details: /api/v1/models/qwen/qwen3.6-plus-04-02/endpoints
 
+  - id: qwen/qwen3.6-plus-256k
+    name: Qwen3.6 Plus >256k
+    provider_id: qwen
+    upstream_id: qwen3.6-plus-256k
+    description: ''
+    enabled: true
+    context_length: 0
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+
   - id: qwen/qwq-32b
     name: 'Qwen: QwQ 32B'
     provider_id: qwen
@@ -2202,8 +2215,8 @@ models:
     enabled: true
     context_length: 131072
     pricing:
-      prompt: '0'
-      completion: '0.000001'
+      prompt: '0.00000015'
+      completion: '0.00000058'
       request: '0'
       image: '0'
     architecture:
