@@ -17,7 +17,6 @@ models:
     context_length: 131072
     provider_id: moonshot
     upstream_id: kimi-k2
-    description: Kimi K2 Instruct is a large-scale Mixture-of-Experts (MoE) language model developed by Moonshot AI, featuring 1 trillion total parameters with 32 billion active per forward pass. It is optimized for...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -37,6 +36,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Kimi K2 Instruct is a large-scale Mixture-of-Experts (MoE) language model developed by Moonshot AI, featuring 1 trillion total parameters with 32 billion active per forward pass. It is optimized for...
 
   - id: moonshot/kimi-k2-0711-preview
     pricing:
@@ -74,7 +74,6 @@ models:
     context_length: 262144
     provider_id: moonshot
     upstream_id: kimi-k2-0905
-    description: Kimi K2 0905 is the September update of [Kimi K2 0711](moonshotai/kimi-k2). It is a large-scale Mixture-of-Experts (MoE) language model developed by Moonshot AI, featuring 1 trillion total parameters with 32...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -98,6 +97,7 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
+    description: Kimi K2 0905 is the September update of [Kimi K2 0711](moonshotai/kimi-k2). It is a large-scale Mixture-of-Experts (MoE) language model developed by Moonshot AI, featuring 1 trillion total parameters with 32...
 
   - id: moonshot/kimi-k2-0905-preview
     pricing:
@@ -136,7 +136,6 @@ models:
     context_length: 262144
     provider_id: moonshot
     upstream_id: kimi-k2-thinking
-    description: Kimi K2 Thinking is Moonshot AI’s most advanced open reasoning model to date, extending the K2 series into agentic, long-horizon reasoning. Built on the trillion-parameter Mixture-of-Experts (MoE) architecture introduced in...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -165,6 +164,7 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
+    description: Kimi K2 Thinking is Moonshot AI’s most advanced open reasoning model to date, extending the K2 series into agentic, long-horizon reasoning. Built on the trillion-parameter Mixture-of-Experts (MoE) architecture introduced in...
 
   - id: moonshot/kimi-k2-thinking
     pricing:
@@ -242,7 +242,6 @@ models:
     context_length: 262144
     provider_id: moonshot
     upstream_id: kimi-k2.5
-    description: Kimi K2.5 is Moonshot AI's native multimodal model, delivering state-of-the-art visual coding capability and a self-directed agent swarm paradigm. Built on Kimi K2 with continued pretraining over approximately 15T mixed...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -277,6 +276,7 @@ models:
       context_length: 262144
       max_completion_tokens: 65535
       is_moderated: false
+    description: Kimi K2.5 is Moonshot AI's native multimodal model, delivering state-of-the-art visual coding capability and a self-directed agent swarm paradigm. Built on Kimi K2 with continued pretraining over approximately 15T mixed...
 
   - id: moonshot/kimi-k2.5
     pricing:
@@ -316,7 +316,6 @@ models:
     context_length: 256000
     provider_id: moonshot
     upstream_id: kimi-k2.6
-    description: Kimi K2.6 is Moonshot AI's next-generation multimodal model, designed for long-horizon coding, coding-driven UI/UX generation, and multi-agent orchestration. It handles complex end-to-end coding tasks across Python, Rust, and Go, and...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -352,6 +351,7 @@ models:
       context_length: 256000
       max_completion_tokens: 65536
       is_moderated: false
+    description: Kimi K2.6 is Moonshot AI's next-generation multimodal model, designed for long-horizon coding, coding-driven UI/UX generation, and multi-agent orchestration. It handles complex end-to-end coding tasks across Python, Rust, and Go, and...
 
   - id: moonshot/kimi-k2.6
     pricing:

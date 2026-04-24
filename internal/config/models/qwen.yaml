@@ -18,7 +18,6 @@ models:
     context_length: 32768
     provider_id: qwen
     upstream_id: qwen-2.5-72b-instruct
-    description: 'Qwen2.5 72B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -40,6 +39,7 @@ models:
       context_length: 32768
       max_completion_tokens: 16384
       is_moderated: false
+    description: 'Qwen2.5 72B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
 
   - id: qwen/qwen-2.5-7b-instruct
     pricing:
@@ -59,7 +59,6 @@ models:
     context_length: 32768
     provider_id: qwen
     upstream_id: qwen-2.5-7b-instruct
-    description: 'Qwen2.5 7B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -86,6 +85,7 @@ models:
       context_length: 32768
       max_completion_tokens: 32768
       is_moderated: false
+    description: 'Qwen2.5 7B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
 
   - id: qwen/qwen-2.5-coder-32b-instruct
     pricing:
@@ -105,7 +105,6 @@ models:
     context_length: 32768
     provider_id: qwen
     upstream_id: qwen-2.5-coder-32b-instruct
-    description: 'Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improvements in **code generation**, **code reasoning**...'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -122,6 +121,7 @@ models:
       context_length: 32768
       max_completion_tokens: null
       is_moderated: false
+    description: 'Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improvements in **code generation**, **code reasoning**...'
 
   - id: qwen/qwen-coder
     pricing:
@@ -224,7 +224,6 @@ models:
     context_length: 32768
     provider_id: qwen
     upstream_id: qwen-max
-    description: Qwen-Max, based on Qwen2.5, provides the best inference performance among [Qwen models](/qwen), especially for complex multi-step tasks. It's a large-scale MoE model that has been pretrained on over 20 trillion...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -241,6 +240,7 @@ models:
       context_length: 32768
       max_completion_tokens: 8192
       is_moderated: false
+    description: Qwen-Max, based on Qwen2.5, provides the best inference performance among [Qwen models](/qwen), especially for complex multi-step tasks. It's a large-scale MoE model that has been pretrained on over 20 trillion...
 
   - id: qwen/qwen-plus
     pricing:
@@ -261,7 +261,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-plus
-    description: Qwen-Plus, based on the Qwen2.5 foundation model, is a 131K context model with a balanced performance, speed, and cost combination.
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -278,6 +277,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen-Plus, based on the Qwen2.5 foundation model, is a 131K context model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-01-25
     pricing:
@@ -295,6 +295,7 @@ models:
     context_length: 129024
     provider_id: qwen
     upstream_id: qwen-plus-2025-01-25
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-04-28
     pricing:
@@ -312,6 +313,7 @@ models:
     context_length: 129024
     provider_id: qwen
     upstream_id: qwen-plus-2025-04-28
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-07-14
     pricing:
@@ -329,6 +331,7 @@ models:
     context_length: 129024
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-14
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-07-28
     pricing:
@@ -348,7 +351,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-28
-    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -370,6 +372,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-07-28:thinking
     pricing:
@@ -389,7 +392,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-28:thinking
-    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -413,6 +415,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-2025-09-11
     pricing:
@@ -430,6 +433,7 @@ models:
     context_length: 997952
     provider_id: qwen
     upstream_id: qwen-plus-2025-09-11
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-plus-latest
     pricing:
@@ -447,6 +451,7 @@ models:
     context_length: 997952
     provider_id: qwen
     upstream_id: qwen-plus-latest
+    description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
 
   - id: qwen/qwen-turbo
     pricing:
@@ -466,7 +471,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen-turbo
-    description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -483,6 +487,7 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
+    description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
 
   - id: qwen/qwen-turbo-2024-11-01
     pricing:
@@ -500,6 +505,7 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-turbo-2024-11-01
+    description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
 
   - id: qwen/qwen-turbo-2025-04-28
     pricing:
@@ -517,6 +523,7 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-turbo-2025-04-28
+    description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
 
   - id: qwen/qwen-turbo-latest
     pricing:
@@ -534,6 +541,7 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen-turbo-latest
+    description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
 
   - id: qwen/qwen-vl-max
     pricing:
@@ -553,7 +561,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen-vl-max
-    description: Qwen VL Max is a visual understanding model with 7500 tokens context length. It excels in delivering optimal performance for a broader spectrum of complex tasks.
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -574,6 +581,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen VL Max is a visual understanding model with 7500 tokens context length. It excels in delivering optimal performance for a broader spectrum of complex tasks.
 
   - id: qwen/qwen-vl-plus
     pricing:
@@ -594,7 +602,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen-vl-plus
-    description: Qwen's Enhanced Large Visual Language Model. Significantly upgraded for detailed recognition capabilities and text recognition abilities, supporting ultra-high pixel resolutions up to millions of pixels and extreme aspect ratios for...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -609,6 +616,7 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
+    description: Qwen's Enhanced Large Visual Language Model. Significantly upgraded for detailed recognition capabilities and text recognition abilities, supporting ultra-high pixel resolutions up to millions of pixels and extreme aspect ratios for...
 
   - id: qwen/qwen2.5-vl-72b-instruct
     pricing:
@@ -628,7 +636,6 @@ models:
     context_length: 32000
     provider_id: qwen
     upstream_id: qwen2.5-vl-72b-instruct
-    description: Qwen2.5-VL is proficient in recognizing common objects such as flowers, birds, fish, and insects. It is also highly capable of analyzing texts, charts, icons, graphics, and layouts within images.
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -649,6 +656,7 @@ models:
       context_length: 32000
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen2.5-VL is proficient in recognizing common objects such as flowers, birds, fish, and insects. It is also highly capable of analyzing texts, charts, icons, graphics, and layouts within images.
 
   - id: qwen/qwen3-14b
     pricing:
@@ -668,7 +676,6 @@ models:
     context_length: 40960
     provider_id: qwen
     upstream_id: qwen3-14b
-    description: Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -695,6 +702,7 @@ models:
       context_length: 40960
       max_completion_tokens: 40960
       is_moderated: false
+    description: Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
 
   - id: qwen/qwen3-235b-a22b
     pricing:
@@ -714,7 +722,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-235b-a22b
-    description: Qwen3-235B-A22B is a 235B parameter mixture-of-experts (MoE) model developed by Qwen, activating 22B parameters per forward pass. It supports seamless switching between a "thinking" mode for complex reasoning, math, and...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -733,6 +740,7 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
+    description: Qwen3-235B-A22B is a 235B parameter mixture-of-experts (MoE) model developed by Qwen, activating 22B parameters per forward pass. It supports seamless switching between a "thinking" mode for complex reasoning, math, and...
 
   - id: qwen/qwen3-235b-a22b-2507
     pricing:
@@ -751,7 +759,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-235b-a22b-2507
-    description: Qwen3-235B-A22B-Instruct-2507 is a multilingual, instruction-tuned mixture-of-experts language model based on the Qwen3-235B architecture, with 22B active parameters per forward pass. It is optimized for general-purpose text generation, including instruction following,...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -777,6 +784,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-235B-A22B-Instruct-2507 is a multilingual, instruction-tuned mixture-of-experts language model based on the Qwen3-235B architecture, with 22B active parameters per forward pass. It is optimized for general-purpose text generation, including instruction following,...
 
   - id: qwen/qwen3-235b-a22b-thinking-2507
     pricing:
@@ -796,7 +804,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-235b-a22b-thinking-2507
-    description: Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass and natively supports up to 262,144...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -826,6 +833,7 @@ models:
       context_length: 131072
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass and natively supports up to 262,144...
 
   - id: qwen/qwen3-30b-a3b
     pricing:
@@ -845,7 +853,6 @@ models:
     context_length: 40960
     provider_id: qwen
     upstream_id: qwen3-30b-a3b
-    description: Qwen3, the latest generation in the Qwen large language model series, features both dense and mixture-of-experts (MoE) architectures to excel in reasoning, multilingual support, and advanced agent tasks. Its unique...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -876,6 +883,7 @@ models:
       context_length: 40960
       max_completion_tokens: 40960
       is_moderated: false
+    description: Qwen3, the latest generation in the Qwen large language model series, features both dense and mixture-of-experts (MoE) architectures to excel in reasoning, multilingual support, and advanced agent tasks. Its unique...
 
   - id: qwen/qwen3-30b-a3b-instruct-2507
     pricing:
@@ -894,7 +902,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-30b-a3b-instruct-2507
-    description: Qwen3-30B-A3B-Instruct-2507 is a 30.5B-parameter mixture-of-experts language model from Qwen, with 3.3B active parameters per inference. It operates in non-thinking mode and is designed for high-quality instruction following, multilingual understanding, and...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -918,6 +925,7 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
+    description: Qwen3-30B-A3B-Instruct-2507 is a 30.5B-parameter mixture-of-experts language model from Qwen, with 3.3B active parameters per inference. It operates in non-thinking mode and is designed for high-quality instruction following, multilingual understanding, and...
 
   - id: qwen/qwen3-30b-a3b-thinking-2507
     pricing:
@@ -937,7 +945,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-30b-a3b-thinking-2507
-    description: Qwen3-30B-A3B-Thinking-2507 is a 30B parameter Mixture-of-Experts reasoning model optimized for complex tasks requiring extended multi-step thinking. The model is designed specifically for “thinking mode,” where internal reasoning traces are separated...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -963,6 +970,7 @@ models:
       context_length: 131072
       max_completion_tokens: 131072
       is_moderated: false
+    description: Qwen3-30B-A3B-Thinking-2507 is a 30B parameter Mixture-of-Experts reasoning model optimized for complex tasks requiring extended multi-step thinking. The model is designed specifically for “thinking mode,” where internal reasoning traces are separated...
 
   - id: qwen/qwen3-32b
     pricing:
@@ -983,7 +991,6 @@ models:
     context_length: 40960
     provider_id: qwen
     upstream_id: qwen3-32b
-    description: Qwen3-32B is a dense 32.8B parameter causal language model from the Qwen3 series, optimized for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1009,6 +1016,7 @@ models:
       context_length: 40960
       max_completion_tokens: 40960
       is_moderated: false
+    description: Qwen3-32B is a dense 32.8B parameter causal language model from the Qwen3 series, optimized for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
 
   - id: qwen/qwen3-8b
     pricing:
@@ -1029,7 +1037,6 @@ models:
     context_length: 40960
     provider_id: qwen
     upstream_id: qwen3-8b
-    description: Qwen3-8B is a dense 8.2B parameter causal language model from the Qwen3 series, designed for both reasoning-heavy tasks and efficient dialogue. It supports seamless switching between "thinking" mode for math,...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1062,6 +1069,7 @@ models:
       context_length: 40960
       max_completion_tokens: 8192
       is_moderated: false
+    description: Qwen3-8B is a dense 8.2B parameter causal language model from the Qwen3 series, designed for both reasoning-heavy tasks and efficient dialogue. It supports seamless switching between "thinking" mode for math,...
 
   - id: qwen/qwen3-coder
     pricing:
@@ -1081,7 +1089,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-coder
-    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1105,6 +1112,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
 
   - id: qwen/qwen3-coder-30b-a3b-instruct
     pricing:
@@ -1123,7 +1131,6 @@ models:
     context_length: 160000
     provider_id: qwen
     upstream_id: qwen3-coder-30b-a3b-instruct
-    description: Qwen3-Coder-30B-A3B-Instruct is a 30.5B parameter Mixture-of-Experts (MoE) model with 128 experts (8 active per forward pass), designed for advanced code generation, repository-scale understanding, and agentic tool use. Built on the...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1145,6 +1152,7 @@ models:
       context_length: 160000
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-Coder-30B-A3B-Instruct is a 30.5B parameter Mixture-of-Experts (MoE) model with 128 experts (8 active per forward pass), designed for advanced code generation, repository-scale understanding, and agentic tool use. Built on the...
 
   - id: qwen/qwen3-coder-flash
     pricing:
@@ -1165,7 +1173,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen3-coder-flash
-    description: Qwen3 Coder Flash is Alibaba's fast and cost efficient version of their proprietary Qwen3 Coder Plus. It is a powerful coding agent model specializing in autonomous programming via tool calling...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -1186,6 +1193,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
+    description: Qwen3 Coder Flash is Alibaba's fast and cost efficient version of their proprietary Qwen3 Coder Plus. It is a powerful coding agent model specializing in autonomous programming via tool calling...
 
   - id: qwen/qwen3-coder-flash-2025-07-28
     pricing:
@@ -1222,7 +1230,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-coder-next
-    description: Qwen3-Coder-Next is an open-weight causal language model optimized for coding agents and local development workflows. It uses a sparse MoE design with 80B total parameters and only 3B activated per...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1249,6 +1256,7 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
+    description: Qwen3-Coder-Next is an open-weight causal language model optimized for coding agents and local development workflows. It uses a sparse MoE design with 80B total parameters and only 3B activated per...
 
   - id: qwen/qwen3-coder-plus
     pricing:
@@ -1269,7 +1277,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen3-coder-plus
-    description: Qwen3 Coder Plus is Alibaba's proprietary version of the Open Source Qwen3 Coder 480B A35B. It is a powerful coding agent model specializing in autonomous programming via tool calling and...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -1291,6 +1298,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
+    description: Qwen3 Coder Plus is Alibaba's proprietary version of the Open Source Qwen3 Coder 480B A35B. It is a powerful coding agent model specializing in autonomous programming via tool calling and...
 
   - id: qwen/qwen3-coder-plus-2025-07-22
     pricing:
@@ -1326,7 +1334,6 @@ models:
     context_length: 262000
     provider_id: qwen
     upstream_id: qwen3-coder:free
-    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1344,6 +1351,7 @@ models:
       context_length: 262000
       max_completion_tokens: 262000
       is_moderated: false
+    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
 
   - id: qwen/qwen3-max
     pricing:
@@ -1364,7 +1372,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-max
-    description: Qwen3-Max is an updated release built on the Qwen3 series, offering major improvements in reasoning, instruction following, multilingual support, and long-tail knowledge coverage compared to the January 2025 version. It...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -1385,6 +1392,7 @@ models:
       context_length: 262144
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-Max is an updated release built on the Qwen3 series, offering major improvements in reasoning, instruction following, multilingual support, and long-tail knowledge coverage compared to the January 2025 version. It...
 
   - id: qwen/qwen3-max-2026-01-23
     pricing:
@@ -1437,7 +1445,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-max-thinking
-    description: Qwen3-Max-Thinking is the flagship reasoning model in the Qwen3 series, designed for high-stakes cognitive tasks that require deep, multi-step reasoning. By significantly scaling model capacity and reinforcement learning compute, it...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1460,6 +1467,7 @@ models:
       context_length: 262144
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-Max-Thinking is the flagship reasoning model in the Qwen3 series, designed for high-stakes cognitive tasks that require deep, multi-step reasoning. By significantly scaling model capacity and reinforcement learning compute, it...
 
   - id: qwen/qwen3-next-80b-a3b-instruct
     pricing:
@@ -1478,7 +1486,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-instruct
-    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1502,6 +1509,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
 
   - id: qwen/qwen3-next-80b-a3b-instruct:free
     pricing:
@@ -1520,7 +1528,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-instruct:free
-    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1540,6 +1547,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
 
   - id: qwen/qwen3-next-80b-a3b-thinking
     pricing:
@@ -1558,7 +1566,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-thinking
-    description: Qwen3-Next-80B-A3B-Thinking is a reasoning-first chat model in the Qwen3-Next line that outputs structured “thinking” traces by default. It’s designed for hard multi-step problems; math proofs, code synthesis/debugging, logic, and agentic...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1588,6 +1595,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-Next-80B-A3B-Thinking is a reasoning-first chat model in the Qwen3-Next line that outputs structured “thinking” traces by default. It’s designed for hard multi-step problems; math proofs, code synthesis/debugging, logic, and agentic...
 
   - id: qwen/qwen3-vl-235b-a22b-instruct
     pricing:
@@ -1608,7 +1616,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3-vl-235b-a22b-instruct
-    description: Qwen3-VL-235B-A22B Instruct is an open-weight multimodal model that unifies strong text generation with visual understanding across images and video. The Instruct model targets general vision-language use (VQA, document parsing, chart/table...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1636,6 +1643,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3-VL-235B-A22B Instruct is an open-weight multimodal model that unifies strong text generation with visual understanding across images and video. The Instruct model targets general vision-language use (VQA, document parsing, chart/table...
 
   - id: qwen/qwen3-vl-235b-a22b-thinking
     pricing:
@@ -1655,7 +1663,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-235b-a22b-thinking
-    description: Qwen3-VL-235B-A22B Thinking is a multimodal model that unifies strong text generation with visual understanding across images and video. The Thinking model is optimized for multimodal reasoning in STEM and math....
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1685,6 +1692,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-235B-A22B Thinking is a multimodal model that unifies strong text generation with visual understanding across images and video. The Thinking model is optimized for multimodal reasoning in STEM and math....
 
   - id: qwen/qwen3-vl-30b-a3b-instruct
     pricing:
@@ -1704,7 +1712,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-30b-a3b-instruct
-    description: Qwen3-VL-30B-A3B-Instruct is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Instruct variant optimizes instruction-following for general multimodal tasks. It excels in perception...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1735,6 +1742,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-30B-A3B-Instruct is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Instruct variant optimizes instruction-following for general multimodal tasks. It excels in perception...
 
   - id: qwen/qwen3-vl-30b-a3b-thinking
     pricing:
@@ -1754,7 +1762,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-30b-a3b-thinking
-    description: Qwen3-VL-30B-A3B-Thinking is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Thinking variant enhances reasoning in STEM, math, and complex tasks. It excels...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1785,6 +1792,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-30B-A3B-Thinking is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Thinking variant enhances reasoning in STEM, math, and complex tasks. It excels...
 
   - id: qwen/qwen3-vl-32b-instruct
     pricing:
@@ -1804,7 +1812,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-32b-instruct
-    description: Qwen3-VL-32B-Instruct is a large-scale multimodal vision-language model designed for high-precision understanding and reasoning across text, images, and video. With 32 billion parameters, it combines deep visual perception with advanced text...
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -1827,6 +1834,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-32B-Instruct is a large-scale multimodal vision-language model designed for high-precision understanding and reasoning across text, images, and video. With 32 billion parameters, it combines deep visual perception with advanced text...
 
   - id: qwen/qwen3-vl-32b-thinking
     pricing:
@@ -1864,7 +1872,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-8b-instruct
-    description: Qwen3-VL-8B-Instruct is a multimodal vision-language model from the Qwen3-VL series, built for high-fidelity understanding and reasoning across text, images, and video. It features improved multimodal fusion with Interleaved-MRoPE for long-horizon...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1891,6 +1898,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-8B-Instruct is a multimodal vision-language model from the Qwen3-VL series, built for high-fidelity understanding and reasoning across text, images, and video. It features improved multimodal fusion with Interleaved-MRoPE for long-horizon...
 
   - id: qwen/qwen3-vl-8b-thinking
     pricing:
@@ -1910,7 +1918,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwen3-vl-8b-thinking
-    description: Qwen3-VL-8B-Thinking is the reasoning-optimized variant of the Qwen3-VL-8B multimodal model, designed for advanced visual and textual reasoning across complex scenes, documents, and temporal sequences. It integrates enhanced multimodal alignment and...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1932,6 +1939,7 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
+    description: Qwen3-VL-8B-Thinking is the reasoning-optimized variant of the Qwen3-VL-8B multimodal model, designed for advanced visual and textual reasoning across complex scenes, documents, and temporal sequences. It integrates enhanced multimodal alignment and...
 
   - id: qwen/qwen3-vl-plus
     pricing:
@@ -1970,7 +1978,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3.5-122b-a10b
-    description: The Qwen3.5 122B-A10B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. In terms of...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2004,6 +2011,7 @@ models:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 122B-A10B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. In terms of...
 
   - id: qwen/qwen3.5-27b
     pricing:
@@ -2024,7 +2032,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3.5-27b
-    description: The Qwen3.5 27B native vision-language Dense model incorporates a linear attention mechanism, delivering fast response times while balancing inference speed and performance. Its overall capabilities are comparable to those of...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2058,6 +2065,7 @@ models:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 27B native vision-language Dense model incorporates a linear attention mechanism, delivering fast response times while balancing inference speed and performance. Its overall capabilities are comparable to those of...
 
   - id: qwen/qwen3.5-35b-a3b
     pricing:
@@ -2078,7 +2086,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3.5-35b-a3b
-    description: The Qwen3.5 Series 35B-A3B is a native vision-language model designed with a hybrid architecture that integrates linear attention mechanisms and a sparse mixture-of-experts model, achieving higher inference efficiency. Its overall...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2112,6 +2119,7 @@ models:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 Series 35B-A3B is a native vision-language model designed with a hybrid architecture that integrates linear attention mechanisms and a sparse mixture-of-experts model, achieving higher inference efficiency. Its overall...
 
   - id: qwen/qwen3.5-397b-a17b
     pricing:
@@ -2133,7 +2141,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3.5-397b-a17b
-    description: The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2167,6 +2174,7 @@ models:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...
 
   - id: qwen/qwen3.5-9b
     pricing:
@@ -2187,7 +2195,6 @@ models:
     context_length: 262144
     provider_id: qwen
     upstream_id: qwen3.5-9b
-    description: Qwen3.5-9B is a multimodal foundation model from the Qwen3.5 family, designed to deliver strong reasoning, coding, and visual understanding in an efficient 9B-parameter architecture. It uses a unified vision-language design...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2220,6 +2227,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Qwen3.5-9B is a multimodal foundation model from the Qwen3.5 family, designed to deliver strong reasoning, coding, and visual understanding in an efficient 9B-parameter architecture. It uses a unified vision-language design...
 
   - id: qwen/qwen3.5-flash-02-23
     pricing:
@@ -2241,7 +2249,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen3.5-flash-02-23
-    description: The Qwen3.5 native vision-language Flash models are built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. Compared to the...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2264,6 +2271,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 native vision-language Flash models are built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. Compared to the...
 
   - id: qwen/qwen3.5-plus
     pricing:
@@ -2303,7 +2311,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen3.5-plus-02-15
-    description: The Qwen3.5 native vision-language series Plus models are built on a hybrid architecture that integrates linear attention mechanisms with sparse mixture-of-experts models, achieving higher inference efficiency. In a variety of...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2326,6 +2333,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
+    description: The Qwen3.5 native vision-language series Plus models are built on a hybrid architecture that integrates linear attention mechanisms with sparse mixture-of-experts models, achieving higher inference efficiency. In a variety of...
 
   - id: qwen/qwen3.6-plus
     pricing:
@@ -2347,7 +2355,6 @@ models:
     context_length: 1000000
     provider_id: qwen
     upstream_id: qwen3.6-plus
-    description: Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to the 3.5 series, it delivers...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2373,6 +2380,7 @@ models:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
+    description: Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to the 3.5 series, it delivers...
 
   - id: qwen/qwq-32b
     pricing:
@@ -2392,7 +2400,6 @@ models:
     context_length: 131072
     provider_id: qwen
     upstream_id: qwq-32b
-    description: QwQ is the reasoning model of the Qwen series. Compared with conventional instruction-tuned models, QwQ, which is capable of thinking and reasoning, can achieve significantly enhanced performance in downstream tasks,...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2410,6 +2417,7 @@ models:
       context_length: 131072
       max_completion_tokens: 131072
       is_moderated: false
+    description: QwQ is the reasoning model of the Qwen series. Compared with conventional instruction-tuned models, QwQ, which is capable of thinking and reasoning, can achieve significantly enhanced performance in downstream tasks,...
 
   - id: qwen/qwq-plus
     pricing:

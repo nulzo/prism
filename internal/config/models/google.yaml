@@ -863,7 +863,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.0-flash-001
-    description: Gemini Flash 2.0 offers a significantly faster time to first token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5). It...
     supported_parameters:
       - max_tokens
       - response_format
@@ -886,6 +885,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
       is_moderated: false
+    description: Gemini Flash 2.0 offers a significantly faster time to first token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5). It...
 
   - id: google/gemini-2.0-flash-lite
     pricing:
@@ -926,7 +926,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.0-flash-lite-001
-    description: Gemini 2.0 Flash Lite offers a significantly faster time to first token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5),...
     supported_parameters:
       - max_tokens
       - response_format
@@ -949,6 +948,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
       is_moderated: false
+    description: Gemini 2.0 Flash Lite offers a significantly faster time to first token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining quality on par with larger models like [Gemini Pro 1.5](/google/gemini-pro-1.5),...
 
   - id: google/gemini-2.5-flash
     pricing:
@@ -973,7 +973,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-flash
-    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking" capabilities, enabling it to provide responses with greater...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -997,6 +996,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65535
       is_moderated: false
+    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking" capabilities, enabling it to provide responses with greater accuracy and nuanced context handling.
 
   - id: google/gemini-2.5-flash-image
     pricing:
@@ -1019,7 +1019,6 @@ models:
     context_length: 32768
     provider_id: google
     upstream_id: gemini-2.5-flash-image
-    description: Gemini 2.5 Flash Image, a.k.a. "Nano Banana," is now generally available. It is a state of the art image generation model with contextual understanding. It is capable of image generation,...
     supported_parameters:
       - max_tokens
       - response_format
@@ -1039,6 +1038,7 @@ models:
       context_length: 32768
       max_completion_tokens: 32768
       is_moderated: false
+    description: Google's specialized image generation model optimized for fast, high-quality image generation. Outputs images at 1024x1024 resolution, with each image consuming 1290 output tokens.
 
   - id: google/gemini-2.5-flash-lite
     pricing:
@@ -1063,7 +1063,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-flash-lite
-    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1087,6 +1086,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65535
       is_moderated: false
+    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance across common benchmarks compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning) is disabled to prioritize speed, but developers can enable it via the Reasoning API parameter to selectively trade off cost for intelligence.
 
   - id: google/gemini-2.5-flash-lite-preview-09-2025
     pricing:
@@ -1111,7 +1111,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-flash-lite-preview-09-2025
-    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1135,6 +1134,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65535
       is_moderated: false
+    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance...
 
   - id: google/gemini-2.5-flash-preview
     pricing:
@@ -1176,7 +1176,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-pro
-    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1200,6 +1199,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs "thinking" capabilities, enabling it to reason through responses with enhanced accuracy and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks, including first-place positioning on the LMArena leaderboard, reflecting superior human-preference alignment and complex problem-solving abilities.
 
   - id: google/gemini-2.5-pro-preview
     pricing:
@@ -1223,7 +1223,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-pro-preview
-    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1243,6 +1242,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...
 
   - id: google/gemini-2.5-pro-preview-05-06
     pricing:
@@ -1267,7 +1267,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-2.5-pro-preview-05-06
-    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1291,6 +1290,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65535
       is_moderated: false
+    description: Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...
 
   - id: google/gemini-3-flash-preview
     pricing:
@@ -1315,7 +1315,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-3-flash-preview
-    description: Gemini 3 Flash Preview is a high speed, high value thinking model designed for agentic workflows, multi turn chat, and coding assistance. It delivers near Pro level reasoning and tool...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1338,6 +1337,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
 
   - id: google/gemini-3-pro-image-preview
     pricing:
@@ -1360,7 +1360,6 @@ models:
     context_length: 65536
     provider_id: google
     upstream_id: gemini-3-pro-image-preview
-    description: Nano Banana Pro is Google’s most advanced image-generation and editing model, built on Gemini 3 Pro. It extends the original Nano Banana with significantly improved multimodal reasoning, real-world grounding, and...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1381,6 +1380,7 @@ models:
       context_length: 65536
       max_completion_tokens: 32768
       is_moderated: false
+    description: Google's image generation model optimized for high-quality image generation. Supports 1K/2K and 4K resolution outputs with flexible pricing based on image dimensions.
 
   - id: google/gemini-3-pro-preview
     pricing:
@@ -1420,7 +1420,6 @@ models:
     context_length: 65536
     provider_id: google
     upstream_id: gemini-3.1-flash-image-preview
-    description: Gemini 3.1 Flash Image Preview, a.k.a. "Nano Banana 2," is Google’s latest state of the art image generation and editing model, delivering Pro-level visual quality at Flash speed. It combines...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1444,6 +1443,7 @@ models:
       context_length: 65536
       max_completion_tokens: 65536
       is_moderated: false
+    description: Google's latest image generation model (Nano Banana 2) optimized for fast, high-quality image generation. Supports multiple output resolutions from 512px to 4K, with text and thinking output priced separately from image output tokens.
 
   - id: google/gemini-3.1-flash-lite-preview
     pricing:
@@ -1468,7 +1468,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-3.1-flash-lite-preview
-    description: Gemini 3.1 Flash Lite Preview is Google's high-efficiency model optimized for high-volume use cases. It outperforms Gemini 2.5 Flash Lite on overall quality and approaches Gemini 2.5 Flash performance across...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1494,6 +1493,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Google's fastest and most cost-efficient Gemini 3 series model, built for intelligence at scale. Optimized for high-volume, low-latency applications while maintaining strong multimodal capabilities.
 
   - id: google/gemini-3.1-pro-preview
     pricing:
@@ -1518,7 +1518,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-3.1-pro-preview
-    description: Gemini 3.1 Pro Preview is Google’s frontier reasoning model, delivering enhanced software engineering performance, improved agentic reliability, and more efficient token usage across complex workflows. Building on the multimodal foundation...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1541,6 +1540,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: The latest performance, intelligence, and usability improvements to the best model family in the world for multimodal understanding, agentic capabilities, and vibe-coding.
 
   - id: google/gemini-3.1-pro-preview-customtools
     pricing:
@@ -1565,7 +1565,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: gemini-3.1-pro-preview-customtools
-    description: Gemini 3.1 Pro Preview Custom Tools is a variant of Gemini 3.1 Pro that improves tool selection behavior by preventing overuse of a general bash tool when more efficient third-party...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1588,6 +1587,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Gemini 3.1 Pro Preview Custom Tools is a variant of Gemini 3.1 Pro that improves tool selection behavior by preventing overuse of a general bash tool when more efficient third-party...
 
   - id: google/gemini-embedding-001
     pricing:
@@ -1728,7 +1728,6 @@ models:
     context_length: 8192
     provider_id: google
     upstream_id: gemma-2-27b-it
-    description: Gemma 2 27B by Google is an open model built from the same research and technology used to create the [Gemini models](/models?q=gemini). Gemma models are well-suited for a variety of...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1747,6 +1746,7 @@ models:
       context_length: 8192
       max_completion_tokens: 2048
       is_moderated: false
+    description: Gemma 2 27B by Google is an open model built from the same research and technology used to create the [Gemini models](/models?q=gemini). Gemma models are well-suited for a variety of...
 
   - id: google/gemma-3
     pricing:
@@ -1784,7 +1784,6 @@ models:
     context_length: 131072
     provider_id: google
     upstream_id: gemma-3-12b-it
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1804,6 +1803,7 @@ models:
       context_length: 131072
       max_completion_tokens: null
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3-12b-it:free
     pricing:
@@ -1824,7 +1824,6 @@ models:
     context_length: 32768
     provider_id: google
     upstream_id: gemma-3-12b-it:free
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - max_tokens
       - seed
@@ -1838,6 +1837,7 @@ models:
       context_length: 32768
       max_completion_tokens: 8192
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3-27b-it
     pricing:
@@ -1858,7 +1858,6 @@ models:
     context_length: 131072
     provider_id: google
     upstream_id: gemma-3-27b-it
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1884,6 +1883,7 @@ models:
       context_length: 131072
       max_completion_tokens: 16384
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3-27b-it:free
     pricing:
@@ -1904,7 +1904,6 @@ models:
     context_length: 131072
     provider_id: google
     upstream_id: gemma-3-27b-it:free
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - max_tokens
       - response_format
@@ -1923,6 +1922,7 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3-4b-it
     pricing:
@@ -1943,7 +1943,6 @@ models:
     context_length: 131072
     provider_id: google
     upstream_id: gemma-3-4b-it
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1963,6 +1962,7 @@ models:
       context_length: 131072
       max_completion_tokens: null
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3-4b-it:free
     pricing:
@@ -1983,7 +1983,6 @@ models:
     context_length: 32768
     provider_id: google
     upstream_id: gemma-3-4b-it:free
-    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
     supported_parameters:
       - max_tokens
       - response_format
@@ -1998,6 +1997,7 @@ models:
       context_length: 32768
       max_completion_tokens: 8192
       is_moderated: false
+    description: Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...
 
   - id: google/gemma-3n
     pricing:
@@ -2033,7 +2033,6 @@ models:
     context_length: 8192
     provider_id: google
     upstream_id: gemma-3n-e2b-it:free
-    description: Gemma 3n E2B IT is a multimodal, instruction-tuned model developed by Google DeepMind, designed to operate efficiently at an effective parameter size of 2B while leveraging a 6B architecture. Based...
     supported_parameters:
       - max_tokens
       - response_format
@@ -2047,6 +2046,7 @@ models:
       context_length: 8192
       max_completion_tokens: 2048
       is_moderated: false
+    description: Gemma 3n E2B IT is a multimodal, instruction-tuned model developed by Google DeepMind, designed to operate efficiently at an effective parameter size of 2B while leveraging a 6B architecture. Based...
 
   - id: google/gemma-3n-e4b-it
     pricing:
@@ -2065,7 +2065,6 @@ models:
     context_length: 32768
     provider_id: google
     upstream_id: gemma-3n-e4b-it
-    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and low-resource devices, such as phones, laptops, and tablets. It supports multimodal inputs—including text, visual data, and audio—enabling diverse tasks...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -2084,6 +2083,7 @@ models:
       context_length: 32768
       max_completion_tokens: null
       is_moderated: false
+    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and low-resource devices, such as phones, laptops, and tablets. It supports multimodal inputs—including text, visual data, and audio—enabling diverse tasks...
 
   - id: google/gemma-3n-e4b-it:free
     pricing:
@@ -2102,7 +2102,6 @@ models:
     context_length: 8192
     provider_id: google
     upstream_id: gemma-3n-e4b-it:free
-    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and low-resource devices, such as phones, laptops, and tablets. It supports multimodal inputs—including text, visual data, and audio—enabling diverse tasks...
     supported_parameters:
       - max_tokens
       - response_format
@@ -2116,6 +2115,7 @@ models:
       context_length: 8192
       max_completion_tokens: 2048
       is_moderated: false
+    description: Gemma 3n E4B-it is optimized for efficient execution on mobile and low-resource devices, such as phones, laptops, and tablets. It supports multimodal inputs—including text, visual data, and audio—enabling diverse tasks...
 
   - id: google/gemma-4-26b-a4b-it
     pricing:
@@ -2136,7 +2136,6 @@ models:
     context_length: 262144
     provider_id: google
     upstream_id: gemma-4-26b-a4b-it
-    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2167,6 +2166,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...
 
   - id: google/gemma-4-26b-a4b-it:free
     pricing:
@@ -2187,7 +2187,6 @@ models:
     context_length: 262144
     provider_id: google
     upstream_id: gemma-4-26b-a4b-it:free
-    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2208,6 +2207,7 @@ models:
       context_length: 262144
       max_completion_tokens: 32768
       is_moderated: false
+    description: Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...
 
   - id: google/gemma-4-31b-it
     pricing:
@@ -2228,7 +2228,6 @@ models:
     context_length: 262144
     provider_id: google
     upstream_id: gemma-4-31b-it
-    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2262,6 +2261,7 @@ models:
       context_length: 262144
       max_completion_tokens: null
       is_moderated: false
+    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...
 
   - id: google/gemma-4-31b-it:free
     pricing:
@@ -2282,7 +2282,6 @@ models:
     context_length: 262144
     provider_id: google
     upstream_id: gemma-4-31b-it:free
-    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2306,6 +2305,7 @@ models:
       context_length: 262144
       max_completion_tokens: 32768
       is_moderated: false
+    description: Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...
 
   - id: google/imagegeneration@006
     pricing:
@@ -2539,7 +2539,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: lyria-3-clip-preview
-    description: 30 second duration clips are priced at $0.04 per clip. Lyria 3 is Google's family of music generation models, available through the Gemini API. With Lyria 3, you can generate...
     supported_parameters:
       - max_tokens
       - response_format
@@ -2559,6 +2558,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: 30 second duration clips are priced at $0.04 per clip. Lyria 3 is Google's family of music generation models, available through the Gemini API. With Lyria 3, you can generate...
 
   - id: google/lyria-3-pro-preview
     pricing:
@@ -2579,7 +2579,6 @@ models:
     context_length: 1048576
     provider_id: google
     upstream_id: lyria-3-pro-preview
-    description: Full-length songs are priced at $0.08 per song. Lyria 3 is Google's family of music generation models, available through the Gemini API. With Lyria 3, you can generate high-quality, 48kHz...
     supported_parameters:
       - max_tokens
       - response_format
@@ -2599,6 +2598,7 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
       is_moderated: false
+    description: Full-length songs are priced at $0.08 per song. Lyria 3 is Google's family of music generation models, available through the Gemini API. With Lyria 3, you can generate high-quality, 48kHz...
 
   - id: google/meta/llama-3.1-405b-instruct-maas
     pricing:
