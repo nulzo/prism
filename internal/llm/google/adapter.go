@@ -27,6 +27,7 @@ func init() {
 type Adapter struct {
 	config config.ProviderConfig
 	client *http.Client
+	stream *http.Client
 }
 
 func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
@@ -45,7 +46,8 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 
 	return &Adapter{
 		config: config,
-		client: &http.Client{Timeout: timeout},
+		client: httpclient.NewRequestClient(timeout),
+		stream: httpclient.NewStreamingClient(),
 	}, nil
 }
 
@@ -551,7 +553,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 		headers := map[string]string{}
 		parser := processing.NewStreamParser()
 
-		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, shape, func(line string) error {
+		err := httpclient.StreamRequest(ctx, a.stream, "POST", url, headers, shape, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}
@@ -628,7 +630,7 @@ func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatR
 
 		parsers := make(map[int]*processing.StreamParser)
 
-		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, payload, func(line string) error {
+		err := httpclient.StreamRequest(ctx, a.stream, "POST", url, headers, payload, func(line string) error {
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
 			}

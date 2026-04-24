@@ -56,6 +56,20 @@ func parseDurationOr(s string, fallback time.Duration) time.Duration {
 	return d
 }
 
+// parseDurationAllowZero behaves like parseDurationOr but preserves an
+// explicit zero duration. Useful for HTTP server knobs where 0 means
+// "disabled", notably WriteTimeout for SSE endpoints.
+func parseDurationAllowZero(s string, fallback time.Duration) time.Duration {
+	if s == "" {
+		return fallback
+	}
+	d, err := time.ParseDuration(s)
+	if err != nil || d < 0 {
+		return fallback
+	}
+	return d
+}
+
 const rawBanner = `
    ________   _______   ________  ________  _______  
   ╱        ╲╱╱       ╲ ╱        ╲╱        ╲╱       ╲╲
@@ -169,10 +183,19 @@ func main() {
 	}
 
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
+	readTimeout := parseDurationAllowZero(cfg.Server.ReadTimeout, 30*time.Second)
+	readHeaderTimeout := parseDurationAllowZero(cfg.Server.ReadHeaderTimeout, 10*time.Second)
+	writeTimeout := parseDurationAllowZero(cfg.Server.WriteTimeout, 0)
+	idleTimeout := parseDurationAllowZero(cfg.Server.IdleTimeout, 2*time.Minute)
+	shutdownTimeout := parseDurationAllowZero(cfg.Server.ShutdownTimeout, 10*time.Second)
 
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
-		Handler: apiServer.Handler(),
+		Addr:              fmt.Sprintf(":%d", cfg.Server.Port),
+		Handler:           apiServer.Handler(),
+		ReadTimeout:       readTimeout,
+		ReadHeaderTimeout: readHeaderTimeout,
+		WriteTimeout:      writeTimeout,
+		IdleTimeout:       idleTimeout,
 	}
 
 	// Start pprof server
@@ -195,7 +218,7 @@ func main() {
 
 	logger.Info("Shutting down server...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {

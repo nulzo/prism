@@ -1,0 +1,57 @@
+package httpclient
+
+import (
+	"net"
+	"net/http"
+	"time"
+)
+
+const (
+	defaultDialTimeout           = 30 * time.Second
+	defaultKeepAlive             = 30 * time.Second
+	defaultTLSHandshakeTimeout   = 10 * time.Second
+	defaultResponseHeaderTimeout = 2 * time.Minute
+	defaultExpectContinueTimeout = 1 * time.Second
+	defaultIdleConnTimeout       = 90 * time.Second
+	defaultMaxIdleConns          = 500
+	defaultMaxIdleConnsPerHost   = 500
+	defaultMaxConnsPerHost       = 500
+)
+
+func newTransport(responseHeaderTimeout time.Duration) *http.Transport {
+	return &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   defaultDialTimeout,
+			KeepAlive: defaultKeepAlive,
+		}).DialContext,
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          defaultMaxIdleConns,
+		MaxIdleConnsPerHost:   defaultMaxIdleConnsPerHost,
+		MaxConnsPerHost:       defaultMaxConnsPerHost,
+		IdleConnTimeout:       defaultIdleConnTimeout,
+		TLSHandshakeTimeout:   defaultTLSHandshakeTimeout,
+		ExpectContinueTimeout: defaultExpectContinueTimeout,
+		ResponseHeaderTimeout: responseHeaderTimeout,
+	}
+}
+
+// NewRequestClient creates a client for regular JSON requests. The timeout
+// caps the full request/response lifetime, which is fine for non-streaming
+// calls like chat completions, model discovery, and health checks.
+func NewRequestClient(timeout time.Duration) *http.Client {
+	return &http.Client{
+		Timeout:   timeout,
+		Transport: newTransport(defaultResponseHeaderTimeout),
+	}
+}
+
+// NewStreamingClient creates a client for SSE / long-lived streaming calls.
+// Intentionally leaves http.Client.Timeout unset so the response body can stay
+// open indefinitely once headers have arrived. Connection setup still has
+// bounded dial / TLS / first-byte timeouts via the transport above.
+func NewStreamingClient() *http.Client {
+	return &http.Client{
+		Transport: newTransport(defaultResponseHeaderTimeout),
+	}
+}

@@ -1,6 +1,7 @@
 package extension
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -80,8 +81,8 @@ type webSearchResult struct {
 }
 
 func (t *WebSearchExtension) Execute(ctx context.Context, config api.ExtensionConfig, args []byte) (string, error) {
-	var parsedArgs webSearchArgs
-	if err := json.Unmarshal(args, &parsedArgs); err != nil {
+	parsedArgs, err := decodeWebSearchArgs(args)
+	if err != nil {
 		return "", fmt.Errorf("invalid arguments: %w", err)
 	}
 
@@ -159,4 +160,31 @@ func (t *WebSearchExtension) Execute(ctx context.Context, config api.ExtensionCo
 	}
 
 	return string(resBytes), nil
+}
+
+// decodeWebSearchArgs accepts a single JSON object and tolerates the
+// OpenAI-compat "snapshot mode" bug where buggy upstreams concatenate
+// multiple full argument objects into one string (`{...}{...}`).
+func decodeWebSearchArgs(args []byte) (webSearchArgs, error) {
+	var parsed webSearchArgs
+	if err := json.Unmarshal(args, &parsed); err == nil {
+		return parsed, nil
+	}
+
+	dec := json.NewDecoder(bytes.NewReader(bytes.TrimSpace(args)))
+	var last json.RawMessage
+	for {
+		var v json.RawMessage
+		if err := dec.Decode(&v); err != nil {
+			break
+		}
+		last = v
+	}
+	if len(last) == 0 {
+		return webSearchArgs{}, fmt.Errorf("expected JSON object")
+	}
+	if err := json.Unmarshal(last, &parsed); err != nil {
+		return webSearchArgs{}, err
+	}
+	return parsed, nil
 }

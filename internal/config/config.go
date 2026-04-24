@@ -67,10 +67,15 @@ type DatabaseConfig struct {
 }
 
 type ServerConfig struct {
-	Port        int      `mapstructure:"port" validate:"required,numeric"`
-	Env         string   `mapstructure:"env" validate:"required,oneof=development production staging"`
-	AuthEnabled bool     `mapstructure:"auth_enabled"`
-	APIKeys     []string `mapstructure:"api_keys" validate:"dive,min=10"`
+	Port              int      `mapstructure:"port" validate:"required,numeric"`
+	Env               string   `mapstructure:"env" validate:"required,oneof=development production staging"`
+	AuthEnabled       bool     `mapstructure:"auth_enabled"`
+	APIKeys           []string `mapstructure:"api_keys" validate:"dive,min=10"`
+	ReadTimeout       string   `mapstructure:"read_timeout"`
+	ReadHeaderTimeout string   `mapstructure:"read_header_timeout"`
+	WriteTimeout      string   `mapstructure:"write_timeout"`
+	IdleTimeout       string   `mapstructure:"idle_timeout"`
+	ShutdownTimeout   string   `mapstructure:"shutdown_timeout"`
 }
 
 type RedisConfig struct {
@@ -96,6 +101,11 @@ func LoadConfig() (*Config, error) {
 	// Default Values
 	v.SetDefault("server.port", 8080)
 	v.SetDefault("server.env", "development")
+	v.SetDefault("server.read_timeout", "30s")
+	v.SetDefault("server.read_header_timeout", "10s")
+	v.SetDefault("server.write_timeout", "0s")
+	v.SetDefault("server.idle_timeout", "2m")
+	v.SetDefault("server.shutdown_timeout", "10s")
 	v.SetDefault("redis.enabled", false)
 	v.SetDefault("rate_limit.requests_per_second", 10.0)
 	v.SetDefault("rate_limit.burst", 20)

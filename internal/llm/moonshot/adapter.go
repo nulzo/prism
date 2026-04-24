@@ -24,20 +24,13 @@ func init() {
 type Adapter struct {
 	config config.ProviderConfig
 	client *http.Client
+	stream *http.Client
 }
 
 func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	fmt.Printf("DEBUG: Moonshot Adapter Init. ID=%s BaseURL='%s' APIKeyLen=%d\n", config.ID, config.BaseURL, len(config.APIKey))
 	if config.BaseURL == "" {
 		config.BaseURL = "https://api.moonshot.ai/v1"
-	}
-
-	// Use a custom transport to support high concurrency
-	transport := &http.Transport{
-		MaxIdleConns:        500,
-		MaxIdleConnsPerHost: 500,
-		MaxConnsPerHost:     500, // Limit total connections to prevent storm
-		IdleConnTimeout:     90 * time.Second,
 	}
 
 	timeout := 10 * time.Minute
@@ -51,10 +44,8 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 
 	return &Adapter{
 		config: config,
-		client: &http.Client{
-			Timeout:   timeout,
-			Transport: transport,
-		},
+		client: httpclient.NewRequestClient(timeout),
+		stream: httpclient.NewStreamingClient(),
 	}, nil
 }
 
@@ -169,7 +160,7 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 		// Map of parsers for each choice index
 		parsers := make(map[int]*processing.StreamParser)
 
-		err := httpclient.StreamRequest(ctx, a.client, "POST", url, headers, req, func(line string) error {
+		err := httpclient.StreamRequest(ctx, a.stream, "POST", url, headers, req, func(line string) error {
 			// SSE format: data: {...}
 			if !strings.HasPrefix(line, "data: ") {
 				return nil
