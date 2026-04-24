@@ -26,12 +26,13 @@ FROM alpine:latest
 # certs
 RUN apk add --no-cache ca-certificates
 
-WORKDIR /root/
-COPY --from=binary-build /home/prism .
+WORKDIR /app
+RUN mkdir -p /app/config /data
+COPY --from=binary-build /home/prism ./prism
 COPY --from=binary-build /home/internal/config/config.yaml ./config/config.yaml
 COPY --from=binary-build /home/internal/config/models ./config/models
 
 ENV SERVER_PORT=8080
 EXPOSE $SERVER_PORT
 
-CMD ["./prism"]
+CMD ["/app/prism"]
