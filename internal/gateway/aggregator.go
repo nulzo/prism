@@ -1,7 +1,6 @@
 package gateway
 
 import (
-	"encoding/json"
 	"strings"
 
 	"github.com/nulzo/model-router-api/pkg/api"
@@ -62,7 +61,7 @@ func (a *ToolCallAccumulator) ApplyAt(slot int, delta api.ToolCall) {
 		cur.Function.Name = delta.Function.Name
 	}
 	if delta.Function.Arguments != "" {
-		cur.Function.Arguments = mergeToolArguments(cur.Function.Arguments, delta.Function.Arguments)
+		cur.Function.Arguments += delta.Function.Arguments
 	}
 	if delta.ExtraContent != nil {
 		cur.ExtraContent = delta.ExtraContent
@@ -77,11 +76,7 @@ func (a *ToolCallAccumulator) Snapshot() []api.ToolCall {
 	out := make([]api.ToolCall, 0, a.maxIdx+1)
 	for i := 0; i <= a.maxIdx; i++ {
 		if c, ok := a.bySlot[i]; ok {
-			// Sanitize before returning so the message history
-			// sent back to the provider contains clean JSON.
-			clean := *c
-			clean.Function.Arguments = SanitizeArguments(clean.Function.Arguments)
-			out = append(out, clean)
+			out = append(out, *c)
 		}
 	}
 	return out
@@ -89,97 +84,6 @@ func (a *ToolCallAccumulator) Snapshot() []api.ToolCall {
 
 // Empty reports whether any tool-call deltas have been applied.
 func (a *ToolCallAccumulator) Empty() bool { return len(a.bySlot) == 0 }
-
-// mergeToolArguments combines the previously-accumulated tool_call arguments
-// with an incoming delta. Most OpenAI-compatible providers stream genuine
-// incremental JSON fragments (`{"que` → `ry":"` → `foo"}`), where simple
-// concatenation is correct. A handful of providers — Google's Gemini
-// OpenAI-compat layer being the poster child — instead re-send the *full*
-// arguments JSON in every delta ("snapshot mode"). Naïve concatenation
-// there produces `{"query":"foo"}{"query":"foo"}` and the downstream tool
-// invocation fails with `invalid character '{' after top-level value`.
-//
-// Strategy: try to decode the accumulated buffer as JSON. If it parses,
-// the buffer already represents a complete argument object, so a new
-// delta that also parses on its own is a snapshot — replace the buffer
-// with the delta. Otherwise fall back to concatenation (incremental mode).
-func mergeToolArguments(current, delta string) string {
-	if current == "" {
-		return delta
-	}
-	if !isCompleteJSONValue(current) {
-		return current + delta
-	}
-	if isCompleteJSONValue(delta) {
-		// Both sides are parseable → snapshot. Prefer the longer snapshot
-		// when they differ in length (providers occasionally reorder keys
-		// on repeat but usually extend the payload).
-		if len(delta) >= len(current) {
-			return delta
-		}
-		return current
-	}
-	// Current is complete but delta isn't — provider likely started a
-	// fresh incremental stream after a snapshot. Replace with delta so
-	// subsequent concatenation yields valid JSON.
-	return delta
-}
-
-// isCompleteJSONValue reports whether s is a self-contained JSON value.
-// Uses json.Decoder so we can detect the "trailing data" case (concatenated
-// snapshots) explicitly — a strict json.Unmarshal would silently reject
-// those with the same error that triggers the tool_call bug we're fixing.
-func isCompleteJSONValue(s string) bool {
-	trimmed := strings.TrimSpace(s)
-	if trimmed == "" {
-		return false
-	}
-	dec := json.NewDecoder(strings.NewReader(trimmed))
-	var v json.RawMessage
-	if err := dec.Decode(&v); err != nil {
-		return false
-	}
-	// Anything trailing after the first value means it isn't a single
-	// complete value (likely a concatenated snapshot).
-	return !dec.More()
-}
-
-// SanitizeArguments trims and normalizes a tool-call arguments string to a
-// value that is safe to pass to json.Unmarshal. Callers at the
-// extension-invocation boundary use it as a defense-in-depth layer: even
-// if a provider invents a streaming variant the accumulator hasn't
-// seen before (e.g. multiple snapshots concatenated in one delta), this
-// fallback extracts the LAST valid JSON object from the string.
-//
-// Semantics:
-//   - Trims surrounding whitespace.
-//   - Empty input → "{}" (tool expected an object).
-//   - Uses json.Decoder to scan through all valid JSON values in the string.
-//   - Returns the LAST successfully decoded value.
-//   - If no valid JSON value is found, "{}" is returned so the extension
-//     runs with empty arguments instead of erroring out.
-func SanitizeArguments(s string) string {
-	s = strings.TrimSpace(s)
-	if s == "" {
-		return "{}"
-	}
-
-	dec := json.NewDecoder(strings.NewReader(s))
-	var lastValid json.RawMessage
-
-	for {
-		var v json.RawMessage
-		if err := dec.Decode(&v); err != nil {
-			break
-		}
-		lastValid = v
-	}
-
-	if lastValid == nil {
-		return "{}"
-	}
-	return string(lastValid)
-}
 
 // StreamAggregator collects deltas from a single upstream stream into a
 // non-streaming-shaped ChatResponse. It also tracks finish reason, usage,

@@ -284,14 +284,13 @@ func (o *PipelineOrchestrator) executeExtensions(
 		}
 
 		rawArgs := tc.Function.Arguments
-		args := SanitizeArguments(rawArgs)
 
 		log.Debug("executing extension",
 			zap.String("extension", tc.Function.Name),
 			zap.String("tool_call_id", tc.ID),
-			zap.Int("arguments_bytes", len(args)),
+			zap.Int("arguments_bytes", len(rawArgs)),
 		)
-		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(args))
+		result, err := ext.Execute(ctx, activeExtConfigs[tc.Function.Name], []byte(rawArgs))
 		if err != nil {
 			log.Warn("extension execution failed",
 				zap.String("extension", tc.Function.Name),
@@ -301,7 +300,6 @@ func (o *PipelineOrchestrator) executeExtensions(
 			log.Debug("extension execution failed: raw arguments",
 				zap.String("extension", tc.Function.Name),
 				zap.String("raw_arguments", rawArgs),
-				zap.String("sanitized_arguments", args),
 			)
 			result = fmt.Sprintf(`{"error":%q}`, err.Error())
 		}

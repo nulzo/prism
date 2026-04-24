@@ -125,13 +125,6 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 		if len(resp.Choices) > 0 && resp.Choices[0].Message != nil && len(resp.Choices[0].Message.ToolCalls) > 0 {
 			hasExtension := false
 
-			// Sanitize tool calls before appending to history so the
-			// provider sees clean JSON on the next iteration.
-			for i := range resp.Choices[0].Message.ToolCalls {
-				tc := &resp.Choices[0].Message.ToolCalls[i]
-				tc.Function.Arguments = SanitizeArguments(tc.Function.Arguments)
-			}
-
 			// Append the assistant's tool call message to history
 			upstreamReq.Messages = append(upstreamReq.Messages, *resp.Choices[0].Message)
 
@@ -139,23 +132,14 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 				// Is it an active extension?
 				if ext, ok := activeExtensions[tc.Function.Name]; ok {
 					hasExtension = true
-					// Defense-in-depth: same scanner-based normalization
-					// the streaming pipeline uses. Non-streaming tool
-					// calls go through adapter.Chat so the raw
-					// accumulator isn't involved, but providers still
-					// occasionally return slightly malformed arguments
-					// (extra whitespace, trailing commas on legacy OSS
-					// models) and this guarantees we hand Execute a
-					// single valid JSON value.
 					rawArgs := tc.Function.Arguments
-					args := SanitizeArguments(rawArgs)
 					log.Debug("executing extension",
 						zap.String("extension", tc.Function.Name),
 						zap.String("tool_call_id", tc.ID),
-						zap.Int("arguments_bytes", len(args)),
+						zap.Int("arguments_bytes", len(rawArgs)),
 					)
 
-					resultStr, execErr := ext.Execute(ctx, activeExtensionConfigs[tc.Function.Name], []byte(args))
+					resultStr, execErr := ext.Execute(ctx, activeExtensionConfigs[tc.Function.Name], []byte(rawArgs))
 					if execErr != nil {
 						log.Warn("extension execution failed",
 							zap.String("extension", tc.Function.Name),
@@ -165,7 +149,6 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 						log.Debug("extension execution failed: raw arguments",
 							zap.String("extension", tc.Function.Name),
 							zap.String("raw_arguments", rawArgs),
-							zap.String("sanitized_arguments", args),
 						)
 						resultStr = `{"error": "` + execErr.Error() + `"}`
 					}

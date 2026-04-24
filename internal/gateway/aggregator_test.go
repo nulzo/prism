@@ -89,74 +89,11 @@ func TestStreamAggregator_FoldsTextReasoningToolCalls(t *testing.T) {
 	}
 }
 
-// Gemini's OpenAI-compat streaming occasionally re-sends the full
-// `arguments` JSON in multiple deltas instead of emitting true incremental
-// chunks. Naive concatenation yields `{...}{...}` which the downstream
-// extension parser rejects with "invalid character '{' after top-level
-// value". The accumulator must detect the snapshot pattern and replace
-// instead of append.
-func TestToolCallAccumulator_GeminiSnapshotMode(t *testing.T) {
-	acc := NewToolCallAccumulator()
-	acc.Apply([]api.ToolCall{
-		{ID: "call_1", Type: "function", Function: api.FunctionCall{
-			Name: "web_search", Arguments: `{"query":"latest AI news"}`,
-		}},
-	})
-	acc.Apply([]api.ToolCall{
-		{Function: api.FunctionCall{Arguments: `{"query":"latest AI news"}`}},
-	})
-
-	calls := acc.Snapshot()
-	if len(calls) != 1 {
-		t.Fatalf("expected 1 call, got %d", len(calls))
-	}
-	if got, want := calls[0].Function.Arguments, `{"query":"latest AI news"}`; got != want {
-		t.Fatalf("snapshot not deduped: got %q want %q", got, want)
-	}
-}
-
-// Mixed mode: a complete snapshot followed by an incremental fragment
-// means the provider restarted streaming. Drop the buffered snapshot and
-// keep the new incremental stream so downstream sees valid JSON once the
-// stream closes.
-func TestToolCallAccumulator_SnapshotThenIncremental(t *testing.T) {
-	acc := NewToolCallAccumulator()
-	acc.Apply([]api.ToolCall{{Function: api.FunctionCall{Arguments: `{"query":"foo"}`}}})
-	acc.Apply([]api.ToolCall{{Function: api.FunctionCall{Arguments: `{"quer`}}})
-	acc.Apply([]api.ToolCall{{Function: api.FunctionCall{Arguments: `y":"bar"}`}}})
-
-	calls := acc.Snapshot()
-	if got, want := calls[0].Function.Arguments, `{"query":"bar"}`; got != want {
-		t.Fatalf("mixed mode mishandled: got %q want %q", got, want)
-	}
-}
-
 func TestStreamAggregator_NilChunkSafe(t *testing.T) {
 	agg := NewStreamAggregator()
 	agg.Apply(nil) // must not panic
 	resp := agg.FinalResponse()
 	if resp == nil {
 		t.Fatalf("FinalResponse returned nil")
-	}
-}
-
-func TestSanitizeArguments_Fallback(t *testing.T) {
-	cases := []struct {
-		in, want string
-	}{
-		{"", "{}"},
-		{"   ", "{}"},
-		{`{"q":"foo"}`, `{"q":"foo"}`},
-		{`{"q":"foo"}{"q":"bar"}`, `{"q":"bar"}`},
-		{`{"q":"foo"} {"q":"bar"}`, `{"q":"bar"}`},
-		{"{\"q\":\"foo\"}\n{\"q\":\"bar\"}", `{"q":"bar"}`},
-		{`{"q":"foo"}garbage{"q":"bar"}`, `{"q":"foo"}`}, // garbage stops the decoder
-		{`not json`, "{}"}, // garbage input degrades to empty object
-	}
-	for _, tc := range cases {
-		got := SanitizeArguments(tc.in)
-		if got != tc.want {
-			t.Fatalf("SanitizeArguments(%q) = %q, want %q", tc.in, got, tc.want)
-		}
 	}
 }
