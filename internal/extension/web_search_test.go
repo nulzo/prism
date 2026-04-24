@@ -93,4 +93,3 @@ func TestWebSearchExtension_Execute(t *testing.T) {
 		t.Error("expected error for missing query")
 	}
 }
-

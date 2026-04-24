@@ -463,7 +463,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	return ch, nil
 }
 
-
 func (a *Adapter) Health(ctx context.Context) error {
 	// Anthropic's "list models" endpoint is a good candidate for a health check
 	// as it requires auth and verifies connectivity.

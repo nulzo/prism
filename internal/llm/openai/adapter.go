@@ -305,7 +305,6 @@ func normalizeEffort(e string) string {
 	}
 }
 
-
 func (a *Adapter) Health(ctx context.Context) error {
 	url := fmt.Sprintf("%s/models", strings.TrimRight(a.config.BaseURL, "/"))
 

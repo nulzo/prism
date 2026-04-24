@@ -17,7 +17,7 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 		if filter.Provider != "" && m.ProviderID != filter.Provider {
 			continue
 		}
-		
+
 		out = append(out, entryToPublic(m))
 	}
 	return out, nil

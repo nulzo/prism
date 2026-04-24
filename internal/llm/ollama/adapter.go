@@ -58,7 +58,6 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	}, nil
 }
 
-
 func (a *Adapter) Type() string {
 	return string(llm.Ollama)
 }

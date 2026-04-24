@@ -334,7 +334,6 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	return ch, nil
 }
 
-
 func (a *Adapter) Health(ctx context.Context) error {
 	if a.config.APIKey == "" {
 		return fmt.Errorf("missing API key")

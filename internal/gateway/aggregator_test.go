@@ -105,17 +105,17 @@ func TestToolCallAccumulator_NoIndexWithIDFallback(t *testing.T) {
 	acc.Apply([]api.ToolCall{
 		{ID: "call_1", Type: "function", Function: api.FunctionCall{Name: "get_weather", Arguments: `{"loc`}},
 	})
-	
+
 	// Chunk 2: continuation for call_1, ID matches, no Index
 	acc.Apply([]api.ToolCall{
 		{ID: "call_1", Function: api.FunctionCall{Arguments: `ation":"SF"}`}},
 	})
-	
+
 	// Chunk 3: introduces call_2 with ID but no Index
 	acc.Apply([]api.ToolCall{
 		{ID: "call_2", Type: "function", Function: api.FunctionCall{Name: "get_time", Arguments: `{"tz":"`}},
 	})
-	
+
 	// Chunk 4: continuation for call_2 with no ID and no Index (appends to active maxIdx)
 	acc.Apply([]api.ToolCall{
 		{Function: api.FunctionCall{Arguments: `UTC"}`}},
@@ -125,11 +125,11 @@ func TestToolCallAccumulator_NoIndexWithIDFallback(t *testing.T) {
 	if len(calls) != 2 {
 		t.Fatalf("expected 2 calls, got %d", len(calls))
 	}
-	
+
 	if calls[0].ID != "call_1" || calls[0].Function.Name != "get_weather" || calls[0].Function.Arguments != `{"location":"SF"}` {
 		t.Fatalf("call_1 mismatch: %+v", calls[0])
 	}
-	
+
 	if calls[1].ID != "call_2" || calls[1].Function.Name != "get_time" || calls[1].Function.Arguments != `{"tz":"UTC"}` {
 		t.Fatalf("call_2 mismatch: %+v", calls[1])
 	}

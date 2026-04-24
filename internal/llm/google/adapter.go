@@ -680,7 +680,6 @@ func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatR
 	return ch, nil
 }
 
-
 func (a *Adapter) Health(ctx context.Context) error {
 	url := fmt.Sprintf("%s/models?key=%s&pageSize=1",
 		strings.TrimRight(a.config.BaseURL, "/"),

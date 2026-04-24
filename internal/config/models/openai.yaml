@@ -1,488 +1,468 @@
 models:
 
-  - id: openai/1024-x-1024/dall-e-2
-    name: 1024-x-1024/dall-e-2
-    provider_id: openai
-    upstream_id: 1024-x-1024/dall-e-2
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1024-x-1024/gpt-image-1.5
-    name: 1024-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: 1024-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1024-x-1024/gpt-image-1.5-2025-12-16
-    name: 1024-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: 1024-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1024-x-1536/gpt-image-1.5
-    name: 1024-x-1536/gpt-image-1.5
-    provider_id: openai
-    upstream_id: 1024-x-1536/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1024-x-1536/gpt-image-1.5-2025-12-16
-    name: 1024-x-1536/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: 1024-x-1536/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1536-x-1024/gpt-image-1.5
-    name: 1536-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: 1536-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/1536-x-1024/gpt-image-1.5-2025-12-16
-    name: 1536-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: 1536-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/256-x-256/dall-e-2
-    name: 256-x-256/dall-e-2
-    provider_id: openai
-    upstream_id: 256-x-256/dall-e-2
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/512-x-512/dall-e-2
-    name: 512-x-512/dall-e-2
-    provider_id: openai
-    upstream_id: 512-x-512/dall-e-2
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
   - id: openai/ada
-    name: ada
+    pricing:
+      prompt: '0.0000004'
+      completion: '0.0000004'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: ada
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/babbage
-    name: babbage
-    provider_id: openai
-    upstream_id: babbage
-    description: ''
-    enabled: true
-    context_length: 0
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000005'
+      completion: '0.0000005'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: babbage
 
   - id: openai/chatgpt-4o-latest
+    pricing:
+      prompt: '0.000005'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: ChatGPT-4o
     provider_id: openai
     upstream_id: chatgpt-4o-latest
-    description: OpenAI ChatGPT 4o is continually updated by OpenAI to point to the
-      current version of GPT-4o used by ChatGPT. It therefore differs slightly from
-      the API version of GPT-4o in that it has additional RLHF. It is intended for
-      research and evaluation.
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    description: OpenAI ChatGPT 4o is continually updated by OpenAI to point to the current version of GPT-4o used by ChatGPT. It therefore differs slightly from the API version of GPT-4o in that it has additional RLHF. It is intended for research and evaluation.
+    context_length: 128000
 
   - id: openai/chatgpt-image-latest
-    name: chatgpt-image-latest
-    provider_id: openai
-    upstream_id: chatgpt-image-latest
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.000005'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: chatgpt-image-latest
+    provider_id: openai
+    upstream_id: chatgpt-image-latest
 
   - id: openai/codex-mini
-    name: Codex Mini
-    provider_id: openai
-    upstream_id: codex-mini
-    description: codex-mini-latest is a fine-tuned version of o4-mini specifically
-      for use in Codex CLI. For direct use in the API, we recommend starting with
-      gpt-4.1.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/codex-mini-latest
-    name: codex-mini-latest
-    provider_id: openai
-    upstream_id: codex-mini-latest
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.0000015'
       completion: '0.000006'
       request: '0'
       image: '0'
+      input_cache_read: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: Codex Mini
+    provider_id: openai
+    upstream_id: codex-mini
+    description: codex-mini-latest is a fine-tuned version of o4-mini specifically for use in Codex CLI. For direct use in the API, we recommend starting with gpt-4.1.
+
+  - id: openai/codex-mini-latest
+    pricing:
+      prompt: '0.0000015'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: codex-mini-latest
+    context_length: 200000
+    provider_id: openai
+    upstream_id: codex-mini-latest
 
   - id: openai/computer-use
-    name: Computer use
-    provider_id: openai
-    upstream_id: computer-use
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/curie
-    name: curie
-    provider_id: openai
-    upstream_id: curie
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/dall-e-2
-    name: dall-e-2
-    provider_id: openai
-    upstream_id: dall-e-2
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/dall-e-3
-    name: dall-e-3
-    provider_id: openai
-    upstream_id: dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/davinci
-    name: davinci
-    provider_id: openai
-    upstream_id: davinci
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-3.5-turbo
-    name: ft:gpt-3.5-turbo
-    provider_id: openai
-    upstream_id: ft:gpt-3.5-turbo
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-3.5-turbo-
-    name: ft:gpt-3.5-turbo-
-    provider_id: openai
-    upstream_id: ft:gpt-3.5-turbo-
-    description: GPT-3.5 Turbo fine tuned.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-3.5-turbo-0125
-    name: ft:gpt-3.5-turbo-0125
-    provider_id: openai
-    upstream_id: ft:gpt-3.5-turbo-0125
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-3.5-turbo-0613
-    name: ft:gpt-3.5-turbo-0613
-    provider_id: openai
-    upstream_id: ft:gpt-3.5-turbo-0613
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-3.5-turbo-1106
-    name: ft:gpt-3.5-turbo-1106
-    provider_id: openai
-    upstream_id: ft:gpt-3.5-turbo-1106
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-4-0613
-    name: ft:gpt-4-0613
-    provider_id: openai
-    upstream_id: ft:gpt-4-0613
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.00003'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-4.1-2025-04-14
-    name: ft:gpt-4.1-2025-04-14
-    provider_id: openai
-    upstream_id: ft:gpt-4.1-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.000003'
       completion: '0.000012'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: Computer use
+    provider_id: openai
+    upstream_id: computer-use
+
+  - id: openai/container
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: container
+    provider_id: openai
+    upstream_id: container
+
+  - id: openai/curie
+    pricing:
+      prompt: '0.000002'
+      completion: '0.000002'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: curie
+
+  - id: openai/dall-e-2
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: dall-e-2
+    provider_id: openai
+    upstream_id: dall-e-2
+
+  - id: openai/dall-e-3
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: dall-e-3
+    provider_id: openai
+    upstream_id: dall-e-3
+
+  - id: openai/davinci
+    pricing:
+      prompt: '0.00002'
+      completion: '0.00002'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: davinci
+
+  - id: openai/ft:gpt-3.5-turbo
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-3.5-turbo
+    context_length: 16385
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo
+
+  - id: openai/ft:gpt-3.5-turbo-
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo-
+    description: GPT-3.5 Turbo fine tuned.
+
+  - id: openai/ft:gpt-3.5-turbo-0125
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-3.5-turbo-0125
+    context_length: 16385
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo-0125
+
+  - id: openai/ft:gpt-3.5-turbo-0613
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-3.5-turbo-0613
+    context_length: 4096
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo-0613
+
+  - id: openai/ft:gpt-3.5-turbo-1106
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-3.5-turbo-1106
+    context_length: 16385
+    provider_id: openai
+    upstream_id: ft:gpt-3.5-turbo-1106
+
+  - id: openai/ft:gpt-4-0613
+    pricing:
+      prompt: '0.00003'
+      completion: '0.00006'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4-0613
+    context_length: 8192
+    provider_id: openai
+    upstream_id: ft:gpt-4-0613
+
+  - id: openai/ft:gpt-4.1-2025-04-14
+    pricing:
+      prompt: '0.000003'
+      completion: '0.000012'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4.1-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: ft:gpt-4.1-2025-04-14
 
   - id: openai/ft:gpt-4.1-mini-2025-04-14
-    name: ft:gpt-4.1-mini-2025-04-14
-    provider_id: openai
-    upstream_id: ft:gpt-4.1-mini-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.0000008'
       completion: '0.0000032'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4.1-mini-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: ft:gpt-4.1-mini-2025-04-14
 
   - id: openai/ft:gpt-4.1-nano-2025-04-14
-    name: ft:gpt-4.1-nano-2025-04-14
-    provider_id: openai
-    upstream_id: ft:gpt-4.1-nano-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.0000002'
       completion: '0.0000008'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4.1-nano-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: ft:gpt-4.1-nano-2025-04-14
 
   - id: openai/ft:gpt-4o
-    name: ft:gpt-4o
+    pricing:
+      prompt: '0.00000375'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: ft:gpt-4o
     description: GPT-4o fine tuned.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/ft:gpt-4o-2024-08-06
+    pricing:
+      prompt: '0.00000375'
+      completion: '0.000015'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
     name: ft:gpt-4o-2024-08-06
+    context_length: 128000
     provider_id: openai
     upstream_id: ft:gpt-4o-2024-08-06
-    description: ''
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0.00000375'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
 
   - id: openai/ft:gpt-4o-2024-11-20
-    name: ft:gpt-4o-2024-11-20
-    provider_id: openai
-    upstream_id: ft:gpt-4o-2024-11-20
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000375'
       completion: '0.000015'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4o-2024-11-20
+    context_length: 128000
+    provider_id: openai
+    upstream_id: ft:gpt-4o-2024-11-20
 
   - id: openai/ft:gpt-4o-mini
-    name: ft:gpt-4o-mini
-    provider_id: openai
-    upstream_id: ft:gpt-4o-mini
-    description: GPT-4o Mini fine tuned.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/ft:gpt-4o-mini-2024-07-18
-    name: ft:gpt-4o-mini-2024-07-18
-    provider_id: openai
-    upstream_id: ft:gpt-4o-mini-2024-07-18
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.0000003'
       completion: '0.0000012'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: ft:gpt-4o-mini
+    description: GPT-4o Mini fine tuned.
+
+  - id: openai/ft:gpt-4o-mini-2024-07-18
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:gpt-4o-mini-2024-07-18
+    context_length: 128000
+    provider_id: openai
+    upstream_id: ft:gpt-4o-mini-2024-07-18
 
   - id: openai/ft:o4-mini-2025-04-16
-    name: ft:o4-mini-2025-04-16
-    provider_id: openai
-    upstream_id: ft:o4-mini-2025-04-16
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.000004'
       completion: '0.000016'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: ft:o4-mini-2025-04-16
+    context_length: 200000
+    provider_id: openai
+    upstream_id: ft:o4-mini-2025-04-16
 
   - id: openai/gpt-3.5-0301
-    name: gpt-3.5-0301
-    provider_id: openai
-    upstream_id: gpt-3.5-0301
-    description: ''
-    enabled: true
-    context_length: 0
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000015'
+      completion: '0.000002'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: gpt-3.5-0301
 
   - id: openai/gpt-3.5-turbo
-    name: 'OpenAI: GPT-3.5 Turbo'
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo
-    description: |-
-      GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.
-
-      Training data up to Sep 2021.
-    enabled: true
-    context_length: 16385
     pricing:
       prompt: '0.0000005'
       completion: '0.0000015'
@@ -494,11 +474,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 16385
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-3.5 Turbo'
+    context_length: 16385
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo
+    description: |-
+      GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.
+
+      Training data up to Sep 2021.
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -517,30 +501,29 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo/endpoints
+    top_provider:
+      context_length: 16385
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-3.5-turbo-0125
-    name: gpt-3.5-turbo-0125
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo-0125
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.0000005'
       completion: '0.0000015'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-3.5-turbo-0125
+    context_length: 16385
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-0125
 
   - id: openai/gpt-3.5-turbo-0613
-    name: 'OpenAI: GPT-3.5 Turbo (older v0613)'
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo-0613
-    description: |-
-      GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.
-
-      Training data up to Sep 2021.
-    enabled: true
-    context_length: 4095
     pricing:
       prompt: '0.000001'
       completion: '0.000002'
@@ -552,11 +535,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 4095
-      max_completion_tokens: 4096
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-3.5 Turbo (older v0613)'
+    context_length: 4095
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-0613
+    description: |-
+      GPT-3.5 Turbo is OpenAI's fastest model. It can understand and generate natural language or code, and is optimized for chat and traditional completion tasks.
+
+      Training data up to Sep 2021.
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -575,29 +562,29 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-0613/endpoints
+    top_provider:
+      context_length: 4095
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: openai/gpt-3.5-turbo-1106
-    name: gpt-3.5-turbo-1106
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo-1106
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.000001'
+      completion: '0.000002'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-3.5-turbo-16k
-    name: 'OpenAI: GPT-3.5 Turbo 16k'
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo-16k
-    description: 'This model offers four times the context length of gpt-3.5-turbo,
-      allowing it to support approximately 20 pages of text in a single request at
-      a higher cost. Training data: up to Sep 2021.'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
     enabled: true
     context_length: 16385
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-1106
+    name: gpt-3.5-turbo-1106
+
+  - id: openai/gpt-3.5-turbo-16k
     pricing:
       prompt: '0.000003'
       completion: '0.000004'
@@ -609,11 +596,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 16385
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-3.5 Turbo 16k'
+    context_length: 16385
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-16k
+    description: 'This model offers four times the context length of gpt-3.5-turbo, allowing it to support approximately 20 pages of text in a single request at a higher cost. Training data: up...'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -633,15 +621,12 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-16k/endpoints
+    top_provider:
+      context_length: 16385
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-3.5-turbo-instruct
-    name: 'OpenAI: GPT-3.5 Turbo Instruct'
-    provider_id: openai
-    upstream_id: gpt-3.5-turbo-instruct
-    description: 'This model is a variant of GPT-3.5 Turbo tuned for instructional
-      prompts and omitting chat-related optimizations. Training data: up to Sep 2021.'
-    enabled: true
-    context_length: 4095
     pricing:
       prompt: '0.0000015'
       completion: '0.000002'
@@ -654,10 +639,12 @@ models:
         - text
       tokenizer: GPT
       instruct_type: chatml
-    top_provider:
-      context_length: 4095
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-3.5 Turbo Instruct'
+    context_length: 4095
+    provider_id: openai
+    upstream_id: gpt-3.5-turbo-instruct
+    description: 'This model is a variant of GPT-3.5 Turbo tuned for instructional prompts and omitting chat-related optimizations. Training data: up to Sep 2021.'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -674,16 +661,12 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-instruct/endpoints
+    top_provider:
+      context_length: 4095
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4
-    name: 'OpenAI: GPT-4'
-    provider_id: openai
-    upstream_id: gpt-4
-    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating
-      sophisticated capabilities in complex reasoning, theory of mind, and narrative
-      understanding.
-    enabled: true
-    context_length: 8191
     pricing:
       prompt: '0.00003'
       completion: '0.00006'
@@ -695,11 +678,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 8191
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4'
+    context_length: 8191
+    provider_id: openai
+    upstream_id: gpt-4
+    description: OpenAI's flagship model, GPT-4 is a large-scale multimodal language model capable of solving difficult problems with greater accuracy than previous models due to its broader general knowledge and advanced reasoning...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -719,29 +703,29 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-4/endpoints
+    top_provider:
+      context_length: 8191
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4-0125-preview
-    name: gpt-4-0125-preview
-    provider_id: openai
-    upstream_id: gpt-4-0125-preview
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.00001'
       completion: '0.00003'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4-0125-preview
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4-0125-preview
 
   - id: openai/gpt-4-0314
-    name: 'OpenAI: GPT-4 (older v0314)'
-    provider_id: openai
-    upstream_id: gpt-4-0314
-    description: 'GPT-4-0314 is the first version of GPT-4 released, with a context
-      length of 8,192 tokens, and was supported until June 14. Training data: up to
-      Sep 2021.'
-    enabled: true
-    context_length: 8191
     pricing:
       prompt: '0.00003'
       completion: '0.00006'
@@ -753,11 +737,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 8191
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4 (older v0314)'
+    context_length: 8191
+    provider_id: openai
+    upstream_id: gpt-4-0314
+    description: 'GPT-4-0314 is the first version of GPT-4 released, with a context length of 8,192 tokens, and was supported until June 14. Training data: up to Sep 2021.'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -776,30 +761,29 @@ models:
     knowledge_cutoff: '2021-09-30'
     links:
       details: /api/v1/models/openai/gpt-4-0314/endpoints
+    top_provider:
+      context_length: 8191
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4-0613
-    name: gpt-4-0613
-    provider_id: openai
-    upstream_id: gpt-4-0613
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.00003'
       completion: '0.00006'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4-0613
+    context_length: 8192
+    provider_id: openai
+    upstream_id: gpt-4-0613
 
   - id: openai/gpt-4-1106-preview
-    name: 'OpenAI: GPT-4 Turbo (older v1106)'
-    provider_id: openai
-    upstream_id: gpt-4-1106-preview
-    description: |-
-      The latest GPT-4 Turbo model with vision capabilities. Vision requests can now use JSON mode and function calling.
-
-      Training data: up to April 2023.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00001'
       completion: '0.00003'
@@ -811,11 +795,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4 Turbo (older v1106)'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4-1106-preview
+    description: |-
+      The latest GPT-4 Turbo model with vision capabilities. Vision requests can now use JSON mode and function calling.
+
+      Training data: up to April 2023.
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -834,32 +822,30 @@ models:
     knowledge_cutoff: '2023-04-30'
     links:
       details: /api/v1/models/openai/gpt-4-1106-preview/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4-32k
-    name: gpt 4
-    provider_id: openai
-    upstream_id: gpt-4-32k
-    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating
-      sophisticated capabilities in complex reasoning, theory of mind, and narrative
-      understanding.
-    enabled: true
-    context_length: 0
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00006'
+      completion: '0.00012'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt 4
+    context_length: 32000
+    provider_id: openai
+    upstream_id: gpt-4-32k
+    description: GPT-4 is the latest and most advanced model in the GPT series, demonstrating sophisticated capabilities in complex reasoning, theory of mind, and narrative understanding.
 
   - id: openai/gpt-4-turbo
-    name: 'OpenAI: GPT-4 Turbo'
-    provider_id: openai
-    upstream_id: gpt-4-turbo
-    description: |-
-      The latest GPT-4 Turbo model with vision capabilities. Vision requests can now use JSON mode and function calling.
-
-      Training data: up to December 2023.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00001'
       completion: '0.00003'
@@ -872,11 +858,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4 Turbo'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4-turbo
+    description: |-
+      The latest GPT-4 Turbo model with vision capabilities. Vision requests can now use JSON mode and function calling.
+
+      Training data: up to December 2023.
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -895,29 +885,30 @@ models:
     knowledge_cutoff: '2023-12-31'
     links:
       details: /api/v1/models/openai/gpt-4-turbo/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4-turbo-2024-04-09
-    name: gpt-4-turbo-2024-04-09
-    provider_id: openai
-    upstream_id: gpt-4-turbo-2024-04-09
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.00001'
       completion: '0.00003'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4-turbo-2024-04-09
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4-turbo-2024-04-09
 
   - id: openai/gpt-4-turbo-preview
-    name: 'OpenAI: GPT-4 Turbo Preview'
-    provider_id: openai
-    upstream_id: gpt-4-turbo-preview
-    description: 'The preview GPT-4 model with improved instruction following, JSON
-      mode, reproducible outputs, parallel function calling, and more. Training data:
-      up to Dec 2023. **Note:** heavily rate limited by OpenAI while...'
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00001'
       completion: '0.00003'
@@ -929,11 +920,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4 Turbo Preview'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4-turbo-preview
+    description: 'The preview GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023. **Note:** heavily rate limited by OpenAI while...'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -952,36 +944,36 @@ models:
     knowledge_cutoff: '2023-12-31'
     links:
       details: /api/v1/models/openai/gpt-4-turbo-preview/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: true
 
   - id: openai/gpt-4-vision-preview
+    pricing:
+      prompt: '0.00001'
+      completion: '0.00003'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: gpt 4 vision
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-4-vision-preview
     description: GPT-4 Vision is a model that offers a balance between cost and performance.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4.1
-    name: 'OpenAI: GPT-4.1'
-    provider_id: openai
-    upstream_id: gpt-4.1
-    description: GPT-4.1 is OpenAI's latest flagship model, offering major improvements
-      in coding, instruction following, and long context understanding with up to
-      1 million tokens of context.
-    enabled: true
-    context_length: 1047576
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
       input_cache_read: '0.0000005'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -990,11 +982,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 1047576
-      max_completion_tokens: null
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-4.1'
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1
+    description: GPT-4.1 is a flagship large language model optimized for advanced instruction following, real-world software engineering, and long-context reasoning. It supports a 1 million token context window and outperforms GPT-4o and...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -1008,36 +1001,36 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-4.1-2025-04-14/endpoints
+    top_provider:
+      context_length: 1047576
+      max_completion_tokens: null
+      is_moderated: false
 
   - id: openai/gpt-4.1-2025-04-14
-    name: gpt-4.1-2025-04-14
-    provider_id: openai
-    upstream_id: gpt-4.1-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4.1-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1-2025-04-14
 
   - id: openai/gpt-4.1-mini
-    name: 'OpenAI: GPT-4.1 Mini'
-    provider_id: openai
-    upstream_id: gpt-4.1-mini
-    description: GPT-4.1 Mini is a significant leap in small model performance, matching
-      or exceeding GPT-4o in many benchmarks while reducing latency by nearly half
-      and cost by 83%.
-    enabled: true
-    context_length: 1047576
     pricing:
       prompt: '0.0000004'
       completion: '0.0000016'
       request: '0'
       image: '0'
       input_cache_read: '0.0000001'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1046,11 +1039,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 1047576
-      max_completion_tokens: 32768
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4.1 Mini'
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1-mini
+    description: GPT-4.1 Mini is a mid-sized model delivering performance competitive with GPT-4o at substantially lower latency and cost. It retains a 1 million token context window and scores 45.1% on hard...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -1064,36 +1058,36 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-4.1-mini-2025-04-14/endpoints
+    top_provider:
+      context_length: 1047576
+      max_completion_tokens: 32768
+      is_moderated: true
 
   - id: openai/gpt-4.1-mini-2025-04-14
-    name: gpt-4.1-mini-2025-04-14
-    provider_id: openai
-    upstream_id: gpt-4.1-mini-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.0000004'
       completion: '0.0000016'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4.1-mini-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1-mini-2025-04-14
 
   - id: openai/gpt-4.1-nano
-    name: 'OpenAI: GPT-4.1 Nano'
-    provider_id: openai
-    upstream_id: gpt-4.1-nano
-    description: GPT-4.1 Nano is OpenAI's fastest and cheapest model, delivering exceptional
-      performance for its size with a 1 million token context window, ideal for classification
-      and autocompletion tasks.
-    enabled: true
-    context_length: 1047576
     pricing:
       prompt: '0.0000001'
       completion: '0.0000004'
       request: '0'
       image: '0'
       input_cache_read: '0.000000025'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1102,11 +1096,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 1047576
-      max_completion_tokens: 32768
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4.1 Nano'
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1-nano
+    description: For tasks that demand low latency, GPT‑4.1 nano is the fastest and cheapest model in the GPT-4.1 series. It delivers exceptional performance at a small size with its 1 million...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -1120,62 +1115,54 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-4.1-nano-2025-04-14/endpoints
+    top_provider:
+      context_length: 1047576
+      max_completion_tokens: 32768
+      is_moderated: true
 
   - id: openai/gpt-4.1-nano-2025-04-14
-    name: gpt-4.1-nano-2025-04-14
-    provider_id: openai
-    upstream_id: gpt-4.1-nano-2025-04-14
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0.0000001'
       completion: '0.0000004'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-4.5
-    name: GPT-4.5
-    provider_id: openai
-    upstream_id: gpt-4.5
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
     enabled: true
-    context_length: 0
+    name: gpt-4.1-nano-2025-04-14
+    context_length: 1047576
+    provider_id: openai
+    upstream_id: gpt-4.1-nano-2025-04-14
+
+  - id: openai/gpt-4.5-preview
     pricing:
       prompt: '0.000075'
       completion: '0.00015'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-4.5-preview
+      input_cache_read: '0.0000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: GPT-4.5 (Preview)
     provider_id: openai
     upstream_id: gpt-4.5-preview
-    description: GPT-4.5 (Preview) is a research preview of OpenAI's latest language
-      model, designed to advance capabilities in reasoning, creativity, and multi-turn
-      conversation. It builds on previous iterations with improvements in world knowledge,
-      contextual coherence, and the ability to follow user intent more effectively.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    description: GPT-4.5 (Preview) is a research preview of OpenAI's latest language model, designed to advance capabilities in reasoning, creativity, and multi-turn conversation. It builds on previous iterations with improvements in world knowledge, contextual coherence, and the ability to follow user intent more effectively.
 
   - id: openai/gpt-4o
-    name: 'OpenAI: GPT-4o'
-    provider_id: openai
-    upstream_id: gpt-4o
-    description: GPT-4 Optimized (GPT-4o) is designed for high performance in reasoning,
-      creativity, and technical tasks while maintaining consistent output quality.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
+      input_cache_read: '0.00000125'
     architecture:
       input_modalities:
         - text
@@ -1184,11 +1171,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-4o'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o
+    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1209,16 +1197,12 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: false
 
   - id: openai/gpt-4o-2024-05-13
-    name: 'OpenAI: GPT-4o (2024-05-13)'
-    provider_id: openai
-    upstream_id: gpt-4o-2024-05-13
-    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both
-      text and image inputs with text outputs. It maintains the intelligence level
-      of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.000005'
       completion: '0.000015'
@@ -1232,11 +1216,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 4096
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-4o (2024-05-13)'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-2024-05-13
+    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1257,24 +1242,18 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-2024-05-13/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 4096
+      is_moderated: false
 
   - id: openai/gpt-4o-2024-08-06
-    name: 'OpenAI: GPT-4o (2024-08-06)'
-    provider_id: openai
-    upstream_id: gpt-4o-2024-08-06
-    description: The 2024-08-06 version of GPT-4o offers improved performance in structured
-      outputs, with the ability to supply a JSON schema in the respone_format. Read
-      more [here](https://openai.com/index/introducing-structured-outputs-in-the-api/).
-      GPT-4o ("o" for "omni") is...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.00000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1283,11 +1262,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-4o (2024-08-06)'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-2024-08-06
+    description: The 2024-08-06 version of GPT-4o offers improved performance in structured outputs, with the ability to supply a JSON schema in the respone_format. Read more [here](https://openai.com/index/introducing-structured-outputs-in-the-api/). GPT-4o ("o" for "omni") is...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1308,23 +1288,18 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-2024-08-06/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: false
 
   - id: openai/gpt-4o-2024-11-20
-    name: 'OpenAI: GPT-4o (2024-11-20)'
-    provider_id: openai
-    upstream_id: gpt-4o-2024-11-20
-    description: The 2024-11-20 version of GPT-4o offers a leveled-up creative writing
-      ability with more natural, engaging, and tailored writing to improve relevance
-      & readability. It’s also better at working with uploaded...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.00000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1333,11 +1308,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4o (2024-11-20)'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-2024-11-20
+    description: The 2024-11-20 version of GPT-4o offers a leveled-up creative writing ability with more natural, engaging, and tailored writing to improve relevance & readability. It’s also better at working with uploaded...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1357,14 +1333,12 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-2024-11-20/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-4o-audio-preview
-    name: 'OpenAI: GPT-4o Audio'
-    provider_id: openai
-    upstream_id: gpt-4o-audio-preview
-    description: Audio model for gpt-4o
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
@@ -1378,11 +1352,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4o Audio'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-audio-preview
+    description: The gpt-4o-audio-preview model adds support for audio inputs as prompts. This enhancement allows the model to detect nuances within audio recordings and add depth to generated user experiences. Audio outputs...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1405,50 +1380,54 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-audio-preview/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-4o-audio-preview-2024-12-17
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-audio-preview-2024-12-17
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-audio-preview-2024-12-17
-    description: ''
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-audio-preview-2025-06-03
-    name: gpt-4o-audio-preview-2025-06-03
-    provider_id: openai
-    upstream_id: gpt-4o-audio-preview-2025-06-03
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-audio-preview-2025-06-03
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-audio-preview-2025-06-03
 
   - id: openai/gpt-4o-mini
-    name: 'OpenAI: GPT-4o-mini'
-    provider_id: openai
-    upstream_id: gpt-4o-mini
-    description: GPT-4o Mini is a cost-optimized variant of GPT-4o, designed for high-efficiency
-      processing while maintaining strong performance. It excels in rapid inference
-      and resource-efficient operations, making it ideal for production deployments
-      requiring a balance of cost and capability.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000015'
       completion: '0.0000006'
       request: '0'
       image: '0'
       input_cache_read: '0.000000075'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1457,11 +1436,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-4o-mini'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini
+    description: GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1482,23 +1462,18 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-mini/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: false
 
   - id: openai/gpt-4o-mini-2024-07-18
-    name: 'OpenAI: GPT-4o-mini (2024-07-18)'
-    provider_id: openai
-    upstream_id: gpt-4o-mini-2024-07-18
-    description: GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o),
-      supporting both text and image inputs with text outputs. As their most advanced
-      small model, it is many multiples more affordable...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000015'
       completion: '0.0000006'
       request: '0'
       image: '0'
       input_cache_read: '0.000000075'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1507,11 +1482,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4o-mini (2024-07-18)'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-2024-07-18
+    description: GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1531,80 +1507,100 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-mini-2024-07-18/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-4o-mini-2024-07-18.ft-
-    name: gpt-4o-mini-2024-07-18.ft-
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: gpt-4o-mini-2024-07-18.ft-
     description: GPT-4o Mini fine tuned.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-mini-audio-preview
-    name: gpt 4o mini audio preview
-    provider_id: openai
-    upstream_id: gpt-4o-mini-audio-preview
-    description: Audio model for gpt-4o mini
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/gpt-4o-mini-audio-preview-2024-12-17
-    name: gpt-4o-mini-audio-preview-2024-12-17
-    provider_id: openai
-    upstream_id: gpt-4o-mini-audio-preview-2024-12-17
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000015'
       completion: '0.0000006'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-4o-mini-realtime-preview
-    name: gpt-4o-mini-realtime-preview
-    provider_id: openai
-    upstream_id: gpt-4o-mini-realtime-preview
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
     enabled: true
-    context_length: 4096
+    name: gpt 4o mini audio preview
+    provider_id: openai
+    upstream_id: gpt-4o-mini-audio-preview
+    description: Audio model for gpt-4o mini
+    context_length: 128000
+
+  - id: openai/gpt-4o-mini-audio-preview-2024-12-17
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.00000015'
+      completion: '0.0000006'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-4o-mini-realtime-preview-2024-12-17
-    name: gpt-4o-mini-realtime-preview-2024-12-17
-    provider_id: openai
-    upstream_id: gpt-4o-mini-realtime-preview-2024-12-17
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
     enabled: true
-    context_length: 4096
+    name: gpt-4o-mini-audio-preview-2024-12-17
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-audio-preview-2024-12-17
+
+  - id: openai/gpt-4o-mini-realtime-preview
     pricing:
       prompt: '0.0000006'
       completion: '0.0000024'
       request: '0'
       image: '0'
+      input_cache_read: '0.0000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: gpt-4o-mini-realtime-preview
+    context_length: 128000
+    name: gpt-4o-mini-realtime-preview
+
+  - id: openai/gpt-4o-mini-realtime-preview-2024-12-17
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-mini-realtime-preview-2024-12-17
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-realtime-preview-2024-12-17
 
   - id: openai/gpt-4o-mini-search-preview
-    name: 'OpenAI: GPT-4o-mini Search Preview'
-    provider_id: openai
-    upstream_id: gpt-4o-mini-search-preview
-    description: GPT-4o mini Search Preview is a specialized model for web search
-      in Chat Completions. It is trained to understand and execute web search queries.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000015'
       completion: '0.0000006'
@@ -1616,11 +1612,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4o-mini Search Preview'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-search-preview
+    description: GPT-4o mini Search Preview is a specialized model for web search in Chat Completions. It is trained to understand and execute web search queries.
     supported_parameters:
       - max_tokens
       - response_format
@@ -1629,145 +1626,183 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-mini-search-preview-2025-03-11/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-4o-mini-search-preview-2025-03-11
-    name: gpt-4o-mini-search-preview-2025-03-11
-    provider_id: openai
-    upstream_id: gpt-4o-mini-search-preview-2025-03-11
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000015'
       completion: '0.0000006'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-mini-search-preview-2025-03-11
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-search-preview-2025-03-11
 
   - id: openai/gpt-4o-mini-transcribe
-    name: gpt-4o-mini-transcribe
+    pricing:
+      prompt: '0.00000125'
+      completion: '0.000005'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: gpt-4o-mini-transcribe
-    description: ''
-    enabled: true
     context_length: 16000
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    name: gpt-4o-mini-transcribe
 
   - id: openai/gpt-4o-mini-transcribe-2025-03-20
+    pricing:
+      prompt: '0.00000125'
+      completion: '0.000005'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-mini-transcribe-2025-03-20
+    context_length: 16000
     provider_id: openai
     upstream_id: gpt-4o-mini-transcribe-2025-03-20
-    description: ''
-    enabled: true
-    context_length: 16000
-    pricing:
-      prompt: '0.00000125'
-      completion: '0.000005'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-mini-transcribe-2025-12-15
-    name: gpt-4o-mini-transcribe-2025-12-15
-    provider_id: openai
-    upstream_id: gpt-4o-mini-transcribe-2025-12-15
-    description: ''
-    enabled: true
-    context_length: 16000
     pricing:
       prompt: '0.00000125'
       completion: '0.000005'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-mini-transcribe-2025-12-15
+    context_length: 16000
+    provider_id: openai
+    upstream_id: gpt-4o-mini-transcribe-2025-12-15
 
   - id: openai/gpt-4o-mini-tts
-    name: gpt-4o-mini-tts
-    provider_id: openai
-    upstream_id: gpt-4o-mini-tts
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000006'
+      completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: gpt-4o-mini-tts
+    name: gpt-4o-mini-tts
 
   - id: openai/gpt-4o-mini-tts-2025-03-20
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-mini-tts-2025-03-20
     provider_id: openai
     upstream_id: gpt-4o-mini-tts-2025-03-20
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/gpt-4o-mini-tts-2025-12-15
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-4o-mini-tts-2025-12-15
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-mini-tts-2025-12-15
     provider_id: openai
     upstream_id: gpt-4o-mini-tts-2025-12-15
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-realtime-preview
-    name: gpt-4o-realtime-preview
+    pricing:
+      prompt: '0.000005'
+      completion: '0.00002'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.0000025'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: gpt-4o-realtime-preview
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    context_length: 128000
+    name: gpt-4o-realtime-preview
 
   - id: openai/gpt-4o-realtime-preview-2024-12-17
+    pricing:
+      prompt: '0.000005'
+      completion: '0.00002'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-realtime-preview-2024-12-17
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-realtime-preview-2024-12-17
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000005'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-realtime-preview-2025-06-03
-    name: gpt-4o-realtime-preview-2025-06-03
-    provider_id: openai
-    upstream_id: gpt-4o-realtime-preview-2025-06-03
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.000005'
       completion: '0.00002'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-realtime-preview-2025-06-03
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-realtime-preview-2025-06-03
 
   - id: openai/gpt-4o-search-preview
-    name: 'OpenAI: GPT-4o Search Preview'
-    provider_id: openai
-    upstream_id: gpt-4o-search-preview
-    description: GPT-4o Search Previewis a specialized model for web search in Chat
-      Completions. It is trained to understand and execute web search queries.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
@@ -1779,11 +1814,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-4o Search Preview'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-4o-search-preview
+    description: GPT-4o Search Previewis a specialized model for web search in Chat Completions. It is trained to understand and execute web search queries.
     supported_parameters:
       - max_tokens
       - response_format
@@ -1792,78 +1828,87 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/gpt-4o-search-preview-2025-03-11/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-4o-search-preview-2025-03-11
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-4o-search-preview-2025-03-11
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-search-preview-2025-03-11
-    description: ''
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-4o-transcribe
-    name: gpt-4o-transcribe
-    provider_id: openai
-    upstream_id: gpt-4o-transcribe
-    description: ''
-    enabled: true
-    context_length: 16000
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/gpt-4o-transcribe-diarize
-    name: gpt-4o-transcribe-diarize
-    provider_id: openai
-    upstream_id: gpt-4o-transcribe-diarize
-    description: ''
-    enabled: true
-    context_length: 16000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    provider_id: openai
+    upstream_id: gpt-4o-transcribe
+    context_length: 16000
+    name: gpt-4o-transcribe
+
+  - id: openai/gpt-4o-transcribe-diarize
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-4o-transcribe-diarize
+    context_length: 16000
+    provider_id: openai
+    upstream_id: gpt-4o-transcribe-diarize
 
   - id: openai/gpt-4o:extended
+    pricing:
+      prompt: '0.000006'
+      completion: '0.000018'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: GPT-4o (extended)
     provider_id: openai
     upstream_id: gpt-4o:extended
-    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both
-      text and image inputs with text outputs. It maintains the intelligence level
-      of GPT-4 Turbo while being twice as fast and 50% more cost-effective. GPT-4o
-      also offers improved performance in processing non-English languages and enhanced
-      visual capabilities.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    description: GPT-4o ("o" for "omni") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of GPT-4 Turbo while being twice as fast and 50% more cost-effective. GPT-4o also offers improved performance in processing non-English languages and enhanced visual capabilities.
 
   - id: openai/gpt-5
-    name: 'OpenAI: GPT-5'
-    provider_id: openai
-    upstream_id: gpt-5
-    description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic
-      tasks across domains.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1872,11 +1917,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5
+    description: GPT-5 is OpenAI’s most advanced model, offering major improvements in reasoning, code quality, and user experience. It is optimized for complex tasks that require step-by-step reasoning, instruction following, and accuracy...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1897,35 +1943,36 @@ models:
     knowledge_cutoff: '2024-09-30'
     links:
       details: /api/v1/models/openai/gpt-5-2025-08-07/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5-2025-08-07
-    name: gpt-5-2025-08-07
-    provider_id: openai
-    upstream_id: gpt-5-2025-08-07
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-2025-08-07
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5-2025-08-07
 
   - id: openai/gpt-5-chat
-    name: 'OpenAI: GPT-5 Chat'
-    provider_id: openai
-    upstream_id: gpt-5-chat
-    description: GPT-5 Chat is designed for advanced, natural, multimodal, and context-aware
-      conversations for enterprise applications.
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1934,11 +1981,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Chat'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5-chat
+    description: GPT-5 Chat is designed for advanced, natural, multimodal, and context-aware conversations for enterprise applications.
     supported_parameters:
       - max_tokens
       - response_format
@@ -1947,36 +1995,36 @@ models:
     knowledge_cutoff: '2024-09-30'
     links:
       details: /api/v1/models/openai/gpt-5-chat-2025-08-07/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-5-chat-latest
-    name: gpt-5-chat-latest
-    provider_id: openai
-    upstream_id: gpt-5-chat-latest
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-chat-latest
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5-chat-latest
 
   - id: openai/gpt-5-codex
-    name: 'OpenAI: GPT-5 Codex'
-    provider_id: openai
-    upstream_id: gpt-5-codex
-    description: GPT-5-Codex is a specialized version of GPT-5 optimized for software
-      engineering and coding workflows. It is designed for both interactive development
-      sessions and long, independent execution of complex engineering tasks....
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -1984,11 +2032,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Codex'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-codex
+    description: GPT-5-Codex is a specialized version of GPT-5 optimized for software engineering and coding workflows. It is designed for both interactive development sessions and long, independent execution of complex engineering tasks....
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2005,24 +2054,18 @@ models:
     knowledge_cutoff: '2024-09-30'
     links:
       details: /api/v1/models/openai/gpt-5-codex/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5-image
-    name: 'OpenAI: GPT-5 Image'
-    provider_id: openai
-    upstream_id: gpt-5-image
-    description: '[GPT-5](https://openrouter.ai/openai/gpt-5) Image combines OpenAI''s
-      GPT-5 model with state-of-the-art image generation capabilities. It offers major
-      improvements in reasoning, code quality, and user experience while incorporating
-      GPT Image 1''s superior instruction following,...'
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00001'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.00000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2032,11 +2075,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Image'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-image
+    description: '[GPT-5](https://openrouter.ai/openai/gpt-5) Image combines OpenAI''s GPT-5 model with state-of-the-art image generation capabilities. It offers major improvements in reasoning, code quality, and user experience while incorporating GPT Image 1''s superior instruction following,...'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2058,24 +2102,18 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5-image/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5-image-mini
-    name: 'OpenAI: GPT-5 Image Mini'
-    provider_id: openai
-    upstream_id: gpt-5-image-mini
-    description: GPT-5 Image Mini combines OpenAI's advanced language capabilities,
-      powered by [GPT-5 Mini](https://openrouter.ai/openai/gpt-5-mini), with GPT Image
-      1 Mini for efficient image generation. This natively multimodal model features
-      superior instruction following, text...
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.0000025'
       completion: '0.000002'
       request: '0'
       image: '0'
       input_cache_read: '0.00000025'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2085,11 +2123,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Image Mini'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-image-mini
+    description: GPT-5 Image Mini combines OpenAI's advanced language capabilities, powered by [GPT-5 Mini](https://openrouter.ai/openai/gpt-5-mini), with GPT Image 1 Mini for efficient image generation. This natively multimodal model features superior instruction following, text...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2111,22 +2150,18 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5-image-mini/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5-mini
-    name: 'OpenAI: GPT-5 Mini'
-    provider_id: openai
-    upstream_id: gpt-5-mini
-    description: GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's
-      great for well-defined tasks and precise prompts.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
       input_cache_read: '0.000000025'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2135,11 +2170,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Mini'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-mini
+    description: GPT-5 Mini is a compact version of GPT-5, designed to handle lighter-weight reasoning tasks. It provides the same instruction-following and safety-tuning benefits as GPT-5, but with reduced latency and cost....
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2160,35 +2196,36 @@ models:
     knowledge_cutoff: '2024-05-31'
     links:
       details: /api/v1/models/openai/gpt-5-mini-2025-08-07/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5-mini-2025-08-07
-    name: gpt-5-mini-2025-08-07
-    provider_id: openai
-    upstream_id: gpt-5-mini-2025-08-07
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-mini-2025-08-07
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5-mini-2025-08-07
 
   - id: openai/gpt-5-nano
-    name: 'OpenAI: GPT-5 Nano'
-    provider_id: openai
-    upstream_id: gpt-5-nano
-    description: GPT-5 Nano is OpenAI's fastest, cheapest version of GPT-5. It's great
-      for summarization and classification tasks.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000005'
       completion: '0.0000004'
       request: '0'
       image: '0'
       input_cache_read: '0.00000001'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2197,11 +2234,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: null
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5 Nano'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-nano
+    description: GPT-5-Nano is the smallest and fastest variant in the GPT-5 system, optimized for developer tools, rapid interactions, and ultra-low latency environments. While limited in reasoning depth compared to its larger...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2222,29 +2260,30 @@ models:
     knowledge_cutoff: '2024-05-31'
     links:
       details: /api/v1/models/openai/gpt-5-nano-2025-08-07/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: null
+      is_moderated: false
 
   - id: openai/gpt-5-nano-2025-08-07
-    name: gpt-5-nano-2025-08-07
-    provider_id: openai
-    upstream_id: gpt-5-nano-2025-08-07
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000005'
       completion: '0.0000004'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-nano-2025-08-07
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5-nano-2025-08-07
 
   - id: openai/gpt-5-pro
-    name: 'OpenAI: GPT-5 Pro'
-    provider_id: openai
-    upstream_id: gpt-5-pro
-    description: GPT-5 Pro is OpenAI’s most advanced model, offering major improvements
-      in reasoning, code quality, and user experience. It is optimized for complex
-      tasks that require step-by-step reasoning, instruction following, and...
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.000015'
       completion: '0.00012'
@@ -2258,11 +2297,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5 Pro'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5-pro
+    description: GPT-5 Pro is OpenAI’s most advanced model, offering major improvements in reasoning, code quality, and user experience. It is optimized for complex tasks that require step-by-step reasoning, instruction following, and...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2279,60 +2319,72 @@ models:
     knowledge_cutoff: '2024-09-30'
     links:
       details: /api/v1/models/openai/gpt-5-pro-2025-10-06/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5-pro-2025-10-06
-    name: gpt-5-pro-2025-10-06
-    provider_id: openai
-    upstream_id: gpt-5-pro-2025-10-06
-    description: ''
-    enabled: true
-    context_length: 272000
     pricing:
       prompt: '0.000015'
       completion: '0.00012'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-pro-2025-10-06
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5-pro-2025-10-06
 
   - id: openai/gpt-5-search-api
+    pricing:
+      prompt: '0.00000125'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-5-search-api
+    context_length: 272000
     provider_id: openai
     upstream_id: gpt-5-search-api
-    description: ''
-    enabled: true
-    context_length: 128000
-    pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-5-search-api-2025-10-14
-    name: gpt-5-search-api-2025-10-14
-    provider_id: openai
-    upstream_id: gpt-5-search-api-2025-10-14
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5-search-api-2025-10-14
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5-search-api-2025-10-14
 
   - id: openai/gpt-5.1
-    name: 'OpenAI: GPT-5.1'
-    provider_id: openai
-    upstream_id: gpt-5.1
-    description: The best model for coding and agentic tasks across industries
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.00000013'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2341,11 +2393,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.1'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.1
+    description: GPT-5.1 is the latest frontier-grade model in the GPT-5 series, offering stronger general-purpose reasoning, improved instruction adherence, and a more natural conversational style compared to GPT-5. It uses adaptive reasoning...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2365,36 +2418,36 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.1-20251113/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.1-2025-11-13
-    name: gpt-5.1-2025-11-13
-    provider_id: openai
-    upstream_id: gpt-5.1-2025-11-13
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.1-2025-11-13
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5.1-2025-11-13
 
   - id: openai/gpt-5.1-chat
-    name: 'OpenAI: GPT-5.1 Chat'
-    provider_id: openai
-    upstream_id: gpt-5.1-chat
-    description: GPT-5.1 Chat (AKA Instant is the fast, lightweight member of the
-      5.1 family, optimized for low-latency chat while retaining strong general intelligence.
-      It uses adaptive reasoning to selectively “think” on...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2403,11 +2456,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.1 Chat'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.1-chat
+    description: GPT-5.1 Chat (AKA Instant is the fast, lightweight member of the 5.1 family, optimized for low-latency chat while retaining strong general intelligence. It uses adaptive reasoning to selectively “think” on...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -2422,36 +2476,36 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.1-chat-20251113/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-5.1-chat-latest
-    name: gpt-5.1-chat-latest
-    provider_id: openai
-    upstream_id: gpt-5.1-chat-latest
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.1-chat-latest
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.1-chat-latest
 
   - id: openai/gpt-5.1-codex
-    name: 'OpenAI: GPT-5.1-Codex'
-    provider_id: openai
-    upstream_id: gpt-5.1-codex
-    description: GPT-5.1-Codex is a specialized version of GPT-5.1 optimized for software
-      engineering and coding workflows. It is designed for both interactive development
-      sessions and long, independent execution of complex engineering tasks....
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2459,11 +2513,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.1-Codex'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.1-codex
+    description: GPT-5.1-Codex is a specialized version of GPT-5.1 optimized for software engineering and coding workflows. It is designed for both interactive development sessions and long, independent execution of complex engineering tasks....
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2483,23 +2538,18 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.1-codex-20251113/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5.1-codex-max
-    name: 'OpenAI: GPT-5.1-Codex-Max'
-    provider_id: openai
-    upstream_id: gpt-5.1-codex-max
-    description: GPT-5.1-Codex-Max is OpenAI’s latest agentic coding model, designed
-      for long-running, high-context software development tasks. It is based on an
-      updated version of the 5.1 reasoning stack and trained on agentic...
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000125'
       completion: '0.00001'
       request: '0'
       image: '0'
       input_cache_read: '0.000000125'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2507,11 +2557,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.1-Codex-Max'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.1-codex-max
+    description: GPT-5.1-Codex-Max is OpenAI’s latest agentic coding model, designed for long-running, high-context software development tasks. It is based on an updated version of the 5.1 reasoning stack and trained on agentic...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2531,21 +2582,18 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.1-codex-max-20251204/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5.1-codex-mini
-    name: 'OpenAI: GPT-5.1-Codex-Mini'
-    provider_id: openai
-    upstream_id: gpt-5.1-codex-mini
-    description: GPT-5.1-Codex-Mini is a smaller and faster version of GPT-5.1-Codex
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000025'
       completion: '0.000002'
       request: '0'
       image: '0'
       input_cache_read: '0.00000003'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2553,11 +2601,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.1-Codex-Mini'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.1-codex-mini
+    description: GPT-5.1-Codex-Mini is a smaller and faster version of GPT-5.1-Codex
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2577,21 +2626,18 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.1-codex-mini-20251113/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.2
-    name: 'OpenAI: GPT-5.2'
-    provider_id: openai
-    upstream_id: gpt-5.2
-    description: The best model for coding and agentic tasks across industries
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
       input_cache_read: '0.000000175'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2600,11 +2646,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.2'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.2
+    description: GPT-5.2 is the latest frontier-grade model in the GPT-5 series, offering stronger agentic and long context perfomance compared to GPT-5.1. It uses adaptive reasoning to allocate computation dynamically, responding quickly...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2624,36 +2671,36 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.2-20251211/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.2-2025-12-11
-    name: gpt-5.2-2025-12-11
-    provider_id: openai
-    upstream_id: gpt-5.2-2025-12-11
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.2-2025-12-11
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5.2-2025-12-11
 
   - id: openai/gpt-5.2-chat
-    name: 'OpenAI: GPT-5.2 Chat'
-    provider_id: openai
-    upstream_id: gpt-5.2-chat
-    description: GPT-5.2 Chat (AKA Instant) is the fast, lightweight member of the
-      5.2 family, optimized for low-latency chat while retaining strong general intelligence.
-      It uses adaptive reasoning to selectively “think” on...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
       input_cache_read: '0.000000175'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2662,11 +2709,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 32000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.2 Chat'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.2-chat
+    description: GPT-5.2 Chat (AKA Instant) is the fast, lightweight member of the 5.2 family, optimized for low-latency chat while retaining strong general intelligence. It uses adaptive reasoning to selectively “think” on...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -2681,37 +2729,36 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.2-chat-20251211/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
 
   - id: openai/gpt-5.2-chat-latest
-    name: gpt-5.2-chat-latest
-    provider_id: openai
-    upstream_id: gpt-5.2-chat-latest
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.2-chat-latest
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.2-chat-latest
 
   - id: openai/gpt-5.2-codex
-    name: 'OpenAI: GPT-5.2-Codex'
-    provider_id: openai
-    upstream_id: gpt-5.2-codex
-    description: GPT-5.2-Codex is an upgraded version of GPT-5.1-Codex optimized for
-      software engineering and coding workflows. It is designed for both interactive
-      development sessions and long, independent execution of complex engineering
-      tasks....
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
       input_cache_read: '0.000000175'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2719,11 +2766,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.2-Codex'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.2-codex
+    description: GPT-5.2-Codex is an upgraded version of GPT-5.1-Codex optimized for software engineering and coding workflows. It is designed for both interactive development sessions and long, independent execution of complex engineering tasks....
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2740,14 +2788,12 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.2-codex-20260114/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.2-pro
-    name: 'OpenAI: GPT-5.2 Pro'
-    provider_id: openai
-    upstream_id: gpt-5.2-pro
-    description: Version of GPT-5.2 that produces smarter and more precise responses.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.000021'
       completion: '0.000168'
@@ -2761,11 +2807,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.2 Pro'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.2-pro
+    description: GPT-5.2 Pro is OpenAI’s most advanced model, offering major improvements in agentic coding and long context performance over GPT-5 Pro. It is optimized for complex tasks that require step-by-step reasoning,...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2781,36 +2828,36 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.2-pro-20251211/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5.2-pro-2025-12-11
-    name: gpt-5.2-pro-2025-12-11
-    provider_id: openai
-    upstream_id: gpt-5.2-pro-2025-12-11
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.000021'
       completion: '0.000168'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.2-pro-2025-12-11
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5.2-pro-2025-12-11
 
   - id: openai/gpt-5.3-chat
-    name: 'OpenAI: GPT-5.3 Chat'
-    provider_id: openai
-    upstream_id: gpt-5.3-chat
-    description: GPT-5.3 Chat is an update to ChatGPT's most-used model that makes
-      everyday conversations smoother, more useful, and more directly helpful. It
-      delivers more accurate answers with better contextualization and significantly...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
       input_cache_read: '0.000000175'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2819,11 +2866,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.3 Chat'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.3-chat
+    description: GPT-5.3 Chat is an update to ChatGPT's most-used model that makes everyday conversations smoother, more useful, and more directly helpful. It delivers more accurate answers with better contextualization and significantly...
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -2841,34 +2889,36 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.3-chat-20260303/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-5.3-chat-latest
-    name: gpt-5.3-chat-latest
-    provider_id: openai
-    upstream_id: gpt-5.3-chat-latest
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-5.3-chat-latest
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-5.3-chat-latest
 
   - id: openai/gpt-5.3-codex
-    name: 'OpenAI: GPT-5.3-Codex'
-    provider_id: openai
-    upstream_id: gpt-5.3-codex
-    description: The most capable agentic coding model
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000175'
       completion: '0.000014'
       request: '0'
       image: '0'
       input_cache_read: '0.000000175'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2877,11 +2927,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.3-Codex'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.3-codex
+    description: GPT-5.3-Codex is OpenAI’s most advanced agentic coding model, combining the frontier software engineering performance of GPT-5.2-Codex with the broader reasoning and professional knowledge capabilities of GPT-5.2. It achieves state-of-the-art results...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2901,21 +2952,18 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.3-codex-20260224/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5.4
-    name: 'OpenAI: GPT-5.4'
-    provider_id: openai
-    upstream_id: gpt-5.4
-    description: OpenAI's most capable model with a 1.05M token context window.
-    enabled: true
-    context_length: 1050000
     pricing:
       prompt: '0.0000025'
       completion: '0.000015'
       request: '0'
       image: '0'
       input_cache_read: '0.00000025'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -2924,11 +2972,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 1050000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.4'
+    context_length: 1050000
+    provider_id: openai
+    upstream_id: gpt-5.4
+    description: GPT-5.4 is OpenAI’s latest frontier model, unifying the Codex and GPT lines into a single system. It features a 1M+ token context window (922K input, 128K output) with support for...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2948,50 +2997,36 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.4-20260305/endpoints
+    top_provider:
+      context_length: 1050000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.4-2026-03-05
-    name: gpt-5.4-2026-03-05
-    provider_id: openai
-    upstream_id: gpt-5.4-2026-03-05
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.000015'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-5.4-272k
-    name: GPT-5.4 >272k
-    provider_id: openai
-    upstream_id: gpt-5.4-272k
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
     enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.000005'
-      completion: '0.0000225'
-      request: '0'
-      image: '0'
+    name: gpt-5.4-2026-03-05
+    context_length: 1050000
+    provider_id: openai
+    upstream_id: gpt-5.4-2026-03-05
 
   - id: openai/gpt-5.4-image-2
-    name: 'OpenAI: GPT-5.4 Image 2'
-    provider_id: openai
-    upstream_id: gpt-5.4-image-2
-    description: '[GPT-5.4](https://openrouter.ai/openai/gpt-5.4) Image 2 combines
-      OpenAI''s GPT-5.4 model with state-of-the-art image generation capabilities
-      from GPT Image 2. It enables rich multimodal workflows, allowing users to seamlessly
-      move between reasoning, coding, and...'
-    enabled: true
-    context_length: 272000
     pricing:
       prompt: '0.000008'
       completion: '0.000015'
       request: '0'
       image: '0'
       input_cache_read: '0.000002'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -3001,11 +3036,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 272000
-      max_completion_tokens: 128000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT-5.4 Image 2'
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5.4-image-2
+    description: '[GPT-5.4](https://openrouter.ai/openai/gpt-5.4) Image 2 combines OpenAI''s GPT-5.4 model with state-of-the-art image generation capabilities from GPT Image 2. It enables rich multimodal workflows, allowing users to seamlessly move between reasoning, coding, and...'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -3028,21 +3064,18 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.4-image-2-20260421/endpoints
+    top_provider:
+      context_length: 272000
+      max_completion_tokens: 128000
+      is_moderated: true
 
   - id: openai/gpt-5.4-mini
-    name: 'OpenAI: GPT-5.4 Mini'
-    provider_id: openai
-    upstream_id: gpt-5.4-mini
-    description: Our strongest mini model yet for coding, computer use, and subagents.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.00000075'
       completion: '0.0000045'
       request: '0'
       image: '0'
       input_cache_read: '0.000000075'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -3051,11 +3084,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.4 Mini'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.4-mini
+    description: GPT-5.4 mini brings the core capabilities of GPT-5.4 to a faster, more efficient model optimized for high-throughput workloads. It supports text and image inputs with strong performance across reasoning, coding,...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -3076,21 +3110,18 @@ models:
     knowledge_cutoff: '2025-08-31'
     links:
       details: /api/v1/models/openai/gpt-5.4-mini-20260317/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.4-nano
-    name: 'OpenAI: GPT-5.4 Nano'
-    provider_id: openai
-    upstream_id: gpt-5.4-nano
-    description: Our cheapest GPT-5.4-class model for simple high-volume tasks.
-    enabled: true
-    context_length: 400000
     pricing:
       prompt: '0.0000002'
       completion: '0.00000125'
       request: '0'
       image: '0'
       input_cache_read: '0.00000002'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -3099,11 +3130,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 400000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.4 Nano'
+    context_length: 400000
+    provider_id: openai
+    upstream_id: gpt-5.4-nano
+    description: GPT-5.4 nano is the most lightweight and cost-efficient variant of the GPT-5.4 family, optimized for speed-critical and high-volume tasks. It supports text and image inputs and is designed for low-latency...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -3124,14 +3156,12 @@ models:
     knowledge_cutoff: '2025-08-31'
     links:
       details: /api/v1/models/openai/gpt-5.4-nano-20260317/endpoints
+    top_provider:
+      context_length: 400000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.4-pro
-    name: 'OpenAI: GPT-5.4 Pro'
-    provider_id: openai
-    upstream_id: gpt-5.4-pro
-    description: Version of GPT-5.4 that produces smarter and more precise responses.
-    enabled: true
-    context_length: 1050000
     pricing:
       prompt: '0.00003'
       completion: '0.00018'
@@ -3145,11 +3175,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 1050000
-      max_completion_tokens: 128000
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: GPT-5.4 Pro'
+    context_length: 1050000
+    provider_id: openai
+    upstream_id: gpt-5.4-pro
+    description: GPT-5.4 Pro is OpenAI's most advanced model, building on GPT-5.4's unified architecture with enhanced reasoning capabilities for complex, high-stakes tasks. It features a 1M+ token context window (922K input, 128K...
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -3169,68 +3200,48 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/openai/gpt-5.4-pro-20260305/endpoints
+    top_provider:
+      context_length: 1050000
+      max_completion_tokens: 128000
+      is_moderated: false
 
   - id: openai/gpt-5.4-pro-2026-03-05
-    name: gpt-5.4-pro-2026-03-05
-    provider_id: openai
-    upstream_id: gpt-5.4-pro-2026-03-05
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.00003'
       completion: '0.00018'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-5.4-pro-272k
-    name: GPT-5.4 Pro >272k
-    provider_id: openai
-    upstream_id: gpt-5.4-pro-272k
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
     enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.00006'
-      completion: '0.00027'
-      request: '0'
-      image: '0'
+    name: gpt-5.4-pro-2026-03-05
+    context_length: 1050000
+    provider_id: openai
+    upstream_id: gpt-5.4-pro-2026-03-05
 
   - id: openai/gpt-5.5
-    name: gpt-5.5
-    provider_id: openai
-    upstream_id: gpt-5.5
-    description: ''
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.000005'
       completion: '0.00003'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-5.5-pro
-    name: GPT-5.5 Pro ≤272k
-    provider_id: openai
-    upstream_id: gpt-5.5-pro
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
     enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.00003'
-      completion: '0.00018'
-      request: '0'
-      image: '0'
+    name: gpt-5.5
+    context_length: 272000
+    provider_id: openai
+    upstream_id: gpt-5.5
 
   - id: openai/gpt-audio
-    name: 'OpenAI: GPT Audio'
-    provider_id: openai
-    upstream_id: gpt-audio
-    description: The gpt-audio model is OpenAI's first generally available audio model.
-      The new snapshot features an upgraded decoder for more natural sounding voices
-      and maintains better voice consistency. Audio is priced...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
@@ -3244,11 +3255,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT Audio'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-audio
+    description: The gpt-audio model is OpenAI's first generally available audio model. The new snapshot features an upgraded decoder for more natural sounding voices and maintains better voice consistency. Audio is priced...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -3270,42 +3282,48 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-audio/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-audio-1.5
+    pricing:
+      prompt: '0.0000025'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-audio-1.5
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-audio-1.5
-    description: ''
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-audio-2025-08-28
-    name: gpt-audio-2025-08-28
-    provider_id: openai
-    upstream_id: gpt-audio-2025-08-28
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.0000025'
       completion: '0.00001'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-audio-2025-08-28
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-audio-2025-08-28
 
   - id: openai/gpt-audio-mini
-    name: 'OpenAI: GPT Audio Mini'
-    provider_id: openai
-    upstream_id: gpt-audio-mini
-    description: A cost-efficient version of GPT Audio. The new snapshot features
-      an upgraded decoder for more natural sounding voices and maintains better voice
-      consistency. Input is priced at $0.60 per million...
-    enabled: true
-    context_length: 128000
     pricing:
       prompt: '0.0000006'
       completion: '0.0000024'
@@ -3319,11 +3337,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 128000
-      max_completion_tokens: 16384
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: GPT Audio Mini'
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-audio-mini
+    description: A cost-efficient version of GPT Audio. The new snapshot features an upgraded decoder for more natural sounding voices and maintains better voice consistency. Input is priced at $0.60 per million...
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -3345,120 +3364,114 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-audio-mini/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 16384
+      is_moderated: true
 
   - id: openai/gpt-audio-mini-2025-10-06
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-audio-mini-2025-10-06
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-audio-mini-2025-10-06
-    description: ''
-    enabled: true
-    context_length: 16384
-    pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-audio-mini-2025-12-15
-    name: gpt-audio-mini-2025-12-15
-    provider_id: openai
-    upstream_id: gpt-audio-mini-2025-12-15
-    description: ''
-    enabled: true
-    context_length: 16384
     pricing:
       prompt: '0.0000006'
       completion: '0.0000024'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-audio-mini-2025-12-15
+    context_length: 128000
+    provider_id: openai
+    upstream_id: gpt-audio-mini-2025-12-15
 
   - id: openai/gpt-image-1
-    name: gpt-image-1
-    provider_id: openai
-    upstream_id: gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.000005'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-image-1
+    provider_id: openai
+    upstream_id: gpt-image-1
 
   - id: openai/gpt-image-1-mini
-    name: gpt-image-1-mini
-    provider_id: openai
-    upstream_id: gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.000002'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-image-1-mini
+    provider_id: openai
+    upstream_id: gpt-image-1-mini
 
   - id: openai/gpt-image-1.5
+    pricing:
+      prompt: '0.000005'
+      completion: '0.00001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-image-1.5
     provider_id: openai
     upstream_id: gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/gpt-image-1.5-2025-12-16
     pricing:
       prompt: '0.000005'
       completion: '0.00001'
       request: '0'
       image: '0'
-
-  - id: openai/gpt-image-1.5-2025-12-16
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-image-1.5-2025-12-16
     provider_id: openai
     upstream_id: gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000005'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-
-  - id: openai/gpt-image-2-image
-    name: gpt-image-2 (image gen) image tokens
-    provider_id: openai
-    upstream_id: gpt-image-2-image
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.000008'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
-
-  - id: openai/gpt-image-2-text
-    name: gpt-image-2 (image gen) text tokens
-    provider_id: openai
-    upstream_id: gpt-image-2-text
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.000005'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-oss-120b
-    name: 'OpenAI: gpt-oss-120b'
-    provider_id: openai
-    upstream_id: gpt-oss-120b
-    description: gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts
-      (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose
-      production use cases. It activates 5.1B parameters per forward pass and is optimized...
-    enabled: true
-    context_length: 131072
     pricing:
       prompt: '0.000000039'
       completion: '0.00000019'
@@ -3470,11 +3483,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: null
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: gpt-oss-120b'
+    context_length: 131072
+    provider_id: openai
+    upstream_id: gpt-oss-120b
+    description: gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases. It activates 5.1B parameters per forward pass and is optimized...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -3502,16 +3516,12 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-oss-120b/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: null
+      is_moderated: false
 
   - id: openai/gpt-oss-120b:free
-    name: 'OpenAI: gpt-oss-120b (free)'
-    provider_id: openai
-    upstream_id: gpt-oss-120b:free
-    description: gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts
-      (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose
-      production use cases. It activates 5.1B parameters per forward pass and is optimized...
-    enabled: true
-    context_length: 131072
     pricing:
       prompt: '0'
       completion: '0'
@@ -3523,11 +3533,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: 131072
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: gpt-oss-120b (free)'
+    context_length: 131072
+    provider_id: openai
+    upstream_id: gpt-oss-120b:free
+    description: gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases. It activates 5.1B parameters per forward pass and is optimized...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -3544,16 +3555,12 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-oss-120b/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 131072
+      is_moderated: true
 
   - id: openai/gpt-oss-20b
-    name: 'OpenAI: gpt-oss-20b'
-    provider_id: openai
-    upstream_id: gpt-oss-20b
-    description: gpt-oss-20b is an open-weight 21B parameter model released by OpenAI
-      under the Apache 2.0 license. It uses a Mixture-of-Experts (MoE) architecture
-      with 3.6B active parameters per forward pass, optimized for...
-    enabled: true
-    context_length: 131072
     pricing:
       prompt: '0.00000003'
       completion: '0.00000014'
@@ -3565,11 +3572,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: null
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: gpt-oss-20b'
+    context_length: 131072
+    provider_id: openai
+    upstream_id: gpt-oss-20b
+    description: gpt-oss-20b is an open-weight 21B parameter model released by OpenAI under the Apache 2.0 license. It uses a Mixture-of-Experts (MoE) architecture with 3.6B active parameters per forward pass, optimized for...
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -3598,16 +3606,12 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-oss-20b/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: null
+      is_moderated: false
 
   - id: openai/gpt-oss-20b:free
-    name: 'OpenAI: gpt-oss-20b (free)'
-    provider_id: openai
-    upstream_id: gpt-oss-20b:free
-    description: gpt-oss-20b is an open-weight 21B parameter model released by OpenAI
-      under the Apache 2.0 license. It uses a Mixture-of-Experts (MoE) architecture
-      with 3.6B active parameters per forward pass, optimized for...
-    enabled: true
-    context_length: 131072
     pricing:
       prompt: '0'
       completion: '0'
@@ -3619,11 +3623,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: 8192
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: gpt-oss-20b (free)'
+    context_length: 131072
+    provider_id: openai
+    upstream_id: gpt-oss-20b:free
+    description: gpt-oss-20b is an open-weight 21B parameter model released by OpenAI under the Apache 2.0 license. It uses a Mixture-of-Experts (MoE) architecture with 3.6B active parameters per forward pass, optimized for...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -3640,35 +3645,30 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/gpt-oss-20b/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 8192
+      is_moderated: true
 
   - id: openai/gpt-oss-safeguard-20b
-    name: 'OpenAI: gpt-oss-safeguard-20b'
-    provider_id: openai
-    upstream_id: gpt-oss-safeguard-20b
-    description: gpt-oss-safeguard-20b is a safety reasoning model from OpenAI built
-      upon gpt-oss-20b. This open-weight, 21B-parameter Mixture-of-Experts (MoE) model
-      offers lower latency for safety tasks like content classification, LLM filtering,
-      and trust...
-    enabled: true
-    context_length: 131072
     pricing:
       prompt: '0.000000075'
       completion: '0.0000003'
       request: '0'
       image: '0'
       input_cache_read: '0.000000037'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text->text
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: 65536
-      is_moderated: false
+    enabled: true
+    name: 'OpenAI: gpt-oss-safeguard-20b'
+    context_length: 131072
+    provider_id: openai
+    upstream_id: gpt-oss-safeguard-20b
+    description: gpt-oss-safeguard-20b is a safety reasoning model from OpenAI built upon gpt-oss-20b. This open-weight, 21B-parameter Mixture-of-Experts (MoE) model offers lower latency for safety tasks like content classification, LLM filtering, and trust...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -3686,580 +3686,142 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/gpt-oss-safeguard-20b/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 65536
+      is_moderated: false
 
   - id: openai/gpt-realtime
-    name: gpt-realtime
+    pricing:
+      prompt: '0.000004'
+      completion: '0.000016'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.0000004'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: gpt-realtime
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    context_length: 32000
+    name: gpt-realtime
 
   - id: openai/gpt-realtime-1.5
+    pricing:
+      prompt: '0.000004'
+      completion: '0.000016'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-realtime-1.5
+    context_length: 32000
     provider_id: openai
     upstream_id: gpt-realtime-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-realtime-2025-08-28
-    name: gpt-realtime-2025-08-28
-    provider_id: openai
-    upstream_id: gpt-realtime-2025-08-28
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.000004'
       completion: '0.000016'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
+    name: gpt-realtime-2025-08-28
+    context_length: 32000
+    provider_id: openai
+    upstream_id: gpt-realtime-2025-08-28
 
   - id: openai/gpt-realtime-mini
-    name: gpt-realtime-mini
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000006'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: gpt-realtime-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    context_length: 128000
+    name: gpt-realtime-mini
 
   - id: openai/gpt-realtime-mini-2025-10-06
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
+    enabled: true
     name: gpt-realtime-mini-2025-10-06
+    context_length: 128000
     provider_id: openai
     upstream_id: gpt-realtime-mini-2025-10-06
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
 
   - id: openai/gpt-realtime-mini-2025-12-15
-    name: gpt-realtime-mini-2025-12-15
-    provider_id: openai
-    upstream_id: gpt-realtime-mini-2025-12-15
-    description: ''
-    enabled: true
-    context_length: 4096
     pricing:
       prompt: '0.0000006'
       completion: '0.0000024'
       request: '0'
       image: '0'
-
-  - id: openai/hd/1024-x-1024/dall-e-3
-    name: hd/1024-x-1024/dall-e-3
-    provider_id: openai
-    upstream_id: hd/1024-x-1024/dall-e-3
-    description: ''
+    architecture:
+      input_modalities:
+        - text
+        - audio
+      output_modalities:
+        - text
     enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/hd/1024-x-1792/dall-e-3
-    name: hd/1024-x-1792/dall-e-3
+    name: gpt-realtime-mini-2025-12-15
+    context_length: 128000
     provider_id: openai
-    upstream_id: hd/1024-x-1792/dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/hd/1792-x-1024/dall-e-3
-    name: hd/1792-x-1024/dall-e-3
-    provider_id: openai
-    upstream_id: hd/1792-x-1024/dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1024/gpt-image-1
-    name: high/1024-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: high/1024-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1024/gpt-image-1.5
-    name: high/1024-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: high/1024-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1024/gpt-image-1.5-2025-12-16
-    name: high/1024-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: high/1024-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1536/gpt-image-1
-    name: high/1024-x-1536/gpt-image-1
-    provider_id: openai
-    upstream_id: high/1024-x-1536/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1536/gpt-image-1.5
-    name: high/1024-x-1536/gpt-image-1.5
-    provider_id: openai
-    upstream_id: high/1024-x-1536/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1024-x-1536/gpt-image-1.5-2025-12-16
-    name: high/1024-x-1536/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: high/1024-x-1536/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1536-x-1024/gpt-image-1
-    name: high/1536-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: high/1536-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1536-x-1024/gpt-image-1.5
-    name: high/1536-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: high/1536-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/high/1536-x-1024/gpt-image-1.5-2025-12-16
-    name: high/1536-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: high/1536-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1024/gpt-image-1
-    name: low/1024-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: low/1024-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1024/gpt-image-1-mini
-    name: low/1024-x-1024/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: low/1024-x-1024/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1024/gpt-image-1.5
-    name: low/1024-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: low/1024-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1024/gpt-image-1.5-2025-12-16
-    name: low/1024-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: low/1024-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1536/gpt-image-1
-    name: low/1024-x-1536/gpt-image-1
-    provider_id: openai
-    upstream_id: low/1024-x-1536/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1536/gpt-image-1-mini
-    name: low/1024-x-1536/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: low/1024-x-1536/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1536/gpt-image-1.5
-    name: low/1024-x-1536/gpt-image-1.5
-    provider_id: openai
-    upstream_id: low/1024-x-1536/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1024-x-1536/gpt-image-1.5-2025-12-16
-    name: low/1024-x-1536/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: low/1024-x-1536/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1536-x-1024/gpt-image-1
-    name: low/1536-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: low/1536-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1536-x-1024/gpt-image-1-mini
-    name: low/1536-x-1024/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: low/1536-x-1024/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1536-x-1024/gpt-image-1.5
-    name: low/1536-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: low/1536-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/low/1536-x-1024/gpt-image-1.5-2025-12-16
-    name: low/1536-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: low/1536-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1024/gpt-image-1
-    name: medium/1024-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: medium/1024-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1024/gpt-image-1-mini
-    name: medium/1024-x-1024/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: medium/1024-x-1024/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1024/gpt-image-1.5
-    name: medium/1024-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: medium/1024-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1024/gpt-image-1.5-2025-12-16
-    name: medium/1024-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: medium/1024-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1536/gpt-image-1
-    name: medium/1024-x-1536/gpt-image-1
-    provider_id: openai
-    upstream_id: medium/1024-x-1536/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1536/gpt-image-1-mini
-    name: medium/1024-x-1536/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: medium/1024-x-1536/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1536/gpt-image-1.5
-    name: medium/1024-x-1536/gpt-image-1.5
-    provider_id: openai
-    upstream_id: medium/1024-x-1536/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1024-x-1536/gpt-image-1.5-2025-12-16
-    name: medium/1024-x-1536/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: medium/1024-x-1536/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1536-x-1024/gpt-image-1
-    name: medium/1536-x-1024/gpt-image-1
-    provider_id: openai
-    upstream_id: medium/1536-x-1024/gpt-image-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1536-x-1024/gpt-image-1-mini
-    name: medium/1536-x-1024/gpt-image-1-mini
-    provider_id: openai
-    upstream_id: medium/1536-x-1024/gpt-image-1-mini
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1536-x-1024/gpt-image-1.5
-    name: medium/1536-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: medium/1536-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/medium/1536-x-1024/gpt-image-1.5-2025-12-16
-    name: medium/1536-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: medium/1536-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    upstream_id: gpt-realtime-mini-2025-12-15
 
   - id: openai/moderation
-    name: moderation
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: moderation
     description: All OpenAI moderation models and endpoints are free of charge
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/o1
-    name: 'OpenAI: o1'
-    provider_id: openai
-    upstream_id: o1
-    description: O1 is a model that offers a balance between cost and performance.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.000015'
       completion: '0.00006'
       request: '0'
       image: '0'
       input_cache_read: '0.0000075'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4268,11 +3830,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o1'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o1
+    description: The latest and strongest model family from OpenAI, o1 is designed to spend more time thinking before responding. The o1 model series is trained with large-scale reinforcement learning to reason...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4292,55 +3855,49 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/o1-2024-12-17/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o1-2024-12-17
-    name: o1-2024-12-17
-    provider_id: openai
-    upstream_id: o1-2024-12-17
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.000015'
       completion: '0.00006'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o1-2024-12-17
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o1-2024-12-17
 
   - id: openai/o1-mini
+    pricing:
+      prompt: '0.0000011'
+      completion: '0.0000044'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000055'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: o1 mini
+    context_length: 128000
     provider_id: openai
     upstream_id: o1-mini
     description: O1 Mini is a model that offers a balance between cost and performance.
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/o1-preview
-    name: o1 and o1-preview
-    provider_id: openai
-    upstream_id: o1-preview
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0.000015'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
 
   - id: openai/o1-pro
-    name: 'OpenAI: o1-pro'
-    provider_id: openai
-    upstream_id: o1-pro
-    description: The o1 series of models are trained with reinforcement learning to
-      think before they answer and perform complex reasoning. The o1-pro model uses
-      more compute to think harder and provide consistently better answers.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.00015'
       completion: '0.0006'
@@ -4354,11 +3911,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o1-pro'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o1-pro
+    description: The o1 series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o1-pro model uses more compute to think harder and provide...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4369,38 +3927,36 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/o1-pro/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o1-pro-2025-03-19
-    name: o1-pro-2025-03-19
-    provider_id: openai
-    upstream_id: o1-pro-2025-03-19
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.00015'
       completion: '0.0006'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o1-pro-2025-03-19
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o1-pro-2025-03-19
 
   - id: openai/o3
-    name: 'OpenAI: o3'
-    provider_id: openai
-    upstream_id: o3
-    description: 'o3 is a well-rounded and powerful model across domains. It sets
-      a new standard for math, science, coding, and visual reasoning tasks. It also
-      excels at technical writing and instruction-following. Use it to think through
-      multi-step problems that involve analysis across text, code, and images. Note
-      that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations'
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
       input_cache_read: '0.0000005'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4409,11 +3965,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o3'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3
+    description: o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following....
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4426,37 +3983,36 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/o3-2025-04-16/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o3-2025-04-16
-    name: o3-2025-04-16
-    provider_id: openai
-    upstream_id: o3-2025-04-16
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o3-2025-04-16
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-2025-04-16
 
   - id: openai/o3-deep-research
-    name: 'OpenAI: o3 Deep Research'
-    provider_id: openai
-    upstream_id: o3-deep-research
-    description: |-
-      o3-deep-research is OpenAI's advanced model for deep research, designed to tackle complex, multi-step research tasks.
-
-      Note: This model always uses the 'web_search' tool which adds additional cost.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.00001'
       completion: '0.00004'
       request: '0'
       image: '0'
       input_cache_read: '0.0000025'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4465,11 +4021,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o3 Deep Research'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-deep-research
+    description: |-
+      o3-deep-research is OpenAI's advanced model for deep research, designed to tackle complex, multi-step research tasks.
+
+      Note: This model always uses the 'web_search' tool which adds additional cost.
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -4493,35 +4053,36 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/o3-deep-research-2025-06-26/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o3-deep-research-2025-06-26
-    name: o3-deep-research-2025-06-26
-    provider_id: openai
-    upstream_id: o3-deep-research-2025-06-26
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.00001'
       completion: '0.00004'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o3-deep-research-2025-06-26
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-deep-research-2025-06-26
 
   - id: openai/o3-mini
-    name: 'OpenAI: o3 Mini'
-    provider_id: openai
-    upstream_id: o3-mini
-    description: OpenAI o3-mini is a cost-efficient language model optimized for STEM
-      reasoning tasks, particularly excelling in science, mathematics, and coding.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
       input_cache_read: '0.00000055'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4529,11 +4090,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o3 Mini'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-mini
+    description: OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding. This model supports the `reasoning_effort` parameter, which can be set to...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4553,37 +4115,35 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/o3-mini-2025-01-31/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o3-mini-2025-01-31
-    name: o3-mini-2025-01-31
-    provider_id: openai
-    upstream_id: o3-mini-2025-01-31
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: o3-mini-2025-01-31
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-mini-2025-01-31
 
   - id: openai/o3-mini-high
-    name: 'OpenAI: o3 Mini High'
-    provider_id: openai
-    upstream_id: o3-mini-high
-    description: OpenAI o3-mini-high is the same model as [o3-mini](/openai/o3-mini)
-      with reasoning_effort set to high. o3-mini is a cost-efficient language model
-      optimized for STEM reasoning tasks, particularly excelling in science, mathematics,
-      and...
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
       input_cache_read: '0.00000055'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4591,11 +4151,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o3 Mini High'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-mini-high
+    description: OpenAI o3-mini-high is the same model as [o3-mini](/openai/o3-mini) with reasoning_effort set to high. o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4612,16 +4173,12 @@ models:
     knowledge_cutoff: '2023-10-31'
     links:
       details: /api/v1/models/openai/o3-mini-high-2025-01-31/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o3-pro
-    name: 'OpenAI: o3 Pro'
-    provider_id: openai
-    upstream_id: o3-pro
-    description: The o-series of models are trained with reinforcement learning to
-      think before they answer and perform complex reasoning. The o3-pro model uses
-      more compute to think harder and provide consistently better answers.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.00002'
       completion: '0.00008'
@@ -4635,11 +4192,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o3 Pro'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-pro
+    description: The o-series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o3-pro model uses more compute to think harder and provide consistently...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4656,35 +4214,36 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/o3-pro-2025-06-10/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o3-pro-2025-06-10
-    name: o3-pro-2025-06-10
-    provider_id: openai
-    upstream_id: o3-pro-2025-06-10
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.00002'
       completion: '0.00008'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o3-pro-2025-06-10
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o3-pro-2025-06-10
 
   - id: openai/o4-mini
-    name: 'OpenAI: o4 Mini'
-    provider_id: openai
-    upstream_id: o4-mini
-    description: OpenAI o4-mini-high is the same model as o4-mini with reasoning_effort
-      set to high.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
       input_cache_read: '0.000000275'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4693,11 +4252,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o4 Mini'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o4-mini
+    description: OpenAI o4-mini is a compact reasoning model in the o-series, optimized for fast, cost-efficient performance while retaining strong multimodal and agentic capabilities. It supports tool use and demonstrates competitive reasoning...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4710,37 +4270,36 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/o4-mini-2025-04-16/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o4-mini-2025-04-16
-    name: o4-mini-2025-04-16
-    provider_id: openai
-    upstream_id: o4-mini-2025-04-16
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o4-mini-2025-04-16
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o4-mini-2025-04-16
 
   - id: openai/o4-mini-deep-research
-    name: 'OpenAI: o4 Mini Deep Research'
-    provider_id: openai
-    upstream_id: o4-mini-deep-research
-    description: |-
-      o4-mini-deep-research is OpenAI's faster, more affordable deep research model—ideal for tackling complex, multi-step research tasks.
-
-      Note: This model always uses the 'web_search' tool which adds additional cost.
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
       input_cache_read: '0.0000005'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4749,11 +4308,15 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o4 Mini Deep Research'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o4-mini-deep-research
+    description: |-
+      o4-mini-deep-research is OpenAI's faster, more affordable deep research model—ideal for tackling complex, multi-step research tasks.
+
+      Note: This model always uses the 'web_search' tool which adds additional cost.
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -4777,36 +4340,36 @@ models:
       frequency_penalty: null
     links:
       details: /api/v1/models/openai/o4-mini-deep-research-2025-06-26/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/o4-mini-deep-research-2025-06-26
-    name: o4-mini-deep-research-2025-06-26
-    provider_id: openai
-    upstream_id: o4-mini-deep-research-2025-06-26
-    description: ''
-    enabled: true
-    context_length: 100000
     pricing:
       prompt: '0.000002'
       completion: '0.000008'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+    enabled: true
+    name: o4-mini-deep-research-2025-06-26
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o4-mini-deep-research-2025-06-26
 
   - id: openai/o4-mini-high
-    name: 'OpenAI: o4 Mini High'
-    provider_id: openai
-    upstream_id: o4-mini-high
-    description: OpenAI o4-mini-high is the same model as [o4-mini](/openai/o4-mini)
-      with reasoning_effort set to high. OpenAI o4-mini is a compact reasoning model
-      in the o-series, optimized for fast, cost-efficient performance while retaining...
-    enabled: true
-    context_length: 200000
     pricing:
       prompt: '0.0000011'
       completion: '0.0000044'
       request: '0'
       image: '0'
       input_cache_read: '0.000000275'
-      input_cache_write: '0'
     architecture:
       input_modalities:
         - text
@@ -4815,11 +4378,12 @@ models:
       output_modalities:
         - text
       tokenizer: GPT
-      instruct_type: null
-    top_provider:
-      context_length: 200000
-      max_completion_tokens: 100000
-      is_moderated: true
+    enabled: true
+    name: 'OpenAI: o4 Mini High'
+    context_length: 200000
+    provider_id: openai
+    upstream_id: o4-mini-high
+    description: OpenAI o4-mini-high is the same model as [o4-mini](/openai/o4-mini) with reasoning_effort set to high. OpenAI o4-mini is a compact reasoning model in the o-series, optimized for fast, cost-efficient performance while retaining...
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -4836,422 +4400,321 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/openai/o4-mini-high-2025-04-16/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 100000
+      is_moderated: true
 
   - id: openai/omni-moderation-2024-09-26
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: omni-moderation-2024-09-26
+    context_length: 32768
     provider_id: openai
     upstream_id: omni-moderation-2024-09-26
-    description: ''
-    enabled: true
-    context_length: 32768
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/omni-moderation-latest
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: omni-moderation-latest
+    context_length: 32768
     provider_id: openai
     upstream_id: omni-moderation-latest
-    description: ''
-    enabled: true
-    context_length: 32768
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/openai/container
-    name: openai/container
-    provider_id: openai
-    upstream_id: openai/container
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/openai/sora-2
-    name: openai/sora-2
-    provider_id: openai
-    upstream_id: openai/sora-2
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/openai/sora-2-pro
-    name: openai/sora-2-pro
-    provider_id: openai
-    upstream_id: openai/sora-2-pro
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/openai/sora-2-pro-high-res
-    name: openai/sora-2-pro-high-res
-    provider_id: openai
-    upstream_id: openai/sora-2-pro-high-res
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/sora-2
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: sora-2
     provider_id: openai
     upstream_id: sora-2
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/sora-2-pro
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/sora-2-pro
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: sora-2-pro
     provider_id: openai
     upstream_id: sora-2-pro
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/sora-2-pro-high-res
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/sora-2-pro-high-res
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: sora-2-pro-high-res
     provider_id: openai
     upstream_id: sora-2-pro-high-res
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1024/dall-e-3
-    name: standard/1024-x-1024/dall-e-3
-    provider_id: openai
-    upstream_id: standard/1024-x-1024/dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1024/gpt-image-1.5
-    name: standard/1024-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: standard/1024-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1024/gpt-image-1.5-2025-12-16
-    name: standard/1024-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: standard/1024-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1536/gpt-image-1.5
-    name: standard/1024-x-1536/gpt-image-1.5
-    provider_id: openai
-    upstream_id: standard/1024-x-1536/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1536/gpt-image-1.5-2025-12-16
-    name: standard/1024-x-1536/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: standard/1024-x-1536/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1024-x-1792/dall-e-3
-    name: standard/1024-x-1792/dall-e-3
-    provider_id: openai
-    upstream_id: standard/1024-x-1792/dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1536-x-1024/gpt-image-1.5
-    name: standard/1536-x-1024/gpt-image-1.5
-    provider_id: openai
-    upstream_id: standard/1536-x-1024/gpt-image-1.5
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1536-x-1024/gpt-image-1.5-2025-12-16
-    name: standard/1536-x-1024/gpt-image-1.5-2025-12-16
-    provider_id: openai
-    upstream_id: standard/1536-x-1024/gpt-image-1.5-2025-12-16
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/standard/1792-x-1024/dall-e-3
-    name: standard/1792-x-1024/dall-e-3
-    provider_id: openai
-    upstream_id: standard/1792-x-1024/dall-e-3
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/text-davinci-002
-    name: text-davinci-002
+    pricing:
+      prompt: '0.00002'
+      completion: '0.00002'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: text-davinci-002
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/text-davinci-003
-    name: text-davinci-003
+    pricing:
+      prompt: '0.00002'
+      completion: '0.00002'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     provider_id: openai
     upstream_id: text-davinci-003
-    description: ''
-    enabled: true
-    context_length: 0
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/text-embedding-3-large
+    pricing:
+      prompt: '0.00000013'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: text embedding 3
+    context_length: 8192
     provider_id: openai
     upstream_id: text-embedding-3-large
-    description: Text Embedding 3 is a model that offers a balance between cost and
-      performance.
-    enabled: true
-    context_length: 8191
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    description: Text Embedding 3 is a model that offers a balance between cost and performance.
 
   - id: openai/text-embedding-3-small
+    pricing:
+      prompt: '0.00000002'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: text embedding 3
+    context_length: 8192
     provider_id: openai
     upstream_id: text-embedding-3-small
-    description: Text Embedding 3 is a model that offers a balance between cost and
-      performance.
-    enabled: true
-    context_length: 8191
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+    description: Text Embedding 3 is a model that offers a balance between cost and performance.
 
   - id: openai/text-embedding-ada-002
-    name: text embedding ada
-    provider_id: openai
-    upstream_id: text-embedding-ada-002
-    description: Text Embedding Ada is a model that offers a balance between cost
-      and performance.
-    enabled: true
-    context_length: 8191
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-
-  - id: openai/text-embedding-ada-002-v2
-    name: text-embedding-ada-002-v2
-    provider_id: openai
-    upstream_id: text-embedding-ada-002-v2
-    description: ''
-    enabled: true
-    context_length: 8191
     pricing:
       prompt: '0.0000001'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: text embedding ada
+    context_length: 8192
+    provider_id: openai
+    upstream_id: text-embedding-ada-002
+    description: Text Embedding Ada is a model that offers a balance between cost and performance.
+
+  - id: openai/text-embedding-ada-002-v2
+    pricing:
+      prompt: '0.0000001'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: text-embedding-ada-002-v2
+    context_length: 8191
+    provider_id: openai
+    upstream_id: text-embedding-ada-002-v2
 
   - id: openai/text-moderation-007
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: text-moderation-007
+    context_length: 32768
     provider_id: openai
     upstream_id: text-moderation-007
-    description: ''
-    enabled: true
-    context_length: 32768
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/text-moderation-latest
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: text-moderation-latest
+    context_length: 32768
     provider_id: openai
     upstream_id: text-moderation-latest
-    description: ''
-    enabled: true
-    context_length: 32768
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
 
   - id: openai/text-moderation-stable
-    name: text-moderation-stable
-    provider_id: openai
-    upstream_id: text-moderation-stable
-    description: ''
-    enabled: true
-    context_length: 32768
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: text-moderation-stable
+    context_length: 32768
+    provider_id: openai
+    upstream_id: text-moderation-stable
 
   - id: openai/tts-1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: tts-1
     provider_id: openai
     upstream_id: tts-1
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/tts-1-1106
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/tts-1-1106
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: tts-1-1106
     provider_id: openai
     upstream_id: tts-1-1106
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/tts-1-hd
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/tts-1-hd
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: tts-1-hd
     provider_id: openai
     upstream_id: tts-1-hd
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/tts-1-hd-1106
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/tts-1-hd-1106
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: tts-1-hd-1106
     provider_id: openai
     upstream_id: tts-1-hd-1106
-    description: ''
-    enabled: true
-    context_length: 4096
+
+  - id: openai/whisper-1
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
-
-  - id: openai/whisper-1
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
     name: whisper-1
     provider_id: openai
     upstream_id: whisper-1
-    description: ''
-    enabled: true
-    context_length: 4096
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
