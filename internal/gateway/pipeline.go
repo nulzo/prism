@@ -96,9 +96,8 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 
 	// 3. Agentic Loop
 	var finalResp *api.ChatResponse
-	maxIterations := 5
 
-	for i := 0; i < maxIterations; i++ {
+	for i := 0; i <= MaxAgenticIterations; i++ {
 		log.Debug("provider chat iteration", zap.Int("iteration", i+1))
 		resp, err := provider.Chat(ctx, upstreamReq)
 		if err != nil {
@@ -124,6 +123,9 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 		// gating on finish_reason silently swallows tool execution.
 		if len(resp.Choices) > 0 && resp.Choices[0].Message != nil && len(resp.Choices[0].Message.ToolCalls) > 0 {
 			hasExtension := false
+			if i >= MaxAgenticIterations {
+				break
+			}
 
 			// Append the assistant's tool call message to history
 			upstreamReq.Messages = append(upstreamReq.Messages, *resp.Choices[0].Message)
@@ -165,8 +167,16 @@ func (o *PipelineOrchestrator) Execute(ctx context.Context, req *api.ChatRequest
 				}
 			}
 
-			// If we executed at least one extension, loop again
+			// If we executed at least one extension, loop again.
 			if hasExtension {
+				// If this was the last allowed tool-calling iteration, ask for
+				// one final answer with tool-calling removed from the provider
+				// request instead of relying on provider-specific tool_choice
+				// semantics.
+				if i == MaxAgenticIterations-1 {
+					log.Warn("agentic loop hit MaxAgenticIterations, forcing final answer", zap.Int("max", MaxAgenticIterations))
+					forceFinalAnswerAfterToolLimit(upstreamReq)
+				}
 				continue
 			}
 		}

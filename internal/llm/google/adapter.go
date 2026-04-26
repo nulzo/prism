@@ -168,6 +168,19 @@ type GeminiRequest struct {
 	GenerationConfig *GeminiGenerationConfig `json:"generationConfig,omitempty"`
 }
 
+type GeminiOpenAICompatPayload struct {
+	*api.UpstreamChatRequest
+	ExtraBody GeminiOpenAIExtraBody `json:"extra_body,omitempty"`
+}
+
+type GeminiOpenAIExtraBody struct {
+	Google GeminiOpenAIExtraBodyGoogle `json:"google,omitempty"`
+}
+
+type GeminiOpenAIExtraBodyGoogle struct {
+	SafetySettings []GeminiSafetySetting `json:"safety_settings,omitempty"`
+}
+
 func usesOpenAICompat(req *api.UpstreamChatRequest) bool {
 	if len(req.Tools) > 0 || req.ToolChoice != nil {
 		return true
@@ -412,6 +425,21 @@ func stripReasoningField(req *api.UpstreamChatRequest) *api.UpstreamChatRequest 
 	return &cp
 }
 
+func openAICompatPayload(req *api.UpstreamChatRequest) any {
+	stripped := stripReasoningField(req)
+	if stripped == nil {
+		return nil
+	}
+	return &GeminiOpenAICompatPayload{
+		UpstreamChatRequest: stripped,
+		ExtraBody: GeminiOpenAIExtraBody{
+			Google: GeminiOpenAIExtraBodyGoogle{
+				SafetySettings: defaultSafetySettings(),
+			},
+		},
+	}
+}
+
 func effortToThinkingBudget(effort string) *int {
 	var v int
 	switch strings.ToLower(strings.TrimSpace(effort)) {
@@ -509,7 +537,7 @@ func (a *Adapter) chatOpenAICompat(ctx context.Context, req *api.UpstreamChatReq
 	// router-only reasoning object; when it's set, the tool-enabled path
 	// below will surface reasoning via the provider's reasoning_content /
 	// reasoning deltas (already aliased by ChatMessage.UnmarshalJSON).
-	payload := stripReasoningField(req)
+	payload := openAICompatPayload(req)
 
 	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, payload, &resp); err != nil {
 		return nil, a.handleUpstreamError(err)
@@ -623,7 +651,7 @@ func (a *Adapter) streamOpenAICompat(ctx context.Context, req *api.UpstreamChatR
 		"Authorization": "Bearer " + a.config.APIKey,
 	}
 
-	payload := stripReasoningField(req)
+	payload := openAICompatPayload(req)
 
 	go func() {
 		defer close(ch)

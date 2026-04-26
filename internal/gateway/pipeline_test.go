@@ -138,3 +138,81 @@ func TestPipelineOrchestrator_Execute(t *testing.T) {
 		t.Errorf("expected original request to remain unchanged, got %d messages", len(req.Messages))
 	}
 }
+
+func TestPipelineOrchestrator_Execute_MaxIterationsForcesFinalRequestWithoutTools(t *testing.T) {
+	pReg := plugin.NewRegistry()
+	eReg := extension.NewRegistry()
+	eReg.Register(extension.NewDatetimeExtension())
+
+	orchestrator := NewPipelineOrchestrator(pReg, eReg)
+	callCount := 0
+
+	mockProv := &mockProvider{
+		chatFunc: func(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
+			callCount++
+			if callCount <= MaxAgenticIterations {
+				if len(req.Tools) != 1 {
+					t.Fatalf("tool iteration %d: expected extension tool to be available, got %+v", callCount, req.Tools)
+				}
+				return &api.ChatResponse{
+					Choices: []api.Choice{{
+						FinishReason: "tool_calls",
+						Message: &api.ChatMessage{
+							Role: "assistant",
+							ToolCalls: []api.ToolCall{{
+								ID:   "call_datetime",
+								Type: "function",
+								Function: api.FunctionCall{
+									Name:      "prism_datetime",
+									Arguments: `{"timezone":"UTC"}`,
+								},
+							}},
+						},
+					}},
+				}, nil
+			}
+
+			if len(req.Tools) != 0 {
+				t.Fatalf("final request should remove tools, got %+v", req.Tools)
+			}
+			if req.ToolChoice != nil {
+				t.Fatalf("final request should remove tool_choice, got %+v", req.ToolChoice)
+			}
+			if len(req.Messages) == 0 {
+				t.Fatalf("final request missing messages")
+			}
+			if req.Messages[len(req.Messages)-1].Content.Text != finalAnswerAfterToolLimitPrompt {
+				t.Fatalf("final request missing tool-limit instruction, got last message %+v", req.Messages[len(req.Messages)-1])
+			}
+			return &api.ChatResponse{
+				Choices: []api.Choice{{
+					FinishReason: "stop",
+					Message: &api.ChatMessage{
+						Role:    "assistant",
+						Content: api.Content{Text: "Here is the final answer."},
+					},
+				}},
+			}, nil
+		},
+	}
+
+	req := &api.ChatRequest{
+		Model:      "mock-model",
+		Messages:   []api.ChatMessage{{Role: "user", Content: api.Content{Text: "keep searching"}}},
+		Extensions: []api.ExtensionConfig{{ID: "prism:datetime"}},
+	}
+
+	resp, err := orchestrator.Execute(context.Background(), req, mockProv)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if callCount != MaxAgenticIterations+1 {
+		t.Fatalf("expected %d provider calls, got %d", MaxAgenticIterations+1, callCount)
+	}
+	if got := resp.Choices[0].Message.Content.Text; got != "Here is the final answer." {
+		t.Fatalf("final content: got %q", got)
+	}
+	if len(resp.Choices[0].Message.ToolCalls) != 0 {
+		t.Fatalf("final response leaked tool calls: %+v", resp.Choices[0].Message.ToolCalls)
+	}
+}

@@ -14,9 +14,8 @@ import (
 )
 
 // MaxAgenticIterations bounds the agentic tool-calling loop so a misbehaving
-// model can't drive unbounded extension execution. Mirrors OpenRouter's
-// default ceiling of five iterations per request.
-const MaxAgenticIterations = 10
+// model can't drive unbounded extension execution.
+const MaxAgenticIterations = 15
 
 // streamBufferSize sizes the outbound channel between the pipeline goroutine
 // and the HTTP handler. Small enough to bound memory if the client is slow,
@@ -29,11 +28,25 @@ const streamBufferSize = 16
 // UI clients (prism-ui) can subscribe to them to render tool activity.
 const PrismToolEventAnnotationType = "prism.tool_event"
 
+const finalAnswerAfterToolLimitPrompt = "You have reached the maximum number of tool calls. Do not call or request any more tools. Provide a final answer to the user based only on the information gathered so far."
+
+func forceFinalAnswerAfterToolLimit(req *api.UpstreamChatRequest) {
+	req.Messages = append(req.Messages, api.ChatMessage{
+		Role: "system",
+		Content: api.Content{
+			Text: finalAnswerAfterToolLimitPrompt,
+		},
+	})
+	req.Tools = nil
+	req.ToolChoice = nil
+}
+
 // Stream runs a request through the plugin/extension pipeline as a streaming
-// agentic loop. Both /chat/completions paths funnel through here:
+// agentic loop:
 //
 //   - StreamChat exposes the channel directly to the HTTP handler.
-//   - Chat wraps it in Collect() to materialize a single response.
+//   - tests and internal callers can wrap it in Collect() to materialize a
+//     single response.
 //
 // Lifecycle:
 //
@@ -44,9 +57,8 @@ const PrismToolEventAnnotationType = "prism.tool_event"
 //     b. Forward content chunks to client; aggregate everything internally.
 //     c. Hold trailing finish/usage chunks in a tail buffer until the
 //     iteration ends so we can decide whether they belong to the client.
-//     d. If finish_reason=tool_calls AND any call hits a registered
-//     extension: drop the tail, execute extensions, append messages,
-//     emit synthetic tool-event chunks, loop.
+//     d. If any tool call hits a registered extension: drop the tail, execute
+//     extensions, append messages, emit synthetic tool-event chunks, loop.
 //     Else: flush the tail (final stop + usage) and exit.
 //  4. PostProcess plugins on the aggregated response.
 //
@@ -101,9 +113,7 @@ func (o *PipelineOrchestrator) Stream(
 }
 
 // Collect drains a streaming pipeline channel into a single non-streaming
-// response. Service.Chat uses this so the streaming and non-streaming code
-// paths share an implementation: any bug fixed in the stream pipeline is
-// fixed for both.
+// response.
 func Collect(ch <-chan api.StreamResult) (*api.ChatResponse, error) {
 	agg := NewStreamAggregator()
 	for r := range ch {
@@ -232,18 +242,11 @@ func (o *PipelineOrchestrator) runAgenticLoop(
 				return nil
 			}
 
-			// If this was the last allowed tool-calling iteration, append a
-			// system prompt to force the model to answer on the next turn.
+			// If this was the last allowed tool-calling iteration, ask for one
+			// final answer with tool-calling removed from the provider request.
 			if iter == MaxAgenticIterations-1 {
 				log.Warn("agentic loop hit MaxAgenticIterations, forcing final answer", zap.Int("max", MaxAgenticIterations))
-				upstreamReq.Messages = append(upstreamReq.Messages, api.ChatMessage{
-					Role: "system",
-					Content: api.Content{
-						Text: "You have reached the maximum number of tool calls. Please provide a final answer to the user based on the information you have gathered so far.",
-					},
-				})
-				// Force the model to stop calling tools.
-				upstreamReq.ToolChoice = "none"
+				forceFinalAnswerAfterToolLimit(upstreamReq)
 			}
 			continue
 		}

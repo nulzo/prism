@@ -17,9 +17,10 @@ import (
 // Stream() returns the next scripted stream so we can simulate the agentic
 // loop's "first iteration: tool_calls; second iteration: final answer" flow.
 type streamingMockProvider struct {
-	streams [][]api.StreamResult
-	calls   atomic.Int32
-	caps    llm.Capabilities
+	streams    [][]api.StreamResult
+	streamFunc func(ctx context.Context, req *api.UpstreamChatRequest, call int) ([]api.StreamResult, error)
+	calls      atomic.Int32
+	caps       llm.Capabilities
 }
 
 func (m *streamingMockProvider) Name() string                   { return "mock" }
@@ -36,6 +37,20 @@ func (m *streamingMockProvider) Chat(ctx context.Context, req *api.UpstreamChatR
 
 func (m *streamingMockProvider) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	idx := int(m.calls.Add(1)) - 1
+	if m.streamFunc != nil {
+		chunks, err := m.streamFunc(ctx, req, idx)
+		if err != nil {
+			return nil, err
+		}
+		out := make(chan api.StreamResult, len(chunks))
+		go func() {
+			defer close(out)
+			for _, c := range chunks {
+				out <- c
+			}
+		}()
+		return out, nil
+	}
 	if idx >= len(m.streams) {
 		idx = len(m.streams) - 1
 	}
@@ -201,6 +216,98 @@ func TestPipeline_StreamWithExtension_AgenticLoop(t *testing.T) {
 	}
 	if got, want := mock.calls.Load(), int32(2); got != want {
 		t.Errorf("expected provider Stream called %d times, got %d", want, got)
+	}
+}
+
+func TestPipeline_StreamWithExtension_MaxIterationsForcesFinalRequestWithoutTools(t *testing.T) {
+	pReg := plugin.NewRegistry()
+	eReg := extension.NewRegistry()
+	eReg.Register(extension.NewDatetimeExtension())
+
+	mock := &streamingMockProvider{
+		caps: llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat},
+		streamFunc: func(ctx context.Context, req *api.UpstreamChatRequest, call int) ([]api.StreamResult, error) {
+			if call < MaxAgenticIterations {
+				if len(req.Tools) != 1 {
+					t.Fatalf("tool iteration %d: expected extension tool to be available, got %+v", call+1, req.Tools)
+				}
+				return []api.StreamResult{
+					{Response: &api.ChatResponse{
+						Choices: []api.Choice{{Index: 0, Delta: &api.ChatMessage{
+							Role: "assistant",
+							ToolCalls: []api.ToolCall{{
+								ID:   "call_datetime",
+								Type: "function",
+								Function: api.FunctionCall{
+									Name:      "prism_datetime",
+									Arguments: `{"timezone":"UTC"}`,
+								},
+							}},
+						}}},
+					}},
+					{Response: &api.ChatResponse{
+						Choices: []api.Choice{{Index: 0, Delta: &api.ChatMessage{}, FinishReason: "tool_calls"}},
+					}},
+				}, nil
+			}
+
+			if len(req.Tools) != 0 {
+				t.Fatalf("final request should remove tools, got %+v", req.Tools)
+			}
+			if req.ToolChoice != nil {
+				t.Fatalf("final request should remove tool_choice, got %+v", req.ToolChoice)
+			}
+			if len(req.Messages) == 0 || req.Messages[len(req.Messages)-1].Content.Text != finalAnswerAfterToolLimitPrompt {
+				t.Fatalf("final request missing tool-limit instruction, got messages %+v", req.Messages)
+			}
+			return []api.StreamResult{
+				{Response: &api.ChatResponse{
+					Choices: []api.Choice{{Index: 0, Delta: &api.ChatMessage{Role: "assistant", Content: api.Content{Text: "Final answer."}}}},
+				}},
+				{Response: &api.ChatResponse{
+					Choices: []api.Choice{{Index: 0, Delta: &api.ChatMessage{}, FinishReason: "stop"}},
+				}},
+			}, nil
+		},
+	}
+
+	orch := NewPipelineOrchestrator(pReg, eReg)
+	stream, err := orch.Stream(context.Background(), &api.ChatRequest{
+		Model:      "mock-model",
+		Messages:   []api.ChatMessage{{Role: "user", Content: api.Content{Text: "keep searching"}}},
+		Extensions: []api.ExtensionConfig{{ID: "prism:datetime"}},
+	}, mock)
+	if err != nil {
+		t.Fatalf("Stream returned error: %v", err)
+	}
+
+	var text strings.Builder
+	var sawToolCallFinish bool
+	for r := range stream {
+		if r.Err != nil {
+			t.Fatalf("stream emitted error: %v", r.Err)
+		}
+		if r.Response == nil {
+			continue
+		}
+		for _, ch := range r.Response.Choices {
+			if ch.FinishReason == "tool_calls" {
+				sawToolCallFinish = true
+			}
+			if ch.Delta != nil {
+				text.WriteString(ch.Delta.Content.Text)
+			}
+		}
+	}
+
+	if got := text.String(); got != "Final answer." {
+		t.Fatalf("aggregated content: got %q", got)
+	}
+	if sawToolCallFinish {
+		t.Fatalf("intermediate tool_calls finish chunk leaked to client")
+	}
+	if got, want := mock.calls.Load(), int32(MaxAgenticIterations+1); got != want {
+		t.Fatalf("expected provider Stream called %d times, got %d", want, got)
 	}
 }
 
