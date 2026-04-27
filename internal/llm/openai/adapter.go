@@ -1,11 +1,17 @@
 package openai
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"mime"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"strings"
 	"time"
 
@@ -66,6 +72,21 @@ type upstreamErrorResponse struct {
 	} `json:"error"`
 }
 
+type imageGenerationRequest struct {
+	Model  string `json:"model"`
+	Prompt string `json:"prompt"`
+}
+
+type imageGenerationResponse struct {
+	Created int64 `json:"created"`
+	Data    []struct {
+		URL           string `json:"url,omitempty"`
+		B64JSON       string `json:"b64_json,omitempty"`
+		RevisedPrompt string `json:"revised_prompt,omitempty"`
+	} `json:"data"`
+	Usage *api.ResponseUsage `json:"usage,omitempty"`
+}
+
 func (a *Adapter) handleUpstreamError(err error) error {
 	var upstreamErr *httpclient.UpstreamError
 	if !errors.As(err, &upstreamErr) {
@@ -101,6 +122,92 @@ func (a *Adapter) Capabilities() llm.Capabilities {
 	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
 }
 
+func (a *Adapter) generateImage(ctx context.Context, req *api.UpstreamChatRequest, headers map[string]string) (*api.ChatResponse, error) {
+	prompt := imagePrompt(req.Messages)
+	if prompt == "" {
+		return nil, api.BadRequestError("image generation requires a non-empty text prompt")
+	}
+	references := imageReferences(req.Messages)
+	if len(references) > 0 {
+		return a.editImage(ctx, req, headers, prompt, references)
+	}
+
+	var imgResp imageGenerationResponse
+	url := fmt.Sprintf("%s/images/generations", strings.TrimRight(a.config.BaseURL, "/"))
+	payload := imageGenerationRequest{
+		Model:  req.Model,
+		Prompt: prompt,
+	}
+	if err := httpclient.SendRequest(ctx, a.client, "POST", url, headers, payload, &imgResp); err != nil {
+		return nil, a.handleUpstreamError(err)
+	}
+
+	return imageGenerationToChatResponse(req.Model, prompt, &imgResp)
+}
+
+func (a *Adapter) editImage(ctx context.Context, req *api.UpstreamChatRequest, headers map[string]string, prompt string, references []string) (*api.ChatResponse, error) {
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+	if err := writer.WriteField("model", req.Model); err != nil {
+		return nil, err
+	}
+	if err := writer.WriteField("prompt", prompt); err != nil {
+		return nil, err
+	}
+
+	for i, ref := range references {
+		if err := appendImageReference(writer, i, ref); err != nil {
+			return nil, err
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+
+	var imgResp imageGenerationResponse
+	url := fmt.Sprintf("%s/images/edits", strings.TrimRight(a.config.BaseURL, "/"))
+	if err := a.sendMultipart(ctx, url, headers, writer.FormDataContentType(), &body, &imgResp); err != nil {
+		return nil, a.handleUpstreamError(err)
+	}
+
+	return imageGenerationToChatResponse(req.Model, prompt, &imgResp)
+}
+
+func (a *Adapter) sendMultipart(ctx context.Context, url string, headers map[string]string, contentType string, body io.Reader, response any) error {
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	httpReq.Header.Set("Content-Type", contentType)
+	for k, v := range headers {
+		httpReq.Header.Set(k, v)
+	}
+
+	resp, err := a.client.Do(httpReq)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		respBody, _ := io.ReadAll(resp.Body)
+		return &httpclient.UpstreamError{
+			StatusCode: resp.StatusCode,
+			Body:       respBody,
+			URL:        url,
+		}
+	}
+
+	if response != nil {
+		if err := json.NewDecoder(resp.Body).Decode(response); err != nil {
+			return fmt.Errorf("failed to decode response: %w", err)
+		}
+	}
+	return nil
+}
+
 func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {
 	var resp api.ChatResponse
 	headers := map[string]string{
@@ -109,6 +216,10 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 
 	if org, ok := a.config.Config["organization"]; ok {
 		headers["OpenAI-Organization"] = org
+	}
+
+	if isImageGenerationModel(req.Model) {
+		return a.generateImage(ctx, req, headers)
 	}
 
 	url := fmt.Sprintf("%s/chat/completions", strings.TrimRight(a.config.BaseURL, "/"))
@@ -149,6 +260,19 @@ func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.
 
 func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-chan api.StreamResult, error) {
 	ch := make(chan api.StreamResult)
+
+	if isImageGenerationModel(req.Model) {
+		go func() {
+			defer close(ch)
+			resp, err := a.Chat(ctx, req)
+			if err != nil {
+				ch <- api.StreamResult{Err: err}
+				return
+			}
+			ch <- api.StreamResult{Response: imageChatResponseToChunk(resp)}
+		}()
+		return ch, nil
+	}
 
 	req.Stream = true
 	req.StreamOptions = &api.StreamOptions{IncludeUsage: true}
@@ -226,10 +350,151 @@ func (a *Adapter) Stream(ctx context.Context, req *api.UpstreamChatRequest) (<-c
 	return ch, nil
 }
 
+func isImageGenerationModel(model string) bool {
+	model = strings.ToLower(strings.TrimSpace(model))
+	return strings.HasPrefix(model, "gpt-image-") ||
+		strings.HasPrefix(model, "dall-e-") ||
+		model == "chatgpt-image-latest"
+}
+
+func imagePrompt(messages []api.ChatMessage) string {
+	var parts []string
+	for _, msg := range messages {
+		if msg.Content.Text != "" {
+			parts = append(parts, msg.Content.Text)
+		}
+		for _, part := range msg.Content.Parts {
+			if part.Type == "text" && part.Text != "" {
+				parts = append(parts, part.Text)
+			}
+		}
+	}
+	return strings.TrimSpace(strings.Join(parts, "\n\n"))
+}
+
+func imageReferences(messages []api.ChatMessage) []string {
+	var refs []string
+	for _, msg := range messages {
+		for _, part := range msg.Content.Parts {
+			if part.Type == "image_url" && part.ImageURL != nil && part.ImageURL.URL != "" {
+				refs = append(refs, part.ImageURL.URL)
+			}
+		}
+		for _, image := range msg.Images {
+			if image.ImageURL != nil && image.ImageURL.URL != "" {
+				refs = append(refs, image.ImageURL.URL)
+			}
+		}
+	}
+	return refs
+}
+
+func appendImageReference(writer *multipart.Writer, index int, ref string) error {
+	image, err := processing.ProcessImageURL(ref)
+	if err != nil {
+		return api.BadRequestError(fmt.Sprintf("invalid image reference %d: %v", index+1, err))
+	}
+	data, err := base64.StdEncoding.DecodeString(image.Data)
+	if err != nil {
+		return api.BadRequestError(fmt.Sprintf("invalid image reference %d: %v", index+1, err))
+	}
+
+	mediaType := image.MediaType
+	if parsed, _, err := mime.ParseMediaType(mediaType); err == nil && parsed != "" {
+		mediaType = parsed
+	}
+	if mediaType == "" {
+		mediaType = "image/png"
+	}
+
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name="image[]"; filename="reference-%d%s"`, index+1, imageExtension(mediaType)))
+	header.Set("Content-Type", mediaType)
+	part, err := writer.CreatePart(header)
+	if err != nil {
+		return err
+	}
+	_, err = part.Write(data)
+	return err
+}
+
+func imageExtension(mediaType string) string {
+	extensions, err := mime.ExtensionsByType(mediaType)
+	if err == nil && len(extensions) > 0 {
+		return extensions[0]
+	}
+	return ".png"
+}
+
+func imageGenerationToChatResponse(model string, prompt string, imgResp *imageGenerationResponse) (*api.ChatResponse, error) {
+	images := make([]api.ContentPart, 0, len(imgResp.Data))
+	caption := prompt
+	for _, item := range imgResp.Data {
+		if item.RevisedPrompt != "" {
+			caption = item.RevisedPrompt
+		}
+		switch {
+		case item.B64JSON != "":
+			images = append(images, api.ContentPart{
+				Type:     "image_url",
+				ImageURL: &api.ImageURL{URL: "data:image/png;base64," + item.B64JSON},
+			})
+		case item.URL != "":
+			images = append(images, api.ContentPart{
+				Type:     "image_url",
+				ImageURL: &api.ImageURL{URL: item.URL},
+			})
+		}
+	}
+	if len(images) == 0 {
+		return nil, api.ProviderError("OpenAI image generation returned no images", nil)
+	}
+
+	created := imgResp.Created
+	if created == 0 {
+		created = time.Now().Unix()
+	}
+
+	return &api.ChatResponse{
+		ID:      fmt.Sprintf("img-%d", created),
+		Object:  "chat.completion",
+		Created: created,
+		Model:   model,
+		Choices: []api.Choice{{
+			Index: 0,
+			Message: &api.ChatMessage{
+				Role:    "assistant",
+				Content: api.Content{Text: caption},
+				Images:  images,
+			},
+			FinishReason: "stop",
+		}},
+		Usage: imgResp.Usage,
+	}, nil
+}
+
+func imageChatResponseToChunk(resp *api.ChatResponse) *api.ChatResponse {
+	if resp == nil {
+		return nil
+	}
+	chunk := *resp
+	chunk.Object = "chat.completion.chunk"
+	for i := range chunk.Choices {
+		choice := &chunk.Choices[i]
+		if choice.Message == nil {
+			continue
+		}
+		delta := *choice.Message
+		choice.Delta = &delta
+		choice.Message = nil
+	}
+	return &chunk
+}
+
 // upstreamPayload mirrors the subset of UpstreamChatRequest that
-// OpenAI-compatible providers accept plus the native reasoning controls
-// (reasoning_effort and, when the base URL looks like OpenRouter, the
-// structured `reasoning` object). We purposely do NOT forward the generic
+// OpenAI-compatible providers accept plus the native reasoning control:
+// `reasoning_effort` for OpenAI-style upstreams, or the structured
+// `reasoning` object for OpenRouter-style gateways. We purposely do NOT forward the generic
 // `reasoning` field by default because strict OpenAI-compatible shims
 // (Gemini, DeepSeek direct, Moonshot) will 400 on unknown fields.
 type upstreamPayload struct {
@@ -270,10 +535,6 @@ func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
 		return out
 	}
 
-	if r.Effort != "" {
-		out.ReasoningEffort = normalizeEffort(r.Effort)
-	}
-
 	// Pass the full object through only to upstreams that we know accept
 	// it (OpenRouter and other gateway-style endpoints). This check is
 	// deliberately loose — exact hostname matching is brittle across self-
@@ -284,6 +545,8 @@ func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
 			MaxTokens: r.MaxTokens,
 			Exclude:   r.Exclude,
 		}
+	} else if r.Effort != "" {
+		out.ReasoningEffort = normalizeEffort(r.Effort)
 	}
 
 	return out

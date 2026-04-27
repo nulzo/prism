@@ -94,6 +94,7 @@ func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResp
 	}
 
 	reqClone := *req
+	s.applyModelParameterPolicy(&reqClone, req.Model)
 	reqClone.Model = upstreamModelID
 
 	// Prefer the request-scoped generation id (set by the HTTP layer so the
@@ -306,6 +307,7 @@ func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan 
 	}
 
 	reqClone := *req
+	s.applyModelParameterPolicy(&reqClone, req.Model)
 	reqClone.Model = upstreamID
 
 	// Single source of truth for streaming. The pipeline forwards provider

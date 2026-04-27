@@ -131,7 +131,7 @@ func (a *Adapter) buildUpstreamPayload(req *api.UpstreamChatRequest) any {
 
 	// DeepSeek supports "thinking: {type: 'enabled'}" and "reasoning_effort"
 	out.Thinking = &thinkingConfig{Type: "enabled"}
-	
+
 	if r.Effort != "" {
 		effort := strings.ToLower(strings.TrimSpace(r.Effort))
 		if effort == "xhigh" || effort == "high" {

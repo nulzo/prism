@@ -1,11 +1,10 @@
 models:
-
   - id: openai/ada
     pricing:
-      prompt: '0.0000004'
-      completion: '0.0000004'
-      request: '0'
-      image: '0'
+      prompt: "0.0000004"
+      completion: "0.0000004"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -17,10 +16,10 @@ models:
 
   - id: openai/babbage
     pricing:
-      prompt: '0.0000005'
-      completion: '0.0000005'
-      request: '0'
-      image: '0'
+      prompt: "0.0000005"
+      completion: "0.0000005"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -32,10 +31,10 @@ models:
 
   - id: openai/chatgpt-4o-latest
     pricing:
-      prompt: '0.000005'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -50,10 +49,10 @@ models:
 
   - id: openai/chatgpt-image-latest
     pricing:
-      prompt: '0.000005'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -66,11 +65,11 @@ models:
 
   - id: openai/codex-mini
     pricing:
-      prompt: '0.0000015'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000375'
+      prompt: "0.0000015"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000375"
     architecture:
       input_modalities:
         - text
@@ -84,10 +83,10 @@ models:
 
   - id: openai/codex-mini-latest
     pricing:
-      prompt: '0.0000015'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.0000015"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -103,10 +102,10 @@ models:
 
   - id: openai/computer-use
     pricing:
-      prompt: '0.000003'
-      completion: '0.000012'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -119,10 +118,10 @@ models:
 
   - id: openai/container
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -135,10 +134,10 @@ models:
 
   - id: openai/curie
     pricing:
-      prompt: '0.000002'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.000002"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -150,10 +149,10 @@ models:
 
   - id: openai/dall-e-2
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -166,10 +165,10 @@ models:
 
   - id: openai/dall-e-3
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -182,10 +181,10 @@ models:
 
   - id: openai/davinci
     pricing:
-      prompt: '0.00002'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
+      prompt: "0.00002"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -197,10 +196,10 @@ models:
 
   - id: openai/ft:gpt-3.5-turbo
     pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -214,10 +213,10 @@ models:
 
   - id: openai/ft:gpt-3.5-turbo-
     pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -230,10 +229,10 @@ models:
 
   - id: openai/ft:gpt-3.5-turbo-0125
     pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -247,10 +246,10 @@ models:
 
   - id: openai/ft:gpt-3.5-turbo-0613
     pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -264,10 +263,10 @@ models:
 
   - id: openai/ft:gpt-3.5-turbo-1106
     pricing:
-      prompt: '0.000003'
-      completion: '0.000006'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -281,10 +280,10 @@ models:
 
   - id: openai/ft:gpt-4-0613
     pricing:
-      prompt: '0.00003'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -298,10 +297,10 @@ models:
 
   - id: openai/ft:gpt-4.1-2025-04-14
     pricing:
-      prompt: '0.000003'
-      completion: '0.000012'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -315,10 +314,10 @@ models:
 
   - id: openai/ft:gpt-4.1-mini-2025-04-14
     pricing:
-      prompt: '0.0000008'
-      completion: '0.0000032'
-      request: '0'
-      image: '0'
+      prompt: "0.0000008"
+      completion: "0.0000032"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -332,10 +331,10 @@ models:
 
   - id: openai/ft:gpt-4.1-nano-2025-04-14
     pricing:
-      prompt: '0.0000002'
-      completion: '0.0000008'
-      request: '0'
-      image: '0'
+      prompt: "0.0000002"
+      completion: "0.0000008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -349,10 +348,10 @@ models:
 
   - id: openai/ft:gpt-4o
     pricing:
-      prompt: '0.00000375'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.00000375"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -365,10 +364,10 @@ models:
 
   - id: openai/ft:gpt-4o-2024-08-06
     pricing:
-      prompt: '0.00000375'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.00000375"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -384,10 +383,10 @@ models:
 
   - id: openai/ft:gpt-4o-2024-11-20
     pricing:
-      prompt: '0.00000375'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.00000375"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -402,10 +401,10 @@ models:
 
   - id: openai/ft:gpt-4o-mini
     pricing:
-      prompt: '0.0000003'
-      completion: '0.0000012'
-      request: '0'
-      image: '0'
+      prompt: "0.0000003"
+      completion: "0.0000012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -418,10 +417,10 @@ models:
 
   - id: openai/ft:gpt-4o-mini-2024-07-18
     pricing:
-      prompt: '0.0000003'
-      completion: '0.0000012'
-      request: '0'
-      image: '0'
+      prompt: "0.0000003"
+      completion: "0.0000012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -436,10 +435,10 @@ models:
 
   - id: openai/ft:o4-mini-2025-04-16
     pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
-      request: '0'
-      image: '0'
+      prompt: "0.000004"
+      completion: "0.000016"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -453,10 +452,10 @@ models:
 
   - id: openai/gpt-3.5-0301
     pricing:
-      prompt: '0.0000015'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.0000015"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -468,10 +467,10 @@ models:
 
   - id: openai/gpt-3.5-turbo
     pricing:
-      prompt: '0.0000005'
-      completion: '0.0000015'
-      request: '0'
-      image: '0'
+      prompt: "0.0000005"
+      completion: "0.0000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -479,7 +478,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-3.5 Turbo'
+    name: "OpenAI: GPT-3.5 Turbo"
     context_length: 16385
     provider_id: openai
     upstream_id: gpt-3.5-turbo
@@ -498,7 +497,7 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo/endpoints
     top_provider:
@@ -512,10 +511,10 @@ models:
 
   - id: openai/gpt-3.5-turbo-0125
     pricing:
-      prompt: '0.0000005'
-      completion: '0.0000015'
-      request: '0'
-      image: '0'
+      prompt: "0.0000005"
+      completion: "0.0000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -529,10 +528,10 @@ models:
 
   - id: openai/gpt-3.5-turbo-0613
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.000001"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -540,7 +539,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-3.5 Turbo (older v0613)'
+    name: "OpenAI: GPT-3.5 Turbo (older v0613)"
     context_length: 4095
     provider_id: openai
     upstream_id: gpt-3.5-turbo-0613
@@ -559,7 +558,7 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-0613/endpoints
     top_provider:
@@ -573,10 +572,10 @@ models:
 
   - id: openai/gpt-3.5-turbo-1106
     pricing:
-      prompt: '0.000001'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.000001"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -590,10 +589,10 @@ models:
 
   - id: openai/gpt-3.5-turbo-16k
     pricing:
-      prompt: '0.000003'
-      completion: '0.000004'
-      request: '0'
-      image: '0'
+      prompt: "0.000003"
+      completion: "0.000004"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -601,7 +600,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-3.5 Turbo 16k'
+    name: "OpenAI: GPT-3.5 Turbo 16k"
     context_length: 16385
     provider_id: openai
     upstream_id: gpt-3.5-turbo-16k
@@ -621,21 +620,21 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-16k/endpoints
     top_provider:
       context_length: 16385
       max_completion_tokens: 4096
       is_moderated: true
-    description: 'This model offers four times the context length of gpt-3.5-turbo, allowing it to support approximately 20 pages of text in a single request at a higher cost. Training data: up to Sep 2021.'
+    description: "This model offers four times the context length of gpt-3.5-turbo, allowing it to support approximately 20 pages of text in a single request at a higher cost. Training data: up to Sep 2021."
 
   - id: openai/gpt-3.5-turbo-instruct
     pricing:
-      prompt: '0.0000015'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.0000015"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -644,7 +643,7 @@ models:
       tokenizer: GPT
       instruct_type: chatml
     enabled: true
-    name: 'OpenAI: GPT-3.5 Turbo Instruct'
+    name: "OpenAI: GPT-3.5 Turbo Instruct"
     context_length: 4095
     provider_id: openai
     upstream_id: gpt-3.5-turbo-instruct
@@ -661,21 +660,21 @@ models:
       - temperature
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-3.5-turbo-instruct/endpoints
     top_provider:
       context_length: 4095
       max_completion_tokens: 4096
       is_moderated: true
-    description: 'This model is a variant of GPT-3.5 Turbo tuned for instructional prompts and omitting chat-related optimizations. Training data: up to Sep 2021.'
+    description: "This model is a variant of GPT-3.5 Turbo tuned for instructional prompts and omitting chat-related optimizations. Training data: up to Sep 2021."
 
   - id: openai/gpt-4
     pricing:
-      prompt: '0.00003'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -683,7 +682,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4'
+    name: "OpenAI: GPT-4"
     context_length: 8191
     provider_id: openai
     upstream_id: gpt-4
@@ -703,7 +702,7 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-4/endpoints
     top_provider:
@@ -714,10 +713,10 @@ models:
 
   - id: openai/gpt-4-0125-preview
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -731,10 +730,10 @@ models:
 
   - id: openai/gpt-4-0314
     pricing:
-      prompt: '0.00003'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -742,7 +741,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4 (older v0314)'
+    name: "OpenAI: GPT-4 (older v0314)"
     context_length: 8191
     provider_id: openai
     upstream_id: gpt-4-0314
@@ -761,21 +760,21 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2021-09-30'
+    knowledge_cutoff: "2021-09-30"
     links:
       details: /api/v1/models/openai/gpt-4-0314/endpoints
     top_provider:
       context_length: 8191
       max_completion_tokens: 4096
       is_moderated: true
-    description: 'GPT-4-0314 is the first version of GPT-4 released, with a context length of 8,192 tokens, and was supported until June 14. Training data: up to Sep 2021.'
+    description: "GPT-4-0314 is the first version of GPT-4 released, with a context length of 8,192 tokens, and was supported until June 14. Training data: up to Sep 2021."
 
   - id: openai/gpt-4-0613
     pricing:
-      prompt: '0.00003'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -789,10 +788,10 @@ models:
 
   - id: openai/gpt-4-1106-preview
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -800,7 +799,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4 Turbo (older v1106)'
+    name: "OpenAI: GPT-4 Turbo (older v1106)"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4-1106-preview
@@ -819,7 +818,7 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2023-04-30'
+    knowledge_cutoff: "2023-04-30"
     links:
       details: /api/v1/models/openai/gpt-4-1106-preview/endpoints
     top_provider:
@@ -833,10 +832,10 @@ models:
 
   - id: openai/gpt-4-32k
     pricing:
-      prompt: '0.00006'
-      completion: '0.00012'
-      request: '0'
-      image: '0'
+      prompt: "0.00006"
+      completion: "0.00012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -851,10 +850,10 @@ models:
 
   - id: openai/gpt-4-turbo
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -863,7 +862,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4 Turbo'
+    name: "OpenAI: GPT-4 Turbo"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4-turbo
@@ -882,7 +881,7 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2023-12-31'
+    knowledge_cutoff: "2023-12-31"
     links:
       details: /api/v1/models/openai/gpt-4-turbo/endpoints
     top_provider:
@@ -896,10 +895,10 @@ models:
 
   - id: openai/gpt-4-turbo-2024-04-09
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -918,10 +917,10 @@ models:
 
   - id: openai/gpt-4-turbo-preview
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -929,7 +928,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4 Turbo Preview'
+    name: "OpenAI: GPT-4 Turbo Preview"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4-turbo-preview
@@ -948,21 +947,21 @@ models:
       - tools
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2023-12-31'
+    knowledge_cutoff: "2023-12-31"
     links:
       details: /api/v1/models/openai/gpt-4-turbo-preview/endpoints
     top_provider:
       context_length: 128000
       max_completion_tokens: 4096
       is_moderated: true
-    description: 'The preview GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023. **Note:** heavily rate limited by OpenAI while...'
+    description: "The preview GPT-4 model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Training data: up to Dec 2023. **Note:** heavily rate limited by OpenAI while..."
 
   - id: openai/gpt-4-vision-preview
     pricing:
-      prompt: '0.00001'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -977,11 +976,11 @@ models:
 
   - id: openai/gpt-4.1
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000005'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000005"
     architecture:
       input_modalities:
         - text
@@ -991,7 +990,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4.1'
+    name: "OpenAI: GPT-4.1"
     context_length: 1047576
     provider_id: openai
     upstream_id: gpt-4.1
@@ -1005,7 +1004,7 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-4.1-2025-04-14/endpoints
     top_provider:
@@ -1016,10 +1015,10 @@ models:
 
   - id: openai/gpt-4.1-2025-04-14
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1035,11 +1034,11 @@ models:
 
   - id: openai/gpt-4.1-mini
     pricing:
-      prompt: '0.0000004'
-      completion: '0.0000016'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000001'
+      prompt: "0.0000004"
+      completion: "0.0000016"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000001"
     architecture:
       input_modalities:
         - text
@@ -1049,7 +1048,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4.1 Mini'
+    name: "OpenAI: GPT-4.1 Mini"
     context_length: 1047576
     provider_id: openai
     upstream_id: gpt-4.1-mini
@@ -1063,7 +1062,7 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-4.1-mini-2025-04-14/endpoints
     top_provider:
@@ -1074,10 +1073,10 @@ models:
 
   - id: openai/gpt-4.1-mini-2025-04-14
     pricing:
-      prompt: '0.0000004'
-      completion: '0.0000016'
-      request: '0'
-      image: '0'
+      prompt: "0.0000004"
+      completion: "0.0000016"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1093,11 +1092,11 @@ models:
 
   - id: openai/gpt-4.1-nano
     pricing:
-      prompt: '0.0000001'
-      completion: '0.0000004'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000025'
+      prompt: "0.0000001"
+      completion: "0.0000004"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000025"
     architecture:
       input_modalities:
         - text
@@ -1107,7 +1106,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4.1 Nano'
+    name: "OpenAI: GPT-4.1 Nano"
     context_length: 1047576
     provider_id: openai
     upstream_id: gpt-4.1-nano
@@ -1121,7 +1120,7 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-4.1-nano-2025-04-14/endpoints
     top_provider:
@@ -1132,10 +1131,10 @@ models:
 
   - id: openai/gpt-4.1-nano-2025-04-14
     pricing:
-      prompt: '0.0000001'
-      completion: '0.0000004'
-      request: '0'
-      image: '0'
+      prompt: "0.0000001"
+      completion: "0.0000004"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1151,11 +1150,11 @@ models:
 
   - id: openai/gpt-4.5-preview
     pricing:
-      prompt: '0.000075'
-      completion: '0.00015'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000375'
+      prompt: "0.000075"
+      completion: "0.00015"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000375"
     architecture:
       input_modalities:
         - text
@@ -1169,11 +1168,11 @@ models:
 
   - id: openai/gpt-4o
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000125'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000125"
     architecture:
       input_modalities:
         - text
@@ -1183,7 +1182,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o'
+    name: "OpenAI: GPT-4o"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o
@@ -1204,7 +1203,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o/endpoints
     top_provider:
@@ -1215,10 +1214,10 @@ models:
 
   - id: openai/gpt-4o-2024-05-13
     pricing:
-      prompt: '0.000005'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1228,7 +1227,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o (2024-05-13)'
+    name: "OpenAI: GPT-4o (2024-05-13)"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-2024-05-13
@@ -1249,7 +1248,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-2024-05-13/endpoints
     top_provider:
@@ -1260,11 +1259,11 @@ models:
 
   - id: openai/gpt-4o-2024-08-06
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000125'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000125"
     architecture:
       input_modalities:
         - text
@@ -1274,7 +1273,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o (2024-08-06)'
+    name: "OpenAI: GPT-4o (2024-08-06)"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-2024-08-06
@@ -1295,7 +1294,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-2024-08-06/endpoints
     top_provider:
@@ -1306,11 +1305,11 @@ models:
 
   - id: openai/gpt-4o-2024-11-20
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000125'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000125"
     architecture:
       input_modalities:
         - text
@@ -1320,7 +1319,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o (2024-11-20)'
+    name: "OpenAI: GPT-4o (2024-11-20)"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-2024-11-20
@@ -1340,7 +1339,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-2024-11-20/endpoints
     top_provider:
@@ -1351,10 +1350,10 @@ models:
 
   - id: openai/gpt-4o-audio-preview
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1364,7 +1363,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o Audio'
+    name: "OpenAI: GPT-4o Audio"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-audio-preview
@@ -1387,7 +1386,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-audio-preview/endpoints
     top_provider:
@@ -1398,10 +1397,10 @@ models:
 
   - id: openai/gpt-4o-audio-preview-2024-12-17
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1417,10 +1416,10 @@ models:
 
   - id: openai/gpt-4o-audio-preview-2025-06-03
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1436,11 +1435,11 @@ models:
 
   - id: openai/gpt-4o-mini
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000075'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000075"
     architecture:
       input_modalities:
         - text
@@ -1450,7 +1449,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o-mini'
+    name: "OpenAI: GPT-4o-mini"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-mini
@@ -1471,7 +1470,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-mini/endpoints
     top_provider:
@@ -1482,11 +1481,11 @@ models:
 
   - id: openai/gpt-4o-mini-2024-07-18
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000075'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000075"
     architecture:
       input_modalities:
         - text
@@ -1496,7 +1495,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o-mini (2024-07-18)'
+    name: "OpenAI: GPT-4o-mini (2024-07-18)"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-mini-2024-07-18
@@ -1516,7 +1515,7 @@ models:
       - top_logprobs
       - top_p
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-mini-2024-07-18/endpoints
     top_provider:
@@ -1527,10 +1526,10 @@ models:
 
   - id: openai/gpt-4o-mini-2024-07-18.ft-
     pricing:
-      prompt: '0.0000003'
-      completion: '0.0000012'
-      request: '0'
-      image: '0'
+      prompt: "0.0000003"
+      completion: "0.0000012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1543,10 +1542,10 @@ models:
 
   - id: openai/gpt-4o-mini-audio-preview
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1561,10 +1560,10 @@ models:
 
   - id: openai/gpt-4o-mini-audio-preview-2024-12-17
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1580,11 +1579,11 @@ models:
 
   - id: openai/gpt-4o-mini-realtime-preview
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000003'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000003"
     architecture:
       input_modalities:
         - text
@@ -1598,10 +1597,10 @@ models:
 
   - id: openai/gpt-4o-mini-realtime-preview-2024-12-17
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1616,10 +1615,10 @@ models:
 
   - id: openai/gpt-4o-mini-search-preview
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -1627,7 +1626,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o-mini Search Preview'
+    name: "OpenAI: GPT-4o-mini Search Preview"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-mini-search-preview
@@ -1636,7 +1635,7 @@ models:
       - response_format
       - structured_outputs
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-mini-search-preview-2025-03-11/endpoints
     top_provider:
@@ -1647,10 +1646,10 @@ models:
 
   - id: openai/gpt-4o-mini-search-preview-2025-03-11
     pricing:
-      prompt: '0.00000015'
-      completion: '0.0000006'
-      request: '0'
-      image: '0'
+      prompt: "0.00000015"
+      completion: "0.0000006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1666,10 +1665,10 @@ models:
 
   - id: openai/gpt-4o-mini-transcribe
     pricing:
-      prompt: '0.00000125'
-      completion: '0.000005'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.000005"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1683,10 +1682,10 @@ models:
 
   - id: openai/gpt-4o-mini-transcribe-2025-03-20
     pricing:
-      prompt: '0.00000125'
-      completion: '0.000005'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.000005"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1700,10 +1699,10 @@ models:
 
   - id: openai/gpt-4o-mini-transcribe-2025-12-15
     pricing:
-      prompt: '0.00000125'
-      completion: '0.000005'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.000005"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1717,10 +1716,10 @@ models:
 
   - id: openai/gpt-4o-mini-tts
     pricing:
-      prompt: '0.0000006'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1733,10 +1732,10 @@ models:
 
   - id: openai/gpt-4o-mini-tts-2025-03-20
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1749,10 +1748,10 @@ models:
 
   - id: openai/gpt-4o-mini-tts-2025-12-15
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1765,11 +1764,11 @@ models:
 
   - id: openai/gpt-4o-realtime-preview
     pricing:
-      prompt: '0.000005'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000025'
+      prompt: "0.000005"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000025"
     architecture:
       input_modalities:
         - text
@@ -1783,10 +1782,10 @@ models:
 
   - id: openai/gpt-4o-realtime-preview-2024-12-17
     pricing:
-      prompt: '0.000005'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1801,10 +1800,10 @@ models:
 
   - id: openai/gpt-4o-realtime-preview-2025-06-03
     pricing:
-      prompt: '0.000005'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1819,10 +1818,10 @@ models:
 
   - id: openai/gpt-4o-search-preview
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -1830,7 +1829,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-4o Search Preview'
+    name: "OpenAI: GPT-4o Search Preview"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-4o-search-preview
@@ -1839,7 +1838,7 @@ models:
       - response_format
       - structured_outputs
       - web_search_options
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/gpt-4o-search-preview-2025-03-11/endpoints
     top_provider:
@@ -1850,10 +1849,10 @@ models:
 
   - id: openai/gpt-4o-search-preview-2025-03-11
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1869,10 +1868,10 @@ models:
 
   - id: openai/gpt-4o-transcribe
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1886,10 +1885,10 @@ models:
 
   - id: openai/gpt-4o-transcribe-diarize
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1903,10 +1902,10 @@ models:
 
   - id: openai/gpt-4o:extended
     pricing:
-      prompt: '0.000006'
-      completion: '0.000018'
-      request: '0'
-      image: '0'
+      prompt: "0.000006"
+      completion: "0.000018"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1920,11 +1919,11 @@ models:
 
   - id: openai/gpt-5
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -1934,7 +1933,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5'
+    name: "OpenAI: GPT-5"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5
@@ -1955,7 +1954,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-09-30'
+    knowledge_cutoff: "2024-09-30"
     links:
       details: /api/v1/models/openai/gpt-5-2025-08-07/endpoints
     top_provider:
@@ -1966,10 +1965,10 @@ models:
 
   - id: openai/gpt-5-2025-08-07
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -1985,11 +1984,11 @@ models:
 
   - id: openai/gpt-5-chat
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -1999,7 +1998,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Chat'
+    name: "OpenAI: GPT-5 Chat"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-5-chat
@@ -2008,7 +2007,7 @@ models:
       - response_format
       - seed
       - structured_outputs
-    knowledge_cutoff: '2024-09-30'
+    knowledge_cutoff: "2024-09-30"
     links:
       details: /api/v1/models/openai/gpt-5-chat-2025-08-07/endpoints
     top_provider:
@@ -2019,10 +2018,10 @@ models:
 
   - id: openai/gpt-5-chat-latest
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2038,11 +2037,11 @@ models:
 
   - id: openai/gpt-5-codex
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -2051,7 +2050,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Codex'
+    name: "OpenAI: GPT-5 Codex"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-codex
@@ -2068,7 +2067,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-09-30'
+    knowledge_cutoff: "2024-09-30"
     links:
       details: /api/v1/models/openai/gpt-5-codex/endpoints
     top_provider:
@@ -2079,11 +2078,11 @@ models:
 
   - id: openai/gpt-5-image
     pricing:
-      prompt: '0.00001'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000125'
+      prompt: "0.00001"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000125"
     architecture:
       input_modalities:
         - text
@@ -2094,7 +2093,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Image'
+    name: "OpenAI: GPT-5 Image"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-image
@@ -2123,15 +2122,15 @@ models:
       context_length: 400000
       max_completion_tokens: 128000
       is_moderated: true
-    description: '[GPT-5](https://openrouter.ai/openai/gpt-5) Image combines OpenAI''s GPT-5 model with state-of-the-art image generation capabilities. It offers major improvements in reasoning, code quality, and user experience while incorporating GPT Image 1''s superior instruction following,...'
+    description: "[GPT-5](https://openrouter.ai/openai/gpt-5) Image combines OpenAI's GPT-5 model with state-of-the-art image generation capabilities. It offers major improvements in reasoning, code quality, and user experience while incorporating GPT Image 1's superior instruction following,..."
 
   - id: openai/gpt-5-image-mini
     pricing:
-      prompt: '0.0000025'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000025'
+      prompt: "0.0000025"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000025"
     architecture:
       input_modalities:
         - text
@@ -2142,7 +2141,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Image Mini'
+    name: "OpenAI: GPT-5 Image Mini"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-image-mini
@@ -2175,11 +2174,11 @@ models:
 
   - id: openai/gpt-5-mini
     pricing:
-      prompt: '0.00000025'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000025'
+      prompt: "0.00000025"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000025"
     architecture:
       input_modalities:
         - text
@@ -2189,7 +2188,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Mini'
+    name: "OpenAI: GPT-5 Mini"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-mini
@@ -2210,7 +2209,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-05-31'
+    knowledge_cutoff: "2024-05-31"
     links:
       details: /api/v1/models/openai/gpt-5-mini-2025-08-07/endpoints
     top_provider:
@@ -2221,10 +2220,10 @@ models:
 
   - id: openai/gpt-5-mini-2025-08-07
     pricing:
-      prompt: '0.00000025'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
+      prompt: "0.00000025"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2240,11 +2239,11 @@ models:
 
   - id: openai/gpt-5-nano
     pricing:
-      prompt: '0.00000005'
-      completion: '0.0000004'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000001'
+      prompt: "0.00000005"
+      completion: "0.0000004"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000001"
     architecture:
       input_modalities:
         - text
@@ -2254,7 +2253,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Nano'
+    name: "OpenAI: GPT-5 Nano"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-nano
@@ -2275,7 +2274,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-05-31'
+    knowledge_cutoff: "2024-05-31"
     links:
       details: /api/v1/models/openai/gpt-5-nano-2025-08-07/endpoints
     top_provider:
@@ -2286,10 +2285,10 @@ models:
 
   - id: openai/gpt-5-nano-2025-08-07
     pricing:
-      prompt: '0.00000005'
-      completion: '0.0000004'
-      request: '0'
-      image: '0'
+      prompt: "0.00000005"
+      completion: "0.0000004"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2305,10 +2304,10 @@ models:
 
   - id: openai/gpt-5-pro
     pricing:
-      prompt: '0.000015'
-      completion: '0.00012'
-      request: '0'
-      image: '0'
+      prompt: "0.000015"
+      completion: "0.00012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2318,7 +2317,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5 Pro'
+    name: "OpenAI: GPT-5 Pro"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5-pro
@@ -2335,7 +2334,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-09-30'
+    knowledge_cutoff: "2024-09-30"
     links:
       details: /api/v1/models/openai/gpt-5-pro-2025-10-06/endpoints
     top_provider:
@@ -2346,10 +2345,10 @@ models:
 
   - id: openai/gpt-5-pro-2025-10-06
     pricing:
-      prompt: '0.000015'
-      completion: '0.00012'
-      request: '0'
-      image: '0'
+      prompt: "0.000015"
+      completion: "0.00012"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2364,10 +2363,10 @@ models:
 
   - id: openai/gpt-5-search-api
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2382,10 +2381,10 @@ models:
 
   - id: openai/gpt-5-search-api-2025-10-14
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2400,11 +2399,11 @@ models:
 
   - id: openai/gpt-5.1
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000013'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000013"
     architecture:
       input_modalities:
         - text
@@ -2414,7 +2413,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.1'
+    name: "OpenAI: GPT-5.1"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.1
@@ -2445,10 +2444,10 @@ models:
 
   - id: openai/gpt-5.1-2025-11-13
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2464,11 +2463,11 @@ models:
 
   - id: openai/gpt-5.1-chat
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -2478,7 +2477,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.1 Chat'
+    name: "OpenAI: GPT-5.1 Chat"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-5.1-chat
@@ -2504,10 +2503,10 @@ models:
 
   - id: openai/gpt-5.1-chat-latest
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2522,11 +2521,11 @@ models:
 
   - id: openai/gpt-5.1-codex
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -2535,7 +2534,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.1-Codex'
+    name: "OpenAI: GPT-5.1-Codex"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.1-codex
@@ -2566,11 +2565,11 @@ models:
 
   - id: openai/gpt-5.1-codex-max
     pricing:
-      prompt: '0.00000125'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000125'
+      prompt: "0.00000125"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000125"
     architecture:
       input_modalities:
         - text
@@ -2579,7 +2578,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.1-Codex-Max'
+    name: "OpenAI: GPT-5.1-Codex-Max"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.1-codex-max
@@ -2610,11 +2609,11 @@ models:
 
   - id: openai/gpt-5.1-codex-mini
     pricing:
-      prompt: '0.00000025'
-      completion: '0.000002'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000003'
+      prompt: "0.00000025"
+      completion: "0.000002"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000003"
     architecture:
       input_modalities:
         - text
@@ -2623,7 +2622,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.1-Codex-Mini'
+    name: "OpenAI: GPT-5.1-Codex-Mini"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.1-codex-mini
@@ -2654,11 +2653,11 @@ models:
 
   - id: openai/gpt-5.2
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000175'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000175"
     architecture:
       input_modalities:
         - text
@@ -2668,7 +2667,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.2'
+    name: "OpenAI: GPT-5.2"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.2
@@ -2699,10 +2698,10 @@ models:
 
   - id: openai/gpt-5.2-2025-12-11
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2718,11 +2717,11 @@ models:
 
   - id: openai/gpt-5.2-chat
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000175'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000175"
     architecture:
       input_modalities:
         - text
@@ -2732,7 +2731,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.2 Chat'
+    name: "OpenAI: GPT-5.2 Chat"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-5.2-chat
@@ -2758,10 +2757,10 @@ models:
 
   - id: openai/gpt-5.2-chat-latest
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2776,11 +2775,11 @@ models:
 
   - id: openai/gpt-5.2-codex
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000175'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000175"
     architecture:
       input_modalities:
         - text
@@ -2789,7 +2788,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.2-Codex'
+    name: "OpenAI: GPT-5.2-Codex"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.2-codex
@@ -2817,10 +2816,10 @@ models:
 
   - id: openai/gpt-5.2-pro
     pricing:
-      prompt: '0.000021'
-      completion: '0.000168'
-      request: '0'
-      image: '0'
+      prompt: "0.000021"
+      completion: "0.000168"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2830,7 +2829,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.2 Pro'
+    name: "OpenAI: GPT-5.2 Pro"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.2-pro
@@ -2857,10 +2856,10 @@ models:
 
   - id: openai/gpt-5.2-pro-2025-12-11
     pricing:
-      prompt: '0.000021'
-      completion: '0.000168'
-      request: '0'
-      image: '0'
+      prompt: "0.000021"
+      completion: "0.000168"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2876,11 +2875,11 @@ models:
 
   - id: openai/gpt-5.3-chat
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000175'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000175"
     architecture:
       input_modalities:
         - text
@@ -2890,7 +2889,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.3 Chat'
+    name: "OpenAI: GPT-5.3 Chat"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-5.3-chat
@@ -2919,10 +2918,10 @@ models:
 
   - id: openai/gpt-5.3-chat-latest
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -2937,11 +2936,11 @@ models:
 
   - id: openai/gpt-5.3-codex
     pricing:
-      prompt: '0.00000175'
-      completion: '0.000014'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000175'
+      prompt: "0.00000175"
+      completion: "0.000014"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000175"
     architecture:
       input_modalities:
         - text
@@ -2951,7 +2950,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.3-Codex'
+    name: "OpenAI: GPT-5.3-Codex"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.3-codex
@@ -2982,11 +2981,11 @@ models:
 
   - id: openai/gpt-5.4
     pricing:
-      prompt: '0.0000025'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000025'
+      prompt: "0.0000025"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000025"
     architecture:
       input_modalities:
         - text
@@ -2996,7 +2995,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.4'
+    name: "OpenAI: GPT-5.4"
     context_length: 1050000
     provider_id: openai
     upstream_id: gpt-5.4
@@ -3027,10 +3026,10 @@ models:
 
   - id: openai/gpt-5.4-2026-03-05
     pricing:
-      prompt: '0.0000025'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3044,13 +3043,13 @@ models:
     upstream_id: gpt-5.4-2026-03-05
     description: OpenAI's most capable model with a 1.05M token context window.
 
-  - id: openai/gpt-5.4-image-2
+  - id: openai/gpt-image-2
     pricing:
-      prompt: '0.000008'
-      completion: '0.000015'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000002'
+      prompt: "0.000008"
+      completion: "0.000015"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000002"
     architecture:
       input_modalities:
         - text
@@ -3061,10 +3060,10 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.4 Image 2'
+    name: "OpenAI: GPT-5.4 Image 2"
     context_length: 272000
     provider_id: openai
-    upstream_id: gpt-5.4-image-2
+    upstream_id: gpt-image-2
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -3091,15 +3090,15 @@ models:
       context_length: 272000
       max_completion_tokens: 128000
       is_moderated: true
-    description: '[GPT-5.4](https://openrouter.ai/openai/gpt-5.4) Image 2 combines OpenAI''s GPT-5.4 model with state-of-the-art image generation capabilities from GPT Image 2. It enables rich multimodal workflows, allowing users to seamlessly move between reasoning, coding, and...'
+    description: "[GPT-5.4](https://openrouter.ai/openai/gpt-5.4) Image 2 combines OpenAI's GPT-5.4 model with state-of-the-art image generation capabilities from GPT Image 2. It enables rich multimodal workflows, allowing users to seamlessly move between reasoning, coding, and..."
 
   - id: openai/gpt-5.4-mini
     pricing:
-      prompt: '0.00000075'
-      completion: '0.0000045'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000075'
+      prompt: "0.00000075"
+      completion: "0.0000045"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000075"
     architecture:
       input_modalities:
         - text
@@ -3109,7 +3108,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.4 Mini'
+    name: "OpenAI: GPT-5.4 Mini"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.4-mini
@@ -3130,7 +3129,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-08-31'
+    knowledge_cutoff: "2025-08-31"
     links:
       details: /api/v1/models/openai/gpt-5.4-mini-20260317/endpoints
     top_provider:
@@ -3141,11 +3140,11 @@ models:
 
   - id: openai/gpt-5.4-nano
     pricing:
-      prompt: '0.0000002'
-      completion: '0.00000125'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000002'
+      prompt: "0.0000002"
+      completion: "0.00000125"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000002"
     architecture:
       input_modalities:
         - text
@@ -3155,7 +3154,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.4 Nano'
+    name: "OpenAI: GPT-5.4 Nano"
     context_length: 400000
     provider_id: openai
     upstream_id: gpt-5.4-nano
@@ -3176,7 +3175,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-08-31'
+    knowledge_cutoff: "2025-08-31"
     links:
       details: /api/v1/models/openai/gpt-5.4-nano-20260317/endpoints
     top_provider:
@@ -3187,10 +3186,10 @@ models:
 
   - id: openai/gpt-5.4-pro
     pricing:
-      prompt: '0.00003'
-      completion: '0.00018'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00018"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3200,7 +3199,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT-5.4 Pro'
+    name: "OpenAI: GPT-5.4 Pro"
     context_length: 1050000
     provider_id: openai
     upstream_id: gpt-5.4-pro
@@ -3231,10 +3230,10 @@ models:
 
   - id: openai/gpt-5.4-pro-2026-03-05
     pricing:
-      prompt: '0.00003'
-      completion: '0.00018'
-      request: '0'
-      image: '0'
+      prompt: "0.00003"
+      completion: "0.00018"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3250,10 +3249,10 @@ models:
 
   - id: openai/gpt-5.5
     pricing:
-      prompt: '0.000005'
-      completion: '0.00003'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.00003"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3268,10 +3267,10 @@ models:
 
   - id: openai/gpt-audio
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3281,7 +3280,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT Audio'
+    name: "OpenAI: GPT Audio"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-audio
@@ -3314,10 +3313,10 @@ models:
 
   - id: openai/gpt-audio-1.5
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3332,10 +3331,10 @@ models:
 
   - id: openai/gpt-audio-2025-08-28
     pricing:
-      prompt: '0.0000025'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.0000025"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3350,10 +3349,10 @@ models:
 
   - id: openai/gpt-audio-mini
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3363,7 +3362,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: GPT Audio Mini'
+    name: "OpenAI: GPT Audio Mini"
     context_length: 128000
     provider_id: openai
     upstream_id: gpt-audio-mini
@@ -3396,10 +3395,10 @@ models:
 
   - id: openai/gpt-audio-mini-2025-10-06
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3414,10 +3413,10 @@ models:
 
   - id: openai/gpt-audio-mini-2025-12-15
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3432,10 +3431,10 @@ models:
 
   - id: openai/gpt-image-1
     pricing:
-      prompt: '0.000005'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3448,10 +3447,10 @@ models:
 
   - id: openai/gpt-image-1-mini
     pricing:
-      prompt: '0.000002'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.000002"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3464,10 +3463,10 @@ models:
 
   - id: openai/gpt-image-1.5
     pricing:
-      prompt: '0.000005'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3481,10 +3480,10 @@ models:
 
   - id: openai/gpt-image-1.5-2025-12-16
     pricing:
-      prompt: '0.000005'
-      completion: '0.00001'
-      request: '0'
-      image: '0'
+      prompt: "0.000005"
+      completion: "0.00001"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3498,10 +3497,10 @@ models:
 
   - id: openai/gpt-oss-120b
     pricing:
-      prompt: '0.000000039'
-      completion: '0.00000019'
-      request: '0'
-      image: '0'
+      prompt: "0.000000039"
+      completion: "0.00000019"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -3509,7 +3508,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: gpt-oss-120b'
+    name: "OpenAI: gpt-oss-120b"
     context_length: 131072
     provider_id: openai
     upstream_id: gpt-oss-120b
@@ -3537,7 +3536,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-oss-120b/endpoints
     top_provider:
@@ -3548,10 +3547,10 @@ models:
 
   - id: openai/gpt-oss-120b:free
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -3559,7 +3558,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: gpt-oss-120b (free)'
+    name: "OpenAI: gpt-oss-120b (free)"
     context_length: 131072
     provider_id: openai
     upstream_id: gpt-oss-120b:free
@@ -3576,7 +3575,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-oss-120b/endpoints
     top_provider:
@@ -3587,10 +3586,10 @@ models:
 
   - id: openai/gpt-oss-20b
     pricing:
-      prompt: '0.00000003'
-      completion: '0.00000014'
-      request: '0'
-      image: '0'
+      prompt: "0.00000003"
+      completion: "0.00000014"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -3598,7 +3597,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: gpt-oss-20b'
+    name: "OpenAI: gpt-oss-20b"
     context_length: 131072
     provider_id: openai
     upstream_id: gpt-oss-20b
@@ -3627,7 +3626,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-oss-20b/endpoints
     top_provider:
@@ -3638,10 +3637,10 @@ models:
 
   - id: openai/gpt-oss-20b:free
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text->text
@@ -3649,7 +3648,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: gpt-oss-20b (free)'
+    name: "OpenAI: gpt-oss-20b (free)"
     context_length: 131072
     provider_id: openai
     upstream_id: gpt-oss-20b:free
@@ -3666,7 +3665,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/gpt-oss-20b/endpoints
     top_provider:
@@ -3677,11 +3676,11 @@ models:
 
   - id: openai/gpt-oss-safeguard-20b
     pricing:
-      prompt: '0.000000075'
-      completion: '0.0000003'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000037'
+      prompt: "0.000000075"
+      completion: "0.0000003"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000037"
     architecture:
       input_modalities:
         - text->text
@@ -3689,7 +3688,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: gpt-oss-safeguard-20b'
+    name: "OpenAI: gpt-oss-safeguard-20b"
     context_length: 131072
     provider_id: openai
     upstream_id: gpt-oss-safeguard-20b
@@ -3718,11 +3717,11 @@ models:
 
   - id: openai/gpt-realtime
     pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000004'
+      prompt: "0.000004"
+      completion: "0.000016"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000004"
     architecture:
       input_modalities:
         - text
@@ -3736,10 +3735,10 @@ models:
 
   - id: openai/gpt-realtime-1.5
     pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
-      request: '0'
-      image: '0'
+      prompt: "0.000004"
+      completion: "0.000016"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3754,10 +3753,10 @@ models:
 
   - id: openai/gpt-realtime-2025-08-28
     pricing:
-      prompt: '0.000004'
-      completion: '0.000016'
-      request: '0'
-      image: '0'
+      prompt: "0.000004"
+      completion: "0.000016"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3772,11 +3771,11 @@ models:
 
   - id: openai/gpt-realtime-mini
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000006'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000006"
     architecture:
       input_modalities:
         - text
@@ -3790,10 +3789,10 @@ models:
 
   - id: openai/gpt-realtime-mini-2025-10-06
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3808,10 +3807,10 @@ models:
 
   - id: openai/gpt-realtime-mini-2025-12-15
     pricing:
-      prompt: '0.0000006'
-      completion: '0.0000024'
-      request: '0'
-      image: '0'
+      prompt: "0.0000006"
+      completion: "0.0000024"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3826,10 +3825,10 @@ models:
 
   - id: openai/moderation
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3842,11 +3841,11 @@ models:
 
   - id: openai/o1
     pricing:
-      prompt: '0.000015'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000075'
+      prompt: "0.000015"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000075"
     architecture:
       input_modalities:
         - text
@@ -3856,7 +3855,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o1'
+    name: "OpenAI: o1"
     context_length: 200000
     provider_id: openai
     upstream_id: o1
@@ -3876,7 +3875,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/o1-2024-12-17/endpoints
     top_provider:
@@ -3887,10 +3886,10 @@ models:
 
   - id: openai/o1-2024-12-17
     pricing:
-      prompt: '0.000015'
-      completion: '0.00006'
-      request: '0'
-      image: '0'
+      prompt: "0.000015"
+      completion: "0.00006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3906,11 +3905,11 @@ models:
 
   - id: openai/o1-mini
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000055'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000055"
     architecture:
       input_modalities:
         - text
@@ -3925,10 +3924,10 @@ models:
 
   - id: openai/o1-pro
     pricing:
-      prompt: '0.00015'
-      completion: '0.0006'
-      request: '0'
-      image: '0'
+      prompt: "0.00015"
+      completion: "0.0006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3938,7 +3937,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o1-pro'
+    name: "OpenAI: o1-pro"
     context_length: 200000
     provider_id: openai
     upstream_id: o1-pro
@@ -3949,7 +3948,7 @@ models:
       - response_format
       - seed
       - structured_outputs
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/o1-pro/endpoints
     top_provider:
@@ -3960,10 +3959,10 @@ models:
 
   - id: openai/o1-pro-2025-03-19
     pricing:
-      prompt: '0.00015'
-      completion: '0.0006'
-      request: '0'
-      image: '0'
+      prompt: "0.00015"
+      completion: "0.0006"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -3979,11 +3978,11 @@ models:
 
   - id: openai/o3
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000005'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000005"
     architecture:
       input_modalities:
         - text
@@ -3993,7 +3992,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o3'
+    name: "OpenAI: o3"
     context_length: 200000
     provider_id: openai
     upstream_id: o3
@@ -4006,21 +4005,21 @@ models:
       - structured_outputs
       - tool_choice
       - tools
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/o3-2025-04-16/endpoints
     top_provider:
       context_length: 200000
       max_completion_tokens: 100000
       is_moderated: true
-    description: 'o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following. Use it to think through multi-step problems that involve analysis across text, code, and images. Note that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations'
+    description: "o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following. Use it to think through multi-step problems that involve analysis across text, code, and images. Note that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations"
 
   - id: openai/o3-2025-04-16
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4032,15 +4031,15 @@ models:
     context_length: 200000
     provider_id: openai
     upstream_id: o3-2025-04-16
-    description: 'o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following. Use it to think through multi-step problems that involve analysis across text, code, and images. Note that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations'
+    description: "o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following. Use it to think through multi-step problems that involve analysis across text, code, and images. Note that BYOK is required for this model. Set up here: https://openrouter.ai/settings/integrations"
 
   - id: openai/o3-deep-research
     pricing:
-      prompt: '0.00001'
-      completion: '0.00004'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000025'
+      prompt: "0.00001"
+      completion: "0.00004"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000025"
     architecture:
       input_modalities:
         - text
@@ -4050,7 +4049,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o3 Deep Research'
+    name: "OpenAI: o3 Deep Research"
     context_length: 200000
     provider_id: openai
     upstream_id: o3-deep-research
@@ -4088,10 +4087,10 @@ models:
 
   - id: openai/o3-deep-research-2025-06-26
     pricing:
-      prompt: '0.00001'
-      completion: '0.00004'
-      request: '0'
-      image: '0'
+      prompt: "0.00001"
+      completion: "0.00004"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4110,11 +4109,11 @@ models:
 
   - id: openai/o3-mini
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000055'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000055"
     architecture:
       input_modalities:
         - text
@@ -4123,7 +4122,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o3 Mini'
+    name: "OpenAI: o3 Mini"
     context_length: 200000
     provider_id: openai
     upstream_id: o3-mini
@@ -4143,7 +4142,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/o3-mini-2025-01-31/endpoints
     top_provider:
@@ -4154,10 +4153,10 @@ models:
 
   - id: openai/o3-mini-2025-01-31
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4172,11 +4171,11 @@ models:
 
   - id: openai/o3-mini-high
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.00000055'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.00000055"
     architecture:
       input_modalities:
         - text
@@ -4185,7 +4184,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o3 Mini High'
+    name: "OpenAI: o3 Mini High"
     context_length: 200000
     provider_id: openai
     upstream_id: o3-mini-high
@@ -4202,7 +4201,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2023-10-31'
+    knowledge_cutoff: "2023-10-31"
     links:
       details: /api/v1/models/openai/o3-mini-high-2025-01-31/endpoints
     top_provider:
@@ -4213,10 +4212,10 @@ models:
 
   - id: openai/o3-pro
     pricing:
-      prompt: '0.00002'
-      completion: '0.00008'
-      request: '0'
-      image: '0'
+      prompt: "0.00002"
+      completion: "0.00008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4226,7 +4225,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o3 Pro'
+    name: "OpenAI: o3 Pro"
     context_length: 200000
     provider_id: openai
     upstream_id: o3-pro
@@ -4243,7 +4242,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/o3-pro-2025-06-10/endpoints
     top_provider:
@@ -4254,10 +4253,10 @@ models:
 
   - id: openai/o3-pro-2025-06-10
     pricing:
-      prompt: '0.00002'
-      completion: '0.00008'
-      request: '0'
-      image: '0'
+      prompt: "0.00002"
+      completion: "0.00008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4273,11 +4272,11 @@ models:
 
   - id: openai/o4-mini
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000275'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000275"
     architecture:
       input_modalities:
         - text
@@ -4287,7 +4286,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o4 Mini'
+    name: "OpenAI: o4 Mini"
     context_length: 200000
     provider_id: openai
     upstream_id: o4-mini
@@ -4300,7 +4299,7 @@ models:
       - structured_outputs
       - tool_choice
       - tools
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/o4-mini-2025-04-16/endpoints
     top_provider:
@@ -4311,10 +4310,10 @@ models:
 
   - id: openai/o4-mini-2025-04-16
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4330,11 +4329,11 @@ models:
 
   - id: openai/o4-mini-deep-research
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000005'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.0000005"
     architecture:
       input_modalities:
         - text
@@ -4344,7 +4343,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o4 Mini Deep Research'
+    name: "OpenAI: o4 Mini Deep Research"
     context_length: 200000
     provider_id: openai
     upstream_id: o4-mini-deep-research
@@ -4382,10 +4381,10 @@ models:
 
   - id: openai/o4-mini-deep-research-2025-06-26
     pricing:
-      prompt: '0.000002'
-      completion: '0.000008'
-      request: '0'
-      image: '0'
+      prompt: "0.000002"
+      completion: "0.000008"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4404,11 +4403,11 @@ models:
 
   - id: openai/o4-mini-high
     pricing:
-      prompt: '0.0000011'
-      completion: '0.0000044'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000000275'
+      prompt: "0.0000011"
+      completion: "0.0000044"
+      request: "0"
+      image: "0"
+      input_cache_read: "0.000000275"
     architecture:
       input_modalities:
         - text
@@ -4418,7 +4417,7 @@ models:
         - text
       tokenizer: GPT
     enabled: true
-    name: 'OpenAI: o4 Mini High'
+    name: "OpenAI: o4 Mini High"
     context_length: 200000
     provider_id: openai
     upstream_id: o4-mini-high
@@ -4435,7 +4434,7 @@ models:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
+    knowledge_cutoff: "2024-06-30"
     links:
       details: /api/v1/models/openai/o4-mini-high-2025-04-16/endpoints
     top_provider:
@@ -4446,10 +4445,10 @@ models:
 
   - id: openai/omni-moderation-2024-09-26
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4463,10 +4462,10 @@ models:
 
   - id: openai/omni-moderation-latest
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4480,10 +4479,10 @@ models:
 
   - id: openai/sora-2
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4496,10 +4495,10 @@ models:
 
   - id: openai/sora-2-pro
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4512,10 +4511,10 @@ models:
 
   - id: openai/sora-2-pro-high-res
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4528,10 +4527,10 @@ models:
 
   - id: openai/text-davinci-002
     pricing:
-      prompt: '0.00002'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
+      prompt: "0.00002"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4543,10 +4542,10 @@ models:
 
   - id: openai/text-davinci-003
     pricing:
-      prompt: '0.00002'
-      completion: '0.00002'
-      request: '0'
-      image: '0'
+      prompt: "0.00002"
+      completion: "0.00002"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4558,10 +4557,10 @@ models:
 
   - id: openai/text-embedding-3-large
     pricing:
-      prompt: '0.00000013'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.00000013"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4576,10 +4575,10 @@ models:
 
   - id: openai/text-embedding-3-small
     pricing:
-      prompt: '0.00000002'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.00000002"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4594,10 +4593,10 @@ models:
 
   - id: openai/text-embedding-ada-002
     pricing:
-      prompt: '0.0000001'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.0000001"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4612,10 +4611,10 @@ models:
 
   - id: openai/text-embedding-ada-002-v2
     pricing:
-      prompt: '0.0000001'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0.0000001"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4629,10 +4628,10 @@ models:
 
   - id: openai/text-moderation-007
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4646,10 +4645,10 @@ models:
 
   - id: openai/text-moderation-latest
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4663,10 +4662,10 @@ models:
 
   - id: openai/text-moderation-stable
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4680,10 +4679,10 @@ models:
 
   - id: openai/tts-1
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4696,10 +4695,10 @@ models:
 
   - id: openai/tts-1-1106
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4712,10 +4711,10 @@ models:
 
   - id: openai/tts-1-hd
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4728,10 +4727,10 @@ models:
 
   - id: openai/tts-1-hd-1106
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
@@ -4744,10 +4743,10 @@ models:
 
   - id: openai/whisper-1
     pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
+      prompt: "0"
+      completion: "0"
+      request: "0"
+      image: "0"
     architecture:
       input_modalities:
         - text
