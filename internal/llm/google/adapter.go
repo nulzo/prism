@@ -2,6 +2,7 @@ package google
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -130,6 +131,19 @@ type GeminiGenerationConfig struct {
 	ResponseModalities []string              `json:"responseModalities,omitempty"`
 	Temperature        float64               `json:"temperature,omitempty"`
 	ThinkingConfig     *GeminiThinkingConfig `json:"thinkingConfig,omitempty"`
+	SpeechConfig       *GeminiSpeechConfig   `json:"speechConfig,omitempty"`
+}
+
+type GeminiSpeechConfig struct {
+	VoiceConfig *GeminiVoiceConfig `json:"voiceConfig,omitempty"`
+}
+
+type GeminiVoiceConfig struct {
+	PrebuiltVoiceConfig *GeminiPrebuiltVoiceConfig `json:"prebuiltVoiceConfig,omitempty"`
+}
+
+type GeminiPrebuiltVoiceConfig struct {
+	VoiceName string `json:"voiceName,omitempty"`
 }
 
 // GeminiThinkingConfig controls reasoning output for Gemini thinking models.
@@ -204,6 +218,19 @@ func defaultSafetySettings() []GeminiSafetySetting {
 	}
 }
 
+func geminiSpeechConfig(voice string) *GeminiSpeechConfig {
+	if strings.TrimSpace(voice) == "" {
+		voice = "Kore"
+	}
+	return &GeminiSpeechConfig{
+		VoiceConfig: &GeminiVoiceConfig{
+			PrebuiltVoiceConfig: &GeminiPrebuiltVoiceConfig{
+				VoiceName: voice,
+			},
+		},
+	}
+}
+
 func Shape(req *api.UpstreamChatRequest) (GeminiRequest, error) {
 	gr := GeminiRequest{
 		// Use the least restrictive documented setting for all configurable
@@ -219,6 +246,13 @@ func Shape(req *api.UpstreamChatRequest) (GeminiRequest, error) {
 			mods = append(mods, strings.ToUpper(m))
 		}
 		gr.GenerationConfig.ResponseModalities = mods
+	}
+
+	if req.Audio != nil && req.Audio.Voice != "" {
+		if gr.GenerationConfig == nil {
+			gr.GenerationConfig = &GeminiGenerationConfig{}
+		}
+		gr.GenerationConfig.SpeechConfig = geminiSpeechConfig(req.Audio.Voice)
 	}
 
 	if req.Temperature != 0 {
@@ -392,7 +426,11 @@ func extractResponseParts(parts []GeminiPart) (content string, reasoning string,
 
 		dataURL := fmt.Sprintf("data:%s;base64,%s", part.InlineData.MimeType, part.InlineData.Data)
 		if strings.HasPrefix(part.InlineData.MimeType, "audio/") {
-			audio = &api.AudioOutput{Data: part.InlineData.Data}
+			audio = &api.AudioOutput{
+				Data:     part.InlineData.Data,
+				Format:   "pcm",
+				MimeType: "audio/pcm",
+			}
 			continue
 		}
 
@@ -464,6 +502,61 @@ func effortToThinkingBudget(effort string) *int {
 
 func (a *Adapter) Capabilities() llm.Capabilities {
 	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
+func (a *Adapter) CreateSpeech(ctx context.Context, req *api.UpstreamSpeechRequest) (*api.SpeechResponse, error) {
+	format := strings.ToLower(strings.TrimSpace(req.ResponseFormat))
+	if format != "" && format != "pcm" && format != "pcm16" {
+		return nil, api.BadRequestError("google tts currently supports response_format 'pcm'")
+	}
+
+	shape := GeminiRequest{
+		Contents: []GeminiContent{{
+			Parts: []GeminiPart{{Text: req.Input}},
+		}},
+		SafetySettings: defaultSafetySettings(),
+		GenerationConfig: &GeminiGenerationConfig{
+			ResponseModalities: []string{"AUDIO"},
+			SpeechConfig:       geminiSpeechConfig(req.Voice),
+		},
+	}
+
+	url := fmt.Sprintf("%s/models/%s:generateContent?key=%s",
+		strings.TrimRight(a.config.BaseURL, "/"),
+		req.Model,
+		a.config.APIKey,
+	)
+
+	var gResp GeminiResponse
+	if err := httpclient.SendRequest(ctx, a.client, "POST", url, nil, shape, &gResp); err != nil {
+		return nil, a.handleUpstreamError(err)
+	}
+	if err := geminiResponseError(&gResp); err != nil {
+		return nil, err
+	}
+
+	for _, part := range gResp.Candidates[0].Content.Parts {
+		if part.InlineData == nil || !strings.HasPrefix(part.InlineData.MimeType, "audio/") {
+			continue
+		}
+		audio, err := base64.StdEncoding.DecodeString(part.InlineData.Data)
+		if err != nil {
+			return nil, err
+		}
+		return &api.SpeechResponse{
+			Data:        audio,
+			ContentType: "audio/pcm",
+		}, nil
+	}
+	return nil, api.ProviderError("google tts returned no audio payload", nil)
+}
+
+func (a *Adapter) StreamSpeech(ctx context.Context, req *api.UpstreamSpeechRequest, write api.SpeechStreamWriter) error {
+	resp, err := a.CreateSpeech(ctx, req)
+	if err != nil {
+		return err
+	}
+	return write(resp.ContentType, resp.Data)
 }
 
 func (a *Adapter) Chat(ctx context.Context, req *api.UpstreamChatRequest) (*api.ChatResponse, error) {

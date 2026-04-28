@@ -97,3 +97,11 @@ type StreamResult struct {
 	Response *ChatResponse
 	Err      error
 }
+
+type SpeechResponse struct {
+	Data         []byte
+	ContentType  string
+	GenerationID string
+}
+
+type SpeechStreamWriter func(contentType string, chunk []byte) error

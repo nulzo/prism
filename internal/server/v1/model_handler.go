@@ -20,7 +20,9 @@ func NewModelHandler(service gateway.Service) *ModelHandler {
 
 func (h *ModelHandler) ListModels(c *gin.Context) {
 	filter := api.ModelFilter{
-		Provider: c.Query("provider"),
+		Provider:       c.Query("provider"),
+		InputModality:  c.Query("input_modalities"),
+		OutputModality: c.Query("output_modalities"),
 	}
 
 	// fetch all models/providers from underlying services

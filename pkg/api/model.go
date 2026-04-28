@@ -34,10 +34,12 @@ type Model struct {
 }
 
 type ModelFilter struct {
-	Provider string
-	ID       string
-	Modality string
-	OwnedBy  string
+	Provider       string
+	ID             string
+	Modality       string
+	InputModality  string
+	OutputModality string
+	OwnedBy        string
 }
 
 type Architecture struct {

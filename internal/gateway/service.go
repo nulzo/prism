@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"errors"
@@ -37,6 +38,8 @@ type Service interface {
 	ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error)
 	Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error)
 	StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error)
+	CreateSpeech(ctx context.Context, req *api.SpeechRequest) (*api.SpeechResponse, error)
+	StreamSpeech(ctx context.Context, req *api.SpeechRequest, write api.SpeechStreamWriter) error
 }
 
 type service struct {
@@ -297,6 +300,51 @@ func (s *service) GetProvider(providerID string) (llm.Provider, error) {
 	}
 
 	return nil, api.ProviderError(fmt.Sprintf("provider '%s' configured but not active/loaded", providerID), nil)
+}
+
+func (s *service) CreateSpeech(ctx context.Context, req *api.SpeechRequest) (*api.SpeechResponse, error) {
+	var audio bytes.Buffer
+	contentType := ""
+	if err := s.StreamSpeech(ctx, req, func(nextContentType string, chunk []byte) error {
+		if contentType == "" {
+			contentType = nextContentType
+		}
+		_, err := audio.Write(chunk)
+		return err
+	}); err != nil {
+		return nil, err
+	}
+	return &api.SpeechResponse{
+		Data:         audio.Bytes(),
+		ContentType:  contentType,
+		GenerationID: GenerationID(ctx),
+	}, nil
+}
+
+func (s *service) StreamSpeech(ctx context.Context, req *api.SpeechRequest, write api.SpeechStreamWriter) error {
+	provider, upstreamID, err := s.GetProviderForModel(ctx, req.Model)
+	if err != nil {
+		return err
+	}
+	format := req.ResponseFormat
+	if format == "" {
+		format = "pcm"
+	}
+
+	upstreamReq := &api.UpstreamSpeechRequest{
+		Input:          req.Input,
+		Model:          upstreamID,
+		Voice:          req.Voice,
+		ResponseFormat: format,
+		Speed:          req.Speed,
+		Provider:       req.Provider,
+	}
+
+	if speechProvider, ok := provider.(llm.SpeechProvider); ok {
+		return speechProvider.StreamSpeech(ctx, upstreamReq, write)
+	}
+
+	return api.ProviderError(fmt.Sprintf("provider '%s' does not support /audio/speech", provider.Name()), nil)
 }
 
 func (s *service) StreamChat(ctx context.Context, req *api.ChatRequest) (<-chan api.StreamResult, error) {

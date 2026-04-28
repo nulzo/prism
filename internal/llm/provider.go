@@ -28,6 +28,11 @@ type Provider interface {
 	Health(ctx context.Context) error
 }
 
+type SpeechProvider interface {
+	CreateSpeech(ctx context.Context, req *api.UpstreamSpeechRequest) (*api.SpeechResponse, error)
+	StreamSpeech(ctx context.Context, req *api.UpstreamSpeechRequest, write api.SpeechStreamWriter) error
+}
+
 type ToolCallingMode string
 
 const (

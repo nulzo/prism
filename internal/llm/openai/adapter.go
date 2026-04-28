@@ -87,6 +87,14 @@ type imageGenerationResponse struct {
 	Usage *api.ResponseUsage `json:"usage,omitempty"`
 }
 
+type speechGenerationRequest struct {
+	Model          string   `json:"model"`
+	Input          string   `json:"input"`
+	Voice          string   `json:"voice"`
+	ResponseFormat string   `json:"response_format,omitempty"`
+	Speed          *float64 `json:"speed,omitempty"`
+}
+
 func (a *Adapter) handleUpstreamError(err error) error {
 	var upstreamErr *httpclient.UpstreamError
 	if !errors.As(err, &upstreamErr) {
@@ -120,6 +128,90 @@ func (a *Adapter) handleUpstreamError(err error) error {
 
 func (a *Adapter) Capabilities() llm.Capabilities {
 	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
+func (a *Adapter) CreateSpeech(ctx context.Context, req *api.UpstreamSpeechRequest) (*api.SpeechResponse, error) {
+	var audio bytes.Buffer
+	contentType := ""
+	if err := a.StreamSpeech(ctx, req, func(nextContentType string, chunk []byte) error {
+		if contentType == "" {
+			contentType = nextContentType
+		}
+		_, err := audio.Write(chunk)
+		return err
+	}); err != nil {
+		return nil, err
+	}
+	return &api.SpeechResponse{
+		Data:        audio.Bytes(),
+		ContentType: contentType,
+	}, nil
+}
+
+func (a *Adapter) StreamSpeech(ctx context.Context, req *api.UpstreamSpeechRequest, write api.SpeechStreamWriter) error {
+	headers := map[string]string{
+		"Authorization": "Bearer " + a.config.APIKey,
+		"Content-Type":  "application/json",
+	}
+	if org, ok := a.config.Config["organization"]; ok {
+		headers["OpenAI-Organization"] = org
+	}
+
+	payload := speechGenerationRequest{
+		Model:          req.Model,
+		Input:          req.Input,
+		Voice:          req.Voice,
+		ResponseFormat: req.ResponseFormat,
+		Speed:          req.Speed,
+	}
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	url := fmt.Sprintf("%s/audio/speech", strings.TrimRight(a.config.BaseURL, "/"))
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	for k, v := range headers {
+		httpReq.Header.Set(k, v)
+	}
+
+	resp, err := a.client.Do(httpReq)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		respBody, _ := io.ReadAll(resp.Body)
+		return a.handleUpstreamError(&httpclient.UpstreamError{
+			StatusCode: resp.StatusCode,
+			Body:       respBody,
+			URL:        url,
+		})
+	}
+	contentType := resp.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = speechContentType(req.ResponseFormat)
+	}
+	buffer := make([]byte, 32*1024)
+	for {
+		n, readErr := resp.Body.Read(buffer)
+		if n > 0 {
+			if err := write(contentType, buffer[:n]); err != nil {
+				return err
+			}
+		}
+		if readErr == io.EOF {
+			return nil
+		}
+		if readErr != nil {
+			return readErr
+		}
+	}
 }
 
 func (a *Adapter) generateImage(ctx context.Context, req *api.UpstreamChatRequest, headers map[string]string) (*api.ChatResponse, error) {
@@ -570,6 +662,25 @@ func normalizeEffort(e string) string {
 		return ""
 	default:
 		return "medium"
+	}
+}
+
+func speechContentType(format string) string {
+	switch strings.ToLower(strings.TrimSpace(format)) {
+	case "mp3":
+		return "audio/mpeg"
+	case "wav":
+		return "audio/wav"
+	case "flac":
+		return "audio/flac"
+	case "opus":
+		return "audio/ogg"
+	case "aac":
+		return "audio/aac"
+	case "pcm", "pcm16":
+		return "audio/pcm"
+	default:
+		return "audio/pcm"
 	}
 }
 

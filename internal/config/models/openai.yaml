@@ -1724,7 +1724,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     provider_id: openai
     upstream_id: gpt-4o-mini-tts
@@ -1740,7 +1740,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: gpt-4o-mini-tts-2025-03-20
     provider_id: openai
@@ -1756,7 +1756,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: gpt-4o-mini-tts-2025-12-15
     provider_id: openai
@@ -4687,7 +4687,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: tts-1
     provider_id: openai
@@ -4703,7 +4703,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: tts-1-1106
     provider_id: openai
@@ -4719,7 +4719,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: tts-1-hd
     provider_id: openai
@@ -4735,7 +4735,7 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - speech
     enabled: true
     name: tts-1-hd-1106
     provider_id: openai

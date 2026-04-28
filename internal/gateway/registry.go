@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"strings"
 
 	"github.com/nulzo/model-router-api/pkg/api"
 )
@@ -17,10 +18,29 @@ func (s *service) ListAllModels(ctx context.Context, filter api.ModelFilter) ([]
 		if filter.Provider != "" && m.ProviderID != filter.Provider {
 			continue
 		}
+		if filter.InputModality != "" && !hasModality(m.Architecture.InputModalities, filter.InputModality) {
+			continue
+		}
+		if filter.OutputModality != "" && !hasModality(m.Architecture.OutputModalities, filter.OutputModality) {
+			continue
+		}
 
 		out = append(out, entryToPublic(m))
 	}
 	return out, nil
+}
+
+func hasModality(modalities []string, target string) bool {
+	target = strings.ToLower(strings.TrimSpace(target))
+	if target == "" {
+		return true
+	}
+	for _, modality := range modalities {
+		if strings.ToLower(strings.TrimSpace(modality)) == target {
+			return true
+		}
+	}
+	return false
 }
 
 // entryToPublic projects an api.ModelDefinition into the OpenRouter-aligned public Model shape.

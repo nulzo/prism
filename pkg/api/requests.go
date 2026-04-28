@@ -160,6 +160,24 @@ type AudioConfig struct {
 	Format string `json:"format,omitempty"`
 }
 
+type SpeechRequest struct {
+	Input          string                 `json:"input" binding:"required"`
+	Model          string                 `json:"model" binding:"required"`
+	Voice          string                 `json:"voice" binding:"required"`
+	ResponseFormat string                 `json:"response_format,omitempty"`
+	Speed          *float64               `json:"speed,omitempty"`
+	Provider       map[string]interface{} `json:"provider,omitempty"`
+}
+
+type UpstreamSpeechRequest struct {
+	Input          string                 `json:"input"`
+	Model          string                 `json:"model"`
+	Voice          string                 `json:"voice"`
+	ResponseFormat string                 `json:"response_format,omitempty"`
+	Speed          *float64               `json:"speed,omitempty"`
+	Provider       map[string]interface{} `json:"provider,omitempty"`
+}
+
 type ChatMessage struct {
 	Role string `json:"role" binding:"required,oneof=user assistant system tool"`
 	// Content handles the union string | []ContentPart.
@@ -287,6 +305,8 @@ type ReasoningDetail struct {
 type AudioOutput struct {
 	ID         string `json:"id,omitempty"`
 	ExpiresAt  int64  `json:"expires_at,omitempty"`
+	Format     string `json:"format,omitempty"`
+	MimeType   string `json:"mime_type,omitempty"`
 	Data       string `json:"data,omitempty"`
 	Transcript string `json:"transcript,omitempty"`
 }

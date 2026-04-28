@@ -16,6 +16,63 @@ models:
     provider_id: google
     upstream_id: chirp
 
+  - id: google/gemini-3.1-flash-tts-preview
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Gemini
+    enabled: true
+    name: 'Google: Gemini 3.1 Flash TTS Preview'
+    context_length: 32768
+    provider_id: google
+    upstream_id: gemini-3.1-flash-tts-preview
+    description: Gemini text-to-speech model for controllable single-speaker and multi-speaker speech generation.
+
+  - id: google/gemini-2.5-flash-preview-tts
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Gemini
+    enabled: true
+    name: 'Google: Gemini 2.5 Flash Preview TTS'
+    context_length: 32768
+    provider_id: google
+    upstream_id: gemini-2.5-flash-preview-tts
+    description: Gemini text-to-speech model for low-latency controllable speech generation.
+
+  - id: google/gemini-2.5-pro-preview-tts
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Gemini
+    enabled: true
+    name: 'Google: Gemini 2.5 Pro Preview TTS'
+    context_length: 32768
+    provider_id: google
+    upstream_id: gemini-2.5-pro-preview-tts
+    description: Gemini text-to-speech model for high-quality controllable speech generation.
+
   - id: google/claude-3-5-haiku
     pricing:
       prompt: '0.0000008'

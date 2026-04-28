@@ -24,6 +24,9 @@ func (s *Server) SetupRoutes() {
 	chatHandler := v1.NewChatHandler(s.service, s.validator)
 	api.POST("/chat/completions", chatHandler.CreateCompletion)
 
+	speechHandler := v1.NewSpeechHandler(s.service, s.validator)
+	api.POST("/audio/speech", speechHandler.CreateSpeech)
+
 	modelsHandler := v1.NewModelHandler(s.service)
 	api.GET("/models", modelsHandler.ListModels)
 
