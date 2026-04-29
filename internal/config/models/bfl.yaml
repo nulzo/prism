@@ -9,13 +9,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-flex
-    name: flux-2-flex
+    name: Generate or edit an image with FLUX.2 [FLEX] (recommended for editing)
     canonical_slug: bfl/flux-2-flex
     context_length: 0
     supported_parameters:
@@ -28,6 +29,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [FLEX]. This is a recommended model for image editing and generation. Supports flexible text-to-image and image-to-image editing workflows.
 
   - id: bfl/flux-2-klein-4b
     pricing:
@@ -38,13 +40,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-4b
-    name: flux-2-klein-4b
+    name: Generate or edit an image with FLUX.2 [Klein 4B] (fastest editing)
     canonical_slug: bfl/flux-2-klein-4b
     context_length: 0
     supported_parameters:
@@ -57,6 +60,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [Klein 4B]. Fastest, most lightweight model for image generation and editing.
 
   - id: bfl/flux-2-klein-9b
     pricing:
@@ -67,13 +71,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-9b
-    name: flux-2-klein-9b
+    name: Generate or edit an image with FLUX.2 [Klein 9B] (fast editing)
     canonical_slug: bfl/flux-2-klein-9b
     context_length: 0
     supported_parameters:
@@ -86,6 +91,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [Klein 9B]. Fast, lightweight model for image generation and editing.
 
   - id: bfl/flux-2-klein-9b-preview
     pricing:
@@ -96,13 +102,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-9b-preview
-    name: flux-2-klein-9b-preview
+    name: Generate or edit an image with FLUX.2 [Klein 9B KV] (fast editing with caching)
     canonical_slug: bfl/flux-2-klein-9b-preview
     context_length: 0
     supported_parameters:
@@ -115,6 +122,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [Klein 9B] with KV caching for improved performance.
 
   - id: bfl/flux-2-max
     pricing:
@@ -125,13 +133,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-max
-    name: flux-2-max
+    name: Generate or edit an image with FLUX.2 [MAX] (highest quality)
     canonical_slug: bfl/flux-2-max
     context_length: 0
     supported_parameters:
@@ -144,6 +153,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [MAX]. Highest quality FLUX.2 model for image generation and editing.
 
   - id: bfl/flux-2-pro
     pricing:
@@ -154,13 +164,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-pro
-    name: flux-2-pro
+    name: Generate or edit an image with FLUX.2 [PRO] (recommended for editing)
     canonical_slug: bfl/flux-2-pro
     context_length: 0
     supported_parameters:
@@ -173,6 +184,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [PRO]. This is the recommended default model for image editing and generation. Supports text-to-image and image-to-image editing workflows.
 
   - id: bfl/flux-2-pro-preview
     pricing:
@@ -183,13 +195,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-2-pro-preview
-    name: flux-2-pro-preview
+    name: Generate or edit an image with FLUX.2 [PRO] Preview (recommended for editing)
     canonical_slug: bfl/flux-2-pro-preview
     context_length: 0
     supported_parameters:
@@ -202,6 +215,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation or editing task with FLUX.2 [PRO] Preview. This is a recommended model for image editing and generation.
 
   - id: bfl/flux-dev
     pricing:
@@ -212,13 +226,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
         - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-dev
-    name: flux-dev
+    name: Generate an image with FLUX.1 [dev].
     canonical_slug: bfl/flux-dev
     context_length: 0
     supported_parameters:
@@ -228,6 +243,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with FLUX.1 [dev].
 
   - id: bfl/flux-kontext-max
     pricing:
@@ -238,13 +254,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-kontext-max
-    name: flux-kontext-max
+    name: Create an image with FLUX.1 Kontext [max] (legacy, use FLUX.2 [PRO] for editing)
     canonical_slug: bfl/flux-kontext-max
     context_length: 0
     supported_parameters:
@@ -254,6 +271,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image creation task with FLUX.1 Kontext [max]. For image editing, prefer FLUX.2 [PRO] (/flux-2-pro) or FLUX.2 [FLEX] (/flux-2-flex) which are the recommended default models for editing workflows.
 
   - id: bfl/flux-kontext-pro
     pricing:
@@ -264,13 +282,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-kontext-pro
-    name: flux-kontext-pro
+    name: Create an image with FLUX.1 Kontext [pro] (legacy, use FLUX.2 [PRO] for editing)
     canonical_slug: bfl/flux-kontext-pro
     context_length: 0
     supported_parameters:
@@ -280,6 +299,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image creation task with FLUX.1 Kontext [pro]. For image editing, prefer FLUX.2 [PRO] (/flux-2-pro) or FLUX.2 [FLEX] (/flux-2-flex) which are the recommended default models for editing workflows.
 
   - id: bfl/flux-pro-1.0-expand
     pricing:
@@ -290,13 +310,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-expand
-    name: flux-pro-1.0-expand
+    name: Expand an image by adding pixels on any side.
     canonical_slug: bfl/flux-pro-1.0-expand
     context_length: 0
     supported_parameters:
@@ -306,6 +327,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image expansion task that adds the specified number of pixels to any combination of sides (top, bottom, left, right) while maintaining context.
 
   - id: bfl/flux-pro-1.0-fill
     pricing:
@@ -316,13 +338,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-fill
-    name: flux-pro-1.0-fill
+    name: Generate an image with FLUX.1 Fill [pro] using an input image and mask.
     canonical_slug: bfl/flux-pro-1.0-fill
     context_length: 0
     supported_parameters:
@@ -332,6 +355,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with the FLUX.1 Fill [pro] model using an input image and mask. Mask can be applied to alpha channel or submitted as a separate image.
 
   - id: bfl/flux-pro-1.0-fill-finetuned
     pricing:
@@ -342,13 +366,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-fill-finetuned
-    name: flux-pro-1.0-fill-finetuned
+    name: Generate an image with FLUX.1 Fill [pro] finetune using an input image and mask.
     canonical_slug: bfl/flux-pro-1.0-fill-finetuned
     context_length: 0
     supported_parameters:
@@ -361,6 +386,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with the FLUX.1 Fill [pro] finetune model using an input image and mask. Mask can be applied to alpha channel or submitted as a separate image.
 
   - id: bfl/flux-pro-1.1
     pricing:
@@ -371,13 +397,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
         - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1
-    name: flux-pro-1.1
+    name: Generate an image with FLUX 1.1 [pro].
     canonical_slug: bfl/flux-pro-1.1
     context_length: 0
     supported_parameters:
@@ -387,6 +414,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with FLUX 1.1 [pro].
 
   - id: bfl/flux-pro-1.1-ultra
     pricing:
@@ -397,13 +425,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
         - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1-ultra
-    name: flux-pro-1.1-ultra
+    name: Generate an image with FLUX 1.1 [pro] with ultra mode and optional raw mode.
     canonical_slug: bfl/flux-pro-1.1-ultra
     context_length: 0
     supported_parameters:
@@ -413,6 +442,7 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with FLUX 1.1 [pro] with ultra mode and optional raw mode.
 
   - id: bfl/flux-pro-1.1-ultra-finetuned
     pricing:
@@ -423,13 +453,14 @@ models:
     architecture:
       input_modalities:
         - text
+        - image
       output_modalities:
-        - text
+        - image
     enabled: true
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1-ultra-finetuned
-    name: flux-pro-1.1-ultra-finetuned
+    name: Generate an image with FLUX 1.1 [pro] finetune with ultra mode.
     canonical_slug: bfl/flux-pro-1.1-ultra-finetuned
     context_length: 0
     supported_parameters:
@@ -442,3 +473,4 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+    description: Submits an image generation task with FLUX 1.1 [pro] finetune with ultra mode.

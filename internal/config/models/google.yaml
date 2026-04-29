@@ -15,19 +15,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: aqa
-    name: aqa
+    name: Model that performs Attributed Question Answering.
     canonical_slug: google/aqa
-    context_length: 0
+    context_length: 7168
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 7168
+      max_completion_tokens: 1024
+    description: Model trained to return answers to questions that are grounded in provided sources, along with estimating answerable probability.
 
   - id: google/deep-research-max-preview-04-2026
     pricing:
@@ -44,9 +46,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: deep-research-max-preview-04-2026
-    name: deep-research-max-preview-04-2026
+    name: Deep Research Max Preview (Apr-21-2026)
     canonical_slug: google/deep-research-max-preview-04-2026
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
@@ -54,9 +56,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Preview release (April 21st, 2026) of Deep Research Max
 
   - id: google/deep-research-preview-04-2026
     pricing:
@@ -73,9 +79,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: deep-research-preview-04-2026
-    name: deep-research-preview-04-2026
+    name: Deep Research Preview (Apr-21-2026)
     canonical_slug: google/deep-research-preview-04-2026
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
@@ -83,9 +89,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Preview release (April 21th, 2026) of Deep Research
 
   - id: google/deep-research-pro-preview-12-2025
     pricing:
@@ -102,19 +112,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: deep-research-pro-preview-12-2025
-    name: deep-research-pro-preview-12-2025
+    name: Deep Research Pro Preview (Dec-12-2025)
     canonical_slug: google/deep-research-pro-preview-12-2025
-    context_length: 65536
+    context_length: 131072
     supported_parameters:
-      - max_completion_tokens
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - tool_choice
+      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 65536
-      max_completion_tokens: 32768
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Preview release (December 12th, 2025) of Deep Research Pro
 
   - id: google/gemini-2.0-flash
     pricing:
@@ -132,9 +146,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.0-flash
-    name: gemini 2.0 flash
+    name: Gemini 2.0 Flash
     canonical_slug: google/gemini-2.0-flash
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
@@ -142,11 +156,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1000000
-    description: The newest generation of Google's Gemini models, featuring improved reasoning, instruction following, and factual accuracy, with the Flash variant optimized for cost-efficiency and performance.
+      context_length: 1048576
+      max_completion_tokens: 8192
+    description: Gemini 2.0 Flash
 
   - id: google/gemini-2.0-flash-001
     pricing:
@@ -170,32 +186,31 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.0-flash-001
-    name: gemini 2.0 flash
+    name: Gemini 2.0 Flash 001
     canonical_slug: google/gemini-2.0-flash-001
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1000000
+      context_length: 1048576
       max_completion_tokens: 8192
+    description: Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
+    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-001/endpoints
     expiration_date: '2026-06-01'
-    description: The newest generation of Google's Gemini models, featuring improved reasoning, instruction following, and factual accuracy, with the Flash variant optimized for cost-efficiency and performance.
 
   - id: google/gemini-2.0-flash-lite
     pricing:
@@ -212,9 +227,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.0-flash-lite
-    name: gemini 2.0 flash lite
+    name: Gemini 2.0 Flash-Lite
     canonical_slug: google/gemini-2.0-flash-lite
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
@@ -222,11 +237,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1000000
-    description: A lighter, more cost-effective version of Gemini 2.0 Flash, designed for applications requiring high efficiency while maintaining good performance. Ideal for high-volume, cost-sensitive deployments.
+      context_length: 1048576
+      max_completion_tokens: 8192
+    description: Gemini 2.0 Flash-Lite
 
   - id: google/gemini-2.0-flash-lite-001
     pricing:
@@ -248,32 +265,31 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.0-flash-lite-001
-    name: gemini 2.0 flash lite
+    name: Gemini 2.0 Flash-Lite 001
     canonical_slug: google/gemini-2.0-flash-lite-001
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 8192
+    description: Stable version of Gemini 2.0 Flash-Lite
+    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-lite-001/endpoints
     expiration_date: '2026-06-01'
-    description: A lighter, more cost-effective version of Gemini 2.0 Flash, designed for applications requiring high efficiency while maintaining good performance. Ideal for high-volume, cost-sensitive deployments.
 
   - id: google/gemini-2.5-computer-use-preview-10-2025
     pricing:
@@ -290,9 +306,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-computer-use-preview-10-2025
-    name: gemini-2.5-computer-use-preview-10-2025
+    name: Gemini 2.5 Computer Use Preview 10-2025
     canonical_slug: google/gemini-2.5-computer-use-preview-10-2025
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
@@ -300,9 +316,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Gemini 2.5 Computer Use Preview 10-2025
 
   - id: google/gemini-2.5-flash
     pricing:
@@ -330,29 +350,26 @@ models:
     canonical_slug: google/gemini-2.5-flash
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
-      max_completion_tokens: 65535
+      max_completion_tokens: 65536
+    description: Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
+    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash/endpoints
-    description: Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in "thinking" capabilities, enabling it to provide responses with greater accuracy and nuanced context handling.
 
   - id: google/gemini-2.5-flash-image
     pricing:
@@ -377,30 +394,30 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-image
-    name: Gemini 2.5 Flash Image
+    name: Nano Banana
     canonical_slug: google/gemini-2.5-flash-image
-    context_length: 1000000
+    context_length: 32768
     supported_parameters:
-      - max_completion_tokens
       - max_tokens
       - response_format
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 32768
       max_completion_tokens: 32768
+    description: Gemini 2.5 Flash Preview Image
+    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash-image/endpoints
-    description: Google's specialized image generation model optimized for fast, high-quality image generation. Outputs images at 1024x1024 resolution, with each image consuming 1290 output tokens.
 
   - id: google/gemini-2.5-flash-lite
     pricing:
@@ -424,33 +441,30 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-lite
-    name: Gemini 2.5 Flash Lite
+    name: Gemini 2.5 Flash-Lite
     canonical_slug: google/gemini-2.5-flash-lite
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
-      max_completion_tokens: 65535
+      max_completion_tokens: 65536
+    description: Stable version of Gemini 2.5 Flash-Lite, released in July of 2025
+    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash-lite/endpoints
-    description: Gemini 2.5 Flash-Lite is a lightweight reasoning model in the Gemini 2.5 family, optimized for ultra-low latency and cost efficiency. It offers improved throughput, faster token generation, and better performance across common benchmarks compared to earlier Flash models. By default, "thinking" (i.e. multi-pass reasoning) is disabled to prioritize speed, but developers can enable it via the Reasoning API parameter to selectively trade off cost for intelligence.
 
   - id: google/gemini-2.5-flash-native-audio-latest
     pricing:
@@ -467,19 +481,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-native-audio-latest
-    name: gemini-2.5-flash-native-audio-latest
+    name: Gemini 2.5 Flash Native Audio Latest
     canonical_slug: google/gemini-2.5-flash-native-audio-latest
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 8192
+    description: Latest release of Gemini 2.5 Flash Native Audio
 
   - id: google/gemini-2.5-flash-native-audio-preview-09-2025
     pricing:
@@ -496,19 +512,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-native-audio-preview-09-2025
-    name: gemini-2.5-flash-native-audio-preview-09-2025
+    name: Gemini 2.5 Flash Native Audio Preview 09-2025
     canonical_slug: google/gemini-2.5-flash-native-audio-preview-09-2025
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 8192
+    description: Gemini 2.5 Flash Native Audio Preview 09-2025
 
   - id: google/gemini-2.5-flash-native-audio-preview-12-2025
     pricing:
@@ -525,19 +543,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-native-audio-preview-12-2025
-    name: gemini-2.5-flash-native-audio-preview-12-2025
+    name: Gemini 2.5 Flash Native Audio Preview 12-2025
     canonical_slug: google/gemini-2.5-flash-native-audio-preview-12-2025
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 8192
+    description: Gemini 2.5 Flash Native Audio Preview 12-2025
 
   - id: google/gemini-2.5-flash-preview-tts
     pricing:
@@ -554,9 +574,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-preview-tts
-    name: gemini-2.5-flash-preview-tts
+    name: Gemini 2.5 Flash Preview TTS
     canonical_slug: google/gemini-2.5-flash-preview-tts
-    context_length: 0
+    context_length: 8192
     supported_parameters:
       - max_tokens
       - response_format
@@ -564,9 +584,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 8192
+      max_completion_tokens: 16384
+    description: Gemini 2.5 Flash Preview TTS
 
   - id: google/gemini-2.5-pro
     pricing:
@@ -594,29 +618,26 @@ models:
     canonical_slug: google/gemini-2.5-pro
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Stable release (June 17th, 2025) of Gemini 2.5 Pro
+    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-pro/endpoints
-    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs "thinking" capabilities, enabling it to reason through responses with enhanced accuracy and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks, including first-place positioning on the LMArena leaderboard, reflecting superior human-preference alignment and complex problem-solving abilities.
 
   - id: google/gemini-2.5-pro-preview-tts
     pricing:
@@ -634,9 +655,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-pro-preview-tts
-    name: Gemini 2.5 Pro
+    name: Gemini 2.5 Pro Preview TTS
     canonical_slug: google/gemini-2.5-pro-preview-tts
-    context_length: 0
+    context_length: 8192
     supported_parameters:
       - max_tokens
       - response_format
@@ -644,10 +665,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-    description: Gemini 2.5 Pro is Google's state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs "thinking" capabilities, enabling it to reason through responses with enhanced accuracy and nuanced context handling. Gemini 2.5 Pro achieves top-tier performance on multiple benchmarks, including first-place positioning on the LMArena leaderboard, reflecting superior human-preference alignment and complex problem-solving abilities.
+      context_length: 8192
+      max_completion_tokens: 16384
+    description: Gemini 2.5 Pro Preview TTS
 
   - id: google/gemini-3-flash-preview
     pricing:
@@ -674,24 +698,21 @@ models:
     upstream_id: gemini-3-flash-preview
     name: Gemini 3 Flash Preview
     canonical_slug: google/gemini-3-flash-preview-20251217
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
-      - include_reasoning
-      - max_completion_tokens
       - max_tokens
-      - reasoning
       - response_format
-      - service_tier
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
-      - web_search_options
     top_provider:
       is_moderated: false
       context_length: 1048576
-      max_completion_tokens: 65535
+      max_completion_tokens: 65536
+    description: Gemini 3 Flash Preview
     default_parameters:
       temperature: null
       top_p: null
@@ -701,7 +722,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/google/gemini-3-flash-preview-20251217/endpoints
-    description: Google's ultra-fast frontier model optimized for speed and efficiency. Delivers state-of-the-art performance while maintaining low latency and cost, with improved reasoning and coding capabilities.
 
   - id: google/gemini-3-pro-image-preview
     pricing:
@@ -721,26 +741,29 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3-pro-image-preview
-    name: Gemini 3 Pro Image Preview
+    name: Nano Banana Pro
     canonical_slug: google/gemini-3-pro-image-preview-20251120
-    context_length: 1000000
+    context_length: 131072
     supported_parameters:
-      - max_completion_tokens
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - tool_choice
+      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 65536
+      context_length: 131072
       max_completion_tokens: 32768
+    description: Gemini 3 Pro Image Preview
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
     links:
       details: /api/v1/models/google/gemini-3-pro-image-preview-20251120/endpoints
-    description: Google's image generation model optimized for high-quality image generation. Supports 1K/2K and 4K resolution outputs with flexible pricing based on image dimensions.
 
   - id: google/gemini-3-pro-preview
     pricing:
@@ -767,23 +790,19 @@ models:
     canonical_slug: google/gemini-3-pro-preview
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
-      - max_completion_tokens
       - max_tokens
-      - reasoning
       - response_format
-      - service_tier
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
-      - web_search_options
     top_provider:
       is_moderated: false
       context_length: 1048576
-      max_completion_tokens: 65535
-    description: The best model in the world for multimodal understanding, and our most powerful agentic and vibe-coding model yet.
+      max_completion_tokens: 65536
+    description: Gemini 3 Pro Preview
 
   - id: google/gemini-3.1-flash-image-preview
     pricing:
@@ -801,19 +820,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3.1-flash-image-preview
-    name: Gemini 3.1 Flash Image Preview
+    name: Nano Banana 2
     canonical_slug: google/gemini-3.1-flash-image-preview-20260226
-    context_length: 1000000
+    context_length: 65536
     supported_parameters:
-      - max_completion_tokens
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - tool_choice
+      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 65536
-      max_completion_tokens: 32768
+      max_completion_tokens: 65536
+    description: Gemini 3.1 Flash Image Preview.
     default_parameters:
       temperature: null
       top_p: null
@@ -823,7 +846,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/google/gemini-3.1-flash-image-preview-20260226/endpoints
-    description: Google's latest image generation model (Nano Banana 2) optimized for fast, high-quality image generation. Supports multiple output resolutions from 512px to 4K, with text and thinking output priced separately from image output tokens.
 
   - id: google/gemini-3.1-flash-lite-preview
     pricing:
@@ -851,23 +873,21 @@ models:
     upstream_id: gemini-3.1-flash-lite-preview
     name: Gemini 3.1 Flash Lite Preview
     canonical_slug: google/gemini-3.1-flash-lite-preview-20260303
-    context_length: 1000000
+    context_length: 1048576
     supported_parameters:
-      - include_reasoning
-      - max_completion_tokens
       - max_tokens
-      - reasoning
       - response_format
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
-      - web_search_options
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Gemini 3.1 Flash Lite Preview
     default_parameters:
       temperature: null
       top_p: null
@@ -877,7 +897,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/google/gemini-3.1-flash-lite-preview-20260303/endpoints
-    description: Google's fastest and most cost-efficient Gemini 3 series model, built for intelligence at scale. Optimized for high-volume, low-latency applications while maintaining strong multimodal capabilities.
 
   - id: google/gemini-3.1-flash-live-preview
     pricing:
@@ -894,19 +913,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3.1-flash-live-preview
-    name: gemini-3.1-flash-live-preview
+    name: Gemini 3.1 Flash Live Preview
     canonical_slug: google/gemini-3.1-flash-live-preview
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Gemini 3.1 Flash Live Preview
 
   - id: google/gemini-3.1-flash-tts-preview
     pricing:
@@ -923,9 +944,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3.1-flash-tts-preview
-    name: gemini-3.1-flash-tts-preview
+    name: Gemini 3.1 Flash TTS Preview
     canonical_slug: google/gemini-3.1-flash-tts-preview
-    context_length: 0
+    context_length: 8192
     supported_parameters:
       - max_tokens
       - response_format
@@ -933,9 +954,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 8192
+      max_completion_tokens: 16384
+    description: Gemini 3.1 Flash TTS Preview
 
   - id: google/gemini-3.1-pro-preview
     pricing:
@@ -964,22 +989,19 @@ models:
     canonical_slug: google/gemini-3.1-pro-preview-20260219
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
-      - max_completion_tokens
       - max_tokens
-      - reasoning
       - response_format
-      - service_tier
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
-      - web_search_options
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Gemini 3.1 Pro Preview
     default_parameters:
       temperature: null
       top_p: null
@@ -989,7 +1011,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/google/gemini-3.1-pro-preview-20260219/endpoints
-    description: The latest performance, intelligence, and usability improvements to the best model family in the world for multimodal understanding, agentic capabilities, and vibe-coding.
 
   - id: google/gemini-3.1-pro-preview-customtools
     pricing:
@@ -1014,33 +1035,29 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3.1-pro-preview-customtools
-    name: Gemini 3.1 Pro Preview
+    name: Gemini 3.1 Pro Preview Custom Tools
     canonical_slug: google/gemini-3.1-pro-preview-customtools-20260219
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
-      - max_completion_tokens
       - max_tokens
-      - reasoning
       - response_format
-      - service_tier
       - stop
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
-      - web_search_options
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Gemini 3.1 Pro Preview optimized for custom tool usage
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
     links:
       details: /api/v1/models/google/gemini-3.1-pro-preview-customtools-20260219/endpoints
-    description: The latest performance, intelligence, and usability improvements to the best model family in the world for multimodal understanding, agentic capabilities, and vibe-coding.
 
   - id: google/gemini-embedding-001
     pricing:
@@ -1052,14 +1069,15 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - embedding
+      tokenizer: Gemini
     enabled: true
     source: auto
     provider_id: google
     upstream_id: gemini-embedding-001
-    name: gemini-embedding-001
+    name: Gemini Embedding 001
     canonical_slug: google/gemini-embedding-001
-    context_length: 0
+    context_length: 2048
     supported_parameters:
       - max_tokens
       - response_format
@@ -1070,6 +1088,9 @@ models:
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 2048
+      max_completion_tokens: 1
+    description: Obtain a distributed representation of a text.
 
   - id: google/gemini-embedding-2
     pricing:
@@ -1082,11 +1103,12 @@ models:
         - text
       output_modalities:
         - embedding
+      tokenizer: Gemini
     enabled: true
     source: auto
     provider_id: google
     upstream_id: gemini-embedding-2
-    name: gemini-embedding-2
+    name: Gemini Embedding 2
     canonical_slug: google/gemini-embedding-2
     context_length: 8192
     supported_parameters:
@@ -1100,7 +1122,8 @@ models:
     top_provider:
       is_moderated: false
       context_length: 8192
-      max_completion_tokens: 8192
+      max_completion_tokens: 1
+    description: Obtain a distributed representation of multimodal content.
 
   - id: google/gemini-embedding-2-preview
     pricing:
@@ -1113,11 +1136,12 @@ models:
         - text
       output_modalities:
         - embedding
+      tokenizer: Gemini
     enabled: true
     source: auto
     provider_id: google
     upstream_id: gemini-embedding-2-preview
-    name: gemini-embedding-2-preview
+    name: Gemini Embedding 2 Preview
     canonical_slug: google/gemini-embedding-2-preview
     context_length: 8192
     supported_parameters:
@@ -1131,7 +1155,8 @@ models:
     top_provider:
       is_moderated: false
       context_length: 8192
-      max_completion_tokens: 8192
+      max_completion_tokens: 1
+    description: Obtain a distributed representation of multimodal content.
 
   - id: google/gemini-flash-latest
     pricing:
@@ -1155,25 +1180,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-flash-latest
-    name: Google Gemini Flash Latest
+    name: Gemini Flash Latest
     canonical_slug: ~google/gemini-flash-latest
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Latest release of Gemini Flash
     default_parameters:
       temperature: null
       top_p: null
@@ -1183,7 +1206,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/~google/gemini-flash-latest/endpoints
-    description: This model always redirects to the latest model in the Google Gemini Flash family.
 
   - id: google/gemini-flash-lite-latest
     pricing:
@@ -1200,9 +1222,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-flash-lite-latest
-    name: gemini-flash-lite-latest
+    name: Gemini Flash-Lite Latest
     canonical_slug: google/gemini-flash-lite-latest
-    context_length: 0
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
@@ -1210,9 +1232,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 1048576
+      max_completion_tokens: 65536
+    description: Latest release of Gemini Flash-Lite
 
   - id: google/gemini-pro-latest
     pricing:
@@ -1236,25 +1262,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-pro-latest
-    name: Google Gemini Pro Latest
+    name: Gemini Pro Latest
     canonical_slug: ~google/gemini-pro-latest
     context_length: 1048576
     supported_parameters:
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Latest release of Gemini Pro
     default_parameters:
       temperature: null
       top_p: null
@@ -1264,7 +1288,6 @@ models:
       repetition_penalty: null
     links:
       details: /api/v1/models/~google/gemini-pro-latest/endpoints
-    description: This model always redirects to the latest model in the Google Gemini Pro family.
 
   - id: google/gemini-robotics-er-1.5-preview
     pricing:
@@ -1281,9 +1304,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-robotics-er-1.5-preview
-    name: gemini-robotics-er-1.5-preview
+    name: Gemini Robotics-ER 1.5 Preview
     canonical_slug: google/gemini-robotics-er-1.5-preview
-    context_length: 0
+    context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
@@ -1291,9 +1314,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 1048576
+      max_completion_tokens: 65536
+    description: Gemini Robotics-ER 1.5 Preview
 
   - id: google/gemini-robotics-er-1.6-preview
     pricing:
@@ -1310,9 +1337,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-robotics-er-1.6-preview
-    name: gemini-robotics-er-1.6-preview
+    name: Gemini Robotics-ER 1.6 Preview
     canonical_slug: google/gemini-robotics-er-1.6-preview
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
@@ -1320,9 +1347,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 65536
+    description: Gemini Robotics-ER 1.6 Preview
 
   - id: google/gemma-3-12b-it
     pricing:
@@ -1342,20 +1373,13 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3-12b-it
-    name: Gemma 3 (free)
+    name: Gemma 3 12B
     canonical_slug: google/gemma-3-12b-it
-    context_length: 131072
+    context_length: 32768
     supported_parameters:
-      - frequency_penalty
-      - logit_bias
       - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
@@ -1363,8 +1387,8 @@ models:
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 131072
-      max_completion_tokens: 16384
+      context_length: 32768
+      max_completion_tokens: 8192
     hugging_face_id: google/gemma-3-12b-it
     knowledge_cutoff: '2024-08-31'
     links:
@@ -1386,9 +1410,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3-1b-it
-    name: Gemma 3 (free)
+    name: Gemma 3 1B
     canonical_slug: google/gemma-3-1b-it
-    context_length: 0
+    context_length: 32768
     supported_parameters:
       - max_tokens
       - response_format
@@ -1396,9 +1420,12 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 32768
+      max_completion_tokens: 8192
     description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.
 
   - id: google/gemma-3-27b-it
@@ -1419,20 +1446,13 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3-27b-it
-    name: Gemma 3 (free)
+    name: Gemma 3 27B
     canonical_slug: google/gemma-3-27b-it
     context_length: 131072
     supported_parameters:
-      - frequency_penalty
-      - logit_bias
       - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
@@ -1441,13 +1461,13 @@ models:
     top_provider:
       is_moderated: false
       context_length: 131072
-      max_completion_tokens: 16384
+      max_completion_tokens: 8192
     hugging_face_id: google/gemma-3-27b-it
+    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemma-3-27b-it/endpoints
     description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.
@@ -1470,27 +1490,22 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3-4b-it
-    name: Gemma 3 (free)
+    name: Gemma 3 4B
     canonical_slug: google/gemma-3-4b-it
-    context_length: 131072
+    context_length: 32768
     supported_parameters:
-      - frequency_penalty
-      - logit_bias
       - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
+      - tool_choice
+      - tools
       - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 131072
-      max_completion_tokens: 16384
+      context_length: 32768
+      max_completion_tokens: 8192
     hugging_face_id: google/gemma-3-4b-it
     knowledge_cutoff: '2024-08-31'
     links:
@@ -1512,9 +1527,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3n-e2b-it
-    name: Gemma 3n (free)
+    name: Gemma 3n E2B
     canonical_slug: google/gemma-3n-e2b-it
-    context_length: 0
+    context_length: 8192
     supported_parameters:
       - max_tokens
       - response_format
@@ -1522,9 +1537,12 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 8192
+      max_completion_tokens: 2048
     description: Our open model built for efficient performance on everyday devices like mobile phones, laptops, and tablets.
 
   - id: google/gemma-3n-e4b-it
@@ -1543,23 +1561,22 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-3n-e4b-it
-    name: Gemma 3n (free)
+    name: Gemma 3n E4B
     canonical_slug: google/gemma-3n-e4b-it
-    context_length: 32768
+    context_length: 8192
     supported_parameters:
-      - frequency_penalty
-      - logit_bias
       - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
+      - response_format
       - stop
       - temperature
+      - tool_choice
+      - tools
       - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 32768
+      context_length: 8192
+      max_completion_tokens: 2048
     hugging_face_id: google/gemma-3n-E4B-it
     knowledge_cutoff: '2024-08-31'
     links:
@@ -1584,32 +1601,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-4-26b-a4b-it
-    name: 'Google: Gemma 4 26B A4B '
+    name: Gemma 4 26B A4B IT
     canonical_slug: google/gemma-4-26b-a4b-it-20260403
     context_length: 262144
     supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - logit_bias
-      - logprobs
       - max_tokens
-      - min_p
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
       - top_k
-      - top_logprobs
       - top_p
     top_provider:
       is_moderated: false
       context_length: 262144
+      max_completion_tokens: 32768
+    description: Gemma 4 26B A4B IT
     hugging_face_id: google/gemma-4-26B-A4B-it
     default_parameters:
       temperature: 1
@@ -1636,33 +1644,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemma-4-31b-it
-    name: 'Google: Gemma 4 31B'
+    name: Gemma 4 31B IT
     canonical_slug: google/gemma-4-31b-it-20260402
     context_length: 262144
     supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - logit_bias
-      - logprobs
       - max_tokens
-      - min_p
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
       - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
       - top_k
-      - top_logprobs
       - top_p
     top_provider:
       is_moderated: false
       context_length: 262144
-      max_completion_tokens: 16384
+      max_completion_tokens: 32768
+    description: Gemma 4 31B IT
     hugging_face_id: google/gemma-4-31B-it
     default_parameters:
       temperature: 1
@@ -1689,16 +1687,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: imagen-4.0-fast-generate-001
-    name: imagen-4.0-fast-generate-001
+    name: Imagen 4 Fast
     canonical_slug: google/imagen-4.0-fast-generate-001
-    context_length: 0
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Vertex served Imagen 4.0 Fast model
 
   - id: google/imagen-4.0-generate-001
     pricing:
@@ -1715,16 +1718,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: imagen-4.0-generate-001
-    name: imagen-4.0-generate-001
+    name: Imagen 4
     canonical_slug: google/imagen-4.0-generate-001
-    context_length: 0
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Vertex served Imagen 4.0 model
 
   - id: google/imagen-4.0-ultra-generate-001
     pricing:
@@ -1741,16 +1749,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: imagen-4.0-ultra-generate-001
-    name: imagen-4.0-ultra-generate-001
+    name: Imagen 4 Ultra
     canonical_slug: google/imagen-4.0-ultra-generate-001
-    context_length: 0
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Vertex served Imagen 4.0 ultra model
 
   - id: google/lyria-3-clip-preview
     pricing:
@@ -1770,19 +1783,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: lyria-3-clip-preview
-    name: 'Google: Lyria 3 Clip Preview'
+    name: Lyria 3 Clip Preview
     canonical_slug: google/lyria-3-clip-preview-20260330
     context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
-      - seed
+      - stop
       - temperature
+      - tool_choice
+      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Lyria 3 30s model Preview
     default_parameters:
       temperature: null
       top_p: null
@@ -1811,19 +1828,23 @@ models:
     source: auto
     provider_id: google
     upstream_id: lyria-3-pro-preview
-    name: 'Google: Lyria 3 Pro Preview'
+    name: Lyria 3 Pro Preview
     canonical_slug: google/lyria-3-pro-preview-20260330
     context_length: 1048576
     supported_parameters:
       - max_tokens
       - response_format
-      - seed
+      - stop
       - temperature
+      - tool_choice
+      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
       context_length: 1048576
       max_completion_tokens: 65536
+    description: Lyria 3 Pro Preview
     default_parameters:
       temperature: null
       top_p: null
@@ -1849,9 +1870,9 @@ models:
     source: auto
     provider_id: google
     upstream_id: nano-banana-pro-preview
-    name: nano-banana-pro-preview
+    name: Nano Banana Pro
     canonical_slug: google/nano-banana-pro-preview
-    context_length: 0
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - response_format
@@ -1859,9 +1880,13 @@ models:
       - temperature
       - tool_choice
       - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 131072
+      max_completion_tokens: 32768
+    description: Gemini 3 Pro Image Preview
 
   - id: google/veo-2.0-generate-001
     pricing:
@@ -1878,18 +1903,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-2.0-generate-001
-    name: veo-2.0-generate-001
+    name: Veo 2
     canonical_slug: google/veo-2.0-generate-001
-    context_length: 1024
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1024
-      max_completion_tokens: 1024
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Vertex served Veo 2 model. Access to this model requires billing to be enabled on the associated Google Cloud Platform account. Please visit https://console.cloud.google.com/billing to enable it.
 
   - id: google/veo-3.0-fast-generate-001
     pricing:
@@ -1906,18 +1934,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-3.0-fast-generate-001
-    name: veo-3.0-fast-generate-001
+    name: Veo 3 fast
     canonical_slug: google/veo-3.0-fast-generate-001
-    context_length: 1024
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1024
-      max_completion_tokens: 1024
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Veo 3 fast
 
   - id: google/veo-3.0-generate-001
     pricing:
@@ -1934,18 +1965,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-3.0-generate-001
-    name: veo-3.0-generate-001
+    name: Veo 3
     canonical_slug: google/veo-3.0-generate-001
-    context_length: 1024
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1024
-      max_completion_tokens: 1024
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Veo 3
 
   - id: google/veo-3.1-fast-generate-preview
     pricing:
@@ -1962,18 +1996,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-3.1-fast-generate-preview
-    name: veo-3.1-fast-generate-preview
+    name: Veo 3.1 fast
     canonical_slug: google/veo-3.1-fast-generate-preview
-    context_length: 1024
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1024
-      max_completion_tokens: 1024
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Veo 3.1 fast
 
   - id: google/veo-3.1-generate-preview
     pricing:
@@ -1990,18 +2027,21 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-3.1-generate-preview
-    name: veo-3.1-generate-preview
+    name: Veo 3.1
     canonical_slug: google/veo-3.1-generate-preview
-    context_length: 1024
+    context_length: 480
     supported_parameters:
       - max_tokens
+      - response_format
       - stop
       - temperature
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
-      context_length: 1024
-      max_completion_tokens: 1024
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Veo 3.1
 
   - id: google/veo-3.1-lite-generate-preview
     pricing:
@@ -2018,16 +2058,18 @@ models:
     source: auto
     provider_id: google
     upstream_id: veo-3.1-lite-generate-preview
-    name: veo-3.1-lite-generate-preview
+    name: Veo 3.1 lite
     canonical_slug: google/veo-3.1-lite-generate-preview
-    context_length: 0
+    context_length: 480
     supported_parameters:
       - max_tokens
       - response_format
       - stop
       - temperature
-      - tool_choice
-      - tools
+      - top_k
       - top_p
     top_provider:
       is_moderated: false
+      context_length: 480
+      max_completion_tokens: 8192
+    description: Veo 3.1 lite

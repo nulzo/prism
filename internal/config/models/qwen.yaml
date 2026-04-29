@@ -21,6 +21,7 @@ models:
     canonical_slug: qwen/qwen-2.5-72b-instruct
     hugging_face_id: Qwen/Qwen2.5-72B-Instruct
     context_length: 32768
+    knowledge_cutoff: '2024-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -37,7 +38,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/qwen/qwen-2.5-72b-instruct/endpoints
     top_provider:
@@ -66,10 +66,7 @@ models:
     canonical_slug: qwen/qwen-2.5-7b-instruct
     hugging_face_id: Qwen/Qwen2.5-7B-Instruct
     context_length: 32768
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2024-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -85,7 +82,10 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2024-06-30'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen-2.5-7b-instruct/endpoints
     top_provider:
@@ -114,6 +114,7 @@ models:
     canonical_slug: qwen/qwen-2.5-coder-32b-instruct
     hugging_face_id: Qwen/Qwen2.5-Coder-32B-Instruct
     context_length: 32768
+    knowledge_cutoff: '2024-06-30'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -123,7 +124,6 @@ models:
       - temperature
       - top_k
       - top_p
-    knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/qwen/qwen-2.5-coder-32b-instruct/endpoints
     top_provider:
@@ -299,6 +299,7 @@ models:
     name: qwen-max
     canonical_slug: qwen/qwen-max-2025-01-25
     context_length: 30720
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -309,7 +310,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-max-2025-01-25/endpoints
     top_provider:
@@ -338,6 +338,7 @@ models:
     name: qwen-plus
     canonical_slug: qwen/qwen-plus-2025-01-25
     context_length: 129024
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -348,7 +349,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-01-25/endpoints
     top_provider:
@@ -481,10 +481,7 @@ models:
     name: qwen-plus-2025-07-28
     canonical_slug: qwen/qwen-plus-2025-07-28
     context_length: 997952
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -495,7 +492,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-07-28/endpoints
     top_provider:
@@ -524,10 +524,7 @@ models:
     name: 'Qwen: Qwen Plus 0728 (thinking)'
     canonical_slug: qwen/qwen-plus-2025-07-28
     context_length: 1000000
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -540,7 +537,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-07-28/endpoints
     top_provider:
@@ -638,6 +638,7 @@ models:
     name: qwen-turbo
     canonical_slug: qwen/qwen-turbo-2024-11-01
     context_length: 129024
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -648,7 +649,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-turbo-2024-11-01/endpoints
     top_provider:
@@ -781,10 +781,7 @@ models:
     name: 'Qwen: Qwen VL Max'
     canonical_slug: qwen/qwen-vl-max-2025-01-25
     context_length: 131072
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -794,7 +791,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen-vl-max-2025-01-25/endpoints
     top_provider:
@@ -824,6 +824,7 @@ models:
     name: 'Qwen: Qwen VL Plus'
     canonical_slug: qwen/qwen-vl-plus
     context_length: 131072
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -831,7 +832,6 @@ models:
       - seed
       - temperature
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-vl-plus/endpoints
     top_provider:
@@ -860,6 +860,7 @@ models:
     canonical_slug: qwen/qwen2.5-vl-72b-instruct
     hugging_face_id: Qwen/Qwen2.5-VL-72B-Instruct
     context_length: 32000
+    knowledge_cutoff: '2024-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -873,7 +874,6 @@ models:
       - temperature
       - top_k
       - top_p
-    knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/qwen/qwen2.5-vl-72b-instruct/endpoints
     top_provider:
@@ -902,6 +902,7 @@ models:
     canonical_slug: qwen/qwen3-14b-04-28
     hugging_face_id: Qwen/Qwen3-14B
     context_length: 40960
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -922,7 +923,6 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-14b-04-28/endpoints
     top_provider:
@@ -951,6 +951,7 @@ models:
     canonical_slug: qwen/qwen3-235b-a22b-04-28
     hugging_face_id: Qwen/Qwen3-235B-A22B
     context_length: 131072
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -962,7 +963,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-235b-a22b-04-28/endpoints
     top_provider:
@@ -990,6 +990,7 @@ models:
     canonical_slug: qwen/qwen3-235b-a22b-07-25
     hugging_face_id: Qwen/Qwen3-235B-A22B-Instruct-2507
     context_length: 262144
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1008,7 +1009,6 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-235b-a22b-07-25/endpoints
     top_provider:
@@ -1037,10 +1037,7 @@ models:
     canonical_slug: qwen/qwen3-235b-a22b-thinking-2507
     hugging_face_id: Qwen/Qwen3-235B-A22B-Thinking-2507
     context_length: 131072
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1059,7 +1056,10 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-235b-a22b-thinking-2507/endpoints
     top_provider:
@@ -1087,10 +1087,7 @@ models:
     canonical_slug: qwen/qwen3-30b-a3b-04-28
     hugging_face_id: Qwen/Qwen3-30B-A3B
     context_length: 129024
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1101,7 +1098,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-30b-a3b-04-28/endpoints
     top_provider:
@@ -1129,6 +1129,7 @@ models:
     canonical_slug: qwen/qwen3-30b-a3b-instruct-2507
     hugging_face_id: Qwen/Qwen3-30B-A3B-Instruct-2507
     context_length: 262144
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1145,7 +1146,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-30b-a3b-instruct-2507/endpoints
     top_provider:
@@ -1174,6 +1174,7 @@ models:
     canonical_slug: qwen/qwen3-30b-a3b-thinking-2507
     hugging_face_id: Qwen/Qwen3-30B-A3B-Thinking-2507
     context_length: 131072
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1192,7 +1193,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-30b-a3b-thinking-2507/endpoints
     top_provider:
@@ -1222,6 +1222,7 @@ models:
     canonical_slug: qwen/qwen3-32b-04-28
     hugging_face_id: Qwen/Qwen3-32B
     context_length: 40960
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1240,7 +1241,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-32b-04-28/endpoints
     top_provider:
@@ -1270,13 +1270,7 @@ models:
     canonical_slug: qwen/qwen3-8b-04-28
     hugging_face_id: Qwen/Qwen3-8B
     context_length: 40960
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1295,7 +1289,13 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-8b-04-28/endpoints
     top_provider:
@@ -1323,6 +1323,7 @@ models:
     canonical_slug: qwen/qwen3-coder-480b-a35b-07-25
     hugging_face_id: Qwen/Qwen3-Coder-480B-A35B-Instruct
     context_length: 262144
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1339,7 +1340,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-coder-480b-a35b-07-25/endpoints
     top_provider:
@@ -1367,6 +1367,7 @@ models:
     canonical_slug: qwen/qwen3-coder-30b-a3b-instruct
     hugging_face_id: Qwen/Qwen3-Coder-30B-A3B-Instruct
     context_length: 160000
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1381,7 +1382,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-coder-30b-a3b-instruct/endpoints
     top_provider:
@@ -1410,10 +1410,7 @@ models:
     name: qwen3-coder-flash
     canonical_slug: qwen/qwen3-coder-flash
     context_length: 997952
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1424,7 +1421,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-06-30'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-coder-flash/endpoints
     top_provider:
@@ -1486,10 +1486,6 @@ models:
     canonical_slug: qwen/qwen3-coder-next-2025-02-03
     hugging_face_id: Qwen/Qwen3-Coder-Next
     context_length: 262144
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1506,6 +1502,10 @@ models:
       - tools
       - top_k
       - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-coder-next-2025-02-03/endpoints
     top_provider:
@@ -1534,10 +1534,7 @@ models:
     name: qwen3-coder-plus
     canonical_slug: qwen/qwen3-coder-plus
     context_length: 997952
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1548,7 +1545,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-06-30'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-coder-plus/endpoints
     top_provider:
@@ -1609,6 +1609,7 @@ models:
     canonical_slug: qwen/qwen3-coder-480b-a35b-07-25
     hugging_face_id: Qwen/Qwen3-Coder-480B-A35B-Instruct
     context_length: 262000
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1619,7 +1620,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-coder-480b-a35b-07-25/endpoints
     top_provider:
@@ -1648,10 +1648,7 @@ models:
     name: qwen3-max
     canonical_slug: qwen/qwen3-max
     context_length: 258048
-    default_parameters:
-      temperature: 1
-      top_p: 1
-      frequency_penalty: null
+    knowledge_cutoff: '2025-06-30'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1662,7 +1659,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-06-30'
+    default_parameters:
+      temperature: 1
+      top_p: 1
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-max/endpoints
     top_provider:
@@ -1755,10 +1755,6 @@ models:
     name: 'Qwen: Qwen3 Max Thinking'
     canonical_slug: qwen/qwen3-max-thinking-20260123
     context_length: 262144
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1771,6 +1767,10 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-max-thinking-20260123/endpoints
     top_provider:
@@ -1798,6 +1798,7 @@ models:
     canonical_slug: qwen/qwen3-next-80b-a3b-instruct-2509
     hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Instruct
     context_length: 262144
+    knowledge_cutoff: '2025-09-30'
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -1806,7 +1807,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-09-30'
     links:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-instruct-2509/endpoints
     top_provider:
@@ -1834,6 +1834,7 @@ models:
     canonical_slug: qwen/qwen3-next-80b-a3b-instruct-2509
     hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Instruct
     context_length: 262144
+    knowledge_cutoff: '2025-09-30'
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1846,7 +1847,6 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-09-30'
     links:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-instruct-2509/endpoints
     top_provider:
@@ -1873,10 +1873,7 @@ models:
     canonical_slug: qwen/qwen3-next-80b-a3b-thinking-2509
     hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Thinking
     context_length: 262144
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
+    knowledge_cutoff: '2025-09-30'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -1887,7 +1884,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-09-30'
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-thinking-2509/endpoints
     top_provider:
@@ -1971,10 +1971,7 @@ models:
     canonical_slug: qwen/qwen3-vl-235b-a22b-instruct
     hugging_face_id: Qwen/Qwen3-VL-235B-A22B-Instruct
     context_length: 131072
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      frequency_penalty: null
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -1983,7 +1980,10 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-vl-235b-a22b-instruct/endpoints
     top_provider:
@@ -2012,13 +2012,7 @@ models:
     canonical_slug: qwen/qwen3-vl-235b-a22b-thinking
     hugging_face_id: Qwen/Qwen3-VL-235B-A22B-Thinking
     context_length: 131072
-    default_parameters:
-      temperature: 0.8
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -2029,7 +2023,13 @@ models:
       - tool_choice
       - tools
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: 0.8
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     links:
       details: /api/v1/models/qwen/qwen3-vl-235b-a22b-thinking/endpoints
     top_provider:
@@ -2058,13 +2058,7 @@ models:
     canonical_slug: qwen/qwen3-vl-30b-a3b-instruct
     hugging_face_id: Qwen/Qwen3-VL-30B-A3B-Instruct
     context_length: 131072
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -2081,7 +2075,13 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     links:
       details: /api/v1/models/qwen/qwen3-vl-30b-a3b-instruct/endpoints
     top_provider:
@@ -2110,13 +2110,7 @@ models:
     canonical_slug: qwen/qwen3-vl-30b-a3b-thinking
     hugging_face_id: Qwen/Qwen3-VL-30B-A3B-Thinking
     context_length: 131072
-    default_parameters:
-      temperature: 0.8
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
+    knowledge_cutoff: '2025-03-31'
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2133,7 +2127,13 @@ models:
       - tools
       - top_k
       - top_p
-    knowledge_cutoff: '2025-03-31'
+    default_parameters:
+      temperature: 0.8
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     links:
       details: /api/v1/models/qwen/qwen3-vl-30b-a3b-thinking/endpoints
     top_provider:
@@ -2162,13 +2162,6 @@ models:
     canonical_slug: qwen/qwen3-vl-32b-instruct
     hugging_face_id: Qwen/Qwen3-VL-32B-Instruct
     context_length: 131072
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -2177,6 +2170,13 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     links:
       details: /api/v1/models/qwen/qwen3-vl-32b-instruct/endpoints
     top_provider:
@@ -2239,10 +2239,6 @@ models:
     canonical_slug: qwen/qwen3-vl-8b-instruct
     hugging_face_id: Qwen/Qwen3-VL-8B-Instruct
     context_length: 131072
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -2259,6 +2255,10 @@ models:
       - tools
       - top_k
       - top_p
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-vl-8b-instruct/endpoints
     top_provider:
@@ -2287,9 +2287,6 @@ models:
     canonical_slug: qwen/qwen3-vl-8b-thinking
     hugging_face_id: Qwen/Qwen3-VL-8B-Thinking
     context_length: 131072
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2302,6 +2299,9 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
     links:
       details: /api/v1/models/qwen/qwen3-vl-8b-thinking/endpoints
     top_provider:
@@ -2365,13 +2365,6 @@ models:
     canonical_slug: qwen/qwen3.5-122b-a10b-20260224
     hugging_face_id: Qwen/Qwen3.5-122B-A10B
     context_length: 262144
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2392,6 +2385,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-122b-a10b-20260224/endpoints
     top_provider:
@@ -2421,13 +2421,6 @@ models:
     canonical_slug: qwen/qwen3.5-27b-20260224
     hugging_face_id: Qwen/Qwen3.5-27B
     context_length: 262144
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2448,6 +2441,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-27b-20260224/endpoints
     top_provider:
@@ -2477,13 +2477,6 @@ models:
     canonical_slug: qwen/qwen3.5-35b-a3b-20260224
     hugging_face_id: Qwen/Qwen3.5-35B-A3B
     context_length: 262144
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2504,6 +2497,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-35b-a3b-20260224/endpoints
     top_provider:
@@ -2534,13 +2534,6 @@ models:
     canonical_slug: qwen/qwen3.5-397b-a17b-20260216
     hugging_face_id: Qwen/Qwen3.5-397B-A17B
     context_length: 262144
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2561,6 +2554,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-397b-a17b-20260216/endpoints
     top_provider:
@@ -2590,13 +2590,6 @@ models:
     canonical_slug: qwen/qwen3.5-9b-20260310
     hugging_face_id: Qwen/Qwen3.5-9B
     context_length: 262144
-    default_parameters:
-      temperature: null
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2616,6 +2609,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-9b-20260310/endpoints
     top_provider:
@@ -2644,10 +2644,6 @@ models:
     name: 'Qwen: Qwen3.5-Flash'
     canonical_slug: qwen/qwen3.5-flash-20260224
     context_length: 1000000
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2660,6 +2656,10 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-flash-20260224/endpoints
     top_provider:
@@ -2723,10 +2723,6 @@ models:
     name: 'Qwen: Qwen3.5 Plus 2026-02-15'
     canonical_slug: qwen/qwen3.5-plus-20260216
     context_length: 1000000
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2739,6 +2735,10 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-plus-20260216/endpoints
     top_provider:
@@ -2808,13 +2808,6 @@ models:
     canonical_slug: qwen/qwen3.6-27b-20260422
     hugging_face_id: Qwen/Qwen3.6-27B
     context_length: 256000
-    default_parameters:
-      temperature: null
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2835,6 +2828,13 @@ models:
       - top_k
       - top_logprobs
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.6-27b-20260422/endpoints
     top_provider:
@@ -2865,10 +2865,6 @@ models:
     canonical_slug: qwen/qwen3.6-35b-a3b-20260415
     hugging_face_id: Qwen/Qwen3.6-35B-A3B
     context_length: 262144
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: 20
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2885,6 +2881,10 @@ models:
       - temperature
       - top_k
       - top_p
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 20
     links:
       details: /api/v1/models/qwen/qwen3.6-35b-a3b-20260415/endpoints
     top_provider:
@@ -2996,13 +2996,6 @@ models:
     name: 'Qwen: Qwen3.6 Plus'
     canonical_slug: qwen/qwen3.6-plus-04-02
     context_length: 1000000
-    default_parameters:
-      temperature: null
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -3015,6 +3008,13 @@ models:
       - tool_choice
       - tools
       - top_p
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.6-plus-04-02/endpoints
     top_provider:
