@@ -192,7 +192,8 @@ type GeminiOpenAIExtraBody struct {
 }
 
 type GeminiOpenAIExtraBodyGoogle struct {
-	SafetySettings []GeminiSafetySetting `json:"safety_settings,omitempty"`
+	// Note: safety_settings is only supported for Images endpoint in OpenAI-compatible API.
+	// For chat completions, Gemini 2.5/3 models default to "Off" (least restrictive) anyway.
 }
 
 func usesOpenAICompat(req *api.UpstreamChatRequest) bool {
@@ -468,13 +469,11 @@ func openAICompatPayload(req *api.UpstreamChatRequest) any {
 	if stripped == nil {
 		return nil
 	}
+	// Note: safety_settings is not supported via extra_body for chat completions.
+	// Gemini 2.5/3 models default to "Off" (least restrictive) when not specified.
 	return &GeminiOpenAICompatPayload{
 		UpstreamChatRequest: stripped,
-		ExtraBody: GeminiOpenAIExtraBody{
-			Google: GeminiOpenAIExtraBodyGoogle{
-				SafetySettings: defaultSafetySettings(),
-			},
-		},
+		ExtraBody:           GeminiOpenAIExtraBody{},
 	}
 }
 
