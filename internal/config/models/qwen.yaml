@@ -1,69 +1,29 @@
 models:
 
-  - id: qwen/qwen3-tts-flash
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - speech
-      tokenizer: Qwen
-    enabled: true
-    name: 'Qwen: Qwen3 TTS Flash'
-    provider_id: qwen
-    upstream_id: qwen3-tts-flash
-    supported_parameters:
-      - response_format
-      - speed
-      - voice
-    description: Alibaba Cloud Model Studio Qwen text-to-speech model.
-
-  - id: qwen/qwen3-tts-instruct-flash
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - speech
-      tokenizer: Qwen
-    enabled: true
-    name: 'Qwen: Qwen3 TTS Instruct Flash'
-    provider_id: qwen
-    upstream_id: qwen3-tts-instruct-flash
-    supported_parameters:
-      - response_format
-      - speed
-      - voice
-    description: Alibaba Cloud Model Studio Qwen text-to-speech model with instruction control.
-
   - id: qwen/qwen-2.5-72b-instruct
     pricing:
-      prompt: '0.00000012'
-      completion: '0.00000039'
+      prompt: '0.00000036'
+      completion: '0.0000004'
       request: '0'
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
       instruct_type: chatml
     enabled: true
-    name: Qwen2.5 72B Instruct
-    context_length: 32768
+    source: auto
     provider_id: qwen
     upstream_id: qwen-2.5-72b-instruct
+    name: Qwen2.5 72B Instruct
+    canonical_slug: qwen/qwen-2.5-72b-instruct
+    hugging_face_id: Qwen/Qwen2.5-72B-Instruct
+    context_length: 32768
     supported_parameters:
       - frequency_penalty
+      - logit_bias
       - max_tokens
       - min_p
       - presence_penalty
@@ -71,6 +31,7 @@ models:
       - response_format
       - seed
       - stop
+      - structured_outputs
       - temperature
       - tool_choice
       - tools
@@ -83,7 +44,6 @@ models:
       context_length: 32768
       max_completion_tokens: 16384
       is_moderated: false
-    description: 'Qwen2.5 72B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
 
   - id: qwen/qwen-2.5-7b-instruct
     pricing:
@@ -93,16 +53,23 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
       instruct_type: chatml
     enabled: true
-    name: 'Qwen: Qwen2.5 7B Instruct'
-    context_length: 32768
+    source: auto
     provider_id: qwen
     upstream_id: qwen-2.5-7b-instruct
+    name: 'Qwen: Qwen2.5 7B Instruct'
+    canonical_slug: qwen/qwen-2.5-7b-instruct
+    hugging_face_id: Qwen/Qwen2.5-7B-Instruct
+    context_length: 32768
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -118,10 +85,6 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/qwen/qwen-2.5-7b-instruct/endpoints
@@ -129,7 +92,6 @@ models:
       context_length: 32768
       max_completion_tokens: 32768
       is_moderated: false
-    description: 'Qwen2.5 7B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...'
 
   - id: qwen/qwen-2.5-coder-32b-instruct
     pricing:
@@ -139,16 +101,19 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
       instruct_type: chatml
     enabled: true
-    name: Qwen2.5 Coder 32B Instruct
-    context_length: 32768
+    source: auto
     provider_id: qwen
     upstream_id: qwen-2.5-coder-32b-instruct
+    name: Qwen2.5 Coder 32B Instruct
+    canonical_slug: qwen/qwen-2.5-coder-32b-instruct
+    hugging_face_id: Qwen/Qwen2.5-Coder-32B-Instruct
+    context_length: 32768
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -163,9 +128,7 @@ models:
       details: /api/v1/models/qwen/qwen-2.5-coder-32b-instruct/endpoints
     top_provider:
       context_length: 32768
-      max_completion_tokens: null
       is_moderated: false
-    description: 'Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improvements in **code generation**, **code reasoning**...'
 
   - id: qwen/qwen-coder
     pricing:
@@ -179,10 +142,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-coder
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-coder
+    name: qwen-coder
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 16384
+      is_moderated: false
+    canonical_slug: qwen/qwen-coder
 
   - id: qwen/qwen-flash
     pricing:
@@ -196,10 +175,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-flash
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen-flash
+    name: qwen-flash
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 32768
+      is_moderated: false
+    canonical_slug: qwen/qwen-flash
 
   - id: qwen/qwen-flash-2025-07-28
     pricing:
@@ -213,10 +208,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-flash-2025-07-28
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen-flash-2025-07-28
+    name: qwen-flash-2025-07-28
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 32768
+      is_moderated: false
+    canonical_slug: qwen/qwen-flash-2025-07-28
 
   - id: qwen/qwen-image-2.0
     pricing:
@@ -228,11 +239,20 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - image
     enabled: true
-    name: qwen-image-2.0
+    source: auto
     provider_id: qwen
     upstream_id: qwen-image-2.0
+    name: qwen-image-2.0
+    supported_parameters:
+      - max_tokens
+      - stop
+      - temperature
+      - top_p
+    top_provider:
+      is_moderated: false
+    canonical_slug: qwen/qwen-image-2.0
 
   - id: qwen/qwen-image-2.0-pro
     pricing:
@@ -244,35 +264,47 @@ models:
       input_modalities:
         - text
       output_modalities:
-        - text
+        - image
     enabled: true
-    name: qwen-image-2.0-pro
+    source: auto
     provider_id: qwen
     upstream_id: qwen-image-2.0-pro
+    name: qwen-image-2.0-pro
+    supported_parameters:
+      - max_tokens
+      - stop
+      - temperature
+      - top_p
+    top_provider:
+      is_moderated: false
+    canonical_slug: qwen/qwen-image-2.0-pro
 
   - id: qwen/qwen-max
     pricing:
-      prompt: '0.00000104'
-      completion: '0.00000416'
+      prompt: '0.0000016'
+      completion: '0.0000064'
       request: '0'
       image: '0'
       input_cache_read: '0.000000208'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen-Max '
-    context_length: 32768
+    source: auto
     provider_id: qwen
     upstream_id: qwen-max
+    name: qwen-max
+    canonical_slug: qwen/qwen-max-2025-01-25
+    context_length: 30720
     supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
       - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
+      - reasoning
+      - stop
       - temperature
       - tool_choice
       - tools
@@ -281,35 +313,37 @@ models:
     links:
       details: /api/v1/models/qwen/qwen-max-2025-01-25/endpoints
     top_provider:
-      context_length: 32768
+      context_length: 30720
       max_completion_tokens: 8192
       is_moderated: false
-    description: Qwen-Max, based on Qwen2.5, provides the best inference performance among [Qwen models](/qwen), especially for complex multi-step tasks. It's a large-scale MoE model that has been pretrained on over 20 trillion...
 
   - id: qwen/qwen-plus
     pricing:
-      prompt: '0.00000026'
-      completion: '0.00000078'
+      prompt: '0.0000004'
+      completion: '0.0000012'
       request: '0'
       image: '0'
       input_cache_read: '0.000000052'
       input_cache_write: '0.000000325'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen-Plus'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus
+    name: qwen-plus
+    canonical_slug: qwen/qwen-plus-2025-01-25
+    context_length: 129024
     supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
       - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
+      - reasoning
+      - stop
       - temperature
       - tool_choice
       - tools
@@ -318,8 +352,8 @@ models:
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-01-25/endpoints
     top_provider:
-      context_length: 1000000
-      max_completion_tokens: 32768
+      context_length: 129024
+      max_completion_tokens: 16384
       is_moderated: false
     description: Qwen-Plus, based on the Qwen2.5 foundation model, is a 131K context model with a balanced performance, speed, and cost combination.
 
@@ -335,11 +369,27 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-plus-2025-01-25
-    context_length: 129024
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-01-25
+    name: qwen-plus-2025-01-25
+    context_length: 129024
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 129024
+      max_completion_tokens: 8192
+      is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
+    canonical_slug: qwen/qwen-plus-2025-01-25
 
   - id: qwen/qwen-plus-2025-04-28
     pricing:
@@ -347,17 +397,34 @@ models:
       completion: '0.0000012'
       request: '0'
       image: '0'
+      internal_reasoning: '0.000004'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
     enabled: true
-    name: qwen-plus-2025-04-28
-    context_length: 129024
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-04-28
+    name: qwen-plus-2025-04-28
+    context_length: 129024
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 129024
+      max_completion_tokens: 16384
+      is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
+    canonical_slug: qwen/qwen-plus-2025-04-28
 
   - id: qwen/qwen-plus-2025-07-14
     pricing:
@@ -365,17 +432,34 @@ models:
       completion: '0.0000012'
       request: '0'
       image: '0'
+      internal_reasoning: '0.000004'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
     enabled: true
-    name: qwen-plus-2025-07-14
-    context_length: 129024
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-14
+    name: qwen-plus-2025-07-14
+    context_length: 129024
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 129024
+      max_completion_tokens: 16384
+      is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
+    canonical_slug: qwen/qwen-plus-2025-07-14
 
   - id: qwen/qwen-plus-2025-07-28
     pricing:
@@ -386,34 +470,36 @@ models:
       input_cache_write: '0.000000325'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen Plus 0728'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-28
-    supported_parameters:
-      - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
-      - structured_outputs
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
+    name: qwen-plus-2025-07-28
+    canonical_slug: qwen/qwen-plus-2025-07-28
+    context_length: 997952
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-07-28/endpoints
     top_provider:
-      context_length: 1000000
+      context_length: 997952
       max_completion_tokens: 32768
       is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
@@ -427,15 +513,21 @@ models:
       input_cache_write: '0.000000325'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen Plus 0728 (thinking)'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-07-28:thinking
+    name: 'Qwen: Qwen Plus 0728 (thinking)'
+    canonical_slug: qwen/qwen-plus-2025-07-28
+    context_length: 1000000
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -448,10 +540,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-plus-2025-07-28/endpoints
@@ -473,11 +561,27 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-plus-2025-09-11
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-2025-09-11
+    name: qwen-plus-2025-09-11
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 32768
+      is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
+    canonical_slug: qwen/qwen-plus-2025-09-11
 
   - id: qwen/qwen-plus-latest
     pricing:
@@ -491,35 +595,55 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-plus-latest
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen-plus-latest
+    name: qwen-plus-latest
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 32768
+      is_moderated: false
     description: Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination.
+    canonical_slug: qwen/qwen-plus-latest
 
   - id: qwen/qwen-turbo
     pricing:
-      prompt: '0.0000000325'
-      completion: '0.00000013'
+      prompt: '0.00000005'
+      completion: '0.0000002'
       request: '0'
       image: '0'
       input_cache_read: '0.0000000065'
+      internal_reasoning: '0.0000005'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen-Turbo'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen-turbo
+    name: qwen-turbo
+    canonical_slug: qwen/qwen-turbo-2024-11-01
+    context_length: 129024
     supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
       - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
+      - reasoning
+      - stop
       - temperature
       - tool_choice
       - tools
@@ -528,8 +652,8 @@ models:
     links:
       details: /api/v1/models/qwen/qwen-turbo-2024-11-01/endpoints
     top_provider:
-      context_length: 131072
-      max_completion_tokens: 8192
+      context_length: 129024
+      max_completion_tokens: 16384
       is_moderated: false
     description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
 
@@ -545,11 +669,27 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen-turbo-2024-11-01
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-turbo-2024-11-01
+    name: qwen-turbo-2024-11-01
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 8192
+      is_moderated: false
     description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
+    canonical_slug: qwen/qwen-turbo-2024-11-01
 
   - id: qwen/qwen-turbo-2025-04-28
     pricing:
@@ -557,17 +697,34 @@ models:
       completion: '0.0000002'
       request: '0'
       image: '0'
+      internal_reasoning: '0.0000005'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
     enabled: true
-    name: qwen-turbo-2025-04-28
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-turbo-2025-04-28
+    name: qwen-turbo-2025-04-28
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 16384
+      is_moderated: false
     description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
+    canonical_slug: qwen/qwen-turbo-2025-04-28
 
   - id: qwen/qwen-turbo-latest
     pricing:
@@ -575,17 +732,34 @@ models:
       completion: '0.0000002'
       request: '0'
       image: '0'
+      internal_reasoning: '0.0000005'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
     enabled: true
-    name: qwen-turbo-latest
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen-turbo-latest
+    name: qwen-turbo-latest
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 16384
+      is_moderated: false
     description: Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks.
+    canonical_slug: qwen/qwen-turbo-latest
 
   - id: qwen/qwen-vl-max
     pricing:
@@ -596,15 +770,21 @@ models:
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen VL Max'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen-vl-max
+    name: 'Qwen: Qwen VL Max'
+    canonical_slug: qwen/qwen-vl-max-2025-01-25
+    context_length: 131072
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -614,10 +794,6 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen-vl-max-2025-01-25/endpoints
@@ -637,15 +813,17 @@ models:
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen VL Plus'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen-vl-plus
+    name: 'Qwen: Qwen VL Plus'
+    canonical_slug: qwen/qwen-vl-plus
+    context_length: 131072
     supported_parameters:
       - max_tokens
       - presence_penalty
@@ -660,7 +838,6 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
-    description: Qwen's Enhanced Large Visual Language Model. Significantly upgraded for detailed recognition capabilities and text recognition abilities, supporting ultra-high pixel resolutions up to millions of pixels and extreme aspect ratios for...
 
   - id: qwen/qwen2.5-vl-72b-instruct
     pricing:
@@ -671,15 +848,18 @@ models:
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen2.5 VL 72B Instruct'
-    context_length: 32000
+    source: auto
     provider_id: qwen
     upstream_id: qwen2.5-vl-72b-instruct
+    name: 'Qwen: Qwen2.5 VL 72B Instruct'
+    canonical_slug: qwen/qwen2.5-vl-72b-instruct
+    hugging_face_id: Qwen/Qwen2.5-VL-72B-Instruct
+    context_length: 32000
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -698,7 +878,6 @@ models:
       details: /api/v1/models/qwen/qwen2.5-vl-72b-instruct/endpoints
     top_provider:
       context_length: 32000
-      max_completion_tokens: null
       is_moderated: false
     description: Qwen2.5-VL is proficient in recognizing common objects such as flowers, birds, fish, and insects. It is also highly capable of analyzing texts, charts, icons, graphics, and layouts within images.
 
@@ -710,19 +889,23 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 14B'
-    context_length: 40960
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-14b
+    name: 'Qwen: Qwen3 14B'
+    canonical_slug: qwen/qwen3-14b-04-28
+    hugging_face_id: Qwen/Qwen3-14B
+    context_length: 40960
     supported_parameters:
       - frequency_penalty
       - include_reasoning
+      - logit_bias
       - logprobs
       - max_tokens
       - min_p
@@ -746,7 +929,6 @@ models:
       context_length: 40960
       max_completion_tokens: 40960
       is_moderated: false
-    description: Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
 
   - id: qwen/qwen3-235b-a22b
     pricing:
@@ -756,16 +938,19 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 235B A22B'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-235b-a22b
+    name: 'Qwen: Qwen3 235B A22B'
+    canonical_slug: qwen/qwen3-235b-a22b-04-28
+    hugging_face_id: Qwen/Qwen3-235B-A22B
+    context_length: 131072
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -784,7 +969,6 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
       is_moderated: false
-    description: Qwen3-235B-A22B is a 235B parameter mixture-of-experts (MoE) model developed by Qwen, activating 22B parameters per forward pass. It supports seamless switching between a "thinking" mode for complex reasoning, math, and...
 
   - id: qwen/qwen3-235b-a22b-2507
     pricing:
@@ -794,15 +978,18 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 235B A22B Instruct 2507'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-235b-a22b-2507
+    name: 'Qwen: Qwen3 235B A22B Instruct 2507'
+    canonical_slug: qwen/qwen3-235b-a22b-07-25
+    hugging_face_id: Qwen/Qwen3-235B-A22B-Instruct-2507
+    context_length: 262144
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -826,9 +1013,8 @@ models:
       details: /api/v1/models/qwen/qwen3-235b-a22b-07-25/endpoints
     top_provider:
       context_length: 262144
-      max_completion_tokens: null
+      max_completion_tokens: 16384
       is_moderated: false
-    description: Qwen3-235B-A22B-Instruct-2507 is a multilingual, instruction-tuned mixture-of-experts language model based on the Qwen3-235B architecture, with 22B active parameters per forward pass. It is optimized for general-purpose text generation, including instruction following,...
 
   - id: qwen/qwen3-235b-a22b-thinking-2507
     pricing:
@@ -838,16 +1024,23 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 235B A22B Thinking 2507'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-235b-a22b-thinking-2507
+    name: 'Qwen: Qwen3 235B A22B Thinking 2507'
+    canonical_slug: qwen/qwen3-235b-a22b-thinking-2507
+    hugging_face_id: Qwen/Qwen3-235B-A22B-Thinking-2507
+    context_length: 131072
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -866,18 +1059,12 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-235b-a22b-thinking-2507/endpoints
     top_provider:
       context_length: 131072
-      max_completion_tokens: null
       is_moderated: false
-    description: Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass and natively supports up to 262,144...
 
   - id: qwen/qwen3-30b-a3b
     pricing:
@@ -887,47 +1074,40 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 30B A3B'
-    context_length: 40960
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-30b-a3b
-    supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - logprobs
-      - max_tokens
-      - min_p
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
-      - response_format
-      - seed
-      - stop
-      - structured_outputs
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_logprobs
-      - top_p
+    name: qwen3-30b-a3b
+    canonical_slug: qwen/qwen3-30b-a3b-04-28
+    hugging_face_id: Qwen/Qwen3-30B-A3B
+    context_length: 129024
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-30b-a3b-04-28/endpoints
     top_provider:
-      context_length: 40960
-      max_completion_tokens: 40960
+      context_length: 129024
+      max_completion_tokens: 16384
       is_moderated: false
-    description: Qwen3, the latest generation in the Qwen large language model series, features both dense and mixture-of-experts (MoE) architectures to excel in reasoning, multilingual support, and advanced agent tasks. Its unique...
 
   - id: qwen/qwen3-30b-a3b-instruct-2507
     pricing:
@@ -937,15 +1117,18 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 30B A3B Instruct 2507'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-30b-a3b-instruct-2507
+    name: 'Qwen: Qwen3 30B A3B Instruct 2507'
+    canonical_slug: qwen/qwen3-30b-a3b-instruct-2507
+    hugging_face_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    context_length: 262144
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -969,7 +1152,6 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
-    description: Qwen3-30B-A3B-Instruct-2507 is a 30.5B-parameter mixture-of-experts language model from Qwen, with 3.3B active parameters per inference. It operates in non-thinking mode and is designed for high-quality instruction following, multilingual understanding, and...
 
   - id: qwen/qwen3-30b-a3b-thinking-2507
     pricing:
@@ -980,15 +1162,18 @@ models:
       input_cache_read: '0.00000008'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 30B A3B Thinking 2507'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-30b-a3b-thinking-2507
+    name: 'Qwen: Qwen3 30B A3B Thinking 2507'
+    canonical_slug: qwen/qwen3-30b-a3b-thinking-2507
+    hugging_face_id: Qwen/Qwen3-30B-A3B-Thinking-2507
+    context_length: 131072
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1014,7 +1199,6 @@ models:
       context_length: 131072
       max_completion_tokens: 131072
       is_moderated: false
-    description: Qwen3-30B-A3B-Thinking-2507 is a 30B parameter Mixture-of-Experts reasoning model optimized for complex tasks requiring extended multi-step thinking. The model is designed specifically for “thinking mode,” where internal reasoning traces are separated...
 
   - id: qwen/qwen3-32b
     pricing:
@@ -1025,16 +1209,19 @@ models:
       input_cache_read: '0.00000004'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 32B'
-    context_length: 40960
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-32b
+    name: 'Qwen: Qwen3 32B'
+    canonical_slug: qwen/qwen3-32b-04-28
+    hugging_face_id: Qwen/Qwen3-32B
+    context_length: 40960
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1060,7 +1247,6 @@ models:
       context_length: 40960
       max_completion_tokens: 40960
       is_moderated: false
-    description: Qwen3-32B is a dense 32.8B parameter causal language model from the Qwen3 series, optimized for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode for...
 
   - id: qwen/qwen3-8b
     pricing:
@@ -1071,16 +1257,26 @@ models:
       input_cache_read: '0.00000005'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
       instruct_type: qwen3
     enabled: true
-    name: 'Qwen: Qwen3 8B'
-    context_length: 40960
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-8b
+    name: 'Qwen: Qwen3 8B'
+    canonical_slug: qwen/qwen3-8b-04-28
+    hugging_face_id: Qwen/Qwen3-8B
+    context_length: 40960
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1099,13 +1295,6 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-8b-04-28/endpoints
@@ -1113,26 +1302,27 @@ models:
       context_length: 40960
       max_completion_tokens: 8192
       is_moderated: false
-    description: Qwen3-8B is a dense 8.2B parameter causal language model from the Qwen3 series, designed for both reasoning-heavy tasks and efficient dialogue. It supports seamless switching between "thinking" mode for math,...
 
   - id: qwen/qwen3-coder
     pricing:
       prompt: '0.00000022'
-      completion: '0.000001'
+      completion: '0.0000018'
       request: '0'
       image: '0'
-      input_cache_read: '0.000000022'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Coder 480B A35B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder
+    name: 'Qwen: Qwen3 Coder 480B A35B'
+    canonical_slug: qwen/qwen3-coder-480b-a35b-07-25
+    hugging_face_id: Qwen/Qwen3-Coder-480B-A35B-Instruct
+    context_length: 262144
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1154,9 +1344,8 @@ models:
       details: /api/v1/models/qwen/qwen3-coder-480b-a35b-07-25/endpoints
     top_provider:
       context_length: 262144
-      max_completion_tokens: null
+      max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
 
   - id: qwen/qwen3-coder-30b-a3b-instruct
     pricing:
@@ -1166,15 +1355,18 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Coder 30B A3B Instruct'
-    context_length: 160000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-30b-a3b-instruct
+    name: 'Qwen: Qwen3 Coder 30B A3B Instruct'
+    canonical_slug: qwen/qwen3-coder-30b-a3b-instruct
+    hugging_face_id: Qwen/Qwen3-Coder-30B-A3B-Instruct
+    context_length: 160000
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1196,7 +1388,6 @@ models:
       context_length: 160000
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-Coder-30B-A3B-Instruct is a 30.5B parameter Mixture-of-Experts (MoE) model with 128 experts (8 active per forward pass), designed for advanced code generation, repository-scale understanding, and agentic tool use. Built on the...
 
   - id: qwen/qwen3-coder-flash
     pricing:
@@ -1208,36 +1399,38 @@ models:
       input_cache_write: '0.00000024375'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Coder Flash'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-flash
-    supported_parameters:
-      - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
+    name: qwen3-coder-flash
+    canonical_slug: qwen/qwen3-coder-flash
+    context_length: 997952
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-coder-flash/endpoints
     top_provider:
-      context_length: 1000000
+      context_length: 997952
       max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3 Coder Flash is Alibaba's fast and cost efficient version of their proprietary Qwen3 Coder Plus. It is a powerful coding agent model specializing in autonomous programming via tool calling...
 
   - id: qwen/qwen3-coder-flash-2025-07-28
     pricing:
@@ -1251,29 +1444,52 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-coder-flash-2025-07-28
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-flash-2025-07-28
+    name: qwen3-coder-flash-2025-07-28
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 65536
+      is_moderated: false
+    canonical_slug: qwen/qwen3-coder-flash-2025-07-28
 
   - id: qwen/qwen3-coder-next
     pricing:
-      prompt: '0.00000015'
+      prompt: '0.00000014'
       completion: '0.0000008'
       request: '0'
       image: '0'
-      input_cache_read: '0.00000011'
+      input_cache_read: '0.00000009'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen3 Coder Next'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-next
+    name: 'Qwen: Qwen3 Coder Next'
+    canonical_slug: qwen/qwen3-coder-next-2025-02-03
+    hugging_face_id: Qwen/Qwen3-Coder-Next
+    context_length: 262144
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1290,17 +1506,12 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-coder-next-2025-02-03/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 262144
       is_moderated: false
-    description: Qwen3-Coder-Next is an open-weight causal language model optimized for coding agents and local development workflows. It uses a sparse MoE design with 80B total parameters and only 3B activated per...
 
   - id: qwen/qwen3-coder-plus
     pricing:
@@ -1312,37 +1523,38 @@ models:
       input_cache_write: '0.0000008125'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Coder Plus'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-plus
-    supported_parameters:
-      - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
-      - structured_outputs
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
+    name: qwen3-coder-plus
+    canonical_slug: qwen/qwen3-coder-plus
+    context_length: 997952
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-coder-plus/endpoints
     top_provider:
-      context_length: 1000000
+      context_length: 997952
       max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3 Coder Plus is Alibaba's proprietary version of the Open Source Qwen3 Coder 480B A35B. It is a powerful coding agent model specializing in autonomous programming via tool calling and...
 
   - id: qwen/qwen3-coder-plus-2025-07-22
     pricing:
@@ -1356,10 +1568,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-coder-plus-2025-07-22
-    context_length: 997952
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder-plus-2025-07-22
+    name: qwen3-coder-plus-2025-07-22
+    context_length: 997952
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 997952
+      max_completion_tokens: 65536
+      is_moderated: false
+    canonical_slug: qwen/qwen3-coder-plus-2025-07-22
 
   - id: qwen/qwen3-coder:free
     pricing:
@@ -1369,15 +1597,18 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Coder 480B A35B (free)'
-    context_length: 262000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-coder:free
+    name: 'Qwen: Qwen3 Coder 480B A35B (free)'
+    canonical_slug: qwen/qwen3-coder-480b-a35b-07-25
+    hugging_face_id: Qwen/Qwen3-Coder-480B-A35B-Instruct
+    context_length: 262000
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1395,7 +1626,6 @@ models:
       context_length: 262000
       max_completion_tokens: 262000
       is_moderated: false
-    description: Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-context reasoning over...
 
   - id: qwen/qwen3-max
     pricing:
@@ -1407,36 +1637,38 @@ models:
       input_cache_write: '0.000000975'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Max'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-max
-    supported_parameters:
-      - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
+    name: qwen3-max
+    canonical_slug: qwen/qwen3-max
+    context_length: 258048
     default_parameters:
       temperature: 1
       top_p: 1
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-06-30'
     links:
       details: /api/v1/models/qwen/qwen3-max/endpoints
     top_provider:
-      context_length: 262144
-      max_completion_tokens: 32768
+      context_length: 258048
+      max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3-Max is an updated release built on the Qwen3 series, offering major improvements in reasoning, instruction following, multilingual support, and long-tail knowledge coverage compared to the January 2025 version. It...
 
   - id: qwen/qwen3-max-2026-01-23
     pricing:
@@ -1450,10 +1682,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-max-2026-01-23
-    context_length: 258048
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-max-2026-01-23
+    name: qwen3-max-2026-01-23
+    context_length: 258048
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 258048
+      max_completion_tokens: 65536
+      is_moderated: false
+    canonical_slug: qwen/qwen3-max-2026-01-23
 
   - id: qwen/qwen3-max-preview
     pricing:
@@ -1467,10 +1715,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-max-preview
-    context_length: 258048
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-max-preview
+    name: qwen3-max-preview
+    context_length: 258048
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 258048
+      max_completion_tokens: 65536
+      is_moderated: false
+    canonical_slug: qwen/qwen3-max-preview
 
   - id: qwen/qwen3-max-thinking
     pricing:
@@ -1480,15 +1744,21 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen3 Max Thinking'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-max-thinking
+    name: 'Qwen: Qwen3 Max Thinking'
+    canonical_slug: qwen/qwen3-max-thinking-20260123
+    context_length: 262144
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1501,59 +1771,48 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-max-thinking-20260123/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-Max-Thinking is the flagship reasoning model in the Qwen3 series, designed for high-stakes cognitive tasks that require deep, multi-step reasoning. By significantly scaling model capacity and reinforcement learning compute, it...
 
   - id: qwen/qwen3-next-80b-a3b-instruct
     pricing:
-      prompt: '0.00000009'
-      completion: '0.0000011'
+      prompt: '0.00000015'
+      completion: '0.0000012'
       request: '0'
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Next 80B A3B Instruct'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-instruct
+    name: qwen3-next-80b-a3b-instruct
+    canonical_slug: qwen/qwen3-next-80b-a3b-instruct-2509
+    hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Instruct
+    context_length: 262144
     supported_parameters:
-      - frequency_penalty
-      - logit_bias
+      - max_completion_tokens
       - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
-      - response_format
-      - seed
       - stop
-      - structured_outputs
       - temperature
       - tool_choice
       - tools
-      - top_k
       - top_p
     knowledge_cutoff: '2025-09-30'
     links:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-instruct-2509/endpoints
     top_provider:
       context_length: 262144
-      max_completion_tokens: null
+      max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
 
   - id: qwen/qwen3-next-80b-a3b-instruct:free
     pricing:
@@ -1563,15 +1822,18 @@ models:
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Next 80B A3B Instruct (free)'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-instruct:free
+    name: 'Qwen: Qwen3 Next 80B A3B Instruct (free)'
+    canonical_slug: qwen/qwen3-next-80b-a3b-instruct-2509
+    hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Instruct
+    context_length: 262144
     supported_parameters:
       - frequency_penalty
       - max_tokens
@@ -1589,139 +1851,167 @@ models:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-instruct-2509/endpoints
     top_provider:
       context_length: 262144
-      max_completion_tokens: null
       is_moderated: false
-    description: Qwen3-Next-80B-A3B-Instruct is an instruction-tuned chat model in the Qwen3-Next series optimized for fast, stable responses without “thinking” traces. It targets complex tasks across reasoning, code generation, knowledge QA, and multilingual...
 
   - id: qwen/qwen3-next-80b-a3b-thinking
     pricing:
-      prompt: '0.0000000975'
-      completion: '0.00000078'
+      prompt: '0.00000015'
+      completion: '0.0000012'
       request: '0'
       image: '0'
     architecture:
       input_modalities:
-        - text->text
+        - text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 Next 80B A3B Thinking'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-next-80b-a3b-thinking
-    supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - logit_bias
-      - max_tokens
-      - min_p
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
-      - response_format
-      - seed
-      - stop
-      - structured_outputs
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
+    name: qwen3-next-80b-a3b-thinking
+    canonical_slug: qwen/qwen3-next-80b-a3b-thinking-2509
+    hugging_face_id: Qwen/Qwen3-Next-80B-A3B-Thinking
+    context_length: 262144
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-09-30'
     links:
       details: /api/v1/models/qwen/qwen3-next-80b-a3b-thinking-2509/endpoints
     top_provider:
-      context_length: 131072
-      max_completion_tokens: 32768
+      context_length: 262144
+      max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen3-Next-80B-A3B-Thinking is a reasoning-first chat model in the Qwen3-Next line that outputs structured “thinking” traces by default. It’s designed for hard multi-step problems; math proofs, code synthesis/debugging, logic, and agentic...
+
+  - id: qwen/qwen3-tts-flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Qwen
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3-tts-flash
+    name: 'Qwen: Qwen3 TTS Flash'
+    canonical_slug: qwen/qwen3-tts-flash
+    context_length: 0
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    description: Alibaba Cloud Model Studio Qwen text-to-speech model.
+
+  - id: qwen/qwen3-tts-instruct-flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Qwen
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3-tts-instruct-flash
+    name: 'Qwen: Qwen3 TTS Instruct Flash'
+    canonical_slug: qwen/qwen3-tts-instruct-flash
+    context_length: 0
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    description: Alibaba Cloud Model Studio Qwen text-to-speech model with instruction control.
 
   - id: qwen/qwen3-vl-235b-a22b-instruct
     pricing:
-      prompt: '0.0000002'
-      completion: '0.00000088'
+      prompt: '0.0000004'
+      completion: '0.0000016'
       request: '0'
       image: '0'
       input_cache_read: '0.00000011'
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 235B A22B Instruct'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-235b-a22b-instruct
-    supported_parameters:
-      - frequency_penalty
-      - logit_bias
-      - max_tokens
-      - min_p
-      - presence_penalty
-      - repetition_penalty
-      - response_format
-      - seed
-      - stop
-      - structured_outputs
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
+    name: qwen3-vl-235b-a22b-instruct
+    canonical_slug: qwen/qwen3-vl-235b-a22b-instruct
+    hugging_face_id: Qwen/Qwen3-VL-235B-A22B-Instruct
+    context_length: 131072
     default_parameters:
       temperature: 0.7
       top_p: 0.8
       frequency_penalty: null
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-vl-235b-a22b-instruct/endpoints
     top_provider:
-      context_length: 262144
-      max_completion_tokens: null
+      context_length: 131072
+      max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-235B-A22B Instruct is an open-weight multimodal model that unifies strong text generation with visual understanding across images and video. The Instruct model targets general vision-language use (VQA, document parsing, chart/table...
 
   - id: qwen/qwen3-vl-235b-a22b-thinking
     pricing:
-      prompt: '0.00000026'
-      completion: '0.0000026'
+      prompt: '0.0000004'
+      completion: '0.000004'
       request: '0'
       image: '0'
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 235B A22B Thinking'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-235b-a22b-thinking
-    supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - max_tokens
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
-      - response_format
-      - seed
-      - stop
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
+    name: qwen3-vl-235b-a22b-thinking
+    canonical_slug: qwen/qwen3-vl-235b-a22b-thinking
+    hugging_face_id: Qwen/Qwen3-VL-235B-A22B-Thinking
+    context_length: 131072
     default_parameters:
       temperature: 0.8
       top_p: 0.95
@@ -1729,6 +2019,16 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: 1
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-vl-235b-a22b-thinking/endpoints
@@ -1736,7 +2036,6 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-235B-A22B Thinking is a multimodal model that unifies strong text generation with visual understanding across images and video. The Thinking model is optimized for multimodal reasoning in STEM and math....
 
   - id: qwen/qwen3-vl-30b-a3b-instruct
     pricing:
@@ -1747,15 +2046,25 @@ models:
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 30B A3B Instruct'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-30b-a3b-instruct
+    name: 'Qwen: Qwen3 VL 30B A3B Instruct'
+    canonical_slug: qwen/qwen3-vl-30b-a3b-instruct
+    hugging_face_id: Qwen/Qwen3-VL-30B-A3B-Instruct
+    context_length: 131072
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1772,13 +2081,6 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-vl-30b-a3b-instruct/endpoints
@@ -1786,7 +2088,6 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-30B-A3B-Instruct is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Instruct variant optimizes instruction-following for general multimodal tasks. It excels in perception...
 
   - id: qwen/qwen3-vl-30b-a3b-thinking
     pricing:
@@ -1797,15 +2098,25 @@ models:
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 30B A3B Thinking'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-30b-a3b-thinking
+    name: 'Qwen: Qwen3 VL 30B A3B Thinking'
+    canonical_slug: qwen/qwen3-vl-30b-a3b-thinking
+    hugging_face_id: Qwen/Qwen3-VL-30B-A3B-Thinking
+    context_length: 131072
+    default_parameters:
+      temperature: 0.8
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: 1
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -1822,13 +2133,6 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: 0.8
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: 1
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/qwen/qwen3-vl-30b-a3b-thinking/endpoints
@@ -1836,35 +2140,28 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-30B-A3B-Thinking is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Thinking variant enhances reasoning in STEM, math, and complex tasks. It excels...
 
   - id: qwen/qwen3-vl-32b-instruct
     pricing:
-      prompt: '0.000000104'
-      completion: '0.000000416'
+      prompt: '0.00000016'
+      completion: '0.00000064'
       request: '0'
       image: '0'
     architecture:
       input_modalities:
         - text
-        - image->text
+        - image
       output_modalities:
         - text
       tokenizer: Qwen
     enabled: true
-    name: 'Qwen: Qwen3 VL 32B Instruct'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-32b-instruct
-    supported_parameters:
-      - max_tokens
-      - presence_penalty
-      - response_format
-      - seed
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
+    name: qwen3-vl-32b-instruct
+    canonical_slug: qwen/qwen3-vl-32b-instruct
+    hugging_face_id: Qwen/Qwen3-VL-32B-Instruct
+    context_length: 131072
     default_parameters:
       temperature: 0.7
       top_p: 0.8
@@ -1872,13 +2169,20 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: 1
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
     links:
       details: /api/v1/models/qwen/qwen3-vl-32b-instruct/endpoints
     top_provider:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-32B-Instruct is a large-scale multimodal vision-language model designed for high-precision understanding and reasoning across text, images, and video. With 32 billion parameters, it combines deep visual perception with advanced text...
 
   - id: qwen/qwen3-vl-32b-thinking
     pricing:
@@ -1893,10 +2197,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-vl-32b-thinking
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-32b-thinking
+    name: qwen3-vl-32b-thinking
+    context_length: 131072
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 32768
+      is_moderated: false
+    canonical_slug: qwen/qwen3-vl-32b-thinking
 
   - id: qwen/qwen3-vl-8b-instruct
     pricing:
@@ -1906,16 +2226,23 @@ models:
       image: '0'
     architecture:
       input_modalities:
+        - image
         - text
-        - image->text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 8B Instruct'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-8b-instruct
+    name: 'Qwen: Qwen3 VL 8B Instruct'
+    canonical_slug: qwen/qwen3-vl-8b-instruct
+    hugging_face_id: Qwen/Qwen3-VL-8B-Instruct
+    context_length: 131072
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.8
+      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - logit_bias
@@ -1932,17 +2259,12 @@ models:
       - tools
       - top_k
       - top_p
-    default_parameters:
-      temperature: 0.7
-      top_p: 0.8
-      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3-vl-8b-instruct/endpoints
     top_provider:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-8B-Instruct is a multimodal vision-language model from the Qwen3-VL series, built for high-fidelity understanding and reasoning across text, images, and video. It features improved multimodal fusion with Interleaved-MRoPE for long-horizon...
 
   - id: qwen/qwen3-vl-8b-thinking
     pricing:
@@ -1952,16 +2274,22 @@ models:
       image: '0'
     architecture:
       input_modalities:
+        - image
         - text
-        - image->text
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3 VL 8B Thinking'
-    context_length: 131072
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-8b-thinking
+    name: 'Qwen: Qwen3 VL 8B Thinking'
+    canonical_slug: qwen/qwen3-vl-8b-thinking
+    hugging_face_id: Qwen/Qwen3-VL-8B-Thinking
+    context_length: 131072
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -1974,16 +2302,12 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
     links:
       details: /api/v1/models/qwen/qwen3-vl-8b-thinking/endpoints
     top_provider:
       context_length: 131072
       max_completion_tokens: 32768
       is_moderated: false
-    description: Qwen3-VL-8B-Thinking is the reasoning-optimized variant of the Qwen3-VL-8B multimodal model, designed for advanced visual and textual reasoning across complex scenes, documents, and temporal sequences. It integrates enhanced multimodal alignment and...
 
   - id: qwen/qwen3-vl-plus
     pricing:
@@ -1998,10 +2322,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3-vl-plus
-    context_length: 260096
+    source: auto
     provider_id: qwen
     upstream_id: qwen3-vl-plus
+    name: qwen3-vl-plus
+    context_length: 260096
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 260096
+      max_completion_tokens: 32768
+      is_moderated: false
+    canonical_slug: qwen/qwen3-vl-plus
 
   - id: qwen/qwen3.5-122b-a10b
     pricing:
@@ -2013,15 +2353,25 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5-122B-A10B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-122b-a10b
+    name: 'Qwen: Qwen3.5-122B-A10B'
+    canonical_slug: qwen/qwen3.5-122b-a10b-20260224
+    hugging_face_id: Qwen/Qwen3.5-122B-A10B
+    context_length: 262144
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2042,20 +2392,12 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-122b-a10b-20260224/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 122B-A10B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. In terms of...
 
   - id: qwen/qwen3.5-27b
     pricing:
@@ -2067,15 +2409,25 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5-27B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-27b
+    name: 'Qwen: Qwen3.5-27B'
+    canonical_slug: qwen/qwen3.5-27b-20260224
+    hugging_face_id: Qwen/Qwen3.5-27B
+    context_length: 262144
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2096,20 +2448,12 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-27b-20260224/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 27B native vision-language Dense model incorporates a linear attention mechanism, delivering fast response times while balancing inference speed and performance. Its overall capabilities are comparable to those of...
 
   - id: qwen/qwen3.5-35b-a3b
     pricing:
@@ -2121,15 +2465,25 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5-35B-A3B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-35b-a3b
+    name: 'Qwen: Qwen3.5-35B-A3B'
+    canonical_slug: qwen/qwen3.5-35b-a3b-20260224
+    hugging_face_id: Qwen/Qwen3.5-35B-A3B
+    context_length: 262144
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2150,20 +2504,12 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-35b-a3b-20260224/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 Series 35B-A3B is a native vision-language model designed with a hybrid architecture that integrates linear attention mechanisms and a sparse mixture-of-experts model, achieving higher inference efficiency. Its overall...
 
   - id: qwen/qwen3.5-397b-a17b
     pricing:
@@ -2176,15 +2522,25 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5 397B A17B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-397b-a17b
+    name: 'Qwen: Qwen3.5 397B A17B'
+    canonical_slug: qwen/qwen3.5-397b-a17b-20260216
+    hugging_face_id: Qwen/Qwen3.5-397B-A17B
+    context_length: 262144
+    default_parameters:
+      temperature: 0.6
+      top_p: 0.95
+      top_k: 20
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2205,20 +2561,12 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    default_parameters:
-      temperature: 0.6
-      top_p: 0.95
-      top_k: 20
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-397b-a17b-20260216/endpoints
     top_provider:
       context_length: 262144
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...
 
   - id: qwen/qwen3.5-9b
     pricing:
@@ -2230,15 +2578,25 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5-9B'
-    context_length: 262144
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-9b
+    name: 'Qwen: Qwen3.5-9B'
+    canonical_slug: qwen/qwen3.5-9b-20260310
+    hugging_face_id: Qwen/Qwen3.5-9B
+    context_length: 262144
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -2258,20 +2616,11 @@ models:
       - top_k
       - top_logprobs
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-9b-20260310/endpoints
     top_provider:
       context_length: 262144
-      max_completion_tokens: null
       is_moderated: false
-    description: Qwen3.5-9B is a multimodal foundation model from the Qwen3.5 family, designed to deliver strong reasoning, coding, and visual understanding in an efficient 9B-parameter architecture. It uses a unified vision-language design...
 
   - id: qwen/qwen3.5-flash-02-23
     pricing:
@@ -2284,15 +2633,21 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5-Flash'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-flash-02-23
+    name: 'Qwen: Qwen3.5-Flash'
+    canonical_slug: qwen/qwen3.5-flash-20260224
+    context_length: 1000000
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2305,17 +2660,12 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-flash-20260224/endpoints
     top_provider:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 native vision-language Flash models are built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. Compared to the...
 
   - id: qwen/qwen3.5-plus
     pricing:
@@ -2330,10 +2680,26 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwen3.5-plus
-    context_length: 991808
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-plus
+    name: qwen3.5-plus
+    context_length: 991808
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 991808
+      max_completion_tokens: 65536
+      is_moderated: false
+    canonical_slug: qwen/qwen3.5-plus
 
   - id: qwen/qwen3.5-plus-02-15
     pricing:
@@ -2346,15 +2712,21 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.5 Plus 2026-02-15'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.5-plus-02-15
+    name: 'Qwen: Qwen3.5 Plus 2026-02-15'
+    canonical_slug: qwen/qwen3.5-plus-20260216
+    context_length: 1000000
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2367,17 +2739,240 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.5-plus-20260216/endpoints
     top_provider:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
-    description: The Qwen3.5 native vision-language series Plus models are built on a hybrid architecture that integrates linear attention mechanisms with sparse mixture-of-experts models, achieving higher inference efficiency. In a variety of...
+
+  - id: qwen/qwen3.5-plus-20260420
+    pricing:
+      prompt: '0.0000004'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video
+      output_modalities:
+        - text
+      tokenizer: Qwen3
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3.5-plus-20260420
+    name: 'Qwen: Qwen3.5 Plus 2026-04-20'
+    canonical_slug: qwen/qwen3.5-plus-20260420
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - presence_penalty
+      - reasoning
+      - response_format
+      - seed
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    links:
+      details: /api/v1/models/qwen/qwen3.5-plus-20260420/endpoints
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 65536
+      is_moderated: false
+
+  - id: qwen/qwen3.6-27b
+    pricing:
+      prompt: '0.000000325'
+      completion: '0.00000325'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video
+      output_modalities:
+        - text
+      tokenizer: Qwen3
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3.6-27b
+    name: 'Qwen: Qwen3.6 27B'
+    canonical_slug: qwen/qwen3.6-27b-20260422
+    hugging_face_id: Qwen/Qwen3.6-27B
+    context_length: 256000
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_logprobs
+      - top_p
+    links:
+      details: /api/v1/models/qwen/qwen3.6-27b-20260422/endpoints
+    top_provider:
+      context_length: 256000
+      max_completion_tokens: 65536
+      is_moderated: false
+
+  - id: qwen/qwen3.6-35b-a3b
+    pricing:
+      prompt: '0.0000001612'
+      completion: '0.00000096525'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.0000001612'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video
+      output_modalities:
+        - text
+      tokenizer: Qwen
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3.6-35b-a3b
+    name: 'Qwen: Qwen3.6 35B A3B'
+    canonical_slug: qwen/qwen3.6-35b-a3b-20260415
+    hugging_face_id: Qwen/Qwen3.6-35B-A3B
+    context_length: 262144
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: 20
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/qwen/qwen3.6-35b-a3b-20260415/endpoints
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: 65536
+      is_moderated: false
+
+  - id: qwen/qwen3.6-flash
+    pricing:
+      prompt: '0.00000025'
+      completion: '0.0000015'
+      request: '0'
+      image: '0'
+      input_cache_write: '0.0000003125'
+    architecture:
+      input_modalities:
+        - text
+        - image
+        - video
+      output_modalities:
+        - text
+      tokenizer: Qwen3
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3.6-flash
+    name: 'Qwen: Qwen3.6 Flash'
+    canonical_slug: qwen/qwen3.6-flash
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - presence_penalty
+      - reasoning
+      - response_format
+      - seed
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    links:
+      details: /api/v1/models/qwen/qwen3.6-flash/endpoints
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 65536
+      is_moderated: false
+
+  - id: qwen/qwen3.6-max-preview
+    pricing:
+      prompt: '0.00000104'
+      completion: '0.00000624'
+      request: '0'
+      image: '0'
+      input_cache_write: '0.0000013'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Qwen
+    enabled: true
+    source: auto
+    provider_id: qwen
+    upstream_id: qwen3.6-max-preview
+    name: 'Qwen: Qwen3.6 Max Preview'
+    canonical_slug: qwen/qwen3.6-max-preview-20260420
+    context_length: 262144
+    supported_parameters:
+      - include_reasoning
+      - logprobs
+      - max_tokens
+      - presence_penalty
+      - reasoning
+      - response_format
+      - seed
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_logprobs
+      - top_p
+    links:
+      details: /api/v1/models/qwen/qwen3.6-max-preview-20260420/endpoints
+    top_provider:
+      context_length: 262144
+      max_completion_tokens: 65536
+      is_moderated: false
 
   - id: qwen/qwen3.6-plus
     pricing:
@@ -2390,15 +2985,24 @@ models:
       input_modalities:
         - text
         - image
-        - video->text
+        - video
       output_modalities:
         - text
       tokenizer: Qwen3
     enabled: true
-    name: 'Qwen: Qwen3.6 Plus'
-    context_length: 1000000
+    source: auto
     provider_id: qwen
     upstream_id: qwen3.6-plus
+    name: 'Qwen: Qwen3.6 Plus'
+    canonical_slug: qwen/qwen3.6-plus-04-02
+    context_length: 1000000
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -2411,57 +3015,12 @@ models:
       - tool_choice
       - tools
       - top_p
-    default_parameters:
-      temperature: null
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     links:
       details: /api/v1/models/qwen/qwen3.6-plus-04-02/endpoints
     top_provider:
       context_length: 1000000
       max_completion_tokens: 65536
       is_moderated: false
-    description: Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to the 3.5 series, it delivers...
-
-  - id: qwen/qwq-32b
-    pricing:
-      prompt: '0.00000015'
-      completion: '0.00000058'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text->text
-      output_modalities:
-        - text
-      tokenizer: Qwen
-      instruct_type: qwq
-    enabled: true
-    name: 'Qwen: QwQ 32B'
-    context_length: 131072
-    provider_id: qwen
-    upstream_id: qwq-32b
-    supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - reasoning
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
-    knowledge_cutoff: '2024-06-30'
-    expiration_date: '2026-04-29'
-    links:
-      details: /api/v1/models/qwen/qwq-32b/endpoints
-    top_provider:
-      context_length: 131072
-      max_completion_tokens: 131072
-      is_moderated: false
-    description: QwQ is the reasoning model of the Qwen series. Compared with conventional instruction-tuned models, QwQ, which is capable of thinking and reasoning, can achieve significantly enhanced performance in downstream tasks,...
 
   - id: qwen/qwq-plus
     pricing:
@@ -2475,7 +3034,23 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: qwq-plus
-    context_length: 98304
+    source: auto
     provider_id: qwen
     upstream_id: qwq-plus
+    name: qwq-plus
+    context_length: 98304
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 98304
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: qwen/qwq-plus

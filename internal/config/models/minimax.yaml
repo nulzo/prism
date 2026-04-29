@@ -1,31 +1,455 @@
 models:
-  - id: minimax/MiniMax-M2.7
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: 'MiniMax: M2.7'
-    provider_id: minimax
-    upstream_id: MiniMax-M2.7
-    context_length: 196608
-    supported_parameters:
-      - max_completion_tokens
-      - max_tokens
-      - stop
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
-    description: MiniMax M2.7 text generation via the OpenAI-compatible chat completions API.
 
-  - id: minimax/MiniMax-M2.7-highspeed
+  - id: minimax/MiniMax-M2
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: MiniMax-M2
+    name: MiniMax-M2
+    context_length: 200000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: minimax/MiniMax-M2
+
+  - id: minimax/MiniMax-M2.1
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: MiniMax-M2.1
+    name: MiniMax-M2.1
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: minimax/MiniMax-M2.1
+
+  - id: minimax/MiniMax-M2.1-lightning
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: MiniMax-M2.1-lightning
+    name: MiniMax-M2.1-lightning
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: minimax/MiniMax-M2.1-lightning
+
+  - id: minimax/MiniMax-M2.5
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: MiniMax-M2.5
+    name: MiniMax-M2.5
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: minimax/MiniMax-M2.5
+
+  - id: minimax/MiniMax-M2.5-lightning
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000024'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+      input_cache_write: '0.000000375'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: MiniMax-M2.5-lightning
+    name: MiniMax-M2.5-lightning
+    context_length: 1000000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 8192
+      is_moderated: false
+    canonical_slug: minimax/MiniMax-M2.5-lightning
+
+  - id: minimax/minimax-01
+    pricing:
+      prompt: '0.0000002'
+      completion: '0.0000011'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+        - image
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-01
+    name: 'MiniMax: MiniMax-01'
+    canonical_slug: minimax/minimax-01
+    hugging_face_id: MiniMaxAI/MiniMax-Text-01
+    context_length: 1000192
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - max_tokens
+      - temperature
+      - top_p
+    knowledge_cutoff: '2024-03-31'
+    links:
+      details: /api/v1/models/minimax/minimax-01/endpoints
+    top_provider:
+      context_length: 1000192
+      max_completion_tokens: 1000192
+      is_moderated: false
+
+  - id: minimax/minimax-m1
+    pricing:
+      prompt: '0.0000004'
+      completion: '0.0000022'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m1
+    name: 'MiniMax: MiniMax M1'
+    canonical_slug: minimax/minimax-m1
+    context_length: 1000000
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - max_tokens
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - seed
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    knowledge_cutoff: '2024-06-30'
+    links:
+      details: /api/v1/models/minimax/minimax-m1/endpoints
+    top_provider:
+      context_length: 1000000
+      max_completion_tokens: 40000
+      is_moderated: false
+
+  - id: minimax/minimax-m2
+    pricing:
+      prompt: '0.000000255'
+      completion: '0.000001'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m2
+    name: 'MiniMax: MiniMax M2'
+    canonical_slug: minimax/minimax-m2
+    hugging_face_id: MiniMaxAI/MiniMax-M2
+    context_length: 196608
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/minimax/minimax-m2/endpoints
+    top_provider:
+      context_length: 196608
+      max_completion_tokens: 196608
+      is_moderated: false
+
+  - id: minimax/minimax-m2-her
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m2-her
+    name: 'MiniMax: MiniMax M2-her'
+    canonical_slug: minimax/minimax-m2-her-20260123
+    context_length: 65536
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
+    supported_parameters:
+      - max_tokens
+      - temperature
+      - top_p
+    links:
+      details: /api/v1/models/minimax/minimax-m2-her-20260123/endpoints
+    top_provider:
+      context_length: 65536
+      max_completion_tokens: 2048
+      is_moderated: false
+
+  - id: minimax/minimax-m2.1
+    pricing:
+      prompt: '0.00000029'
+      completion: '0.00000095'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m2.1
+    name: 'MiniMax: MiniMax M2.1'
+    canonical_slug: minimax/minimax-m2.1
+    hugging_face_id: MiniMaxAI/MiniMax-M2.1
+    context_length: 196608
+    default_parameters:
+      temperature: 1
+      top_p: 0.9
+      frequency_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/minimax/minimax-m2.1/endpoints
+    top_provider:
+      context_length: 196608
+      max_completion_tokens: 196608
+      is_moderated: false
+
+  - id: minimax/minimax-m2.5
+    pricing:
+      prompt: '0.00000015'
+      completion: '0.00000115'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m2.5
+    name: 'MiniMax: MiniMax M2.5'
+    canonical_slug: minimax/minimax-m2.5-20260211
+    hugging_face_id: MiniMaxAI/MiniMax-M2.5
+    context_length: 196608
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
+      - max_tokens
+      - min_p
+      - parallel_tool_calls
+      - presence_penalty
+      - reasoning
+      - reasoning_effort
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_logprobs
+      - top_p
+    links:
+      details: /api/v1/models/minimax/minimax-m2.5-20260211/endpoints
+    top_provider:
+      context_length: 196608
+      max_completion_tokens: 131072
+      is_moderated: false
+
+  - id: minimax/minimax-m2.5:free
     pricing:
       prompt: '0'
       completion: '0'
@@ -36,20 +460,186 @@ models:
         - text
       output_modalities:
         - text
+      tokenizer: Other
     enabled: true
-    name: 'MiniMax: M2.7 Highspeed'
+    source: auto
     provider_id: minimax
-    upstream_id: MiniMax-M2.7-highspeed
+    upstream_id: minimax-m2.5:free
+    name: 'MiniMax: MiniMax M2.5 (free)'
+    canonical_slug: minimax/minimax-m2.5-20260211
+    hugging_face_id: MiniMaxAI/MiniMax-M2.5
     context_length: 196608
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
-      - max_completion_tokens
+      - include_reasoning
       - max_tokens
+      - reasoning
+      - response_format
+      - seed
       - stop
+      - temperature
+      - tools
+    links:
+      details: /api/v1/models/minimax/minimax-m2.5-20260211/endpoints
+    top_provider:
+      context_length: 196608
+      max_completion_tokens: 8192
+      is_moderated: true
+
+  - id: minimax/minimax-m2.7
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000012'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.000000059'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: minimax-m2.7
+    name: 'MiniMax: MiniMax M2.7'
+    canonical_slug: minimax/minimax-m2.7-20260318
+    hugging_face_id: MiniMaxAI/MiniMax-M2.7
+    context_length: 196608
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - stop
+      - structured_outputs
       - temperature
       - tool_choice
       - tools
+      - top_k
+      - top_logprobs
       - top_p
-    description: Lower-latency MiniMax M2.7 chat model.
+    links:
+      details: /api/v1/models/minimax/minimax-m2.7-20260318/endpoints
+    top_provider:
+      context_length: 196608
+      is_moderated: false
+
+  - id: minimax/speech-02-hd
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: speech-02-hd
+    name: speech-02-hd
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    canonical_slug: minimax/speech-02-hd
+
+  - id: minimax/speech-02-turbo
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: speech-02-turbo
+    name: speech-02-turbo
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    canonical_slug: minimax/speech-02-turbo
+
+  - id: minimax/speech-2.6-hd
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: speech-2.6-hd
+    name: speech-2.6-hd
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    canonical_slug: minimax/speech-2.6-hd
+
+  - id: minimax/speech-2.6-turbo
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    source: auto
+    provider_id: minimax
+    upstream_id: speech-2.6-turbo
+    name: speech-2.6-turbo
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    top_provider:
+      is_moderated: false
+    canonical_slug: minimax/speech-2.6-turbo
 
   - id: minimax/speech-2.8-hd
     pricing:
@@ -63,13 +653,18 @@ models:
       output_modalities:
         - speech
     enabled: true
-    name: 'MiniMax: Speech 2.8 HD'
+    source: auto
     provider_id: minimax
     upstream_id: speech-2.8-hd
+    name: 'MiniMax: Speech 2.8 HD'
+    canonical_slug: minimax/speech-2.8-hd
+    context_length: 0
     supported_parameters:
       - response_format
       - speed
       - voice
+    top_provider:
+      is_moderated: false
     description: MiniMax high-definition text-to-audio model via T2A v2.
 
   - id: minimax/speech-2.8-turbo
@@ -84,11 +679,16 @@ models:
       output_modalities:
         - speech
     enabled: true
-    name: 'MiniMax: Speech 2.8 Turbo'
+    source: auto
     provider_id: minimax
     upstream_id: speech-2.8-turbo
+    name: 'MiniMax: Speech 2.8 Turbo'
+    canonical_slug: minimax/speech-2.8-turbo
+    context_length: 0
     supported_parameters:
       - response_format
       - speed
       - voice
+    top_provider:
+      is_moderated: false
     description: MiniMax low-latency text-to-audio model via T2A v2.

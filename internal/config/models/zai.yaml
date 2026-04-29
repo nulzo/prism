@@ -1,86 +1,726 @@
 models:
-  - id: zai/glm-5.1
+
+  - id: zai/glm-4-32b
+    pricing:
+      prompt: '0.0000001'
+      completion: '0.0000001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4-32b
+    name: 'Z.ai: GLM 4 32B '
+    canonical_slug: z-ai/glm-4-32b-0414
+    context_length: 128000
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - max_tokens
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    knowledge_cutoff: '2024-06-30'
+    links:
+      details: /api/v1/models/z-ai/glm-4-32b-0414/endpoints
+    top_provider:
+      context_length: 128000
+      is_moderated: false
+
+  - id: zai/glm-4-32b-0414-128k
+    pricing:
+      prompt: '0.0000001'
+      completion: '0.0000001'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4-32b-0414-128k
+    name: glm-4-32b-0414-128k
+    context_length: 128000
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+    canonical_slug: zai/glm-4-32b-0414-128k
+
+  - id: zai/glm-4.5
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000022'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000011'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5
+    name: glm-4.5
+    canonical_slug: z-ai/glm-4.5
+    hugging_face_id: zai-org/GLM-4.5
+    context_length: 128000
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    knowledge_cutoff: '2024-12-31'
+    links:
+      details: /api/v1/models/z-ai/glm-4.5/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+
+  - id: zai/glm-4.5-air
+    pricing:
+      prompt: '0.0000002'
+      completion: '0.0000011'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.000000025'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5-air
+    name: glm-4.5-air
+    canonical_slug: z-ai/glm-4.5-air
+    hugging_face_id: zai-org/GLM-4.5-Air
+    context_length: 128000
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    knowledge_cutoff: '2024-12-31'
+    links:
+      details: /api/v1/models/z-ai/glm-4.5-air/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+
+  - id: zai/glm-4.5-air:free
     pricing:
       prompt: '0'
       completion: '0'
       request: '0'
       image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5-air:free
+    name: 'Z.ai: GLM 4.5 Air (free)'
+    canonical_slug: z-ai/glm-4.5-air
+    hugging_face_id: zai-org/GLM-4.5-Air
+    context_length: 131072
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    knowledge_cutoff: '2024-12-31'
+    links:
+      details: /api/v1/models/z-ai/glm-4.5-air/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 96000
+      is_moderated: false
+
+  - id: zai/glm-4.5-airx
+    pricing:
+      prompt: '0.0000011'
+      completion: '0.0000045'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5-airx
+    name: glm-4.5-airx
+    context_length: 128000
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+    canonical_slug: zai/glm-4.5-airx
+
+  - id: zai/glm-4.5-flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5-flash
+    name: glm-4.5-flash
+    context_length: 128000
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+    canonical_slug: zai/glm-4.5-flash
+
+  - id: zai/glm-4.5-x
+    pricing:
+      prompt: '0.0000022'
+      completion: '0.0000089'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.5-x
+    name: glm-4.5-x
+    context_length: 128000
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
+    canonical_slug: zai/glm-4.5-x
+
+  - id: zai/glm-4.5v
+    pricing:
+      prompt: '0.0000006'
+      completion: '0.0000018'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000011'
     architecture:
       input_modalities:
         - text
         - image
       output_modalities:
         - text
-      tokenizer: GLM
+      tokenizer: Other
     enabled: true
-    name: 'Z.ai: GLM 5.1'
+    source: auto
     provider_id: zai
-    upstream_id: glm-5.1
-    context_length: 200000
+    upstream_id: glm-4.5v
+    name: glm-4.5v
+    canonical_slug: z-ai/glm-4.5v
+    hugging_face_id: zai-org/GLM-4.5V
+    context_length: 128000
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     supported_parameters:
+      - max_completion_tokens
       - max_tokens
-      - response_format
       - stop
       - temperature
       - tool_choice
       - tools
       - top_p
-    description: Z.ai GLM 5.1 served through Z.ai's OpenAI-compatible chat completions API.
+    knowledge_cutoff: '2024-12-31'
+    links:
+      details: /api/v1/models/z-ai/glm-4.5v/endpoints
+    top_provider:
+      context_length: 128000
+      max_completion_tokens: 32000
+      is_moderated: false
 
-  - id: zai/glm-5
+  - id: zai/glm-4.6
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000006'
+      completion: '0.0000022'
       request: '0'
       image: '0'
+      input_cache_read: '0.00000011'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
-      tokenizer: GLM
+      tokenizer: Other
     enabled: true
-    name: 'Z.ai: GLM 5'
+    source: auto
     provider_id: zai
-    upstream_id: glm-5
+    upstream_id: glm-4.6
+    name: glm-4.6
+    canonical_slug: z-ai/glm-4.6
+    hugging_face_id: zai-org/GLM-4.6
     context_length: 200000
+    default_parameters:
+      temperature: 0.6
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     supported_parameters:
       - include_reasoning
+      - max_completion_tokens
       - max_tokens
       - reasoning
-      - response_format
       - stop
       - temperature
       - tool_choice
       - tools
       - top_p
-    description: Z.ai GLM 5 general-purpose chat model.
+    knowledge_cutoff: '2025-03-31'
+    links:
+      details: /api/v1/models/z-ai/glm-4.6/endpoints
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 128000
+      is_moderated: false
+
+  - id: zai/glm-4.6v
+    pricing:
+      prompt: '0.0000003'
+      completion: '0.0000009'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000005'
+    architecture:
+      input_modalities:
+        - image
+        - text
+        - video
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.6v
+    name: 'Z.ai: GLM 4.6V'
+    canonical_slug: z-ai/glm-4.6-20251208
+    hugging_face_id: zai-org/GLM-4.6V
+    context_length: 131072
+    default_parameters:
+      temperature: 0.8
+      top_p: 0.6
+      frequency_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - max_tokens
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - seed
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/z-ai/glm-4.6-20251208/endpoints
+    top_provider:
+      context_length: 131072
+      max_completion_tokens: 24000
+      is_moderated: false
 
   - id: zai/glm-4.7
     pricing:
-      prompt: '0'
-      completion: '0'
+      prompt: '0.0000006'
+      completion: '0.0000022'
       request: '0'
       image: '0'
+      input_cache_read: '0.00000011'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
-      tokenizer: GLM
+      tokenizer: Other
     enabled: true
-    name: 'Z.ai: GLM 4.7'
+    source: auto
     provider_id: zai
     upstream_id: glm-4.7
+    name: glm-4.7
+    canonical_slug: zai/glm-4.7
     context_length: 200000
     supported_parameters:
       - include_reasoning
+      - max_completion_tokens
       - max_tokens
       - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 200000
+      is_moderated: false
+      max_completion_tokens: 128000
+    hugging_face_id: zai-org/GLM-4.7
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/z-ai/glm-4.7-20251222/endpoints
+
+  - id: zai/glm-4.7-flash
+    pricing:
+      prompt: '0.00000006'
+      completion: '0.0000004'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000001'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-4.7-flash
+    name: 'Z.ai: GLM 4.7 Flash'
+    canonical_slug: z-ai/glm-4.7-flash-20260119
+    hugging_face_id: zai-org/GLM-4.7-Flash
+    context_length: 202752
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - structured_outputs
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/z-ai/glm-4.7-flash-20260119/endpoints
+    top_provider:
+      context_length: 202752
+      max_completion_tokens: 16384
+      is_moderated: false
+
+  - id: zai/glm-5
+    pricing:
+      prompt: '0.000001'
+      completion: '0.0000032'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.0000002'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-5
+    name: glm-5
+    canonical_slug: zai/glm-5
+    context_length: 200000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 200000
+      is_moderated: false
+      max_completion_tokens: 128000
+    hugging_face_id: zai-org/GLM-5
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
+    links:
+      details: /api/v1/models/z-ai/glm-5-20260211/endpoints
+
+  - id: zai/glm-5-code
+    pricing:
+      prompt: '0.0000012'
+      completion: '0.000005'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.0000003'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-5-code
+    name: glm-5-code
+    context_length: 200000
+    supported_parameters:
+      - include_reasoning
+      - max_completion_tokens
+      - max_tokens
+      - reasoning
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      context_length: 200000
+      max_completion_tokens: 128000
+      is_moderated: false
+    canonical_slug: zai/glm-5-code
+
+  - id: zai/glm-5-turbo
+    pricing:
+      prompt: '0.0000012'
+      completion: '0.000004'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000024'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-5-turbo
+    name: 'Z.ai: GLM 5 Turbo'
+    canonical_slug: z-ai/glm-5-turbo-20260315
+    context_length: 202752
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - max_tokens
+      - min_p
+      - presence_penalty
+      - reasoning
+      - repetition_penalty
+      - response_format
+      - seed
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_k
+      - top_p
+    links:
+      details: /api/v1/models/z-ai/glm-5-turbo-20260315/endpoints
+    top_provider:
+      context_length: 202752
+      max_completion_tokens: 131072
+      is_moderated: false
+
+  - id: zai/glm-5.1
+    pricing:
+      prompt: '0.00000105'
+      completion: '0.0000035'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.000000525'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-5.1
+    name: 'Z.ai: GLM 5.1'
+    canonical_slug: zai/glm-5.1
+    context_length: 200000
+    supported_parameters:
+      - max_tokens
       - response_format
       - stop
       - temperature
       - tool_choice
       - tools
       - top_p
-    description: Z.ai GLM 4.7 chat and coding model.
+    top_provider:
+      context_length: 200000
+      is_moderated: false
+      max_completion_tokens: 65535
+    hugging_face_id: zai-org/GLM-5.1
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/z-ai/glm-5.1-20260406/endpoints
+
+  - id: zai/glm-5v-turbo
+    pricing:
+      prompt: '0.0000012'
+      completion: '0.000004'
+      request: '0'
+      image: '0'
+      input_cache_read: '0.00000024'
+    architecture:
+      input_modalities:
+        - image
+        - text
+        - video
+      output_modalities:
+        - text
+      tokenizer: Other
+    enabled: true
+    source: auto
+    provider_id: zai
+    upstream_id: glm-5v-turbo
+    name: 'Z.ai: GLM 5V Turbo'
+    canonical_slug: z-ai/glm-5v-turbo-20260401
+    context_length: 202752
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    supported_parameters:
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    links:
+      details: /api/v1/models/z-ai/glm-5v-turbo-20260401/endpoints
+    top_provider:
+      context_length: 202752
+      max_completion_tokens: 131072
+      is_moderated: false

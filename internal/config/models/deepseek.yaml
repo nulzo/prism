@@ -1,63 +1,30 @@
 models:
 
-  - id: deepseek/deepseek-v4-pro
-    pricing:
-      prompt: '0.00014'
-      completion: '0.00028'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.000028'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: 'DeepSeek: V4 Pro'
-    context_length: 1000000
-    provider_id: deepseek
-    upstream_id: deepseek-v4-pro
-    supported_parameters:
-      - frequency_penalty
-      - include_reasoning
-      - logit_bias
-      - max_tokens
-      - min_p
-      - presence_penalty
-      - reasoning
-      - repetition_penalty
-      - response_format
-      - seed
-      - stop
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
-    knowledge_cutoff: '2026-04-01'
-    description: "DeepSeek V4 Pro is an advanced language model with 1.6T total parameters (49B active) rivaling the world's top closed-source models. It excels in complex mathematical reasoning, programming tasks, and logical deduction."
-
   - id: deepseek/deepseek-v4-flash
     pricing:
-      prompt: '0.000014'
-      completion: '0.000028'
+      prompt: '0.00000014'
+      completion: '0.00000028'
       request: '0'
       image: '0'
-      input_cache_read: '0.0000028'
+      input_cache_read: '0.0000000028'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
+      tokenizer: DeepSeek
     enabled: true
-    name: 'DeepSeek: V4 Flash'
-    context_length: 1000000
+    source: auto
     provider_id: deepseek
     upstream_id: deepseek-v4-flash
+    name: 'DeepSeek: DeepSeek V4 Flash'
+    canonical_slug: deepseek/deepseek-v4-flash-20260423
+    context_length: 1048576
     supported_parameters:
       - frequency_penalty
       - include_reasoning
       - logit_bias
+      - logprobs
       - max_tokens
       - min_p
       - presence_penalty
@@ -66,73 +33,79 @@ models:
       - response_format
       - seed
       - stop
+      - structured_outputs
       - temperature
       - tool_choice
       - tools
       - top_k
+      - top_logprobs
       - top_p
-    description: "DeepSeek V4 Flash offers highly efficient performance, reasoning capabilities closely approaching V4-Pro, and a smaller parameter size for fast response times."
+    top_provider:
+      is_moderated: false
+      context_length: 1048576
+      max_completion_tokens: 384000
+    hugging_face_id: deepseek-ai/DeepSeek-V4-Flash
+    default_parameters:
+      temperature: null
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/deepseek/deepseek-v4-flash-20260423/endpoints
 
-  - id: deepseek/deepseek-reasoner
+  - id: deepseek/deepseek-v4-pro
     pricing:
-      prompt: '0.000014'
-      completion: '0.000028'
+      prompt: '0.000000435'
+      completion: '0.00000087'
       request: '0'
       image: '0'
-      input_cache_read: '0.0000028'
+      input_cache_read: '0.000000003625'
     architecture:
       input_modalities:
         - text
       output_modalities:
         - text
+      tokenizer: DeepSeek
     enabled: true
-    name: 'DeepSeek: Reasoner'
-    context_length: 1000000
+    source: auto
     provider_id: deepseek
-    upstream_id: deepseek-reasoner
+    upstream_id: deepseek-v4-pro
+    name: 'DeepSeek: DeepSeek V4 Pro'
+    canonical_slug: deepseek/deepseek-v4-pro-20260423
+    context_length: 1048576
     supported_parameters:
       - frequency_penalty
+      - include_reasoning
+      - logit_bias
+      - logprobs
       - max_tokens
       - min_p
       - presence_penalty
+      - reasoning
+      - repetition_penalty
       - response_format
       - seed
       - stop
+      - structured_outputs
       - temperature
       - tool_choice
       - tools
       - top_k
+      - top_logprobs
       - top_p
-    description: "DeepSeek Reasoner corresponds to the thinking mode of deepseek-v4-flash. (Note: scheduled for deprecation on 2026-07-24)."
-
-  - id: deepseek/deepseek-chat
-    pricing:
-      prompt: '0.000014'
-      completion: '0.000028'
-      request: '0'
-      image: '0'
-      input_cache_read: '0.0000028'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: 'DeepSeek: Chat'
-    context_length: 1000000
-    provider_id: deepseek
-    upstream_id: deepseek-chat
-    supported_parameters:
-      - frequency_penalty
-      - max_tokens
-      - min_p
-      - presence_penalty
-      - response_format
-      - seed
-      - stop
-      - temperature
-      - tool_choice
-      - tools
-      - top_k
-      - top_p
-    description: "DeepSeek Chat corresponds to the non-thinking mode of deepseek-v4-flash. (Note: scheduled for deprecation on 2026-07-24)."
+    top_provider:
+      is_moderated: false
+      context_length: 1048576
+      max_completion_tokens: 384000
+    hugging_face_id: deepseek-ai/DeepSeek-V4-Pro
+    default_parameters:
+      temperature: 1
+      top_p: 1
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
+    links:
+      details: /api/v1/models/deepseek/deepseek-v4-pro-20260423/endpoints

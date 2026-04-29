@@ -1,6 +1,6 @@
 models:
 
-  - id: ollama/codegeex4
+  - id: ollama/cringe:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -12,12 +12,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: codegeex4
-    context_length: 32768
+    source: auto
     provider_id: ollama
-    upstream_id: codegeex4
+    upstream_id: cringe:latest
+    name: cringe:latest
+    canonical_slug: ollama/cringe:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/codegemma
+  - id: ollama/deepscaler:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -29,12 +41,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: codegemma
-    context_length: 8192
+    source: auto
     provider_id: ollama
-    upstream_id: codegemma
+    upstream_id: deepscaler:latest
+    name: deepscaler:latest
+    canonical_slug: ollama/deepscaler:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/codellama
+  - id: ollama/deepseek-r1:1.5b
     pricing:
       prompt: '0'
       completion: '0'
@@ -46,12 +70,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: codellama
-    context_length: 4096
+    source: auto
     provider_id: ollama
-    upstream_id: codellama
+    upstream_id: deepseek-r1:1.5b
+    name: deepseek-r1:1.5b
+    canonical_slug: ollama/deepseek-r1:1.5b
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/deepseek-coder-v2-base
+  - id: ollama/dolphin-llama3:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -63,12 +99,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: deepseek-coder-v2-base
-    context_length: 8192
+    source: auto
     provider_id: ollama
-    upstream_id: deepseek-coder-v2-base
+    upstream_id: dolphin-llama3:latest
+    name: dolphin-llama3:latest
+    canonical_slug: ollama/dolphin-llama3:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/deepseek-coder-v2-instruct
+  - id: ollama/dolphin-phi:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -80,12 +128,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: deepseek-coder-v2-instruct
-    context_length: 32768
+    source: auto
     provider_id: ollama
-    upstream_id: deepseek-coder-v2-instruct
+    upstream_id: dolphin-phi:latest
+    name: dolphin-phi:latest
+    canonical_slug: ollama/dolphin-phi:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/deepseek-coder-v2-lite-base
+  - id: ollama/llama3.2:3b
     pricing:
       prompt: '0'
       completion: '0'
@@ -97,12 +157,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: deepseek-coder-v2-lite-base
-    context_length: 8192
+    source: auto
     provider_id: ollama
-    upstream_id: deepseek-coder-v2-lite-base
+    upstream_id: llama3.2:3b
+    name: llama3.2:3b
+    canonical_slug: ollama/llama3.2:3b
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/deepseek-coder-v2-lite-instruct
+  - id: ollama/phi3:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -114,12 +186,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: deepseek-coder-v2-lite-instruct
-    context_length: 32768
+    source: auto
     provider_id: ollama
-    upstream_id: deepseek-coder-v2-lite-instruct
+    upstream_id: phi3:latest
+    name: phi3:latest
+    canonical_slug: ollama/phi3:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/deepseek-v3.1:671b-cloud
+  - id: ollama/small_cringe:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -131,12 +215,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: deepseek-v3.1:671b-cloud
-    context_length: 163840
+    source: auto
     provider_id: ollama
-    upstream_id: deepseek-v3.1:671b-cloud
+    upstream_id: small_cringe:latest
+    name: small_cringe:latest
+    canonical_slug: ollama/small_cringe:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/gpt-oss:120b-cloud
+  - id: ollama/therapist:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -148,12 +244,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: gpt-oss:120b-cloud
-    context_length: 131072
+    source: auto
     provider_id: ollama
-    upstream_id: gpt-oss:120b-cloud
+    upstream_id: therapist:latest
+    name: therapist:latest
+    canonical_slug: ollama/therapist:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
 
-  - id: ollama/gpt-oss:20b-cloud
+  - id: ollama/tinydolphin:latest
     pricing:
       prompt: '0'
       completion: '0'
@@ -165,330 +273,19 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: gpt-oss:20b-cloud
-    context_length: 131072
+    source: auto
     provider_id: ollama
-    upstream_id: gpt-oss:20b-cloud
-
-  - id: ollama/internlm2_5-20b-chat
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: internlm2_5-20b-chat
-    context_length: 32768
-    provider_id: ollama
-    upstream_id: internlm2_5-20b-chat
-
-  - id: ollama/llama2
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama2
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: llama2
-
-  - id: ollama/llama2-uncensored
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama2-uncensored
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: llama2-uncensored
-
-  - id: ollama/llama2:13b
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama2:13b
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: llama2:13b
-
-  - id: ollama/llama2:70b
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama2:70b
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: llama2:70b
-
-  - id: ollama/llama2:7b
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama2:7b
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: llama2:7b
-
-  - id: ollama/llama3
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama3
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: llama3
-
-  - id: ollama/llama3.1
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama3.1
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: llama3.1
-
-  - id: ollama/llama3:70b
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama3:70b
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: llama3:70b
-
-  - id: ollama/llama3:8b
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: llama3:8b
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: llama3:8b
-
-  - id: ollama/mistral
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mistral
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: mistral
-
-  - id: ollama/mistral-7B-Instruct-v0.1
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mistral-7B-Instruct-v0.1
-    context_length: 8192
-    provider_id: ollama
-    upstream_id: mistral-7B-Instruct-v0.1
-
-  - id: ollama/mistral-7B-Instruct-v0.2
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mistral-7B-Instruct-v0.2
-    context_length: 32768
-    provider_id: ollama
-    upstream_id: mistral-7B-Instruct-v0.2
-
-  - id: ollama/mistral-large-instruct-2407
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mistral-large-instruct-2407
-    context_length: 65536
-    provider_id: ollama
-    upstream_id: mistral-large-instruct-2407
-
-  - id: ollama/mixtral-8x22B-Instruct-v0.1
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mixtral-8x22B-Instruct-v0.1
-    context_length: 65536
-    provider_id: ollama
-    upstream_id: mixtral-8x22B-Instruct-v0.1
-
-  - id: ollama/mixtral-8x7B-Instruct-v0.1
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: mixtral-8x7B-Instruct-v0.1
-    context_length: 32768
-    provider_id: ollama
-    upstream_id: mixtral-8x7B-Instruct-v0.1
-
-  - id: ollama/orca-mini
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: orca-mini
-    context_length: 4096
-    provider_id: ollama
-    upstream_id: orca-mini
-
-  - id: ollama/qwen3-coder:480b-cloud
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: qwen3-coder:480b-cloud
-    context_length: 262144
-    provider_id: ollama
-    upstream_id: qwen3-coder:480b-cloud
-
-  - id: ollama/vicuna
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: vicuna
-    context_length: 2048
-    provider_id: ollama
-    upstream_id: vicuna
+    upstream_id: tinydolphin:latest
+    name: tinydolphin:latest
+    canonical_slug: ollama/tinydolphin:latest
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
