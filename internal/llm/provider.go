@@ -9,15 +9,19 @@ import (
 type ProviderName string
 
 const (
-	Ollama     ProviderName = "ollama"
-	OpenAI     ProviderName = "openai"
-	Anthropic  ProviderName = "anthropic"
-	Google     ProviderName = "google"
-	Moonshot   ProviderName = "moonshot"
-	ElevenLabs ProviderName = "elevenlabs"
-	CosyVoice  ProviderName = "cosyvoice"
-	Qwen3      ProviderName = "qwen3"
-	DeepSeek   ProviderName = "deepseek"
+	Ollama      ProviderName = "ollama"
+	OpenAI      ProviderName = "openai"
+	Anthropic   ProviderName = "anthropic"
+	Google      ProviderName = "google"
+	Moonshot    ProviderName = "moonshot"
+	ElevenLabs  ProviderName = "elevenlabs"
+	CosyVoice   ProviderName = "cosyvoice"
+	Qwen        ProviderName = "qwen"
+	Qwen3       ProviderName = "qwen3"
+	DeepSeek    ProviderName = "deepseek"
+	Zai         ProviderName = "zai"
+	MiniMax     ProviderName = "minimax"
+	HuggingFace ProviderName = "huggingface"
 )
 
 type Provider interface {

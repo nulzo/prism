@@ -1,5 +1,49 @@
 models:
 
+  - id: qwen/qwen3-tts-flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Qwen
+    enabled: true
+    name: 'Qwen: Qwen3 TTS Flash'
+    provider_id: qwen
+    upstream_id: qwen3-tts-flash
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    description: Alibaba Cloud Model Studio Qwen text-to-speech model.
+
+  - id: qwen/qwen3-tts-instruct-flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+      tokenizer: Qwen
+    enabled: true
+    name: 'Qwen: Qwen3 TTS Instruct Flash'
+    provider_id: qwen
+    upstream_id: qwen3-tts-instruct-flash
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    description: Alibaba Cloud Model Studio Qwen text-to-speech model with instruction control.
+
   - id: qwen/qwen-2.5-72b-instruct
     pricing:
       prompt: '0.00000012'

@@ -1,0 +1,94 @@
+models:
+  - id: minimax/MiniMax-M2.7
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: 'MiniMax: M2.7'
+    provider_id: minimax
+    upstream_id: MiniMax-M2.7
+    context_length: 196608
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    description: MiniMax M2.7 text generation via the OpenAI-compatible chat completions API.
+
+  - id: minimax/MiniMax-M2.7-highspeed
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: 'MiniMax: M2.7 Highspeed'
+    provider_id: minimax
+    upstream_id: MiniMax-M2.7-highspeed
+    context_length: 196608
+    supported_parameters:
+      - max_completion_tokens
+      - max_tokens
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    description: Lower-latency MiniMax M2.7 chat model.
+
+  - id: minimax/speech-2.8-hd
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    name: 'MiniMax: Speech 2.8 HD'
+    provider_id: minimax
+    upstream_id: speech-2.8-hd
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    description: MiniMax high-definition text-to-audio model via T2A v2.
+
+  - id: minimax/speech-2.8-turbo
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - speech
+    enabled: true
+    name: 'MiniMax: Speech 2.8 Turbo'
+    provider_id: minimax
+    upstream_id: speech-2.8-turbo
+    supported_parameters:
+      - response_format
+      - speed
+      - voice
+    description: MiniMax low-latency text-to-audio model via T2A v2.

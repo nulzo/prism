@@ -77,3 +77,37 @@ providers:
     base_url: "https://api.deepseek.com"
     enabled: true
     requires_auth: true
+
+  - id: "zai"
+    type: "zai"
+    name: "Z.ai"
+    api_key: "ENV:ZAI_API_KEY"
+    base_url: "https://api.z.ai/api/paas/v4"
+    enabled: true
+    requires_auth: true
+
+  - id: "qwen"
+    type: "qwen"
+    name: "Alibaba Cloud Qwen"
+    api_key: "ENV:DASHSCOPE_API_KEY"
+    base_url: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+    enabled: true
+    requires_auth: true
+    config:
+      tts_base_url: "https://dashscope-intl.aliyuncs.com/api/v1"
+
+  - id: "minimax"
+    type: "minimax"
+    name: "MiniMax"
+    api_key: "ENV:MINIMAX_API_KEY"
+    base_url: "https://api.minimax.io/v1"
+    enabled: true
+    requires_auth: true
+
+  - id: "huggingface"
+    type: "huggingface"
+    name: "Hugging Face Inference Providers"
+    api_key: "ENV:HF_TOKEN"
+    base_url: "https://router.huggingface.co/v1"
+    enabled: true
+    requires_auth: true

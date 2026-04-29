@@ -1,0 +1,81 @@
+models:
+  - id: huggingface/openai/gpt-oss-120b:fastest
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: 'Hugging Face: GPT OSS 120B (fastest)'
+    provider_id: huggingface
+    upstream_id: openai/gpt-oss-120b:fastest
+    supported_parameters:
+      - frequency_penalty
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    description: Hugging Face Inference Providers chat completion routed to the fastest available GPT OSS 120B provider.
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1:fastest
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    name: 'Hugging Face: DeepSeek R1 (fastest)'
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1:fastest
+    supported_parameters:
+      - frequency_penalty
+      - include_reasoning
+      - max_tokens
+      - reasoning
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    description: Hugging Face Inference Providers chat completion routed to DeepSeek R1.
+
+  - id: huggingface/meta-llama/Llama-3.1-8B-Instruct:fastest
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+      tokenizer: Llama
+    enabled: true
+    name: 'Hugging Face: Llama 3.1 8B Instruct (fastest)'
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-3.1-8B-Instruct:fastest
+    supported_parameters:
+      - frequency_penalty
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    description: Hugging Face Inference Providers OpenAI-compatible chat model.
