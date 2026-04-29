@@ -1,31 +1,6 @@
 models:
-  - id: huggingface/openai/gpt-oss-120b:fastest
-    pricing:
-      prompt: '0'
-      completion: '0'
-      request: '0'
-      image: '0'
-    architecture:
-      input_modalities:
-        - text
-      output_modalities:
-        - text
-    enabled: true
-    name: 'Hugging Face: GPT OSS 120B (fastest)'
-    provider_id: huggingface
-    upstream_id: openai/gpt-oss-120b:fastest
-    supported_parameters:
-      - frequency_penalty
-      - max_tokens
-      - response_format
-      - stop
-      - temperature
-      - tool_choice
-      - tools
-      - top_p
-    description: Hugging Face Inference Providers chat completion routed to the fastest available GPT OSS 120B provider.
 
-  - id: huggingface/deepseek-ai/DeepSeek-R1:fastest
+  - id: huggingface/CohereLabs/aya-expanse-32b
     pricing:
       prompt: '0'
       completion: '0'
@@ -37,23 +12,24 @@ models:
       output_modalities:
         - text
     enabled: true
-    name: 'Hugging Face: DeepSeek R1 (fastest)'
+    source: auto
     provider_id: huggingface
-    upstream_id: deepseek-ai/DeepSeek-R1:fastest
+    upstream_id: CohereLabs/aya-expanse-32b
+    name: CohereLabs/aya-expanse-32b
+    canonical_slug: huggingface/CohereLabs/aya-expanse-32b
+    context_length: 0
     supported_parameters:
-      - frequency_penalty
-      - include_reasoning
       - max_tokens
-      - reasoning
       - response_format
       - stop
       - temperature
       - tool_choice
       - tools
       - top_p
-    description: Hugging Face Inference Providers chat completion routed to DeepSeek R1.
+    top_provider:
+      is_moderated: false
 
-  - id: huggingface/meta-llama/Llama-3.1-8B-Instruct:fastest
+  - id: huggingface/CohereLabs/aya-vision-32b
     pricing:
       prompt: '0'
       completion: '0'
@@ -64,13 +40,14 @@ models:
         - text
       output_modalities:
         - text
-      tokenizer: Llama
     enabled: true
-    name: 'Hugging Face: Llama 3.1 8B Instruct (fastest)'
+    source: auto
     provider_id: huggingface
-    upstream_id: meta-llama/Llama-3.1-8B-Instruct:fastest
+    upstream_id: CohereLabs/aya-vision-32b
+    name: CohereLabs/aya-vision-32b
+    canonical_slug: huggingface/CohereLabs/aya-vision-32b
+    context_length: 0
     supported_parameters:
-      - frequency_penalty
       - max_tokens
       - response_format
       - stop
@@ -78,4 +55,3398 @@ models:
       - tool_choice
       - tools
       - top_p
-    description: Hugging Face Inference Providers OpenAI-compatible chat model.
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/c4ai-command-a-03-2025
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/c4ai-command-a-03-2025
+    name: CohereLabs/c4ai-command-a-03-2025
+    canonical_slug: huggingface/CohereLabs/c4ai-command-a-03-2025
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/c4ai-command-r-08-2024
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/c4ai-command-r-08-2024
+    name: CohereLabs/c4ai-command-r-08-2024
+    canonical_slug: huggingface/CohereLabs/c4ai-command-r-08-2024
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/c4ai-command-r7b-12-2024
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/c4ai-command-r7b-12-2024
+    name: CohereLabs/c4ai-command-r7b-12-2024
+    canonical_slug: huggingface/CohereLabs/c4ai-command-r7b-12-2024
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/c4ai-command-r7b-arabic-02-2025
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/c4ai-command-r7b-arabic-02-2025
+    name: CohereLabs/c4ai-command-r7b-arabic-02-2025
+    canonical_slug: huggingface/CohereLabs/c4ai-command-r7b-arabic-02-2025
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/command-a-reasoning-08-2025
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/command-a-reasoning-08-2025
+    name: CohereLabs/command-a-reasoning-08-2025
+    canonical_slug: huggingface/CohereLabs/command-a-reasoning-08-2025
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/command-a-translate-08-2025
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/command-a-translate-08-2025
+    name: CohereLabs/command-a-translate-08-2025
+    canonical_slug: huggingface/CohereLabs/command-a-translate-08-2025
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/command-a-vision-07-2025
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/command-a-vision-07-2025
+    name: CohereLabs/command-a-vision-07-2025
+    canonical_slug: huggingface/CohereLabs/command-a-vision-07-2025
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/tiny-aya-earth
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/tiny-aya-earth
+    name: CohereLabs/tiny-aya-earth
+    canonical_slug: huggingface/CohereLabs/tiny-aya-earth
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/tiny-aya-fire
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/tiny-aya-fire
+    name: CohereLabs/tiny-aya-fire
+    canonical_slug: huggingface/CohereLabs/tiny-aya-fire
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/tiny-aya-global
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/tiny-aya-global
+    name: CohereLabs/tiny-aya-global
+    canonical_slug: huggingface/CohereLabs/tiny-aya-global
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/CohereLabs/tiny-aya-water
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: CohereLabs/tiny-aya-water
+    name: CohereLabs/tiny-aya-water
+    canonical_slug: huggingface/CohereLabs/tiny-aya-water
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/EssentialAI/rnj-1-instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: EssentialAI/rnj-1-instruct
+    name: EssentialAI/rnj-1-instruct
+    canonical_slug: huggingface/EssentialAI/rnj-1-instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/MiniMaxAI/MiniMax-M1-80k
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: MiniMaxAI/MiniMax-M1-80k
+    name: MiniMaxAI/MiniMax-M1-80k
+    canonical_slug: huggingface/MiniMaxAI/MiniMax-M1-80k
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/MiniMaxAI/MiniMax-M2
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: MiniMaxAI/MiniMax-M2
+    name: MiniMaxAI/MiniMax-M2
+    canonical_slug: huggingface/MiniMaxAI/MiniMax-M2
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/MiniMaxAI/MiniMax-M2.1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: MiniMaxAI/MiniMax-M2.1
+    name: MiniMaxAI/MiniMax-M2.1
+    canonical_slug: huggingface/MiniMaxAI/MiniMax-M2.1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/MiniMaxAI/MiniMax-M2.5
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: MiniMaxAI/MiniMax-M2.5
+    name: MiniMaxAI/MiniMax-M2.5
+    canonical_slug: huggingface/MiniMaxAI/MiniMax-M2.5
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/MiniMaxAI/MiniMax-M2.7
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: MiniMaxAI/MiniMax-M2.7
+    name: MiniMaxAI/MiniMax-M2.7
+    canonical_slug: huggingface/MiniMaxAI/MiniMax-M2.7
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/NousResearch/Hermes-2-Pro-Llama-3-8B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: NousResearch/Hermes-2-Pro-Llama-3-8B
+    name: NousResearch/Hermes-2-Pro-Llama-3-8B
+    canonical_slug: huggingface/NousResearch/Hermes-2-Pro-Llama-3-8B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-72B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-72B-Instruct
+    name: Qwen/Qwen2.5-72B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-72B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-7B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-7B-Instruct
+    name: Qwen/Qwen2.5-7B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-7B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-Coder-32B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-Coder-32B-Instruct
+    name: Qwen/Qwen2.5-Coder-32B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-Coder-32B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-Coder-3B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-Coder-3B-Instruct
+    name: Qwen/Qwen2.5-Coder-3B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-Coder-3B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-Coder-7B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-Coder-7B-Instruct
+    name: Qwen/Qwen2.5-Coder-7B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-Coder-7B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen2.5-VL-72B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen2.5-VL-72B-Instruct
+    name: Qwen/Qwen2.5-VL-72B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen2.5-VL-72B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-235B-A22B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-235B-A22B
+    name: Qwen/Qwen3-235B-A22B
+    canonical_slug: huggingface/Qwen/Qwen3-235B-A22B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-235B-A22B-Instruct-2507
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-235B-A22B-Instruct-2507
+    name: Qwen/Qwen3-235B-A22B-Instruct-2507
+    canonical_slug: huggingface/Qwen/Qwen3-235B-A22B-Instruct-2507
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-235B-A22B-Thinking-2507
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-235B-A22B-Thinking-2507
+    name: Qwen/Qwen3-235B-A22B-Thinking-2507
+    canonical_slug: huggingface/Qwen/Qwen3-235B-A22B-Thinking-2507
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-30B-A3B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-30B-A3B
+    name: Qwen/Qwen3-30B-A3B
+    canonical_slug: huggingface/Qwen/Qwen3-30B-A3B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-32B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-32B
+    name: Qwen/Qwen3-32B
+    canonical_slug: huggingface/Qwen/Qwen3-32B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-4B-Instruct-2507
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-4B-Instruct-2507
+    name: Qwen/Qwen3-4B-Instruct-2507
+    canonical_slug: huggingface/Qwen/Qwen3-4B-Instruct-2507
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-8B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-8B
+    name: Qwen/Qwen3-8B
+    canonical_slug: huggingface/Qwen/Qwen3-8B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Coder-30B-A3B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Coder-30B-A3B-Instruct
+    name: Qwen/Qwen3-Coder-30B-A3B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-Coder-30B-A3B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Coder-480B-A35B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Coder-480B-A35B-Instruct
+    name: Qwen/Qwen3-Coder-480B-A35B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-Coder-480B-A35B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8
+    name: Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8
+    canonical_slug: huggingface/Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Coder-Next
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Coder-Next
+    name: Qwen/Qwen3-Coder-Next
+    canonical_slug: huggingface/Qwen/Qwen3-Coder-Next
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Coder-Next-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Coder-Next-FP8
+    name: Qwen/Qwen3-Coder-Next-FP8
+    canonical_slug: huggingface/Qwen/Qwen3-Coder-Next-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Next-80B-A3B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Next-80B-A3B-Instruct
+    name: Qwen/Qwen3-Next-80B-A3B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-Next-80B-A3B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-Next-80B-A3B-Thinking
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-Next-80B-A3B-Thinking
+    name: Qwen/Qwen3-Next-80B-A3B-Thinking
+    canonical_slug: huggingface/Qwen/Qwen3-Next-80B-A3B-Thinking
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-VL-235B-A22B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-VL-235B-A22B-Instruct
+    name: Qwen/Qwen3-VL-235B-A22B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-VL-235B-A22B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-VL-235B-A22B-Thinking
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-VL-235B-A22B-Thinking
+    name: Qwen/Qwen3-VL-235B-A22B-Thinking
+    canonical_slug: huggingface/Qwen/Qwen3-VL-235B-A22B-Thinking
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-VL-30B-A3B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-VL-30B-A3B-Instruct
+    name: Qwen/Qwen3-VL-30B-A3B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-VL-30B-A3B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-VL-30B-A3B-Thinking
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-VL-30B-A3B-Thinking
+    name: Qwen/Qwen3-VL-30B-A3B-Thinking
+    canonical_slug: huggingface/Qwen/Qwen3-VL-30B-A3B-Thinking
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3-VL-8B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3-VL-8B-Instruct
+    name: Qwen/Qwen3-VL-8B-Instruct
+    canonical_slug: huggingface/Qwen/Qwen3-VL-8B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3.5-122B-A10B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3.5-122B-A10B
+    name: Qwen/Qwen3.5-122B-A10B
+    canonical_slug: huggingface/Qwen/Qwen3.5-122B-A10B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3.5-27B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3.5-27B
+    name: Qwen/Qwen3.5-27B
+    canonical_slug: huggingface/Qwen/Qwen3.5-27B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3.5-35B-A3B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3.5-35B-A3B
+    name: Qwen/Qwen3.5-35B-A3B
+    canonical_slug: huggingface/Qwen/Qwen3.5-35B-A3B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3.5-397B-A17B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3.5-397B-A17B
+    name: Qwen/Qwen3.5-397B-A17B
+    canonical_slug: huggingface/Qwen/Qwen3.5-397B-A17B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Qwen/Qwen3.5-9B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Qwen/Qwen3.5-9B
+    name: Qwen/Qwen3.5-9B
+    canonical_slug: huggingface/Qwen/Qwen3.5-9B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Sao10K/L3-70B-Euryale-v2.1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Sao10K/L3-70B-Euryale-v2.1
+    name: Sao10K/L3-70B-Euryale-v2.1
+    canonical_slug: huggingface/Sao10K/L3-70B-Euryale-v2.1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Sao10K/L3-8B-Lunaris-v1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Sao10K/L3-8B-Lunaris-v1
+    name: Sao10K/L3-8B-Lunaris-v1
+    canonical_slug: huggingface/Sao10K/L3-8B-Lunaris-v1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/Sao10K/L3-8B-Stheno-v3.2
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: Sao10K/L3-8B-Stheno-v3.2
+    name: Sao10K/L3-8B-Stheno-v3.2
+    canonical_slug: huggingface/Sao10K/L3-8B-Stheno-v3.2
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/XiaomiMiMo/MiMo-V2-Flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: XiaomiMiMo/MiMo-V2-Flash
+    name: XiaomiMiMo/MiMo-V2-Flash
+    canonical_slug: huggingface/XiaomiMiMo/MiMo-V2-Flash
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/aisingapore/Gemma-SEA-LION-v4-27B-IT
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: aisingapore/Gemma-SEA-LION-v4-27B-IT
+    name: aisingapore/Gemma-SEA-LION-v4-27B-IT
+    canonical_slug: huggingface/aisingapore/Gemma-SEA-LION-v4-27B-IT
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/aisingapore/Qwen-SEA-LION-v4-32B-IT
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: aisingapore/Qwen-SEA-LION-v4-32B-IT
+    name: aisingapore/Qwen-SEA-LION-v4-32B-IT
+    canonical_slug: huggingface/aisingapore/Qwen-SEA-LION-v4-32B-IT
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/allenai/Olmo-3-7B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: allenai/Olmo-3-7B-Instruct
+    name: allenai/Olmo-3-7B-Instruct
+    canonical_slug: huggingface/allenai/Olmo-3-7B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/alpindale/WizardLM-2-8x22B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: alpindale/WizardLM-2-8x22B
+    name: alpindale/WizardLM-2-8x22B
+    canonical_slug: huggingface/alpindale/WizardLM-2-8x22B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/baidu/ERNIE-4.5-300B-A47B-Base-PT
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: baidu/ERNIE-4.5-300B-A47B-Base-PT
+    name: baidu/ERNIE-4.5-300B-A47B-Base-PT
+    canonical_slug: huggingface/baidu/ERNIE-4.5-300B-A47B-Base-PT
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/baidu/ERNIE-4.5-VL-424B-A47B-Base-PT
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: baidu/ERNIE-4.5-VL-424B-A47B-Base-PT
+    name: baidu/ERNIE-4.5-VL-424B-A47B-Base-PT
+    canonical_slug: huggingface/baidu/ERNIE-4.5-VL-424B-A47B-Base-PT
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepcogito/cogito-671b-v2.1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepcogito/cogito-671b-v2.1
+    name: deepcogito/cogito-671b-v2.1
+    canonical_slug: huggingface/deepcogito/cogito-671b-v2.1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepcogito/cogito-671b-v2.1-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepcogito/cogito-671b-v2.1-FP8
+    name: deepcogito/cogito-671b-v2.1-FP8
+    canonical_slug: huggingface/deepcogito/cogito-671b-v2.1-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-Prover-V2-671B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-Prover-V2-671B
+    name: deepseek-ai/DeepSeek-Prover-V2-671B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-Prover-V2-671B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1
+    name: deepseek-ai/DeepSeek-R1
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-0528
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-0528
+    name: deepseek-ai/DeepSeek-R1-0528
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-0528
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+    name: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+    name: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    name: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+    name: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V3
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V3
+    name: deepseek-ai/DeepSeek-V3
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V3
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V3-0324
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V3-0324
+    name: deepseek-ai/DeepSeek-V3-0324
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V3-0324
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V3.1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V3.1
+    name: deepseek-ai/DeepSeek-V3.1
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V3.1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V3.1-Terminus
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V3.1-Terminus
+    name: deepseek-ai/DeepSeek-V3.1-Terminus
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V3.1-Terminus
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V3.2-Exp
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V3.2-Exp
+    name: deepseek-ai/DeepSeek-V3.2-Exp
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V3.2-Exp
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/deepseek-ai/DeepSeek-V4-Pro
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: deepseek-ai/DeepSeek-V4-Pro
+    name: deepseek-ai/DeepSeek-V4-Pro
+    canonical_slug: huggingface/deepseek-ai/DeepSeek-V4-Pro
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/dicta-il/DictaLM-3.0-24B-Thinking
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: dicta-il/DictaLM-3.0-24B-Thinking
+    name: dicta-il/DictaLM-3.0-24B-Thinking
+    canonical_slug: huggingface/dicta-il/DictaLM-3.0-24B-Thinking
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/google/gemma-3-27b-it
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: google/gemma-3-27b-it
+    name: google/gemma-3-27b-it
+    canonical_slug: huggingface/google/gemma-3-27b-it
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/google/gemma-3n-E4B-it
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: google/gemma-3n-E4B-it
+    name: google/gemma-3n-E4B-it
+    canonical_slug: huggingface/google/gemma-3n-E4B-it
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/google/gemma-4-26B-A4B-it
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: google/gemma-4-26B-A4B-it
+    name: google/gemma-4-26B-A4B-it
+    canonical_slug: huggingface/google/gemma-4-26B-A4B-it
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/google/gemma-4-31B-it
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: google/gemma-4-31B-it
+    name: google/gemma-4-31B-it
+    canonical_slug: huggingface/google/gemma-4-31B-it
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/katanemo/Arch-Router-1.5B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: katanemo/Arch-Router-1.5B
+    name: katanemo/Arch-Router-1.5B
+    canonical_slug: huggingface/katanemo/Arch-Router-1.5B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-3.1-70B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-3.1-70B-Instruct
+    name: meta-llama/Llama-3.1-70B-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-3.1-70B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-3.1-8B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-3.1-8B-Instruct
+    name: meta-llama/Llama-3.1-8B-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-3.1-8B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-3.2-1B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-3.2-1B-Instruct
+    name: meta-llama/Llama-3.2-1B-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-3.2-1B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-3.3-70B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-3.3-70B-Instruct
+    name: meta-llama/Llama-3.3-70B-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-3.3-70B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-4-Maverick-17B-128E-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct
+    name: meta-llama/Llama-4-Maverick-17B-128E-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-4-Maverick-17B-128E-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+    name: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+    canonical_slug: huggingface/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-4-Scout-17B-16E-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+    name: meta-llama/Llama-4-Scout-17B-16E-Instruct
+    canonical_slug: huggingface/meta-llama/Llama-4-Scout-17B-16E-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Llama-Guard-4-12B
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Llama-Guard-4-12B
+    name: meta-llama/Llama-Guard-4-12B
+    canonical_slug: huggingface/meta-llama/Llama-Guard-4-12B
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Meta-Llama-3-70B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Meta-Llama-3-70B-Instruct
+    name: meta-llama/Meta-Llama-3-70B-Instruct
+    canonical_slug: huggingface/meta-llama/Meta-Llama-3-70B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/meta-llama/Meta-Llama-3-8B-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: meta-llama/Meta-Llama-3-8B-Instruct
+    name: meta-llama/Meta-Llama-3-8B-Instruct
+    canonical_slug: huggingface/meta-llama/Meta-Llama-3-8B-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/moonshotai/Kimi-K2-Instruct
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: moonshotai/Kimi-K2-Instruct
+    name: moonshotai/Kimi-K2-Instruct
+    canonical_slug: huggingface/moonshotai/Kimi-K2-Instruct
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/moonshotai/Kimi-K2-Instruct-0905
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: moonshotai/Kimi-K2-Instruct-0905
+    name: moonshotai/Kimi-K2-Instruct-0905
+    canonical_slug: huggingface/moonshotai/Kimi-K2-Instruct-0905
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/moonshotai/Kimi-K2-Thinking
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: moonshotai/Kimi-K2-Thinking
+    name: moonshotai/Kimi-K2-Thinking
+    canonical_slug: huggingface/moonshotai/Kimi-K2-Thinking
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/moonshotai/Kimi-K2.5
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: moonshotai/Kimi-K2.5
+    name: moonshotai/Kimi-K2.5
+    canonical_slug: huggingface/moonshotai/Kimi-K2.5
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/moonshotai/Kimi-K2.6
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: moonshotai/Kimi-K2.6
+    name: moonshotai/Kimi-K2.6
+    canonical_slug: huggingface/moonshotai/Kimi-K2.6
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/openai/gpt-oss-120b
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: openai/gpt-oss-120b
+    name: openai/gpt-oss-120b
+    canonical_slug: huggingface/openai/gpt-oss-120b
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/openai/gpt-oss-20b
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: openai/gpt-oss-20b
+    name: openai/gpt-oss-20b
+    canonical_slug: huggingface/openai/gpt-oss-20b
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/openai/gpt-oss-safeguard-20b
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: openai/gpt-oss-safeguard-20b
+    name: openai/gpt-oss-safeguard-20b
+    canonical_slug: huggingface/openai/gpt-oss-safeguard-20b
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/swiss-ai/Apertus-70B-Instruct-2509
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: swiss-ai/Apertus-70B-Instruct-2509
+    name: swiss-ai/Apertus-70B-Instruct-2509
+    canonical_slug: huggingface/swiss-ai/Apertus-70B-Instruct-2509
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/swiss-ai/Apertus-8B-Instruct-2509
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: swiss-ai/Apertus-8B-Instruct-2509
+    name: swiss-ai/Apertus-8B-Instruct-2509
+    canonical_slug: huggingface/swiss-ai/Apertus-8B-Instruct-2509
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/utter-project/EuroLLM-22B-Instruct-2512
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: utter-project/EuroLLM-22B-Instruct-2512
+    name: utter-project/EuroLLM-22B-Instruct-2512
+    canonical_slug: huggingface/utter-project/EuroLLM-22B-Instruct-2512
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/AutoGLM-Phone-9B-Multilingual
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/AutoGLM-Phone-9B-Multilingual
+    name: zai-org/AutoGLM-Phone-9B-Multilingual
+    canonical_slug: huggingface/zai-org/AutoGLM-Phone-9B-Multilingual
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4-32B-0414
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4-32B-0414
+    name: zai-org/GLM-4-32B-0414
+    canonical_slug: huggingface/zai-org/GLM-4-32B-0414
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.5
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.5
+    name: zai-org/GLM-4.5
+    canonical_slug: huggingface/zai-org/GLM-4.5
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.5-Air
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.5-Air
+    name: zai-org/GLM-4.5-Air
+    canonical_slug: huggingface/zai-org/GLM-4.5-Air
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.5V
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.5V
+    name: zai-org/GLM-4.5V
+    canonical_slug: huggingface/zai-org/GLM-4.5V
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.5V-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.5V-FP8
+    name: zai-org/GLM-4.5V-FP8
+    canonical_slug: huggingface/zai-org/GLM-4.5V-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.6
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.6
+    name: zai-org/GLM-4.6
+    canonical_slug: huggingface/zai-org/GLM-4.6
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.6-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.6-FP8
+    name: zai-org/GLM-4.6-FP8
+    canonical_slug: huggingface/zai-org/GLM-4.6-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.6V
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.6V
+    name: zai-org/GLM-4.6V
+    canonical_slug: huggingface/zai-org/GLM-4.6V
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.6V-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.6V-FP8
+    name: zai-org/GLM-4.6V-FP8
+    canonical_slug: huggingface/zai-org/GLM-4.6V-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.6V-Flash
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.6V-Flash
+    name: zai-org/GLM-4.6V-Flash
+    canonical_slug: huggingface/zai-org/GLM-4.6V-Flash
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.7
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.7
+    name: zai-org/GLM-4.7
+    canonical_slug: huggingface/zai-org/GLM-4.7
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-4.7-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-4.7-FP8
+    name: zai-org/GLM-4.7-FP8
+    canonical_slug: huggingface/zai-org/GLM-4.7-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-5
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-5
+    name: zai-org/GLM-5
+    canonical_slug: huggingface/zai-org/GLM-5
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-5.1
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-5.1
+    name: zai-org/GLM-5.1
+    canonical_slug: huggingface/zai-org/GLM-5.1
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false
+
+  - id: huggingface/zai-org/GLM-5.1-FP8
+    pricing:
+      prompt: '0'
+      completion: '0'
+      request: '0'
+      image: '0'
+    architecture:
+      input_modalities:
+        - text
+      output_modalities:
+        - text
+    enabled: true
+    source: auto
+    provider_id: huggingface
+    upstream_id: zai-org/GLM-5.1-FP8
+    name: zai-org/GLM-5.1-FP8
+    canonical_slug: huggingface/zai-org/GLM-5.1-FP8
+    context_length: 0
+    supported_parameters:
+      - max_tokens
+      - response_format
+      - stop
+      - temperature
+      - tool_choice
+      - tools
+      - top_p
+    top_provider:
+      is_moderated: false

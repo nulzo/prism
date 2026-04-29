@@ -196,10 +196,6 @@ models:
     canonical_slug: minimax/minimax-01
     hugging_face_id: MiniMaxAI/MiniMax-Text-01
     context_length: 1000192
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - max_tokens
       - temperature
@@ -207,6 +203,10 @@ models:
     knowledge_cutoff: '2024-03-31'
     links:
       details: /api/v1/models/minimax/minimax-01/endpoints
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 1000192
       max_completion_tokens: 1000192
@@ -231,10 +231,6 @@ models:
     name: 'MiniMax: MiniMax M1'
     canonical_slug: minimax/minimax-m1
     context_length: 1000000
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -252,6 +248,10 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/minimax/minimax-m1/endpoints
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 1000000
       max_completion_tokens: 40000
@@ -278,10 +278,6 @@ models:
     canonical_slug: minimax/minimax-m2
     hugging_face_id: MiniMaxAI/MiniMax-M2
     context_length: 196608
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -302,6 +298,10 @@ models:
       - top_p
     links:
       details: /api/v1/models/minimax/minimax-m2/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
     top_provider:
       context_length: 196608
       max_completion_tokens: 196608
@@ -327,16 +327,16 @@ models:
     name: 'MiniMax: MiniMax M2-her'
     canonical_slug: minimax/minimax-m2-her-20260123
     context_length: 65536
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      frequency_penalty: null
     supported_parameters:
       - max_tokens
       - temperature
       - top_p
     links:
       details: /api/v1/models/minimax/minimax-m2-her-20260123/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
     top_provider:
       context_length: 65536
       max_completion_tokens: 2048
@@ -363,10 +363,6 @@ models:
     canonical_slug: minimax/minimax-m2.1
     hugging_face_id: MiniMaxAI/MiniMax-M2.1
     context_length: 196608
-    default_parameters:
-      temperature: 1
-      top_p: 0.9
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -387,6 +383,10 @@ models:
       - top_p
     links:
       details: /api/v1/models/minimax/minimax-m2.1/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.9
+      frequency_penalty: null
     top_provider:
       context_length: 196608
       max_completion_tokens: 196608
@@ -413,13 +413,6 @@ models:
     canonical_slug: minimax/minimax-m2.5-20260211
     hugging_face_id: MiniMaxAI/MiniMax-M2.5
     context_length: 196608
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -444,6 +437,13 @@ models:
       - top_p
     links:
       details: /api/v1/models/minimax/minimax-m2.5-20260211/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 196608
       max_completion_tokens: 131072
@@ -469,13 +469,6 @@ models:
     canonical_slug: minimax/minimax-m2.5-20260211
     hugging_face_id: MiniMaxAI/MiniMax-M2.5
     context_length: 196608
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -487,6 +480,13 @@ models:
       - tools
     links:
       details: /api/v1/models/minimax/minimax-m2.5-20260211/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 196608
       max_completion_tokens: 8192
@@ -513,13 +513,6 @@ models:
     canonical_slug: minimax/minimax-m2.7-20260318
     hugging_face_id: MiniMaxAI/MiniMax-M2.7
     context_length: 196608
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -541,6 +534,13 @@ models:
       - top_p
     links:
       details: /api/v1/models/minimax/minimax-m2.7-20260318/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 196608
       is_moderated: false

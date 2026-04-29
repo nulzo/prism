@@ -836,13 +836,13 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: &id024
+    knowledge_cutoff: '2023-10-31'
+    links: &id024
+      details: /api/v1/models/openai/gpt-4o-audio-preview/endpoints
+    default_parameters: &id025
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2023-10-31'
-    links: &id025
-      details: /api/v1/models/openai/gpt-4o-audio-preview/endpoints
     description: Audio model for gpt-4o
 
   - id: openai/gpt-4o-audio-preview-2024-12-17
@@ -867,9 +867,9 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: *id024
     knowledge_cutoff: '2023-10-31'
-    links: *id025
+    links: *id024
+    default_parameters: *id025
     description: Audio model for gpt-4o
 
   - id: openai/gpt-4o-audio-preview-2025-06-03
@@ -894,9 +894,9 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: *id024
     knowledge_cutoff: '2023-10-31'
-    links: *id025
+    links: *id024
+    default_parameters: *id025
     description: Audio model for gpt-4o
 
   - id: openai/gpt-4o-mini
@@ -1534,16 +1534,16 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id056
+    knowledge_cutoff: '2024-09-30'
+    links: &id056
+      details: /api/v1/models/openai/gpt-5-2025-08-07/endpoints
+    default_parameters: &id057
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-09-30'
-    links: &id057
-      details: /api/v1/models/openai/gpt-5-2025-08-07/endpoints
     description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic tasks across domains.
 
   - id: openai/gpt-5-2025-08-07
@@ -1569,9 +1569,9 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id056
     knowledge_cutoff: '2024-09-30'
-    links: *id057
+    links: *id056
+    default_parameters: *id057
     description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic tasks across domains.
 
   - id: openai/gpt-5-chat-latest
@@ -1648,13 +1648,13 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    knowledge_cutoff: '2024-09-30'
+    links:
+      details: /api/v1/models/openai/gpt-5-codex/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-09-30'
-    links:
-      details: /api/v1/models/openai/gpt-5-codex/endpoints
     description: GPT-5 is OpenAI's flagship model for coding, reasoning, and agentic tasks across domains.
 
   - id: openai/gpt-5-mini
@@ -1696,16 +1696,16 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id061
+    knowledge_cutoff: '2024-05-31'
+    links: &id061
+      details: /api/v1/models/openai/gpt-5-mini-2025-08-07/endpoints
+    default_parameters: &id062
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-05-31'
-    links: &id062
-      details: /api/v1/models/openai/gpt-5-mini-2025-08-07/endpoints
     description: GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's great for well-defined tasks and precise prompts.
 
   - id: openai/gpt-5-mini-2025-08-07
@@ -1731,9 +1731,9 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id061
     knowledge_cutoff: '2024-05-31'
-    links: *id062
+    links: *id061
+    default_parameters: *id062
     description: GPT-5 mini is a faster, more cost-efficient version of GPT-5. It's great for well-defined tasks and precise prompts.
 
   - id: openai/gpt-5-nano
@@ -1774,16 +1774,16 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id066
+    knowledge_cutoff: '2024-05-31'
+    links: &id066
+      details: /api/v1/models/openai/gpt-5-nano-2025-08-07/endpoints
+    default_parameters: &id067
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2024-05-31'
-    links: &id067
-      details: /api/v1/models/openai/gpt-5-nano-2025-08-07/endpoints
     description: GPT-5 Nano is OpenAI's fastest, cheapest version of GPT-5. It's great for summarization and classification tasks.
 
   - id: openai/gpt-5-nano-2025-08-07
@@ -1809,9 +1809,9 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id066
     knowledge_cutoff: '2024-05-31'
-    links: *id067
+    links: *id066
+    default_parameters: *id067
     description: GPT-5 Nano is OpenAI's fastest, cheapest version of GPT-5. It's great for summarization and classification tasks.
 
   - id: openai/gpt-5-pro
@@ -1851,13 +1851,13 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 272000
-    default_parameters: &id071
+    knowledge_cutoff: '2024-09-30'
+    links: &id071
+      details: /api/v1/models/openai/gpt-5-pro-2025-10-06/endpoints
+    default_parameters: &id072
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-09-30'
-    links: &id072
-      details: /api/v1/models/openai/gpt-5-pro-2025-10-06/endpoints
 
   - id: openai/gpt-5-pro-2025-10-06
     pricing:
@@ -1881,9 +1881,9 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 272000
-    default_parameters: *id071
     knowledge_cutoff: '2024-09-30'
-    links: *id072
+    links: *id071
+    default_parameters: *id072
 
   - id: openai/gpt-5-search-api
     pricing:
@@ -1984,15 +1984,15 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id079
+    links: &id079
+      details: /api/v1/models/openai/gpt-5.1-20251113/endpoints
+    default_parameters: &id080
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id080
-      details: /api/v1/models/openai/gpt-5.1-20251113/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.1-2025-11-13
@@ -2018,8 +2018,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id079
-    links: *id080
+    links: *id079
+    default_parameters: *id080
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.1-chat-latest
@@ -2098,6 +2098,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/openai/gpt-5.1-codex-20251113/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -2105,8 +2107,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/openai/gpt-5.1-codex-20251113/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.1-codex-max
@@ -2147,6 +2147,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/openai/gpt-5.1-codex-max-20251204/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -2154,8 +2156,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/openai/gpt-5.1-codex-max-20251204/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.1-codex-mini
@@ -2196,6 +2196,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/openai/gpt-5.1-codex-mini-20251113/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -2203,8 +2205,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/openai/gpt-5.1-codex-mini-20251113/endpoints
     description: GPT-5.1-Codex-Mini is a smaller and faster version of GPT-5.1-Codex
 
   - id: openai/gpt-5.2
@@ -2247,15 +2247,15 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id084
+    links: &id084
+      details: /api/v1/models/openai/gpt-5.2-20251211/endpoints
+    default_parameters: &id085
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id085
-      details: /api/v1/models/openai/gpt-5.2-20251211/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.2-2025-12-11
@@ -2281,8 +2281,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id084
-    links: *id085
+    links: *id084
+    default_parameters: *id085
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.2-chat-latest
@@ -2362,12 +2362,12 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/openai/gpt-5.2-codex-20260114/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    links:
-      details: /api/v1/models/openai/gpt-5.2-codex-20260114/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.2-pro
@@ -2407,12 +2407,12 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id089
+    links: &id089
+      details: /api/v1/models/openai/gpt-5.2-pro-20251211/endpoints
+    default_parameters: &id090
       temperature: null
       top_p: null
       frequency_penalty: null
-    links: &id090
-      details: /api/v1/models/openai/gpt-5.2-pro-20251211/endpoints
     description: Version of GPT-5.2 that produces smarter and more precise responses.
 
   - id: openai/gpt-5.2-pro-2025-12-11
@@ -2437,8 +2437,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id089
-    links: *id090
+    links: *id089
+    default_parameters: *id090
     description: Version of GPT-5.2 that produces smarter and more precise responses.
 
   - id: openai/gpt-5.3-chat-latest
@@ -2517,6 +2517,8 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/openai/gpt-5.3-codex-20260224/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -2524,8 +2526,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/openai/gpt-5.3-codex-20260224/endpoints
     description: The most capable agentic coding model
 
   - id: openai/gpt-5.4
@@ -2566,15 +2566,15 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: &id094
+    links: &id094
+      details: /api/v1/models/openai/gpt-5.4-20260305/endpoints
+    default_parameters: &id095
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id095
-      details: /api/v1/models/openai/gpt-5.4-20260305/endpoints
     description: OpenAI's most capable model with a 1.05M token context window.
 
   - id: openai/gpt-5.4-2026-03-05
@@ -2600,8 +2600,8 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: *id094
-    links: *id095
+    links: *id094
+    default_parameters: *id095
     description: OpenAI's most capable model with a 1.05M token context window.
 
   - id: openai/gpt-5.4-mini
@@ -2643,16 +2643,16 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id099
+    knowledge_cutoff: '2025-08-31'
+    links: &id099
+      details: /api/v1/models/openai/gpt-5.4-mini-20260317/endpoints
+    default_parameters: &id100
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-08-31'
-    links: &id100
-      details: /api/v1/models/openai/gpt-5.4-mini-20260317/endpoints
     description: Our strongest mini model yet for coding, computer use, and subagents.
 
   - id: openai/gpt-5.4-mini-2026-03-17
@@ -2678,9 +2678,9 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id099
     knowledge_cutoff: '2025-08-31'
-    links: *id100
+    links: *id099
+    default_parameters: *id100
     description: Our strongest mini model yet for coding, computer use, and subagents.
 
   - id: openai/gpt-5.4-nano
@@ -2722,16 +2722,16 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: &id104
+    knowledge_cutoff: '2025-08-31'
+    links: &id104
+      details: /api/v1/models/openai/gpt-5.4-nano-20260317/endpoints
+    default_parameters: &id105
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-08-31'
-    links: &id105
-      details: /api/v1/models/openai/gpt-5.4-nano-20260317/endpoints
     description: Our cheapest GPT-5.4-class model for simple high-volume tasks.
 
   - id: openai/gpt-5.4-nano-2026-03-17
@@ -2757,9 +2757,9 @@ models:
       is_moderated: false
       context_length: 272000
       max_completion_tokens: 128000
-    default_parameters: *id104
     knowledge_cutoff: '2025-08-31'
-    links: *id105
+    links: *id104
+    default_parameters: *id105
     description: Our cheapest GPT-5.4-class model for simple high-volume tasks.
 
   - id: openai/gpt-5.4-pro
@@ -2800,15 +2800,15 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: &id109
+    links: &id109
+      details: /api/v1/models/openai/gpt-5.4-pro-20260305/endpoints
+    default_parameters: &id110
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id110
-      details: /api/v1/models/openai/gpt-5.4-pro-20260305/endpoints
     description: Version of GPT-5.4 that produces smarter and more precise responses.
 
   - id: openai/gpt-5.4-pro-2026-03-05
@@ -2834,8 +2834,8 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: *id109
-    links: *id110
+    links: *id109
+    default_parameters: *id110
     description: Version of GPT-5.4 that produces smarter and more precise responses.
 
   - id: openai/gpt-5.5
@@ -2877,15 +2877,15 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: &id114
+    links: &id114
+      details: /api/v1/models/openai/gpt-5.5-20260423/endpoints
+    default_parameters: &id115
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id115
-      details: /api/v1/models/openai/gpt-5.5-20260423/endpoints
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.5-2026-04-23
@@ -2911,8 +2911,8 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: *id114
-    links: *id115
+    links: *id114
+    default_parameters: *id115
     description: The best model for coding and agentic tasks across industries
 
   - id: openai/gpt-5.5-pro
@@ -2953,15 +2953,15 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: &id119
+    links: &id119
+      details: /api/v1/models/openai/gpt-5.5-pro-20260423/endpoints
+    default_parameters: &id120
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links: &id120
-      details: /api/v1/models/openai/gpt-5.5-pro-20260423/endpoints
     description: Version of GPT-5.5 that produces smarter and more precise responses.
 
   - id: openai/gpt-5.5-pro-2026-04-23
@@ -2987,8 +2987,8 @@ models:
       is_moderated: false
       context_length: 1050000
       max_completion_tokens: 128000
-    default_parameters: *id119
-    links: *id120
+    links: *id119
+    default_parameters: *id120
     description: Version of GPT-5.5 that produces smarter and more precise responses.
 
   - id: openai/gpt-audio
@@ -3024,12 +3024,12 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: &id124
+    links: &id124
+      details: /api/v1/models/openai/gpt-audio/endpoints
+    default_parameters: &id125
       temperature: null
       top_p: null
       frequency_penalty: null
-    links: &id125
-      details: /api/v1/models/openai/gpt-audio/endpoints
 
   - id: openai/gpt-audio-1.5
     pricing:
@@ -3086,8 +3086,8 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: *id124
-    links: *id125
+    links: *id124
+    default_parameters: *id125
 
   - id: openai/gpt-audio-mini
     pricing:
@@ -3122,12 +3122,12 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: &id129
+    links: &id129
+      details: /api/v1/models/openai/gpt-audio-mini/endpoints
+    default_parameters: &id130
       temperature: null
       top_p: null
       frequency_penalty: null
-    links: &id130
-      details: /api/v1/models/openai/gpt-audio-mini/endpoints
 
   - id: openai/gpt-audio-mini-2025-10-06
     pricing:
@@ -3151,8 +3151,8 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: *id129
-    links: *id130
+    links: *id129
+    default_parameters: *id130
 
   - id: openai/gpt-audio-mini-2025-12-15
     pricing:
@@ -3176,8 +3176,8 @@ models:
       is_moderated: false
       context_length: 128000
       max_completion_tokens: 16384
-    default_parameters: *id129
-    links: *id130
+    links: *id129
+    default_parameters: *id130
 
   - id: openai/gpt-image-1
     pricing:
@@ -3531,16 +3531,16 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: &id140
+    knowledge_cutoff: '2023-10-31'
+    links: &id140
+      details: /api/v1/models/openai/o1-2024-12-17/endpoints
+    default_parameters: &id141
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2023-10-31'
-    links: &id141
-      details: /api/v1/models/openai/o1-2024-12-17/endpoints
     description: O1 is a model that offers a balance between cost and performance.
 
   - id: openai/o1-2024-12-17
@@ -3566,9 +3566,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: *id140
     knowledge_cutoff: '2023-10-31'
-    links: *id141
+    links: *id140
+    default_parameters: *id141
     description: O1 is a model that offers a balance between cost and performance.
 
   - id: openai/o1-pro
@@ -3745,12 +3745,12 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: &id153
+    links: &id153
+      details: /api/v1/models/openai/o3-deep-research-2025-06-26/endpoints
+    default_parameters: &id154
       temperature: null
       top_p: null
       frequency_penalty: null
-    links: &id154
-      details: /api/v1/models/openai/o3-deep-research-2025-06-26/endpoints
     description: |-
       o3-deep-research is OpenAI's advanced model for deep research, designed to tackle complex, multi-step research tasks.
 
@@ -3779,8 +3779,8 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: *id153
-    links: *id154
+    links: *id153
+    default_parameters: *id154
     description: |-
       o3-deep-research is OpenAI's advanced model for deep research, designed to tackle complex, multi-step research tasks.
 
@@ -3821,16 +3821,16 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: &id158
+    knowledge_cutoff: '2023-10-31'
+    links: &id158
+      details: /api/v1/models/openai/o3-mini-2025-01-31/endpoints
+    default_parameters: &id159
       temperature: null
       top_p: null
       top_k: null
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2023-10-31'
-    links: &id159
-      details: /api/v1/models/openai/o3-mini-2025-01-31/endpoints
     description: OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding.
 
   - id: openai/o3-mini-2025-01-31
@@ -3856,9 +3856,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: *id158
     knowledge_cutoff: '2023-10-31'
-    links: *id159
+    links: *id158
+    default_parameters: *id159
     description: OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding.
 
   - id: openai/o3-pro
@@ -3898,13 +3898,13 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: &id163
+    knowledge_cutoff: '2024-06-30'
+    links: &id163
+      details: /api/v1/models/openai/o3-pro-2025-06-10/endpoints
+    default_parameters: &id164
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-06-30'
-    links: &id164
-      details: /api/v1/models/openai/o3-pro-2025-06-10/endpoints
     description: The o-series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o3-pro model uses more compute to think harder and provide consistently better answers.
 
   - id: openai/o3-pro-2025-06-10
@@ -3929,9 +3929,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: *id163
     knowledge_cutoff: '2024-06-30'
-    links: *id164
+    links: *id163
+    default_parameters: *id164
     description: The o-series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o3-pro model uses more compute to think harder and provide consistently better answers.
 
   - id: openai/o4-mini
@@ -4041,12 +4041,12 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: &id172
+    links: &id172
+      details: /api/v1/models/openai/o4-mini-deep-research-2025-06-26/endpoints
+    default_parameters: &id173
       temperature: null
       top_p: null
       frequency_penalty: null
-    links: &id173
-      details: /api/v1/models/openai/o4-mini-deep-research-2025-06-26/endpoints
     description: |-
       o4-mini-deep-research is OpenAI's faster, more affordable deep research model—ideal for tackling complex, multi-step research tasks.
 
@@ -4075,8 +4075,8 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 100000
-    default_parameters: *id172
-    links: *id173
+    links: *id172
+    default_parameters: *id173
     description: |-
       o4-mini-deep-research is OpenAI's faster, more affordable deep research model—ideal for tackling complex, multi-step research tasks.
 

@@ -203,14 +203,14 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
     description: Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     expiration_date: '2026-06-01'
     knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-001/endpoints
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
 
   - id: google/gemini-2.0-flash-lite
     pricing:
@@ -282,14 +282,14 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
     description: Stable version of Gemini 2.0 Flash-Lite
-    default_parameters:
-      temperature: null
-      top_p: null
-      frequency_penalty: null
     expiration_date: '2026-06-01'
     knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-lite-001/endpoints
+    default_parameters:
+      temperature: null
+      top_p: null
+      frequency_penalty: null
 
   - id: google/gemini-2.5-computer-use-preview-10-2025
     pricing:
@@ -363,13 +363,13 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/google/gemini-2.5-flash/endpoints
 
   - id: google/gemini-2.5-flash-image
     pricing:
@@ -411,13 +411,13 @@ models:
       context_length: 32768
       max_completion_tokens: 32768
     description: Gemini 2.5 Flash Preview Image
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash-image/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/google/gemini-2.5-flash-image/endpoints
 
   - id: google/gemini-2.5-flash-lite
     pricing:
@@ -458,13 +458,13 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable version of Gemini 2.5 Flash-Lite, released in July of 2025
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-flash-lite/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/google/gemini-2.5-flash-lite/endpoints
 
   - id: google/gemini-2.5-flash-native-audio-latest
     pricing:
@@ -631,13 +631,13 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable release (June 17th, 2025) of Gemini 2.5 Pro
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/google/gemini-2.5-pro/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/google/gemini-2.5-pro/endpoints
 
   - id: google/gemini-2.5-pro-preview-tts
     pricing:
@@ -713,6 +713,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Gemini 3 Flash Preview
+    links:
+      details: /api/v1/models/google/gemini-3-flash-preview-20251217/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -720,8 +722,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3-flash-preview-20251217/endpoints
 
   - id: google/gemini-3-pro-image-preview
     pricing:
@@ -758,12 +758,12 @@ models:
       context_length: 131072
       max_completion_tokens: 32768
     description: Gemini 3 Pro Image Preview
+    links:
+      details: /api/v1/models/google/gemini-3-pro-image-preview-20251120/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3-pro-image-preview-20251120/endpoints
 
   - id: google/gemini-3-pro-preview
     pricing:
@@ -837,6 +837,8 @@ models:
       context_length: 65536
       max_completion_tokens: 65536
     description: Gemini 3.1 Flash Image Preview.
+    links:
+      details: /api/v1/models/google/gemini-3.1-flash-image-preview-20260226/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -844,8 +846,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3.1-flash-image-preview-20260226/endpoints
 
   - id: google/gemini-3.1-flash-lite-preview
     pricing:
@@ -888,6 +888,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Gemini 3.1 Flash Lite Preview
+    links:
+      details: /api/v1/models/google/gemini-3.1-flash-lite-preview-20260303/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -895,8 +897,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3.1-flash-lite-preview-20260303/endpoints
 
   - id: google/gemini-3.1-flash-live-preview
     pricing:
@@ -1002,6 +1002,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Gemini 3.1 Pro Preview
+    links:
+      details: /api/v1/models/google/gemini-3.1-pro-preview-20260219/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -1009,8 +1011,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3.1-pro-preview-20260219/endpoints
 
   - id: google/gemini-3.1-pro-preview-customtools
     pricing:
@@ -1052,12 +1052,12 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Gemini 3.1 Pro Preview optimized for custom tool usage
+    links:
+      details: /api/v1/models/google/gemini-3.1-pro-preview-customtools-20260219/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    links:
-      details: /api/v1/models/google/gemini-3.1-pro-preview-customtools-20260219/endpoints
 
   - id: google/gemini-embedding-001
     pricing:
@@ -1197,6 +1197,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Latest release of Gemini Flash
+    links:
+      details: /api/v1/models/~google/gemini-flash-latest/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -1204,8 +1206,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/~google/gemini-flash-latest/endpoints
 
   - id: google/gemini-flash-lite-latest
     pricing:
@@ -1279,6 +1279,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Latest release of Gemini Pro
+    links:
+      details: /api/v1/models/~google/gemini-pro-latest/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -1286,8 +1288,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/~google/gemini-pro-latest/endpoints
 
   - id: google/gemini-robotics-er-1.5-preview
     pricing:
@@ -1463,13 +1463,13 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
     hugging_face_id: google/gemma-3-27b-it
+    knowledge_cutoff: '2024-08-31'
+    links:
+      details: /api/v1/models/google/gemma-3-27b-it/endpoints
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
-    knowledge_cutoff: '2024-08-31'
-    links:
-      details: /api/v1/models/google/gemma-3-27b-it/endpoints
     description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.
 
   - id: google/gemma-3-4b-it
@@ -1619,12 +1619,12 @@ models:
       max_completion_tokens: 32768
     description: Gemma 4 26B A4B IT
     hugging_face_id: google/gemma-4-26B-A4B-it
+    links:
+      details: /api/v1/models/google/gemma-4-26b-a4b-it-20260403/endpoints
     default_parameters:
       temperature: 1
       top_p: 0.95
       top_k: 64
-    links:
-      details: /api/v1/models/google/gemma-4-26b-a4b-it-20260403/endpoints
 
   - id: google/gemma-4-31b-it
     pricing:
@@ -1662,6 +1662,8 @@ models:
       max_completion_tokens: 32768
     description: Gemma 4 31B IT
     hugging_face_id: google/gemma-4-31B-it
+    links:
+      details: /api/v1/models/google/gemma-4-31b-it-20260402/endpoints
     default_parameters:
       temperature: 1
       top_p: 0.95
@@ -1669,8 +1671,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/gemma-4-31b-it-20260402/endpoints
 
   - id: google/imagen-4.0-fast-generate-001
     pricing:
@@ -1800,6 +1800,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Lyria 3 30s model Preview
+    links:
+      details: /api/v1/models/google/lyria-3-clip-preview-20260330/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -1807,8 +1809,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/lyria-3-clip-preview-20260330/endpoints
 
   - id: google/lyria-3-pro-preview
     pricing:
@@ -1845,6 +1845,8 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Lyria 3 Pro Preview
+    links:
+      details: /api/v1/models/google/lyria-3-pro-preview-20260330/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -1852,8 +1854,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/google/lyria-3-pro-preview-20260330/endpoints
 
   - id: google/nano-banana-pro-preview
     pricing:

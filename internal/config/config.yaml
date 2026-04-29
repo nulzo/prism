@@ -107,7 +107,7 @@ providers:
   - id: "huggingface"
     type: "huggingface"
     name: "Hugging Face Inference Providers"
-    api_key: "ENV:HF_TOKEN"
+    api_key: "ENV:HF_API_KEY"
     base_url: "https://router.huggingface.co/v1"
     enabled: true
     requires_auth: true

@@ -19,10 +19,6 @@ models:
     name: 'Z.ai: GLM 4 32B '
     canonical_slug: z-ai/glm-4-32b-0414
     context_length: 128000
-    default_parameters:
-      temperature: 0.75
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - max_tokens
       - temperature
@@ -32,6 +28,10 @@ models:
     knowledge_cutoff: '2024-06-30'
     links:
       details: /api/v1/models/z-ai/glm-4-32b-0414/endpoints
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 128000
       is_moderated: false
@@ -88,10 +88,6 @@ models:
     canonical_slug: z-ai/glm-4.5
     hugging_face_id: zai-org/GLM-4.5
     context_length: 128000
-    default_parameters:
-      temperature: 0.75
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -103,6 +99,10 @@ models:
     knowledge_cutoff: '2024-12-31'
     links:
       details: /api/v1/models/z-ai/glm-4.5/endpoints
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 128000
       max_completion_tokens: 32000
@@ -129,10 +129,6 @@ models:
     canonical_slug: z-ai/glm-4.5-air
     hugging_face_id: zai-org/GLM-4.5-Air
     context_length: 128000
-    default_parameters:
-      temperature: 0.75
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -144,6 +140,10 @@ models:
     knowledge_cutoff: '2024-12-31'
     links:
       details: /api/v1/models/z-ai/glm-4.5-air/endpoints
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 128000
       max_completion_tokens: 32000
@@ -169,10 +169,6 @@ models:
     canonical_slug: z-ai/glm-4.5-air
     hugging_face_id: zai-org/GLM-4.5-Air
     context_length: 131072
-    default_parameters:
-      temperature: 0.75
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -184,6 +180,10 @@ models:
     knowledge_cutoff: '2024-12-31'
     links:
       details: /api/v1/models/z-ai/glm-4.5-air/endpoints
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 131072
       max_completion_tokens: 96000
@@ -304,10 +304,6 @@ models:
     canonical_slug: z-ai/glm-4.5v
     hugging_face_id: zai-org/GLM-4.5V
     context_length: 128000
-    default_parameters:
-      temperature: 0.75
-      top_p: null
-      frequency_penalty: null
     supported_parameters:
       - max_completion_tokens
       - max_tokens
@@ -319,6 +315,10 @@ models:
     knowledge_cutoff: '2024-12-31'
     links:
       details: /api/v1/models/z-ai/glm-4.5v/endpoints
+    default_parameters:
+      temperature: 0.75
+      top_p: null
+      frequency_penalty: null
     top_provider:
       context_length: 128000
       max_completion_tokens: 32000
@@ -345,13 +345,6 @@ models:
     canonical_slug: z-ai/glm-4.6
     hugging_face_id: zai-org/GLM-4.6
     context_length: 200000
-    default_parameters:
-      temperature: 0.6
-      top_p: null
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - include_reasoning
       - max_completion_tokens
@@ -365,6 +358,13 @@ models:
     knowledge_cutoff: '2025-03-31'
     links:
       details: /api/v1/models/z-ai/glm-4.6/endpoints
+    default_parameters:
+      temperature: 0.6
+      top_p: null
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 200000
       max_completion_tokens: 128000
@@ -393,10 +393,6 @@ models:
     canonical_slug: z-ai/glm-4.6-20251208
     hugging_face_id: zai-org/GLM-4.6V
     context_length: 131072
-    default_parameters:
-      temperature: 0.8
-      top_p: 0.6
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -413,6 +409,10 @@ models:
       - top_p
     links:
       details: /api/v1/models/z-ai/glm-4.6-20251208/endpoints
+    default_parameters:
+      temperature: 0.8
+      top_p: 0.6
+      frequency_penalty: null
     top_provider:
       context_length: 131072
       max_completion_tokens: 24000
@@ -453,12 +453,12 @@ models:
       is_moderated: false
       max_completion_tokens: 128000
     hugging_face_id: zai-org/GLM-4.7
+    links:
+      details: /api/v1/models/z-ai/glm-4.7-20251222/endpoints
     default_parameters:
       temperature: 1
       top_p: 0.95
       frequency_penalty: null
-    links:
-      details: /api/v1/models/z-ai/glm-4.7-20251222/endpoints
 
   - id: zai/glm-4.7-flash
     pricing:
@@ -481,10 +481,6 @@ models:
     canonical_slug: z-ai/glm-4.7-flash-20260119
     hugging_face_id: zai-org/GLM-4.7-Flash
     context_length: 202752
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      frequency_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -505,6 +501,10 @@ models:
       - top_p
     links:
       details: /api/v1/models/z-ai/glm-4.7-flash-20260119/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      frequency_penalty: null
     top_provider:
       context_length: 202752
       max_completion_tokens: 16384
@@ -545,12 +545,12 @@ models:
       is_moderated: false
       max_completion_tokens: 128000
     hugging_face_id: zai-org/GLM-5
+    links:
+      details: /api/v1/models/z-ai/glm-5-20260211/endpoints
     default_parameters:
       temperature: 1
       top_p: 0.95
       frequency_penalty: null
-    links:
-      details: /api/v1/models/z-ai/glm-5-20260211/endpoints
 
   - id: zai/glm-5-code
     pricing:
@@ -606,13 +606,6 @@ models:
     name: 'Z.ai: GLM 5 Turbo'
     canonical_slug: z-ai/glm-5-turbo-20260315
     context_length: 202752
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - frequency_penalty
       - include_reasoning
@@ -632,6 +625,13 @@ models:
       - top_p
     links:
       details: /api/v1/models/z-ai/glm-5-turbo-20260315/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 202752
       max_completion_tokens: 131072
@@ -670,6 +670,8 @@ models:
       is_moderated: false
       max_completion_tokens: 65535
     hugging_face_id: zai-org/GLM-5.1
+    links:
+      details: /api/v1/models/z-ai/glm-5.1-20260406/endpoints
     default_parameters:
       temperature: 1
       top_p: 0.95
@@ -677,8 +679,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/z-ai/glm-5.1-20260406/endpoints
 
   - id: zai/glm-5v-turbo
     pricing:
@@ -702,13 +702,6 @@ models:
     name: 'Z.ai: GLM 5V Turbo'
     canonical_slug: z-ai/glm-5v-turbo-20260401
     context_length: 202752
-    default_parameters:
-      temperature: 1
-      top_p: 0.95
-      top_k: null
-      frequency_penalty: null
-      presence_penalty: null
-      repetition_penalty: null
     supported_parameters:
       - include_reasoning
       - max_tokens
@@ -720,6 +713,13 @@ models:
       - top_p
     links:
       details: /api/v1/models/z-ai/glm-5v-turbo-20260401/endpoints
+    default_parameters:
+      temperature: 1
+      top_p: 0.95
+      top_k: null
+      frequency_penalty: null
+      presence_penalty: null
+      repetition_penalty: null
     top_provider:
       context_length: 202752
       max_completion_tokens: 131072

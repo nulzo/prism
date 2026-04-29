@@ -37,6 +37,8 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
     hugging_face_id: moonshotai/Kimi-K2.5
+    links:
+      details: /api/v1/models/moonshotai/kimi-k2.5-0127/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -44,8 +46,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/moonshotai/kimi-k2.5-0127/endpoints
     description: Kimi's most versatile model featuring a native multimodal architecture that supports both visual and text input, thinking and non-thinking modes, and dialogue and agent tasks. Supports automatic context caching, ToolCalls, JSON Mode, Partial Mode, and internet search.
 
   - id: moonshot/kimi-k2.6
@@ -85,6 +85,8 @@ models:
       context_length: 262144
       max_completion_tokens: 262144
     hugging_face_id: moonshotai/Kimi-K2.6
+    links:
+      details: /api/v1/models/moonshotai/kimi-k2.6-20260420/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -92,8 +94,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/moonshotai/kimi-k2.6-20260420/endpoints
 
   - id: moonshot/moonshot-v1-128k
     pricing:

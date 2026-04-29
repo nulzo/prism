@@ -38,6 +38,8 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 64000
+    links:
+      details: /api/v1/models/anthropic/claude-4.5-haiku-20251001/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -45,8 +47,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/anthropic/claude-4.5-haiku-20251001/endpoints
     description: Fastest and most intelligent Haiku model
 
   - id: anthropic/claude-opus-4-1-20250805
@@ -88,6 +88,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 32000
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/anthropic/claude-4.1-opus-20250805/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -95,9 +98,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/anthropic/claude-4.1-opus-20250805/endpoints
     description: Most intelligent model for complex tasks
 
   - id: anthropic/claude-opus-4-20250514
@@ -139,6 +139,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 32000
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/anthropic/claude-4-opus-20250522/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -146,9 +149,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/anthropic/claude-4-opus-20250522/endpoints
     description: Most intelligent model for complex tasks
 
   - id: anthropic/claude-opus-4-5-20251101
@@ -190,6 +190,8 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 64000
+    links:
+      details: /api/v1/models/anthropic/claude-4.5-opus-20251124/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -197,8 +199,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/anthropic/claude-4.5-opus-20251124/endpoints
     description: Premium model combining maximum intelligence with practical performance
 
   - id: anthropic/claude-opus-4-6
@@ -240,6 +240,8 @@ models:
       is_moderated: false
       context_length: 1000000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/anthropic/claude-4.6-opus-20260205/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -247,8 +249,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/anthropic/claude-4.6-opus-20260205/endpoints
     description: Our most intelligent model for building agents and coding
 
   - id: anthropic/claude-opus-4-7
@@ -290,6 +290,8 @@ models:
       is_moderated: false
       context_length: 1000000
       max_completion_tokens: 128000
+    links:
+      details: /api/v1/models/anthropic/claude-4.7-opus-20260416/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -297,8 +299,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/anthropic/claude-4.7-opus-20260416/endpoints
     description: Our most capable model for complex reasoning and agentic coding
 
   - id: anthropic/claude-sonnet-4-20250514
@@ -340,6 +340,9 @@ models:
       is_moderated: false
       context_length: 1000000
       max_completion_tokens: 64000
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/anthropic/claude-4-sonnet-20250522/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -347,9 +350,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/anthropic/claude-4-sonnet-20250522/endpoints
     description: Optimal balance of intelligence, cost, and speed
 
   - id: anthropic/claude-sonnet-4-5-20250929
@@ -392,6 +392,9 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 64000
+    knowledge_cutoff: '2025-01-31'
+    links:
+      details: /api/v1/models/anthropic/claude-4.5-sonnet-20250929/endpoints
     default_parameters:
       temperature: 1
       top_p: 1
@@ -399,9 +402,6 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    knowledge_cutoff: '2025-01-31'
-    links:
-      details: /api/v1/models/anthropic/claude-4.5-sonnet-20250929/endpoints
     description: Our best combination of speed and intelligence
 
   - id: anthropic/claude-sonnet-4-6
@@ -443,6 +443,8 @@ models:
       is_moderated: false
       context_length: 1000000
       max_completion_tokens: 64000
+    links:
+      details: /api/v1/models/anthropic/claude-4.6-sonnet-20260217/endpoints
     default_parameters:
       temperature: null
       top_p: null
@@ -450,6 +452,4 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
-    links:
-      details: /api/v1/models/anthropic/claude-4.6-sonnet-20260217/endpoints
     description: Our best combination of speed and intelligence
