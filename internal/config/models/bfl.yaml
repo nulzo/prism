@@ -16,7 +16,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-flex
-    name: Generate or edit an image with FLUX.2 [FLEX] (recommended for editing)
+    name: FLUX.2 Flex
     canonical_slug: bfl/flux-2-flex
     context_length: 0
     supported_parameters:
@@ -47,7 +47,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-4b
-    name: Generate or edit an image with FLUX.2 [Klein 4B] (fastest editing)
+    name: FLUX.2 Klein 4b
     canonical_slug: bfl/flux-2-klein-4b
     context_length: 0
     supported_parameters:
@@ -78,7 +78,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-9b
-    name: Generate or edit an image with FLUX.2 [Klein 9B] (fast editing)
+    name: FLUX.2 Klein 9b
     canonical_slug: bfl/flux-2-klein-9b
     context_length: 0
     supported_parameters:
@@ -109,7 +109,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-klein-9b-preview
-    name: Generate or edit an image with FLUX.2 [Klein 9B KV] (fast editing with caching)
+    name: FLUX.2 Klein 9b Preview
     canonical_slug: bfl/flux-2-klein-9b-preview
     context_length: 0
     supported_parameters:
@@ -140,7 +140,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-max
-    name: Generate or edit an image with FLUX.2 [MAX] (highest quality)
+    name: FLUX.2 Max
     canonical_slug: bfl/flux-2-max
     context_length: 0
     supported_parameters:
@@ -171,7 +171,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-pro
-    name: Generate or edit an image with FLUX.2 [PRO] (recommended for editing)
+    name: FLUX.2 Pro
     canonical_slug: bfl/flux-2-pro
     context_length: 0
     supported_parameters:
@@ -202,7 +202,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-2-pro-preview
-    name: Generate or edit an image with FLUX.2 [PRO] Preview (recommended for editing)
+    name: FLUX.2 Pro Preview
     canonical_slug: bfl/flux-2-pro-preview
     context_length: 0
     supported_parameters:
@@ -233,7 +233,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-dev
-    name: Generate an image with FLUX.1 [dev].
+    name: FLUX Dev
     canonical_slug: bfl/flux-dev
     context_length: 0
     supported_parameters:
@@ -261,7 +261,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-kontext-max
-    name: Create an image with FLUX.1 Kontext [max] (legacy, use FLUX.2 [PRO] for editing)
+    name: FLUX Kontext Max
     canonical_slug: bfl/flux-kontext-max
     context_length: 0
     supported_parameters:
@@ -289,7 +289,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-kontext-pro
-    name: Create an image with FLUX.1 Kontext [pro] (legacy, use FLUX.2 [PRO] for editing)
+    name: FLUX Kontext Pro
     canonical_slug: bfl/flux-kontext-pro
     context_length: 0
     supported_parameters:
@@ -317,7 +317,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-expand
-    name: Expand an image by adding pixels on any side.
+    name: FLUX Pro 1.0 Expand
     canonical_slug: bfl/flux-pro-1.0-expand
     context_length: 0
     supported_parameters:
@@ -345,7 +345,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-fill
-    name: Generate an image with FLUX.1 Fill [pro] using an input image and mask.
+    name: FLUX Pro 1.0 Fill
     canonical_slug: bfl/flux-pro-1.0-fill
     context_length: 0
     supported_parameters:
@@ -373,7 +373,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.0-fill-finetuned
-    name: Generate an image with FLUX.1 Fill [pro] finetune using an input image and mask.
+    name: FLUX Pro 1.0 Fill Finetuned
     canonical_slug: bfl/flux-pro-1.0-fill-finetuned
     context_length: 0
     supported_parameters:
@@ -404,7 +404,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1
-    name: Generate an image with FLUX 1.1 [pro].
+    name: FLUX Pro 1.1
     canonical_slug: bfl/flux-pro-1.1
     context_length: 0
     supported_parameters:
@@ -432,7 +432,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1-ultra
-    name: Generate an image with FLUX 1.1 [pro] with ultra mode and optional raw mode.
+    name: FLUX Pro 1.1 Ultra
     canonical_slug: bfl/flux-pro-1.1-ultra
     context_length: 0
     supported_parameters:
@@ -460,7 +460,7 @@ models:
     source: auto
     provider_id: bfl
     upstream_id: flux-pro-1.1-ultra-finetuned
-    name: Generate an image with FLUX 1.1 [pro] finetune with ultra mode.
+    name: FLUX Pro 1.1 Ultra Finetuned
     canonical_slug: bfl/flux-pro-1.1-ultra-finetuned
     context_length: 0
     supported_parameters:

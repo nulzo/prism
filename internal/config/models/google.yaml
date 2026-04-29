@@ -15,7 +15,7 @@ models:
     source: auto
     provider_id: google
     upstream_id: aqa
-    name: Model that performs Attributed Question Answering.
+    name: aqa
     canonical_slug: google/aqa
     context_length: 7168
     supported_parameters:
@@ -203,14 +203,14 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
     description: Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
-    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    expiration_date: '2026-06-01'
+    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-001/endpoints
-    expiration_date: '2026-06-01'
 
   - id: google/gemini-2.0-flash-lite
     pricing:
@@ -282,14 +282,14 @@ models:
       context_length: 1048576
       max_completion_tokens: 8192
     description: Stable version of Gemini 2.0 Flash-Lite
-    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    expiration_date: '2026-06-01'
+    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemini-2.0-flash-lite-001/endpoints
-    expiration_date: '2026-06-01'
 
   - id: google/gemini-2.5-computer-use-preview-10-2025
     pricing:
@@ -363,11 +363,11 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash/endpoints
 
@@ -394,7 +394,7 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-2.5-flash-image
-    name: Nano Banana
+    name: Gemini 2.5 Flash Image
     canonical_slug: google/gemini-2.5-flash-image
     context_length: 32768
     supported_parameters:
@@ -411,11 +411,11 @@ models:
       context_length: 32768
       max_completion_tokens: 32768
     description: Gemini 2.5 Flash Preview Image
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash-image/endpoints
 
@@ -458,11 +458,11 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable version of Gemini 2.5 Flash-Lite, released in July of 2025
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-flash-lite/endpoints
 
@@ -631,11 +631,11 @@ models:
       context_length: 1048576
       max_completion_tokens: 65536
     description: Stable release (June 17th, 2025) of Gemini 2.5 Pro
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/google/gemini-2.5-pro/endpoints
 
@@ -820,7 +820,7 @@ models:
     source: auto
     provider_id: google
     upstream_id: gemini-3.1-flash-image-preview
-    name: Nano Banana 2
+    name: Gemini 3.1 Flash Image Preview
     canonical_slug: google/gemini-3.1-flash-image-preview-20260226
     context_length: 65536
     supported_parameters:
@@ -1463,11 +1463,11 @@ models:
       context_length: 131072
       max_completion_tokens: 8192
     hugging_face_id: google/gemma-3-27b-it
-    knowledge_cutoff: '2024-08-31'
     default_parameters:
       temperature: null
       top_p: null
       frequency_penalty: null
+    knowledge_cutoff: '2024-08-31'
     links:
       details: /api/v1/models/google/gemma-3-27b-it/endpoints
     description: Lightweight, state-of the art, open model built from the same technology that powers our Gemini models.

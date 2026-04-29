@@ -88,7 +88,6 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 32000
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
@@ -96,6 +95,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/anthropic/claude-4.1-opus-20250805/endpoints
     description: Most intelligent model for complex tasks
@@ -139,7 +139,6 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 32000
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
@@ -147,6 +146,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/anthropic/claude-4-opus-20250522/endpoints
     description: Most intelligent model for complex tasks
@@ -340,7 +340,6 @@ models:
       is_moderated: false
       context_length: 1000000
       max_completion_tokens: 64000
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: null
       top_p: null
@@ -348,6 +347,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/anthropic/claude-4-sonnet-20250522/endpoints
     description: Optimal balance of intelligence, cost, and speed
@@ -392,7 +392,6 @@ models:
       is_moderated: false
       context_length: 200000
       max_completion_tokens: 64000
-    knowledge_cutoff: '2025-01-31'
     default_parameters:
       temperature: 1
       top_p: 1
@@ -400,6 +399,7 @@ models:
       frequency_penalty: null
       presence_penalty: null
       repetition_penalty: null
+    knowledge_cutoff: '2025-01-31'
     links:
       details: /api/v1/models/anthropic/claude-4.5-sonnet-20250929/endpoints
     description: Our best combination of speed and intelligence
