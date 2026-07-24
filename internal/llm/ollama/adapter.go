@@ -63,6 +63,13 @@ func (a *Adapter) Type() string {
 	return string(llm.Ollama)
 }
 
+// Capabilities advertises OpenAI-compatible tool calling. The embedded
+// llm.Provider interface does not promote the concrete openai adapter's
+// Capabilities method, so we declare it explicitly here.
+func (a *Adapter) Capabilities() llm.Capabilities {
+	return llm.Capabilities{ToolCalling: llm.ToolCallingOpenAICompat}
+}
+
 func (a *Adapter) Health(ctx context.Context) error {
 	url := fmt.Sprintf("%s/api/version", rootURL(a.config.BaseURL))
 
