@@ -57,6 +57,7 @@ providers:
     base_url: "ENV:OLLAMA_BASE_URL"
     enabled: true
     requires_auth: false
+    timeout: "30m"
     config:
       discover_models: "true"
 

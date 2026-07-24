@@ -38,6 +38,13 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 		config.BaseURL = strings.TrimRight(config.BaseURL, "/") + "/v1"
 	}
 
+	// Local inference can exceed cloud API latencies, especially for
+	// non-streaming /chat/completions where Ollama sends headers only
+	// after the full generation completes.
+	if config.Timeout == "" {
+		config.Timeout = "30m"
+	}
+
 	oaAdapter, err := openai.NewAdapter(config)
 	if err != nil {
 		return nil, err

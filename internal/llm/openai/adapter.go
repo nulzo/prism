@@ -50,7 +50,7 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	return &Adapter{
 		config: config,
 		client: httpclient.NewRequestClient(timeout),
-		stream: httpclient.NewStreamingClient(),
+		stream: httpclient.NewStreamingClient(timeout),
 	}, nil
 }
 
