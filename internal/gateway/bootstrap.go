@@ -6,11 +6,14 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/nulzo/model-router-api/internal/catalog"
 	"github.com/nulzo/model-router-api/internal/cli"
 	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"go.uber.org/zap"
 )
+
+const defaultHydrateTimeout = 30 * time.Second
 
 // BootstrapProviders initializes and registers all enabled providers from configuration.
 func BootstrapProviders(ctx context.Context, service Service, providers []config.ProviderConfig, log *zap.Logger) int {
@@ -47,18 +50,7 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			continue
 		}
 
-		models := pCfg.StaticModels
-		if len(models) == 0 {
-			msg := fmt.Sprintf("%s %s %s",
-				cli.CrossMark(),
-				cli.Stylize(pCfg.ID, cli.Cyan),
-				cli.Stylize("0 models found", cli.Red),
-			)
-			log.Warn(msg)
-			continue
-		}
-
-		// perform health checks
+		// perform health checks before catalog hydration
 		healthCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		if err := providerInstance.Health(healthCtx); err != nil {
 			cancel()
@@ -68,6 +60,26 @@ func BootstrapProviders(ctx context.Context, service Service, providers []config
 			continue
 		}
 		cancel()
+
+		models, err := catalog.ResolveProviderModels(ctx, providerInstance, pCfg.StaticModels, pCfg, defaultHydrateTimeout)
+		if err != nil {
+			log.Warn(fmt.Sprintf("%s %s %s",
+				cli.CrossMark(),
+				cli.Stylize(pCfg.ID, cli.Cyan),
+				cli.Stylize(fmt.Sprintf("model discovery failed: %v", err), cli.Red),
+			))
+			continue
+		}
+
+		if len(models) == 0 {
+			msg := fmt.Sprintf("%s %s %s",
+				cli.CrossMark(),
+				cli.Stylize(pCfg.ID, cli.Cyan),
+				cli.Stylize("0 models found", cli.Red),
+			)
+			log.Warn(msg)
+			continue
+		}
 
 		// register with the service
 		if err := service.RegisterProvider(ctx, providerInstance, models); err != nil {

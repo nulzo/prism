@@ -53,6 +53,13 @@ type CapabilityDescriber interface {
 	Capabilities() Capabilities
 }
 
+// ModelCatalogProvider is implemented by providers that can enumerate models
+// from their upstream runtime (e.g. Ollama GET /api/tags). Static YAML entries
+// are merged on top during catalog hydration; see internal/catalog.
+type ModelCatalogProvider interface {
+	Models(ctx context.Context) ([]api.ModelDefinition, error)
+}
+
 func DescribeCapabilities(p Provider) Capabilities {
 	if describer, ok := p.(CapabilityDescriber); ok {
 		return describer.Capabilities()

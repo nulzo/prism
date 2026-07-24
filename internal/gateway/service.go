@@ -13,6 +13,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nulzo/model-router-api/internal/analytics"
+	"github.com/nulzo/model-router-api/internal/config"
 	"github.com/nulzo/model-router-api/internal/extension"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/platform/logger"
@@ -33,6 +34,8 @@ var (
 type Service interface {
 	// RegisterProvider registers a new model provider.
 	RegisterProvider(ctx context.Context, p llm.Provider, models []api.ModelDefinition) error
+
+	RefreshCatalog(ctx context.Context, providerConfigs []config.ProviderConfig, hydrateTimeout time.Duration) error
 
 	GetProviderForModel(ctx context.Context, modelID string) (llm.Provider, string, error)
 	ListAllModels(ctx context.Context, filter api.ModelFilter) ([]api.Model, error)
@@ -88,6 +91,20 @@ func (s *service) RegisterProvider(ctx context.Context, p llm.Provider, models [
 		s.models[m.ID] = m
 	}
 	return nil
+}
+
+func (s *service) replaceProviderModels(providerID string, models []api.ModelDefinition) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for id, m := range s.models {
+		if m.ProviderID == providerID {
+			delete(s.models, id)
+		}
+	}
+	for _, m := range models {
+		s.models[m.ID] = m
+	}
 }
 
 func (s *service) Chat(ctx context.Context, req *api.ChatRequest) (*api.ChatResponse, error) {

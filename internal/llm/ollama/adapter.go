@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/nulzo/model-router-api/internal/config"
+	"github.com/nulzo/model-router-api/internal/httpclient"
 	"github.com/nulzo/model-router-api/internal/llm"
 	"github.com/nulzo/model-router-api/internal/llm/openai"
 )
@@ -27,9 +28,9 @@ func init() {
 }
 
 type Adapter struct {
-	llm.Provider // embeds the OpenAI adapter for chat/stream capabilities
-	config       config.ProviderConfig
-	client       *http.Client
+	llm.Provider
+	config config.ProviderConfig
+	client *http.Client
 }
 
 func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
@@ -54,7 +55,7 @@ func NewAdapter(config config.ProviderConfig) (llm.Provider, error) {
 	return &Adapter{
 		Provider: oaAdapter,
 		config:   config,
-		client:   &http.Client{Timeout: timeout},
+		client:   httpclient.NewRequestClient(timeout),
 	}, nil
 }
 
@@ -63,9 +64,7 @@ func (a *Adapter) Type() string {
 }
 
 func (a *Adapter) Health(ctx context.Context) error {
-	rootURL := a.config.BaseURL
-	rootURL = strings.TrimSuffix(strings.TrimRight(rootURL, "/"), "/v1")
-	url := fmt.Sprintf("%s/api/version", rootURL)
+	url := fmt.Sprintf("%s/api/version", rootURL(a.config.BaseURL))
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {

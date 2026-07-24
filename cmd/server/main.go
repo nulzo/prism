@@ -146,6 +146,7 @@ func main() {
 
 	// Bootstrap providers
 	gateway.BootstrapProviders(ctx, routerService, cfg.Providers, log)
+	gateway.StartCatalogRefresh(ctx, routerService, cfg.Providers, cfg.Catalog, log)
 
 	apiServer := server.New(cfg, log, repo, routerService, analyticsService, val)
 	readTimeout := parseDurationAllowZero(cfg.Server.ReadTimeout, 30*time.Second)
