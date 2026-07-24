@@ -130,6 +130,10 @@ type GeminiSafetySetting struct {
 type GeminiGenerationConfig struct {
 	ResponseModalities []string              `json:"responseModalities,omitempty"`
 	Temperature        float64               `json:"temperature,omitempty"`
+	TopP               float64               `json:"topP,omitempty"`
+	TopK               int                   `json:"topK,omitempty"`
+	MaxOutputTokens    int                   `json:"maxOutputTokens,omitempty"`
+	StopSequences      []string              `json:"stopSequences,omitempty"`
 	ThinkingConfig     *GeminiThinkingConfig `json:"thinkingConfig,omitempty"`
 	SpeechConfig       *GeminiSpeechConfig   `json:"speechConfig,omitempty"`
 }
@@ -256,11 +260,28 @@ func Shape(req *api.UpstreamChatRequest) (GeminiRequest, error) {
 		gr.GenerationConfig.SpeechConfig = geminiSpeechConfig(req.Audio.Voice)
 	}
 
-	if req.Temperature != 0 {
+	if req.Temperature != 0 || req.TopP != 0 || req.TopK != 0 || req.MaxTokens != 0 || req.MaxCompletionTokens != 0 || req.Stop != nil {
 		if gr.GenerationConfig == nil {
 			gr.GenerationConfig = &GeminiGenerationConfig{}
 		}
-		gr.GenerationConfig.Temperature = req.Temperature
+		if req.Temperature != 0 {
+			gr.GenerationConfig.Temperature = req.Temperature
+		}
+		if req.TopP != 0 {
+			gr.GenerationConfig.TopP = req.TopP
+		}
+		if req.TopK != 0 {
+			gr.GenerationConfig.TopK = req.TopK
+		}
+		switch {
+		case req.MaxCompletionTokens > 0:
+			gr.GenerationConfig.MaxOutputTokens = req.MaxCompletionTokens
+		case req.MaxTokens > 0:
+			gr.GenerationConfig.MaxOutputTokens = req.MaxTokens
+		}
+		if req.Stop != nil && len(req.Stop.Val) > 0 {
+			gr.GenerationConfig.StopSequences = append([]string(nil), req.Stop.Val...)
+		}
 	}
 
 	// Translate the router's ReasoningConfig into Gemini's thinkingConfig.
@@ -449,23 +470,30 @@ func extractResponseParts(parts []GeminiPart) (content string, reasoning string,
 // unlock the full adaptive budget (-1 signals "auto" to Gemini), while
 // `none` turns thinking off entirely. Unknown inputs return nil so the
 // provider default applies.
-// stripReasoningField returns a copy of the request with the router-only
-// `Reasoning` field cleared. Providers proxied via the OpenAI-compat shim
-// reject unknown fields, so we must hide the normalized control before
-// forwarding. Reasoning is still propagated to the caller because the
-// response stream carries `reasoning_content` deltas that
-// ChatMessage.UnmarshalJSON collapses into our `Reasoning` field.
-func stripReasoningField(req *api.UpstreamChatRequest) *api.UpstreamChatRequest {
-	if req == nil || req.Reasoning == nil {
+// stripOpenAICompatFields returns a copy of the request with router-only and
+// Gemini-unsupported OpenAI-compat fields cleared. Google's OpenAI shim
+// validates the payload strictly and rejects sampling knobs such as min_p and
+// repetition_penalty that other OpenRouter providers accept.
+func stripOpenAICompatFields(req *api.UpstreamChatRequest) *api.UpstreamChatRequest {
+	if req == nil {
 		return req
 	}
 	cp := *req
 	cp.Reasoning = nil
+	cp.FrequencyPenalty = 0
+	cp.PresencePenalty = 0
+	cp.RepetitionPenalty = 0
+	cp.MinP = 0
+	cp.TopA = 0
+	cp.Seed = 0
+	cp.TopLogprobs = 0
+	cp.LogitBias = nil
+	cp.Prediction = nil
 	return &cp
 }
 
 func openAICompatPayload(req *api.UpstreamChatRequest) any {
-	stripped := stripReasoningField(req)
+	stripped := stripOpenAICompatFields(req)
 	if stripped == nil {
 		return nil
 	}

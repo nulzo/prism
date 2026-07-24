@@ -92,6 +92,8 @@ func TestShape_SimpleText(t *testing.T) {
 func TestChat_UsesOpenAICompatWhenToolsPresent(t *testing.T) {
 	var gotPath string
 	var gotTools int
+	var gotMinP float64
+	var gotRepetitionPenalty float64
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotPath = r.URL.Path
@@ -100,6 +102,8 @@ func TestChat_UsesOpenAICompatWhenToolsPresent(t *testing.T) {
 		err := json.NewDecoder(r.Body).Decode(&req)
 		assert.NoError(t, err)
 		gotTools = len(req.Tools)
+		gotMinP = req.MinP
+		gotRepetitionPenalty = req.RepetitionPenalty
 
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{
@@ -149,6 +153,8 @@ func TestChat_UsesOpenAICompatWhenToolsPresent(t *testing.T) {
 		Messages: []api.ChatMessage{
 			{Role: "user", Content: api.Content{Text: "What time is it in Tokyo?"}},
 		},
+		MinP:              0.05,
+		RepetitionPenalty: 1.1,
 		Tools: []api.Tool{
 			{
 				Type: "function",
@@ -167,6 +173,8 @@ func TestChat_UsesOpenAICompatWhenToolsPresent(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "/openai/chat/completions", gotPath)
 	assert.Equal(t, 1, gotTools)
+	assert.Zero(t, gotMinP)
+	assert.Zero(t, gotRepetitionPenalty)
 	if assert.Len(t, resp.Choices, 1) {
 		assert.Equal(t, "tool_calls", resp.Choices[0].FinishReason)
 		if assert.NotNil(t, resp.Choices[0].Message) && assert.Len(t, resp.Choices[0].Message.ToolCalls, 1) {

@@ -51,6 +51,36 @@ func TestSanitizeRequestForModelKeepsSupportedReasoning(t *testing.T) {
 	}
 }
 
+func TestSanitizeRequestForModelDropsUnsupportedSamplingParameters(t *testing.T) {
+	req := &api.ChatRequest{
+		Model:             "google/gemini-2.5-flash",
+		Messages:          []api.ChatMessage{{Role: "user", Content: api.Content{Text: "hi"}}},
+		MinP:              0.05,
+		RepetitionPenalty: 1.1,
+		Temperature:       0.7,
+	}
+
+	sanitizeRequestForModel(req, api.ModelDefinition{
+		ID: "google/gemini-2.5-flash",
+		SupportedParameters: []string{
+			"temperature",
+			"max_tokens",
+			"top_p",
+			"top_k",
+		},
+	})
+
+	if req.MinP != 0 {
+		t.Fatalf("expected unsupported min_p to be stripped, got %v", req.MinP)
+	}
+	if req.RepetitionPenalty != 0 {
+		t.Fatalf("expected unsupported repetition_penalty to be stripped, got %v", req.RepetitionPenalty)
+	}
+	if req.Temperature != 0.7 {
+		t.Fatalf("expected supported temperature to be preserved, got %v", req.Temperature)
+	}
+}
+
 func TestServiceChatAppliesModelParameterPolicy(t *testing.T) {
 	enabled := true
 	provider := &capturingProvider{name: "mock-provider"}
